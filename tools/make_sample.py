@@ -111,6 +111,8 @@ def esc_attr(s):
 
 def main(src_path, out_path):
     src = open(src_path, encoding="utf-8").read()
+    # テンプレートに入っている見本の版（利用ガイドの版）は持ち込まない
+    src = re.sub(r'\n?<script type="text/markdown" class="md-version"[^>]*>.*?</script>', "", src, flags=re.S)
     tag = '<script type="text/markdown" id="md-source">'
     a = src.index(tag)
     b = src.index("</script>", a) + len("</script>")
