@@ -181,7 +181,11 @@ kbd {
 .md figcaption { margin-top: .5em; font-size: .88em; color: var(--ink-2); }
 .md blockquote { padding: .1em 1.1em; border-left: 3px solid var(--rule); color: var(--ink-2); }
 .md details { margin: 1em 0; padding: .5em 1em; border: 1px solid var(--rule); border-radius: 6px; }
-.md summary { cursor: pointer; font-weight: 700; }
+.md summary { cursor: pointer; font-weight: 700; list-style: none; }
+.md summary::-webkit-details-marker { display: none; }
+/* 折りたたみの印は、差分のファイル見出しと同じ線の矢印（閉じると右、開くと下） */
+.md details:not(.gh-file) > summary::before { content: ""; display: inline-block; width: 7px; height: 7px; margin: 0 .75em .2em .2em; border-right: 1.5px solid var(--ink-2); border-bottom: 1.5px solid var(--ink-2); transform: rotate(-45deg); vertical-align: middle; transition: transform .15s; }
+.md details:not(.gh-file)[open] > summary::before { transform: rotate(45deg); }
 .md details[open] > summary { margin-bottom: .5em; }
 .md sup.fn-ref a { padding: 0 .15em; font-size: .8em; text-decoration: none; }
 .pagebreak { display: block; height: 0; }
@@ -290,6 +294,10 @@ kbd {
   :root:not([data-theme="light"]) .mm-light { display: none; }
   :root:not([data-theme="light"]) .mm-dark { display: block; }
 }
+/* ライト用とダーク用の画像（URL の末尾に #gh-light-mode-only / #gh-dark-mode-only）。テーマに合わせて片方だけを出す */
+:root[data-theme="dark"] .md .img-light, :root[data-theme="light"] .md .img-dark { display: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .md .img-light { display: none; } }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .md .img-dark { display: none; } }
 
 .md .footnotes-title { font-size: 1.1em; }
 .md .footnotes { font-size: .88em; color: var(--ink-2); }
@@ -686,6 +694,8 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
   .pagebreak[data-kind="page"] { break-after: page; }
   .mm-light { display: block !important; }
   .mm-dark { display: none !important; }
+  .md .img-light { display: inline !important; }
+  .md .img-dark { display: none !important; }
   .c-tabs .tab-list, .gh-view, .ver-banner .vb-actions { display: none !important; }
   .ver-banner { position: static; margin: 0 0 1.5em; }
   .vd-current { outline: 0; }
@@ -766,7 +776,7 @@ slide_level: 3
 
 ### その場で直す
 
-<kbd>E</kbd> キーで左に Markdown の編集欄が開き、入力した内容が右側にすぐ反映されます。直し終えたら <kbd>Ctrl</kbd>+<kbd>S</kbd> で保存します。保存しないままページを閉じようとすると、ブラウザが確認を出します。
+<kbd>E</kbd> キーで左に Markdown の編集欄が開き、入力した内容が右側にすぐ反映されます。直し終えたら <kbd>Ctrl</kbd>+<kbd>S</kbd> で保存します。保存しないままページを閉じようとすると、ブラウザが確認を出します。編集欄に画像を貼り付けるかドロップすると、ファイルの中に埋め込みます（[](#sec-images)）。
 
 :::warning 保存した HTML を直接直さない
 保存した HTML の本文部分をエディタで直しても、次に保存したときに Markdown から作り直されて消えます。直すのは常に Markdown 側です。
@@ -850,14 +860,12 @@ slide_level: 3
 
 ### 改版履歴を自動で作る
 
-本文に次のように書くと、確定した版の一覧（版・日付・作成者・内容）が表になります。版を確定するたびに 1 行増えます。
+本文に次のように書くと、確定した版の一覧（版・日付・作成者・内容）が表になります。版を確定するたびに 1 行増えます。見出しは `## 改版履歴 {-}` のように、章番号を付けない形にしておくのがおすすめです。
 
-```markdown
-## 改版履歴 {-}
-
+::::example
 :::history
 :::
-```
+::::
 
 ### そのほか
 
@@ -925,20 +933,20 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 | `spec` | 項目と値の一覧 | リスト。「**項目**：値」 |
 | `tree` | ツリー（ディレクトリ構成など） | 入れ子のリスト |
 | `doc-only` / `slide-only` | 読み物だけ／スライドだけに表示 | 自由 |
+| `example` | 見本（「表示」と「書き方」のタブ） | 自由。中身を描いたものと、元の Markdown を並べる |
 | 上記以外 | 自作のデザイン | `c-名前` のクラスが付くので CSS を足す |
 
 - 名前の後ろの文字は、タイトル・見出し・表題・出典として使います（`:::timeline 障害の経緯`）
 - 末尾に `{#ID .クラス}` を付けると、ID とクラスを足せます。ID は `[](#ID)` で参照できます
 - 囲みは入れ子にできます。外側を `::::` のように長くしておくと見分けやすくなります
 - Zenn と同じ `:::message`・`:::message alert`・`:::details タイトル` も使えます
+- この章の見本は、すべて `example` で書いています。中身を 1 か所に書くだけで「表示」と「書き方」のタブになるので、見本と書き方がずれません
 
 ### 手順（steps） {#sec-steps}
 
 番号付きリストを、番号と縦線でつないだ手順として見せます。
 
-::::tabs
-#### 表示
-
+::::example
 :::steps
 1. **サービスを停止する**
    `systemctl stop app.service` を実行する
@@ -947,28 +955,13 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 3. **パッチを適用する**
    適用後に `app --version` で版を確かめる
 :::
-
-#### 書き方
-
-```markdown
-:::steps
-1. **サービスを停止する**
-   `systemctl stop app.service` を実行する
-2. **バックアップを取る**
-   設定ファイルとデータベースを退避する
-3. **パッチを適用する**
-   適用後に `app --version` で版を確かめる
-:::
-```
 ::::
 
 ### 工程の流れ（flow）
 
 工程や処理の流れを、矢印でつないで横に並べます。狭い画面では縦に並びます。
 
-::::tabs
-#### 表示
-
+::::example
 :::flow
 - **要件定義**
   業務と要件を整理
@@ -981,77 +974,38 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 - **移行**
   本番環境へ切り替え
 :::
-
-#### 書き方
-
-```markdown
-:::flow
-- **要件定義**
-  業務と要件を整理
-- **設計**
-  方式と機能を決める
-- **実装**
-  開発と単体試験
-:::
-```
 ::::
 
 ### 時系列（timeline）
 
 障害報告の経緯や、プロジェクトの予定に使います。
 
-::::tabs
-#### 表示
-
+::::example
 :::timeline 障害の経緯
 - **11/10 09:00** 監視で応答の遅れを検知
 - **09:15** DB の接続数が上限に達していることを確認
 - **09:40** 接続プールの設定を変更して復旧
 - **10:30** 恒久対策の検討を開始
 :::
-
-#### 書き方
-
-```markdown
-:::timeline 障害の経緯
-- **11/10 09:00** 監視で応答の遅れを検知
-- **09:15** DB の接続数が上限に達していることを確認
-- **09:40** 接続プールの設定を変更して復旧
-:::
-```
 ::::
 
 ### カード（cards）
 
 並列の項目をカードで並べます。リストのほか、見出しごとに書けば中に表やコードも入れられます。
 
-::::tabs
-#### 表示
-
+::::example
 :::cards
 - **可用性** 冗長構成にして、年間の停止時間を 4 時間以内にする
 - **性能** 利用が集中する時間帯でも、画面の応答を 2 秒以内にする
 - **保守性** 設定の変更を、プログラムの修正なしで行えるようにする
 :::
-
-#### 書き方
-
-```markdown
-:::cards
-- **可用性** 冗長構成にして、年間の停止時間を 4 時間以内にする
-- **性能** 利用が集中する時間帯でも、画面の応答を 2 秒以内にする
-- **保守性** 設定の変更を、プログラムの修正なしで行えるようにする
-:::
-```
 ::::
 
 ### 段組み（columns）
 
 `---` で区切った部分を横に並べます。`:::columns 1:2` のように幅の比も指定できます。
 
-::::tabs
-#### 表示
-
+::::example
 :::columns 1:1
 **現行の課題**
 
@@ -1065,33 +1019,13 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 - 基盤の保守が不要になる
 - 定型作業を自動化する
 :::
-
-#### 書き方
-
-```markdown
-:::columns 1:1
-**現行の課題**
-
-- サーバーの保守期限が近い
-- 手作業の運用が多い
-
----
-
-**移行後の姿**
-
-- 基盤の保守が不要になる
-- 定型作業を自動化する
-:::
-```
 ::::
 
 ### 案の比較（compare）
 
 見出しごとに案を並べます。見出しの末尾に `{.best}` を付けた案は、推奨として強調します。
 
-::::tabs
-#### 表示
-
+::::example
 :::compare
 #### 案A オンプレミス継続
 - 初期費用：小
@@ -1105,29 +1039,13 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 - 初期費用：大
 - 運用の手間：中
 :::
-
-#### 書き方
-
-```markdown
-:::compare
-#### 案A オンプレミス継続
-- 初期費用：小
-- 運用の手間：大
-
-#### 案B クラウド移行 {.best}
-- 初期費用：中
-- 運用の手間：小
-:::
-```
 ::::
 
 ### メリット・デメリット（pros-cons）
 
 `---` の前がメリット、後ろがデメリットです。見出しを書けば、その見出しに置き換わります。
 
-::::tabs
-#### 表示
-
+::::example
 :::pros-cons
 - 基盤の保守が不要になる
 - 需要に応じて性能を変えられる
@@ -1137,29 +1055,13 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 - 通信費が増える
 - 監視の仕組みを作り直す必要がある
 :::
-
-#### 書き方
-
-```markdown
-:::pros-cons
-- 基盤の保守が不要になる
-- 需要に応じて性能を変えられる
-
----
-
-- 通信費が増える
-- 監視の仕組みを作り直す必要がある
-:::
-```
 ::::
 
 ### タブ（tabs）
 
 見出しごとにタブにします。OS や環境ごとに手順が違うときに使います。印刷では全部のタブを並べます。
 
-::::tabs
-#### 表示
-
+::::example
 :::tabs
 #### Windows
 
@@ -1173,33 +1075,13 @@ Get-Service app
 systemctl status app
 ```
 :::
-
-#### 書き方
-
-````markdown
-:::tabs
-#### Windows
-
-```powershell
-Get-Service app
-```
-
-#### Linux
-
-```bash
-systemctl status app
-```
-:::
-````
 ::::
 
 ### 要旨とキーメッセージ（summary・lead）
 
 `summary` は文書の冒頭に置く要旨、`lead` はスライドで大きく見せたい一文に使います。
 
-::::tabs
-#### 表示
-
+::::example
 :::summary
 現行システムは 2027 年 3 月に保守が切れるため、2026 年度中にクラウドへ移行する。5 年間の費用は約 15% 下がる見込み。
 :::
@@ -1207,27 +1089,13 @@ systemctl status app
 :::lead
 移行の目的は、保守切れへの対応と、運用の手間を半分にすることです。
 :::
-
-#### 書き方
-
-```markdown
-:::summary
-現行システムは 2027 年 3 月に保守が切れるため、2026 年度中にクラウドへ移行する。
-:::
-
-:::lead
-移行の目的は、保守切れへの対応と、運用の手間を半分にすることです。
-:::
-```
 ::::
 
 ### 数値と進捗（metrics・progress）
 
 `metrics` は先頭の太字を大きな数値として、`progress` は末尾の割合を進捗バーとして見せます。
 
-::::tabs
-#### 表示
-
+::::example
 :::metrics
 - **99.95%** 月間の可用性
 - **1.2 秒** 平均の応答時間
@@ -1240,29 +1108,13 @@ systemctl status app
 - データ移行 35%
 - 試験 0%
 :::
-
-#### 書き方
-
-```markdown
-:::metrics
-- **99.95%** 月間の可用性
-- **1.2 秒** 平均の応答時間
-:::
-
-:::progress 移行作業の進捗
-- 設計 100%
-- 環境構築 80%
-:::
-```
 ::::
 
 ### 注記と折りたたみ（note など・details）
 
 `> [!WARNING]` の形と同じ見た目ですが、囲みの形だとタイトルを付けられ、リストやコードも書きやすくなります。
 
-::::tabs
-#### 表示
-
+::::example
 :::warning 作業の前に確かめること
 - 業務時間外であること
 - 直前のバックアップが取れていること
@@ -1274,30 +1126,13 @@ systemctl status app
 2026-11-10 09:00:05 WARN  slow query (1.2s)
 ```
 :::
-
-#### 書き方
-
-````markdown
-:::warning 作業の前に確かめること
-- 業務時間外であること
-- 直前のバックアップが取れていること
-:::
-
-:::details 実行ログの全文
-```text
-2026-11-10 09:00:01 INFO  service started
-```
-:::
-````
 ::::
 
 ### 想定問答（qa）
 
 見出しが質問、その下が回答になります。
 
-::::tabs
-#### 表示
-
+::::example
 :::qa
 #### 停止時間はどのくらいですか？
 約 30 分です。夜間の保守時間内に収まります。
@@ -1305,47 +1140,23 @@ systemctl status app
 #### 問題があったときに元に戻せますか？
 戻せます。作業の流れは [](#sec-steps) と同じで、逆の順に戻します。
 :::
-
-#### 書き方
-
-```markdown
-:::qa
-#### 停止時間はどのくらいですか？
-約 30 分です。夜間の保守時間内に収まります。
-
-#### 問題があったときに元に戻せますか？
-戻せます。作業の流れは [](#sec-steps) と同じで、逆の順に戻します。
-:::
-```
 ::::
 
 ### 引用（quote）
 
 名前の後ろに出典を書きます。法令やガイドラインの条文を引くときに使います。
 
-::::tabs
-#### 表示
-
+::::example
 :::quote 〇〇省「△△ガイドライン」2026 年版 第 3 章
 重要なシステムでは、障害が起きても業務を続けられるよう、復旧の手順を定め、定期的に訓練すること。
 :::
-
-#### 書き方
-
-```markdown
-:::quote 〇〇省「△△ガイドライン」2026 年版 第 3 章
-重要なシステムでは、障害が起きても業務を続けられるよう、復旧の手順を定め、定期的に訓練すること。
-:::
-```
 ::::
 
 ### 図表番号と参照（figure・table）
 
 `figure` と `table` で囲むと、「図 1」「表 1」のように番号が振られます。表題は、日本語の文書の慣習どおり図は下、表は上に付きます。ID を付けておけば、本文に `[](#ID)` と書くだけで番号に置き換わります。たとえば [](#fig-login) は、書式の見本にある図です。
 
-::::tabs
-#### 表示
-
+::::example
 :::table {#tbl-env} 環境ごとの台数
 | 環境 | Web | AP | DB |
 |---|---:|---:|---:|
@@ -1354,52 +1165,25 @@ systemctl status app
 :::
 
 台数は [](#tbl-env) のとおりです。
-
-#### 書き方
-
-```markdown
-:::table {#tbl-env} 環境ごとの台数
-| 環境 | Web | AP | DB |
-|---|---:|---:|---:|
-| 本番 | 2 | 2 | 2 |
-| 検証 | 1 | 1 | 1 |
-:::
-
-台数は [](#tbl-env) のとおりです。
-```
 ::::
 
 ### 項目と値（spec）
 
 設定値や仕様の一覧に使います。「**項目**：値」か「項目：値」で書きます。
 
-::::tabs
-#### 表示
-
+::::example
 :::spec サーバーの構成
 - **OS**：Red Hat Enterprise Linux 9.4
 - **CPU / メモリ**：4 vCPU / 16 GB
 - **ミドルウェア**：PostgreSQL 16、nginx 1.26
 :::
-
-#### 書き方
-
-```markdown
-:::spec サーバーの構成
-- **OS**：Red Hat Enterprise Linux 9.4
-- **CPU / メモリ**：4 vCPU / 16 GB
-- **ミドルウェア**：PostgreSQL 16、nginx 1.26
-:::
-```
 ::::
 
 ### ツリー（tree）
 
 入れ子のリストを、ディレクトリ構成のような線でつないだツリーにします。
 
-::::tabs
-#### 表示
-
+::::example
 :::tree
 - `app/`
   - `config/`
@@ -1408,28 +1192,13 @@ systemctl status app
     - `start.sh`
   - `README.md`
 :::
-
-#### 書き方
-
-```markdown
-:::tree
-- `app/`
-  - `config/`
-    - `app.yml`
-  - `bin/`
-    - `start.sh`
-  - `README.md`
-:::
-```
 ::::
 
 ### 読み物とスライドの出し分け（doc-only・slide-only）
 
 `doc-only` の中は読み物でだけ、`slide-only` の中はスライドでだけ表示します。スライドには要点だけ、読み物には詳しい説明を載せたいときに使います。
 
-::::tabs
-#### 表示
-
+::::example
 :::doc-only
 この段落は読み物でだけ表示され、スライドでは隠れます。
 :::
@@ -1437,38 +1206,13 @@ systemctl status app
 :::slide-only
 この段落はスライドでだけ表示されます。
 :::
-
-#### 書き方
-
-```markdown
-:::doc-only
-この段落は読み物でだけ表示され、スライドでは隠れます。
-:::
-
-:::slide-only
-この段落はスライドでだけ表示されます。
-:::
-```
 ::::
 
 ### 自作のデザイン
 
 一覧に無い名前を付けると、`c-名前` のクラスが付いた囲みになります。CSS は、テンプレートの `<style>` に書くか、Markdown の中に `<style>` を書きます（Markdown の中に書くと、その文書だけに効きます）。
 
-<style>
-.c-my-box { padding: .8em 1em; border: 2px dashed var(--accent); border-radius: 6px; }
-</style>
-
-::::tabs
-#### 表示
-
-:::my-box
-自作のデザインを当てた部分です。
-:::
-
-#### 書き方
-
-```markdown
+::::example
 <style>
 .c-my-box { padding: .8em 1em; border: 2px dashed var(--accent); border-radius: 6px; }
 </style>
@@ -1476,37 +1220,53 @@ systemctl status app
 :::my-box
 自作のデザインを当てた部分です。
 :::
-```
 ::::
 
 ## 書式の見本
 
 ### 文字の装飾
 
-**太字**、*斜体*、~~取り消し線~~、==蛍光ペン==、`インラインコード`、<kbd>Ctrl</kbd>+<kbd>C</kbd>、[リンク](https://example.com)。URL はそのまま書いてもリンクになります。https://example.com/docs
+日本語の文中でも、`**「強調」**` のように記号の直後で閉じた強調がそのまま効きます。URL はそのまま書いてもリンクになります。
 
-日本語の文中でも、**「強調」**のように記号の直後で閉じた強調がそのまま効きます。
+:::example
+**太字**、*斜体*、~~取り消し線~~、==蛍光ペン==、`インラインコード`、<kbd>Ctrl</kbd>+<kbd>C</kbd>、[リンク](https://example.com)、https://example.com/docs
+
+日本語の文中でも、**「強調」**のように効きます。
+:::
 
 ### 文中のラベルと画面操作の経路
 
-状態を表すラベルは `:ok[完了]` のように書きます。:ok[完了] :warn[保留] :ng[未対応] :info[確認中] :tag[任意] の 5 種類です。画面の操作経路は `:menu[設定 > ネットワーク > プロキシ]` と書くと :menu[設定 > ネットワーク > プロキシ] になります。
+状態を表すラベルは `ok`・`warn`・`ng`・`info`・`tag` の 5 種類です。画面の操作経路は `>` で区切って書きます。表の中でも使えます。
+
+:::example
+:ok[完了] :warn[保留] :ng[未対応] :info[確認中] :tag[任意]
+
+:menu[設定 > ネットワーク > プロキシ] を開く
 
 | 課題 | 状態 | 担当 |
 |---|---|---|
 | ログの保存期間の決定 | :ok[完了] | 運用チーム |
 | 夜間バッチの所要時間 | :warn[保留] | 開発チーム |
 | 帳票の文字化け | :ng[未対応] | 開発チーム |
+:::
 
 ### 表
 
+区切りの行の `:` の位置で、列を左・中央・右に揃えます。
+
+:::example
 | 項目 | 現行 | 移行後 | 備考 |
 |:---|:---:|---:|---|
 | OS | RHEL 7 | RHEL 9 | サポート終了への対応 |
 | DB | Oracle 12c | PostgreSQL 16 | 移行ツールで変換 |
 | 月額費用（円） | 1,200,000 | 850,000 | 税抜 |
+:::
 
 ### コード
 
+言語名の後ろに `:ファイル名` か `title="ファイル名"` を書くと、ファイル名を付けられます。
+
+:::example
 ```bash:deploy.sh
 #!/usr/bin/env bash
 set -euo pipefail
@@ -1518,6 +1278,7 @@ server:
   port: 8080
   timeout: 30s
 ```
+:::
 
 ### 差分（diff）
 
@@ -1528,6 +1289,7 @@ server:
 - 変更した行の中で、実際に変わった語をさらに濃い色で示す
 - 変更前と変更後の行番号を付ける。行番号と `+` `-` は表示だけで、コピーしたときは元の差分のまま
 
+:::example
 ```diff
 diff --git a/config/app.yml b/config/app.yml
 index 3f2a1c0..8b7d9e4 100644
@@ -1554,9 +1316,11 @@ index 0000000..c3d4e5f
 +systemctl restart app.service
 +echo "deployed"
 ```
+:::
 
 ### 図（Mermaid）
 
+::::example
 :::figure {#fig-login} ログイン処理の流れ
 ```mermaid
 sequenceDiagram
@@ -1573,9 +1337,42 @@ sequenceDiagram
     W-->>U: ログイン完了
 ```
 :::
+::::
+
+### 画像 {#sec-images}
+
+`![代替テキスト](画像の URL)` と書きます。画像だけの段落は中央に置き、代替テキストを表題として下に出します。番号を付けるときは `:::figure` で囲みます。
+
+- **ファイル 1 つにまとめる:** 画像を base64 の `data:` URL にして埋め込みます。本文が読みにくくならないよう、本文には `![構成図][arch]` と名前だけを書き、`[arch]: data:image/png;base64,…` の定義を Markdown の末尾に置く書き方（参照形式）がおすすめです
+- **編集欄に貼り付ける:** 編集欄（<kbd>E</kbd>）に画像を貼り付けるかドロップすると、この形で自動的に埋め込みます
+- **ライト用とダーク用:** URL の末尾に `#gh-light-mode-only` と `#gh-dark-mode-only` を付けた 2 枚を並べると、テーマに合わせて片方だけを表示します（GitHub と同じ書き方）。印刷ではライト用を使います
+
+:::example
+![Web・AP・DB の構成][arch]
+![Web・AP・DB の構成][arch-dark]
+
+[arch]: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCAzMDAgNjQiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMWUyNDMwIj48cmVjdCB4PSIyIiB5PSIxMiIgd2lkdGg9IjcyIiBoZWlnaHQ9IjQwIiByeD0iNSIgZmlsbD0iI2VlZjJmOCIgc3Ryb2tlPSIjMmI0YzhjIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9IjM4IiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+V2ViPC90ZXh0PjxwYXRoIGQ9Ik04MCAzMmgyMm0tNi01IDYgNS02IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJiNGM4YyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48cmVjdCB4PSIxMTQiIHk9IjEyIiB3aWR0aD0iNzIiIGhlaWdodD0iNDAiIHJ4PSI1IiBmaWxsPSIjZWVmMmY4IiBzdHJva2U9IiMyYjRjOGMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMTUwIiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QVA8L3RleHQ+PHBhdGggZD0iTTE5MiAzMmgyMm0tNi01IDYgNS02IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJiNGM4YyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48cmVjdCB4PSIyMjYiIHk9IjEyIiB3aWR0aD0iNzIiIGhlaWdodD0iNDAiIHJ4PSI1IiBmaWxsPSIjZWVmMmY4IiBzdHJva2U9IiMyYjRjOGMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMjYyIiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+REI8L3RleHQ+PC9zdmc+#gh-light-mode-only
+[arch-dark]: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCAzMDAgNjQiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjZTFlNWViIj48cmVjdCB4PSIyIiB5PSIxMiIgd2lkdGg9IjcyIiBoZWlnaHQ9IjQwIiByeD0iNSIgZmlsbD0iIzFmMmEzZCIgc3Ryb2tlPSIjOTNiMmVjIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9IjM4IiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+V2ViPC90ZXh0PjxwYXRoIGQ9Ik04MCAzMmgyMm0tNi01IDYgNS02IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzkzYjJlYyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48cmVjdCB4PSIxMTQiIHk9IjEyIiB3aWR0aD0iNzIiIGhlaWdodD0iNDAiIHJ4PSI1IiBmaWxsPSIjMWYyYTNkIiBzdHJva2U9IiM5M2IyZWMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMTUwIiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QVA8L3RleHQ+PHBhdGggZD0iTTE5MiAzMmgyMm0tNi01IDYgNS02IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzkzYjJlYyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48cmVjdCB4PSIyMjYiIHk9IjEyIiB3aWR0aD0iNzIiIGhlaWdodD0iNDAiIHJ4PSI1IiBmaWxsPSIjMWYyYTNkIiBzdHJva2U9IiM5M2IyZWMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMjYyIiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+REI8L3RleHQ+PC9zdmc+#gh-dark-mode-only
+:::
+
+SVG は、本文に `<svg>` を直接書くこともできます。本文の一部になるので、`var(--accent)` などの色の変数や `currentColor` が使え、テーマを切り替えると色も変わります。途中に空行を入れないでください（空行で HTML のかたまりが終わるため）。
+
+:::example
+<svg width="300" height="64" viewBox="0 0 300 64" role="img" aria-label="Web から AP、DB への流れ" style="display:block;margin:0 auto" font-size="14" fill="currentColor">
+  <rect x="2" y="12" width="72" height="40" rx="5" fill="var(--bg-sunken)" stroke="var(--accent)" stroke-width="1.5"/><text x="38" y="37" text-anchor="middle">Web</text>
+  <rect x="114" y="12" width="72" height="40" rx="5" fill="var(--bg-sunken)" stroke="var(--accent)" stroke-width="1.5"/><text x="150" y="37" text-anchor="middle">AP</text>
+  <rect x="226" y="12" width="72" height="40" rx="5" fill="var(--bg-sunken)" stroke="var(--accent)" stroke-width="1.5"/><text x="262" y="37" text-anchor="middle">DB</text>
+  <path d="M80 32h22m-6-5 6 5-6 5M192 32h22m-6-5 6 5-6 5" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+</svg>
+:::
+
+:::warning 画像の大きさに注意
+保存した HTML には、画像が Markdown と描画済みの本文（JavaScript なしでも読めるようにするためのもの）の 2 か所に入ります。版を確定すると、版ごとにもう 1 回入ります。base64 にすると元の約 1.33 倍になるので、画像は縮小してから入れてください。
+:::
 
 ### 注記
 
+:::example
 > [!NOTE]
 > 補足。読み飛ばしても困らない情報に使います。
 
@@ -1590,17 +1387,21 @@ sequenceDiagram
 
 > [!CAUTION]
 > 警告。誤るとデータを失う操作などに使います。
+:::
 
 ### チェックリスト
 
+:::example
 - [x] 要件定義書のレビュー
 - [x] 方式設計
 - [ ] 性能試験
   - [ ] 負荷シナリオの作成
   - [ ] 実施と報告
+:::
 
 ### 折りたたみ
 
+:::example
 <details>
 <summary>ログの全文</summary>
 
@@ -1610,13 +1411,16 @@ sequenceDiagram
 ```
 
 </details>
+:::
 
 ### 脚注
 
+:::example
 調査結果には、出典を脚注で付けられます[^src]。同じ脚注を何度参照しても、番号は 1 つです[^note][^src]。
 
 [^src]: 出典の例：〇〇省「△△ガイドライン」2026 年版
 [^note]: 脚注は文書の末尾にまとめて表示されます。
+:::
 
 ## 雛形
 
@@ -1765,7 +1569,7 @@ slide_level: 3
 
 ### その場で直す
 
-<kbd>E</kbd> キーで左に Markdown の編集欄が開き、入力した内容が右側にすぐ反映されます。直し終えたら <kbd>Ctrl</kbd>+<kbd>S</kbd> で保存します。保存しないままページを閉じようとすると、ブラウザが確認を出します。
+<kbd>E</kbd> キーで左に Markdown の編集欄が開き、入力した内容が右側にすぐ反映されます。直し終えたら <kbd>Ctrl</kbd>+<kbd>S</kbd> で保存します。保存しないままページを閉じようとすると、ブラウザが確認を出します。編集欄に画像を貼り付けるかドロップすると、ファイルの中に埋め込みます（[](#sec-images)）。
 
 :::warning 保存した HTML を直接直さない
 保存した HTML の本文部分をエディタで直しても、次に保存したときに Markdown から作り直されて消えます。直すのは常に Markdown 側です。
@@ -1849,14 +1653,12 @@ slide_level: 3
 
 ### 改版履歴を自動で作る
 
-本文に次のように書くと、確定した版の一覧（版・日付・作成者・内容）が表になります。版を確定するたびに 1 行増えます。
+本文に次のように書くと、確定した版の一覧（版・日付・作成者・内容）が表になります。版を確定するたびに 1 行増えます。見出しは `## 改版履歴 {-}` のように、章番号を付けない形にしておくのがおすすめです。
 
-```markdown
-## 改版履歴 {-}
-
+::::example
 :::history
 :::
-```
+::::
 
 ### そのほか
 
@@ -1924,20 +1726,20 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 | `spec` | 項目と値の一覧 | リスト。「**項目**：値」 |
 | `tree` | ツリー（ディレクトリ構成など） | 入れ子のリスト |
 | `doc-only` / `slide-only` | 読み物だけ／スライドだけに表示 | 自由 |
+| `example` | 見本（「表示」と「書き方」のタブ） | 自由。中身を描いたものと、元の Markdown を並べる |
 | 上記以外 | 自作のデザイン | `c-名前` のクラスが付くので CSS を足す |
 
 - 名前の後ろの文字は、タイトル・見出し・表題・出典として使います（`:::timeline 障害の経緯`）
 - 末尾に `{#ID .クラス}` を付けると、ID とクラスを足せます。ID は `[](#ID)` で参照できます
 - 囲みは入れ子にできます。外側を `::::` のように長くしておくと見分けやすくなります
 - Zenn と同じ `:::message`・`:::message alert`・`:::details タイトル` も使えます
+- この章の見本は、すべて `example` で書いています。中身を 1 か所に書くだけで「表示」と「書き方」のタブになるので、見本と書き方がずれません
 
 ### 手順（steps） {#sec-steps}
 
 番号付きリストを、番号と縦線でつないだ手順として見せます。
 
-::::tabs
-#### 表示
-
+::::example
 :::steps
 1. **サービスを停止する**
    `systemctl stop app.service` を実行する
@@ -1946,28 +1748,13 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 3. **パッチを適用する**
    適用後に `app --version` で版を確かめる
 :::
-
-#### 書き方
-
-```markdown
-:::steps
-1. **サービスを停止する**
-   `systemctl stop app.service` を実行する
-2. **バックアップを取る**
-   設定ファイルとデータベースを退避する
-3. **パッチを適用する**
-   適用後に `app --version` で版を確かめる
-:::
-```
 ::::
 
 ### 工程の流れ（flow）
 
 工程や処理の流れを、矢印でつないで横に並べます。狭い画面では縦に並びます。
 
-::::tabs
-#### 表示
-
+::::example
 :::flow
 - **要件定義**
   業務と要件を整理
@@ -1980,77 +1767,38 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 - **移行**
   本番環境へ切り替え
 :::
-
-#### 書き方
-
-```markdown
-:::flow
-- **要件定義**
-  業務と要件を整理
-- **設計**
-  方式と機能を決める
-- **実装**
-  開発と単体試験
-:::
-```
 ::::
 
 ### 時系列（timeline）
 
 障害報告の経緯や、プロジェクトの予定に使います。
 
-::::tabs
-#### 表示
-
+::::example
 :::timeline 障害の経緯
 - **11/10 09:00** 監視で応答の遅れを検知
 - **09:15** DB の接続数が上限に達していることを確認
 - **09:40** 接続プールの設定を変更して復旧
 - **10:30** 恒久対策の検討を開始
 :::
-
-#### 書き方
-
-```markdown
-:::timeline 障害の経緯
-- **11/10 09:00** 監視で応答の遅れを検知
-- **09:15** DB の接続数が上限に達していることを確認
-- **09:40** 接続プールの設定を変更して復旧
-:::
-```
 ::::
 
 ### カード（cards）
 
 並列の項目をカードで並べます。リストのほか、見出しごとに書けば中に表やコードも入れられます。
 
-::::tabs
-#### 表示
-
+::::example
 :::cards
 - **可用性** 冗長構成にして、年間の停止時間を 4 時間以内にする
 - **性能** 利用が集中する時間帯でも、画面の応答を 2 秒以内にする
 - **保守性** 設定の変更を、プログラムの修正なしで行えるようにする
 :::
-
-#### 書き方
-
-```markdown
-:::cards
-- **可用性** 冗長構成にして、年間の停止時間を 4 時間以内にする
-- **性能** 利用が集中する時間帯でも、画面の応答を 2 秒以内にする
-- **保守性** 設定の変更を、プログラムの修正なしで行えるようにする
-:::
-```
 ::::
 
 ### 段組み（columns）
 
 `---` で区切った部分を横に並べます。`:::columns 1:2` のように幅の比も指定できます。
 
-::::tabs
-#### 表示
-
+::::example
 :::columns 1:1
 **現行の課題**
 
@@ -2064,33 +1812,13 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 - 基盤の保守が不要になる
 - 定型作業を自動化する
 :::
-
-#### 書き方
-
-```markdown
-:::columns 1:1
-**現行の課題**
-
-- サーバーの保守期限が近い
-- 手作業の運用が多い
-
----
-
-**移行後の姿**
-
-- 基盤の保守が不要になる
-- 定型作業を自動化する
-:::
-```
 ::::
 
 ### 案の比較（compare）
 
 見出しごとに案を並べます。見出しの末尾に `{.best}` を付けた案は、推奨として強調します。
 
-::::tabs
-#### 表示
-
+::::example
 :::compare
 #### 案A オンプレミス継続
 - 初期費用：小
@@ -2104,29 +1832,13 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 - 初期費用：大
 - 運用の手間：中
 :::
-
-#### 書き方
-
-```markdown
-:::compare
-#### 案A オンプレミス継続
-- 初期費用：小
-- 運用の手間：大
-
-#### 案B クラウド移行 {.best}
-- 初期費用：中
-- 運用の手間：小
-:::
-```
 ::::
 
 ### メリット・デメリット（pros-cons）
 
 `---` の前がメリット、後ろがデメリットです。見出しを書けば、その見出しに置き換わります。
 
-::::tabs
-#### 表示
-
+::::example
 :::pros-cons
 - 基盤の保守が不要になる
 - 需要に応じて性能を変えられる
@@ -2136,29 +1848,13 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 - 通信費が増える
 - 監視の仕組みを作り直す必要がある
 :::
-
-#### 書き方
-
-```markdown
-:::pros-cons
-- 基盤の保守が不要になる
-- 需要に応じて性能を変えられる
-
----
-
-- 通信費が増える
-- 監視の仕組みを作り直す必要がある
-:::
-```
 ::::
 
 ### タブ（tabs）
 
 見出しごとにタブにします。OS や環境ごとに手順が違うときに使います。印刷では全部のタブを並べます。
 
-::::tabs
-#### 表示
-
+::::example
 :::tabs
 #### Windows
 
@@ -2172,33 +1868,13 @@ Get-Service app
 systemctl status app
 ```
 :::
-
-#### 書き方
-
-````markdown
-:::tabs
-#### Windows
-
-```powershell
-Get-Service app
-```
-
-#### Linux
-
-```bash
-systemctl status app
-```
-:::
-````
 ::::
 
 ### 要旨とキーメッセージ（summary・lead）
 
 `summary` は文書の冒頭に置く要旨、`lead` はスライドで大きく見せたい一文に使います。
 
-::::tabs
-#### 表示
-
+::::example
 :::summary
 現行システムは 2027 年 3 月に保守が切れるため、2026 年度中にクラウドへ移行する。5 年間の費用は約 15% 下がる見込み。
 :::
@@ -2206,27 +1882,13 @@ systemctl status app
 :::lead
 移行の目的は、保守切れへの対応と、運用の手間を半分にすることです。
 :::
-
-#### 書き方
-
-```markdown
-:::summary
-現行システムは 2027 年 3 月に保守が切れるため、2026 年度中にクラウドへ移行する。
-:::
-
-:::lead
-移行の目的は、保守切れへの対応と、運用の手間を半分にすることです。
-:::
-```
 ::::
 
 ### 数値と進捗（metrics・progress）
 
 `metrics` は先頭の太字を大きな数値として、`progress` は末尾の割合を進捗バーとして見せます。
 
-::::tabs
-#### 表示
-
+::::example
 :::metrics
 - **99.95%** 月間の可用性
 - **1.2 秒** 平均の応答時間
@@ -2239,29 +1901,13 @@ systemctl status app
 - データ移行 35%
 - 試験 0%
 :::
-
-#### 書き方
-
-```markdown
-:::metrics
-- **99.95%** 月間の可用性
-- **1.2 秒** 平均の応答時間
-:::
-
-:::progress 移行作業の進捗
-- 設計 100%
-- 環境構築 80%
-:::
-```
 ::::
 
 ### 注記と折りたたみ（note など・details）
 
 `> [!WARNING]` の形と同じ見た目ですが、囲みの形だとタイトルを付けられ、リストやコードも書きやすくなります。
 
-::::tabs
-#### 表示
-
+::::example
 :::warning 作業の前に確かめること
 - 業務時間外であること
 - 直前のバックアップが取れていること
@@ -2273,30 +1919,13 @@ systemctl status app
 2026-11-10 09:00:05 WARN  slow query (1.2s)
 ```
 :::
-
-#### 書き方
-
-````markdown
-:::warning 作業の前に確かめること
-- 業務時間外であること
-- 直前のバックアップが取れていること
-:::
-
-:::details 実行ログの全文
-```text
-2026-11-10 09:00:01 INFO  service started
-```
-:::
-````
 ::::
 
 ### 想定問答（qa）
 
 見出しが質問、その下が回答になります。
 
-::::tabs
-#### 表示
-
+::::example
 :::qa
 #### 停止時間はどのくらいですか？
 約 30 分です。夜間の保守時間内に収まります。
@@ -2304,47 +1933,23 @@ systemctl status app
 #### 問題があったときに元に戻せますか？
 戻せます。作業の流れは [](#sec-steps) と同じで、逆の順に戻します。
 :::
-
-#### 書き方
-
-```markdown
-:::qa
-#### 停止時間はどのくらいですか？
-約 30 分です。夜間の保守時間内に収まります。
-
-#### 問題があったときに元に戻せますか？
-戻せます。作業の流れは [](#sec-steps) と同じで、逆の順に戻します。
-:::
-```
 ::::
 
 ### 引用（quote）
 
 名前の後ろに出典を書きます。法令やガイドラインの条文を引くときに使います。
 
-::::tabs
-#### 表示
-
+::::example
 :::quote 〇〇省「△△ガイドライン」2026 年版 第 3 章
 重要なシステムでは、障害が起きても業務を続けられるよう、復旧の手順を定め、定期的に訓練すること。
 :::
-
-#### 書き方
-
-```markdown
-:::quote 〇〇省「△△ガイドライン」2026 年版 第 3 章
-重要なシステムでは、障害が起きても業務を続けられるよう、復旧の手順を定め、定期的に訓練すること。
-:::
-```
 ::::
 
 ### 図表番号と参照（figure・table）
 
 `figure` と `table` で囲むと、「図 1」「表 1」のように番号が振られます。表題は、日本語の文書の慣習どおり図は下、表は上に付きます。ID を付けておけば、本文に `[](#ID)` と書くだけで番号に置き換わります。たとえば [](#fig-login) は、書式の見本にある図です。
 
-::::tabs
-#### 表示
-
+::::example
 :::table {#tbl-env} 環境ごとの台数
 | 環境 | Web | AP | DB |
 |---|---:|---:|---:|
@@ -2353,52 +1958,25 @@ systemctl status app
 :::
 
 台数は [](#tbl-env) のとおりです。
-
-#### 書き方
-
-```markdown
-:::table {#tbl-env} 環境ごとの台数
-| 環境 | Web | AP | DB |
-|---|---:|---:|---:|
-| 本番 | 2 | 2 | 2 |
-| 検証 | 1 | 1 | 1 |
-:::
-
-台数は [](#tbl-env) のとおりです。
-```
 ::::
 
 ### 項目と値（spec）
 
 設定値や仕様の一覧に使います。「**項目**：値」か「項目：値」で書きます。
 
-::::tabs
-#### 表示
-
+::::example
 :::spec サーバーの構成
 - **OS**：Red Hat Enterprise Linux 9.4
 - **CPU / メモリ**：4 vCPU / 16 GB
 - **ミドルウェア**：PostgreSQL 16、nginx 1.26
 :::
-
-#### 書き方
-
-```markdown
-:::spec サーバーの構成
-- **OS**：Red Hat Enterprise Linux 9.4
-- **CPU / メモリ**：4 vCPU / 16 GB
-- **ミドルウェア**：PostgreSQL 16、nginx 1.26
-:::
-```
 ::::
 
 ### ツリー（tree）
 
 入れ子のリストを、ディレクトリ構成のような線でつないだツリーにします。
 
-::::tabs
-#### 表示
-
+::::example
 :::tree
 - `app/`
   - `config/`
@@ -2407,28 +1985,13 @@ systemctl status app
     - `start.sh`
   - `README.md`
 :::
-
-#### 書き方
-
-```markdown
-:::tree
-- `app/`
-  - `config/`
-    - `app.yml`
-  - `bin/`
-    - `start.sh`
-  - `README.md`
-:::
-```
 ::::
 
 ### 読み物とスライドの出し分け（doc-only・slide-only）
 
 `doc-only` の中は読み物でだけ、`slide-only` の中はスライドでだけ表示します。スライドには要点だけ、読み物には詳しい説明を載せたいときに使います。
 
-::::tabs
-#### 表示
-
+::::example
 :::doc-only
 この段落は読み物でだけ表示され、スライドでは隠れます。
 :::
@@ -2436,38 +1999,13 @@ systemctl status app
 :::slide-only
 この段落はスライドでだけ表示されます。
 :::
-
-#### 書き方
-
-```markdown
-:::doc-only
-この段落は読み物でだけ表示され、スライドでは隠れます。
-:::
-
-:::slide-only
-この段落はスライドでだけ表示されます。
-:::
-```
 ::::
 
 ### 自作のデザイン
 
 一覧に無い名前を付けると、`c-名前` のクラスが付いた囲みになります。CSS は、テンプレートの `<style>` に書くか、Markdown の中に `<style>` を書きます（Markdown の中に書くと、その文書だけに効きます）。
 
-<style>
-.c-my-box { padding: .8em 1em; border: 2px dashed var(--accent); border-radius: 6px; }
-</style>
-
-::::tabs
-#### 表示
-
-:::my-box
-自作のデザインを当てた部分です。
-:::
-
-#### 書き方
-
-```markdown
+::::example
 <style>
 .c-my-box { padding: .8em 1em; border: 2px dashed var(--accent); border-radius: 6px; }
 </style>
@@ -2475,37 +2013,53 @@ systemctl status app
 :::my-box
 自作のデザインを当てた部分です。
 :::
-```
 ::::
 
 ## 書式の見本
 
 ### 文字の装飾
 
-**太字**、*斜体*、~~取り消し線~~、==蛍光ペン==、`インラインコード`、<kbd>Ctrl</kbd>+<kbd>C</kbd>、[リンク](https://example.com)。URL はそのまま書いてもリンクになります。https://example.com/docs
+日本語の文中でも、`**「強調」**` のように記号の直後で閉じた強調がそのまま効きます。URL はそのまま書いてもリンクになります。
 
-日本語の文中でも、**「強調」**のように記号の直後で閉じた強調がそのまま効きます。
+:::example
+**太字**、*斜体*、~~取り消し線~~、==蛍光ペン==、`インラインコード`、<kbd>Ctrl</kbd>+<kbd>C</kbd>、[リンク](https://example.com)、https://example.com/docs
+
+日本語の文中でも、**「強調」**のように効きます。
+:::
 
 ### 文中のラベルと画面操作の経路
 
-状態を表すラベルは `:ok[完了]` のように書きます。:ok[完了] :warn[保留] :ng[未対応] :info[確認中] :tag[任意] の 5 種類です。画面の操作経路は `:menu[設定 > ネットワーク > プロキシ]` と書くと :menu[設定 > ネットワーク > プロキシ] になります。
+状態を表すラベルは `ok`・`warn`・`ng`・`info`・`tag` の 5 種類です。画面の操作経路は `>` で区切って書きます。表の中でも使えます。
+
+:::example
+:ok[完了] :warn[保留] :ng[未対応] :info[確認中] :tag[任意]
+
+:menu[設定 > ネットワーク > プロキシ] を開く
 
 | 課題 | 状態 | 担当 |
 |---|---|---|
 | ログの保存期間の決定 | :ok[完了] | 運用チーム |
 | 夜間バッチの所要時間 | :warn[保留] | 開発チーム |
 | 帳票の文字化け | :ng[未対応] | 開発チーム |
+:::
 
 ### 表
 
+区切りの行の `:` の位置で、列を左・中央・右に揃えます。
+
+:::example
 | 項目 | 現行 | 移行後 | 備考 |
 |:---|:---:|---:|---|
 | OS | RHEL 7 | RHEL 9 | サポート終了への対応 |
 | DB | Oracle 12c | PostgreSQL 16 | 移行ツールで変換 |
 | 月額費用（円） | 1,200,000 | 850,000 | 税抜 |
+:::
 
 ### コード
 
+言語名の後ろに `:ファイル名` か `title="ファイル名"` を書くと、ファイル名を付けられます。
+
+:::example
 ```bash:deploy.sh
 #!/usr/bin/env bash
 set -euo pipefail
@@ -2517,6 +2071,7 @@ server:
   port: 8080
   timeout: 30s
 ```
+:::
 
 ### 差分（diff）
 
@@ -2527,6 +2082,7 @@ server:
 - 変更した行の中で、実際に変わった語をさらに濃い色で示す
 - 変更前と変更後の行番号を付ける。行番号と `+` `-` は表示だけで、コピーしたときは元の差分のまま
 
+:::example
 ```diff
 diff --git a/config/app.yml b/config/app.yml
 index 3f2a1c0..8b7d9e4 100644
@@ -2553,9 +2109,11 @@ index 0000000..c3d4e5f
 +systemctl restart app.service
 +echo "deployed"
 ```
+:::
 
 ### 図（Mermaid）
 
+::::example
 :::figure {#fig-login} ログイン処理の流れ
 ```mermaid
 sequenceDiagram
@@ -2572,9 +2130,42 @@ sequenceDiagram
     W-->>U: ログイン完了
 ```
 :::
+::::
+
+### 画像 {#sec-images}
+
+`![代替テキスト](画像の URL)` と書きます。画像だけの段落は中央に置き、代替テキストを表題として下に出します。番号を付けるときは `:::figure` で囲みます。
+
+- **ファイル 1 つにまとめる:** 画像を base64 の `data:` URL にして埋め込みます。本文が読みにくくならないよう、本文には `![構成図][arch]` と名前だけを書き、`[arch]: data:image/png;base64,…` の定義を Markdown の末尾に置く書き方（参照形式）がおすすめです
+- **編集欄に貼り付ける:** 編集欄（<kbd>E</kbd>）に画像を貼り付けるかドロップすると、この形で自動的に埋め込みます
+- **ライト用とダーク用:** URL の末尾に `#gh-light-mode-only` と `#gh-dark-mode-only` を付けた 2 枚を並べると、テーマに合わせて片方だけを表示します（GitHub と同じ書き方）。印刷ではライト用を使います
+
+:::example
+![Web・AP・DB の構成][arch]
+![Web・AP・DB の構成][arch-dark]
+
+[arch]: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCAzMDAgNjQiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMWUyNDMwIj48cmVjdCB4PSIyIiB5PSIxMiIgd2lkdGg9IjcyIiBoZWlnaHQ9IjQwIiByeD0iNSIgZmlsbD0iI2VlZjJmOCIgc3Ryb2tlPSIjMmI0YzhjIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9IjM4IiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+V2ViPC90ZXh0PjxwYXRoIGQ9Ik04MCAzMmgyMm0tNi01IDYgNS02IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJiNGM4YyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48cmVjdCB4PSIxMTQiIHk9IjEyIiB3aWR0aD0iNzIiIGhlaWdodD0iNDAiIHJ4PSI1IiBmaWxsPSIjZWVmMmY4IiBzdHJva2U9IiMyYjRjOGMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMTUwIiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QVA8L3RleHQ+PHBhdGggZD0iTTE5MiAzMmgyMm0tNi01IDYgNS02IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJiNGM4YyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48cmVjdCB4PSIyMjYiIHk9IjEyIiB3aWR0aD0iNzIiIGhlaWdodD0iNDAiIHJ4PSI1IiBmaWxsPSIjZWVmMmY4IiBzdHJva2U9IiMyYjRjOGMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMjYyIiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+REI8L3RleHQ+PC9zdmc+#gh-light-mode-only
+[arch-dark]: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCAzMDAgNjQiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjZTFlNWViIj48cmVjdCB4PSIyIiB5PSIxMiIgd2lkdGg9IjcyIiBoZWlnaHQ9IjQwIiByeD0iNSIgZmlsbD0iIzFmMmEzZCIgc3Ryb2tlPSIjOTNiMmVjIiBzdHJva2Utd2lkdGg9IjEuNSIvPjx0ZXh0IHg9IjM4IiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+V2ViPC90ZXh0PjxwYXRoIGQ9Ik04MCAzMmgyMm0tNi01IDYgNS02IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzkzYjJlYyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48cmVjdCB4PSIxMTQiIHk9IjEyIiB3aWR0aD0iNzIiIGhlaWdodD0iNDAiIHJ4PSI1IiBmaWxsPSIjMWYyYTNkIiBzdHJva2U9IiM5M2IyZWMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMTUwIiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QVA8L3RleHQ+PHBhdGggZD0iTTE5MiAzMmgyMm0tNi01IDYgNS02IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzkzYjJlYyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48cmVjdCB4PSIyMjYiIHk9IjEyIiB3aWR0aD0iNzIiIGhlaWdodD0iNDAiIHJ4PSI1IiBmaWxsPSIjMWYyYTNkIiBzdHJva2U9IiM5M2IyZWMiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHRleHQgeD0iMjYyIiB5PSIzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+REI8L3RleHQ+PC9zdmc+#gh-dark-mode-only
+:::
+
+SVG は、本文に `<svg>` を直接書くこともできます。本文の一部になるので、`var(--accent)` などの色の変数や `currentColor` が使え、テーマを切り替えると色も変わります。途中に空行を入れないでください（空行で HTML のかたまりが終わるため）。
+
+:::example
+<svg width="300" height="64" viewBox="0 0 300 64" role="img" aria-label="Web から AP、DB への流れ" style="display:block;margin:0 auto" font-size="14" fill="currentColor">
+  <rect x="2" y="12" width="72" height="40" rx="5" fill="var(--bg-sunken)" stroke="var(--accent)" stroke-width="1.5"/><text x="38" y="37" text-anchor="middle">Web</text>
+  <rect x="114" y="12" width="72" height="40" rx="5" fill="var(--bg-sunken)" stroke="var(--accent)" stroke-width="1.5"/><text x="150" y="37" text-anchor="middle">AP</text>
+  <rect x="226" y="12" width="72" height="40" rx="5" fill="var(--bg-sunken)" stroke="var(--accent)" stroke-width="1.5"/><text x="262" y="37" text-anchor="middle">DB</text>
+  <path d="M80 32h22m-6-5 6 5-6 5M192 32h22m-6-5 6 5-6 5" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+</svg>
+:::
+
+:::warning 画像の大きさに注意
+保存した HTML には、画像が Markdown と描画済みの本文（JavaScript なしでも読めるようにするためのもの）の 2 か所に入ります。版を確定すると、版ごとにもう 1 回入ります。base64 にすると元の約 1.33 倍になるので、画像は縮小してから入れてください。
+:::
 
 ### 注記
 
+:::example
 > [!NOTE]
 > 補足。読み飛ばしても困らない情報に使います。
 
@@ -2589,17 +2180,21 @@ sequenceDiagram
 
 > [!CAUTION]
 > 警告。誤るとデータを失う操作などに使います。
+:::
 
 ### チェックリスト
 
+:::example
 - [x] 要件定義書のレビュー
 - [x] 方式設計
 - [ ] 性能試験
   - [ ] 負荷シナリオの作成
   - [ ] 実施と報告
+:::
 
 ### 折りたたみ
 
+:::example
 <details>
 <summary>ログの全文</summary>
 
@@ -2609,13 +2204,16 @@ sequenceDiagram
 ```
 
 </details>
+:::
 
 ### 脚注
 
+:::example
 調査結果には、出典を脚注で付けられます[^src]。同じ脚注を何度参照しても、番号は 1 つです[^note][^src]。
 
 [^src]: 出典の例：〇〇省「△△ガイドライン」2026 年版
 [^note]: 脚注は文書の末尾にまとめて表示されます。
+:::
 
 ## 雛形
 
@@ -3111,7 +2709,7 @@ const CONFIG = {
   // スライドで文字を縮める下限（%）。これより縮めないと入らない分は、次のスライドに送る
   slideMinScale: 80,
 };
-const ENGINE = 'md-report-5';
+const ENGINE = 'md-report-7';
 const KEY_THEME = 'md-report:theme';
 const KEY_TOC = 'md-report:toc';
 const KEY_DIFF = 'md-report:diffview';
@@ -3196,7 +2794,12 @@ const RX = {
   html: /^ {0,3}<(?:[!]--|\/?(?:address|article|aside|audio|blockquote|br|canvas|center|dd|details|dialog|div|dl|dt|figcaption|figure|footer|form|h[1-6]|header|hr|iframe|img|li|main|nav|ol|p|picture|pre|section|style|[s]cript|summary|svg|table|tbody|td|tfoot|th|thead|tr|ul|video)(?=[\s/>]|$))/i,
   fnDef: /^ {0,3}\[\^([^\]\s]+)\]:[ \t]*(.*)$/,
   container: /^ {0,3}(:{3,})[ \t]*(.*?)[ \t]*$/,
+  // [名前]: URL "タイトル"（参照形式の画像・リンクの定義）。URL らしいもの（スキーム付き・パス・ファイル名）だけを定義とみなし、
+  // 「[注意]: 本文」のような文は普通の段落のままにする
+  linkDef: /^ {0,3}\[(?!\^)([^\]]+)\]:[ \t]*(<[^>\n]*>|(?:data:|[A-Za-z][\w+.-]*:\/\/|mailto:|\.{0,2}\/|#)\S*|[\w.~%-]+(?:\/[\w.~%-]+)*\.[A-Za-z0-9]{1,5}(?:[?#]\S*)?)(?:[ \t]+(?:"([^"]*)"|'([^']*)'|\(([^)]*)\)))?[ \t]*$/,
 };
+/* 参照形式の名前は、大文字と小文字・空白の違いを区別しない */
+const refKey = s => String(s).trim().replace(/\s+/g, ' ').toLowerCase();
 /* フェンス（``` / ~~~）の中かどうかを 1 行ずつ判定する。中（または開始・終了の行）なら true */
 function fenceTracker() {
   let open = null;
@@ -3216,6 +2819,7 @@ function createParser(opts = {}) {
   const usedIds = new Set(opts.reserved || []);
   const fnDefs = new Map();
   const fnOrder = [];
+  const linkDefs = new Map();
   const sec = [0, 0];
   const figNo = { fig: 0, tbl: 0 };
   let tabSeq = 0;
@@ -3257,7 +2861,7 @@ function createParser(opts = {}) {
   function startsBlock(lines, i) {
     const l = lines[i];
     return RX.blank.test(l) || isFence(l) || RX.heading.test(l) || RX.hr.test(l) || RX.quote.test(l)
-      || RX.html.test(l) || RX.fnDef.test(l) || RX.container.test(l) || isListStart(l, true) || isTableStart(lines, i);
+      || RX.html.test(l) || RX.fnDef.test(l) || RX.linkDef.test(l) || RX.container.test(l) || isListStart(l, true) || isTableStart(lines, i);
   }
 
   function parseBlocks(lines, ctx = {}) {
@@ -3266,6 +2870,8 @@ function createParser(opts = {}) {
     while (i < lines.length) {
       const line = lines[i];
       if (RX.blank.test(line)) { i++; continue; }
+      // 参照形式の定義は parse() の最初にまとめて読んであるので、本文には出さない
+      if (RX.linkDef.test(line)) { i++; continue; }
 
       if (isFence(line)) {
         m = line.match(RX.fence);
@@ -3407,10 +3013,32 @@ function createParser(opts = {}) {
     return { html: '<' + tag + (ordered && start !== 1 ? ' start="' + start + '"' : '') + '>\n' + lis.join('\n') + '\n</' + tag + '>', next: i };
   }
 
+  /* 画像だけの段落（1 枚、またはライト用とダーク用の 2 枚）なら、表題にする代替テキストを返す（無ければ空文字）。図にしない段落は null */
+  function figureCaption(text) {
+    const imgs = [];
+    const rest = text.replace(/!\[([^\]]*)\](?:\(\s*((?:[^\s()]|\([^\s()]*\))*)(?:\s+(?:"[^"]*"|'[^']*'))?\s*\)|\[([^\]]*)\])?/g, (a, alt, url, ref) => {
+      const u = url != null ? url : (linkDefs.get(refKey(ref || alt)) || {}).url;
+      if (u == null) return a;
+      imgs.push({ alt, mode: (u.match(/#gh-(light|dark)-mode-only$/i) || [])[1] });
+      return '';
+    });
+    if (rest.trim() || !imgs.length || imgs.length > 2) return null;
+    if (imgs.length === 2 && imgs.map(x => (x.mode || '').toLowerCase()).sort().join() !== 'dark,light') return null;
+    return imgs.map(x => x.alt).find(Boolean) || '';
+  }
+  /* 画像の HTML。URL の末尾の #gh-light-mode-only / #gh-dark-mode-only は、テーマで出し分けるクラスにする */
+  function imgHtml(url, alt, title) {
+    let u = String(url).trim(), cls = '';
+    const t = u.match(/#gh-(light|dark)-mode-only$/i);
+    if (t) { cls = 'img-' + t[1].toLowerCase(); u = u.slice(0, -t[0].length); }
+    return '<img src="' + escAttr(safeUrl(u, true)) + '" alt="' + escAttr(stripTags(alt.replace(/\u0000\d+\u0000/g, ''))) + '"'
+      + (title ? ' title="' + escAttr(title) + '"' : '') + (cls ? ' class="' + cls + '"' : '') + '>';
+  }
+
   function renderParagraph(lines, tight) {
     const text = lines.map((l, k) => k ? l.replace(/^[ \t]+/, '') : l.replace(/^ {0,3}/, '')).join('\n').replace(/[ \t]+$/, '');
-    const fig = text.match(/^!\[([^\]]+)\]\(([^)]*)\)$/);
-    if (fig && !tight) return '<figure>' + parseInline(text) + '<figcaption>' + parseInline(fig[1]) + '</figcaption></figure>';
+    const cap = tight ? null : figureCaption(text);
+    if (cap != null) return '<figure>' + parseInline(text) + (cap ? '<figcaption>' + parseInline(cap) + '</figcaption>' : '') + '</figure>';
     const html = parseInline(text);
     return tight ? html : '<p>' + html + '</p>';
   }
@@ -3529,6 +3157,13 @@ function createParser(opts = {}) {
     return { f, list: firstList(f) };
   }
 
+  /* タブの見出しの列と中身（最初のタブを選んだ状態）。labels は HTML */
+  function tabsHtml(labels, bodies) {
+    const gid = uniqueId('tabs-' + (++tabSeq));
+    return '<div class="tab-list" role="tablist">' + labels.map((l, k) => '<button type="button" class="tab" role="tab" id="' + gid + '-t' + k + '" aria-controls="' + gid + '-p' + k + '" aria-selected="' + (k === 0) + '" data-tab="' + k + '">' + l + '</button>').join('') + '</div>'
+      + bodies.map((b, k) => '<div class="tab-panel' + (k === 0 ? ' is-active' : '') + '" role="tabpanel" id="' + gid + '-p' + k + '" aria-labelledby="' + gid + '-t' + k + '" data-label="' + escAttr(stripTags(labels[k])) + '">' + b + '</div>').join('');
+  }
+
   function renderContainer(info, lines) {
     const at = takeAttrs(info, true);
     const nm = at.text.trim().match(/^([A-Za-z][\w-]*)?\s*(.*)$/) || [];
@@ -3597,12 +3232,12 @@ function createParser(opts = {}) {
       }
       case 'tabs': {
         const ps = splitPanels(lines).map(panel);
-        const gid = uniqueId('tabs-' + (++tabSeq));
-        const labels = ps.map((x, k) => x.title || 'タブ ' + (k + 1));
-        return open('div', 'c-tabs') + title
-          + '<div class="tab-list" role="tablist">' + labels.map((l, k) => '<button type="button" class="tab" role="tab" id="' + gid + '-t' + k + '" aria-controls="' + gid + '-p' + k + '" aria-selected="' + (k === 0) + '" data-tab="' + k + '">' + l + '</button>').join('') + '</div>'
-          + ps.map((x, k) => '<div class="tab-panel' + (k === 0 ? ' is-active' : '') + '" role="tabpanel" id="' + gid + '-p' + k + '" aria-labelledby="' + gid + '-t' + k + '" data-label="' + escAttr(stripTags(labels[k])) + '">' + x.body + '</div>').join('')
-          + '</div>';
+        return open('div', 'c-tabs') + title + tabsHtml(ps.map((x, k) => x.title || 'タブ ' + (k + 1)), ps.map(x => x.body)) + '</div>';
+      }
+      case 'example': {
+        // 同じ Markdown から「表示」と「書き方」のタブを作る（2 か所に書かないので、見本と書き方がずれない）
+        const src = lines.join('\n').replace(/^(?:[ \t]*\n)+|\s+$/g, '');
+        return open('div', 'c-tabs c-example') + title + tabsHtml(['表示', '書き方'], [blocks(), renderCode(src, 'markdown')]) + '</div>';
       }
       case 'summary':
         return open('div', 'c-summary') + '<p class="c-title">' + (arg ? parseInline(arg) : '要旨') + '</p>' + blocks() + '</div>';
@@ -3923,12 +3558,21 @@ function createParser(opts = {}) {
       ? '<span class="menu-path">' + text.split(/\s*(?:>|＞|›)\s*/).filter(Boolean).map(p => '<span>' + parseInline(p, true) + '</span>').join('') + '</span>'
       : '<span class="lbl lbl-' + kind + '">' + parseInline(text, true) + '</span>'));
     // 画像とリンク
-    s = s.replace(/!\[([^\]]*)\]\(\s*((?:[^\s()]|\([^\s()]*\))*)(?:\s+(?:"([^"]*)"|'([^']*)'))?\s*\)/g, (a, alt, url, t1, t2) => {
-      const title = t1 ?? t2;
-      return hold('<img src="' + escAttr(safeUrl(url, true)) + '" alt="' + escAttr(stripTags(alt.replace(/\u0000\d+\u0000/g, ''))) + '"' + (title ? ' title="' + escAttr(title) + '"' : '') + '>');
+    s = s.replace(/!\[([^\]]*)\]\(\s*((?:[^\s()]|\([^\s()]*\))*)(?:\s+(?:"([^"]*)"|'([^']*)'))?\s*\)/g, (a, alt, url, t1, t2) => hold(imgHtml(url, alt, t1 ?? t2)));
+    // 参照形式の画像 ![代替][名前]・![代替][]・![代替]（定義があるときだけ）
+    s = s.replace(/!\[([^\]]*)\](?:\[([^\]]*)\])?/g, (a, alt, ref) => {
+      const d = linkDefs.get(refKey(ref || alt));
+      return d ? hold(imgHtml(d.url, alt, d.title)) : a;
     });
     s = s.replace(/\[((?:[^\[\]]|\[[^\[\]]*\])*)\]\(\s*((?:[^\s()]|\([^\s()]*\))*)(?:\s+(?:"([^"]*)"|'([^']*)'))?\s*\)/g,
       (a, text, url, t1, t2) => hold(linkHtml(url, parseInline(text, true, true), t1 ?? t2)));
+    // 参照形式のリンク [文字][名前]・[文字][]・[文字]（定義があるときだけ）
+    if (!inLink) {
+      s = s.replace(/\[((?:[^\[\]]|\[[^\[\]]*\])*)\](?:\[([^\]]*)\])?/g, (a, text, ref) => {
+        const d = linkDefs.size ? linkDefs.get(refKey(ref || text)) : null;
+        return d ? hold(linkHtml(d.url, parseInline(text, true, true), d.title)) : a;
+      });
+    }
     // 裸の URL（日本語の句読点の手前で止める）
     if (!inLink) {
       s = s.replace(/\bhttps?:\/\/[A-Za-z0-9\-._~:\/?#\[\]@!$&'()*+,;=%]+/g, url => {
@@ -3974,6 +3618,13 @@ function createParser(opts = {}) {
     parse(src) {
       const inFence = fenceTracker();
       const lines = src.split('\n').map(l => (inFence(l) ? l : l.replace(/^[ \t]+/, w => w.replace(/\t/g, '    '))));
+      // 参照形式の定義（[名前]: URL）を先に集める。定義は本文のどこに書いてもよい
+      const scan = fenceTracker();
+      for (const l of lines) {
+        if (scan(l)) continue;
+        const d = l.match(RX.linkDef);
+        if (d && !linkDefs.has(refKey(d[1]))) linkDefs.set(refKey(d[1]), { url: d[2].replace(/^<([^>]*)>$/, '$1'), title: d[3] ?? d[4] ?? d[5] ?? '' });
+      }
       const html = parseBlocks(lines, { top: true }) + renderFootnotes();
       return html.includes('class="xref') ? fillXrefs(html) : html;
     },
@@ -5023,6 +4674,37 @@ function splitter(node) {
       return c;
     } };
   }
+  if (node.matches('.c-tabs')) {
+    // タブ（example の見本を含む）は、選んでいるタブの中身を塊の単位で分ける。中の表・リスト・差分などはさらにその単位で分ける。
+    // どの部分にもタブの見出しとほかのタブを付けるので、続きのスライドでも「書き方」に切り替えられる
+    const panels = $$(':scope > .tab-panel', node);
+    const active = panels.find(p => p.classList.contains('is-active')) || panels[0];
+    if (!active) return null;
+    const units = [];
+    Array.from(active.children).forEach(ch => {
+      const s = splitter(ch);
+      if (s && s.count > 1) for (let i = 0; i < s.count; i++) units.push({ ch, s, i });
+      else units.push({ ch, s: null, i: 0 });
+    });
+    return { count: units.length, make(a, b) {
+      const n = node.cloneNode(false);
+      n.removeAttribute('id');
+      Array.from(node.children).forEach(k => {
+        if (k !== active) { n.append(k.cloneNode(true)); return; }
+        const p = active.cloneNode(false);
+        const part = units.slice(a, b);
+        for (let j = 0; j < part.length;) {
+          const u = part[j];
+          let e = j + 1;
+          while (e < part.length && part[e].ch === u.ch) e++;
+          p.append(u.s ? u.s.make(u.i, part[e - 1].i + 1) : u.ch.cloneNode(true));
+          j = e;
+        }
+        n.append(p);
+      });
+      return n;
+    } };
+  }
   if (node.matches('[data-split="items"]')) {
     const box = node.querySelector(':scope > .c-items');
     if (!box) return null;
@@ -5493,10 +5175,74 @@ els.slides.addEventListener('touchend', e => {
   if (Math.abs(dx) > 50) { if (dx < 0) Slides.next(); else Slides.prev(); }
 });
 
-/* ドラッグ＆ドロップで .md を読み込む（UTF-8 でなければ Shift_JIS として読む） */
+/* 編集欄に画像を貼り付け・ドロップすると、base64 にして埋め込む。
+   本文のカーソル位置には ![名前][名前] を、長い data: URL の定義は Markdown の末尾にまとめて置く */
+const isImageFile = f => /^image\//.test(f.type);
+const readDataUrl = f => new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result); r.onerror = () => reject(r.error); r.readAsDataURL(f); });
+async function embedImages(fileList) {
+  const files = Array.from(fileList).filter(isImageFile);
+  if (!files.length) return;
+  const ta = els.textarea;
+  const pos = ta.selectionStart;
+  const used = new Set(ta.value.split('\n').map(l => l.match(RX.linkDef)).filter(Boolean).map(d => refKey(d[1])));
+  const refs = [], defs = [];
+  let bytes = 0;
+  for (const f of files) {
+    let url;
+    try { url = await readDataUrl(f); } catch (err) { toast(f.name + ' を読み込めませんでした'); continue; }
+    bytes += url.length;
+    // ファイル名を代替テキスト（図の表題）と定義の名前にする。クリップボードの画像は名前が「image.png」なので、表題は空にして名前は image-2… と番号を振る
+    const stem = f.name && !/^image\.\w+$/i.test(f.name) ? f.name.replace(/\.[^.]+$/, '') : '';
+    const alt = stem.replace(/[\[\]]/g, '');
+    const base = alt.replace(/\s+/g, '-').slice(0, 40) || 'image';
+    let id = base, n = 1;
+    while (used.has(refKey(id))) id = base + '-' + (++n);
+    used.add(refKey(id));
+    refs.push('![' + alt + '][' + id + ']');
+    defs.push('[' + id + ']: ' + url);
+  }
+  if (!refs.length) return;
+  const v = ta.value;
+  const lastLine = v.replace(/\n+$/, '').split('\n').pop() || '';
+  const tail = (v.endsWith('\n') ? '' : '\n') + (RX.linkDef.test(lastLine) ? '' : '\n') + defs.join('\n') + '\n';
+  // 画像は 1 枚ずつ段落にする（画像だけの段落は図として中央に置かれる）。前後に空行が無ければ足す
+  const before = v.slice(0, pos), after = v.slice(pos);
+  const pre = !before || /\n\n$/.test(before) ? '' : before.endsWith('\n') ? '\n' : '\n\n';
+  const post = !after || /^\n\n/.test(after) ? '' : after.startsWith('\n') ? '\n' : '\n\n';
+  const refText = pre + refs.join('\n\n') + post;
+  const insert = (at, text) => {
+    ta.setSelectionRange(at, at);
+    if (!document.execCommand('insertText', false, text)) ta.setRangeText(text, at, at, 'end');
+  };
+  ta.focus();
+  insert(v.length, tail);   // 先に末尾へ定義を足す（カーソルより後ろなので、カーソルの位置はずれない）
+  insert(pos, refText);
+  const caret = pos + refText.length - post.length;
+  ta.setSelectionRange(caret, caret);
+  ta.dispatchEvent(new Event('input'));
+  const kb = Math.max(1, Math.round(bytes / 1024));
+  toast('画像を ' + refs.length + ' 枚埋め込みました（' + kb + 'KB）。定義は Markdown の末尾にあります' + (kb > 1024 ? '。大きいので、縮小してから入れることをおすすめします' : ''));
+}
+els.textarea.addEventListener('paste', e => {
+  const files = Array.from((e.clipboardData && e.clipboardData.files) || []);
+  if (!files.some(isImageFile)) return;
+  e.preventDefault();
+  embedImages(files);
+});
+
+/* ドラッグ＆ドロップで .md を読み込む（UTF-8 でなければ Shift_JIS として読む）。編集中は画像も受け付ける */
 let dragDepth = 0;
 const hasFiles = e => Array.from((e.dataTransfer && e.dataTransfer.types) || []).includes('Files');
-window.addEventListener('dragenter', e => { if (!hasFiles(e)) return; e.preventDefault(); if (++dragDepth === 1) els.drop.hidden = false; });
+const dragsImage = e => Array.from((e.dataTransfer && e.dataTransfer.items) || []).some(it => it.kind === 'file' && /^image\//.test(it.type));
+window.addEventListener('dragenter', e => {
+  if (!hasFiles(e)) return;
+  e.preventDefault();
+  if (++dragDepth === 1) {
+    $('div', els.drop).textContent = !dragsImage(e) ? 'Markdown ファイルをドロップして読み込む'
+      : Editor.isOpen() ? '画像をドロップして、カーソルの位置に埋め込む' : '画像は、編集欄（E）を開いてからドロップしてください';
+    els.drop.hidden = false;
+  }
+});
 window.addEventListener('dragover', e => { if (hasFiles(e)) e.preventDefault(); });
 window.addEventListener('dragleave', e => { if (!hasFiles(e)) return; if (--dragDepth <= 0) { dragDepth = 0; els.drop.hidden = true; } });
 window.addEventListener('drop', async e => {
@@ -5506,6 +5252,11 @@ window.addEventListener('drop', async e => {
   els.drop.hidden = true;
   const file = e.dataTransfer.files[0];
   if (!file) return;
+  if (isImageFile(file)) {
+    if (Editor.isOpen()) embedImages(e.dataTransfer.files);
+    else toast('画像は、編集欄（E）を開いてから貼り付けるかドロップすると埋め込めます');
+    return;
+  }
   if (!/\.(md|markdown|mdown|txt)$/i.test(file.name) && !/^text\//.test(file.type)) { toast('読み込めるのは .md・.markdown・.txt のファイルです'); return; }
   const buf = await file.arrayBuffer();
   let text;

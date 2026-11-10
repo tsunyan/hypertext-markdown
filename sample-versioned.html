@@ -181,7 +181,11 @@ kbd {
 .md figcaption { margin-top: .5em; font-size: .88em; color: var(--ink-2); }
 .md blockquote { padding: .1em 1.1em; border-left: 3px solid var(--rule); color: var(--ink-2); }
 .md details { margin: 1em 0; padding: .5em 1em; border: 1px solid var(--rule); border-radius: 6px; }
-.md summary { cursor: pointer; font-weight: 700; }
+.md summary { cursor: pointer; font-weight: 700; list-style: none; }
+.md summary::-webkit-details-marker { display: none; }
+/* 折りたたみの印は、差分のファイル見出しと同じ線の矢印（閉じると右、開くと下） */
+.md details:not(.gh-file) > summary::before { content: ""; display: inline-block; width: 7px; height: 7px; margin: 0 .75em .2em .2em; border-right: 1.5px solid var(--ink-2); border-bottom: 1.5px solid var(--ink-2); transform: rotate(-45deg); vertical-align: middle; transition: transform .15s; }
+.md details:not(.gh-file)[open] > summary::before { transform: rotate(45deg); }
 .md details[open] > summary { margin-bottom: .5em; }
 .md sup.fn-ref a { padding: 0 .15em; font-size: .8em; text-decoration: none; }
 .pagebreak { display: block; height: 0; }
@@ -290,6 +294,10 @@ kbd {
   :root:not([data-theme="light"]) .mm-light { display: none; }
   :root:not([data-theme="light"]) .mm-dark { display: block; }
 }
+/* ライト用とダーク用の画像（URL の末尾に #gh-light-mode-only / #gh-dark-mode-only）。テーマに合わせて片方だけを出す */
+:root[data-theme="dark"] .md .img-light, :root[data-theme="light"] .md .img-dark { display: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .md .img-light { display: none; } }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .md .img-dark { display: none; } }
 
 .md .footnotes-title { font-size: 1.1em; }
 .md .footnotes { font-size: .88em; color: var(--ink-2); }
@@ -686,6 +694,8 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
   .pagebreak[data-kind="page"] { break-after: page; }
   .mm-light { display: block !important; }
   .mm-dark { display: none !important; }
+  .md .img-light { display: inline !important; }
+  .md .img-dark { display: none !important; }
   .c-tabs .tab-list, .gh-view, .ver-banner .vb-actions { display: none !important; }
   .ver-banner { position: static; margin: 0 0 1.5em; }
   .vd-current { outline: 0; }
@@ -1017,7 +1027,7 @@ const CONFIG = {
   // スライドで文字を縮める下限（%）。これより縮めないと入らない分は、次のスライドに送る
   slideMinScale: 80,
 };
-const ENGINE = 'md-report-5';
+const ENGINE = 'md-report-7';
 const KEY_THEME = 'md-report:theme';
 const KEY_TOC = 'md-report:toc';
 const KEY_DIFF = 'md-report:diffview';
@@ -1102,7 +1112,12 @@ const RX = {
   html: /^ {0,3}<(?:[!]--|\/?(?:address|article|aside|audio|blockquote|br|canvas|center|dd|details|dialog|div|dl|dt|figcaption|figure|footer|form|h[1-6]|header|hr|iframe|img|li|main|nav|ol|p|picture|pre|section|style|[s]cript|summary|svg|table|tbody|td|tfoot|th|thead|tr|ul|video)(?=[\s/>]|$))/i,
   fnDef: /^ {0,3}\[\^([^\]\s]+)\]:[ \t]*(.*)$/,
   container: /^ {0,3}(:{3,})[ \t]*(.*?)[ \t]*$/,
+  // [名前]: URL "タイトル"（参照形式の画像・リンクの定義）。URL らしいもの（スキーム付き・パス・ファイル名）だけを定義とみなし、
+  // 「[注意]: 本文」のような文は普通の段落のままにする
+  linkDef: /^ {0,3}\[(?!\^)([^\]]+)\]:[ \t]*(<[^>\n]*>|(?:data:|[A-Za-z][\w+.-]*:\/\/|mailto:|\.{0,2}\/|#)\S*|[\w.~%-]+(?:\/[\w.~%-]+)*\.[A-Za-z0-9]{1,5}(?:[?#]\S*)?)(?:[ \t]+(?:"([^"]*)"|'([^']*)'|\(([^)]*)\)))?[ \t]*$/,
 };
+/* 参照形式の名前は、大文字と小文字・空白の違いを区別しない */
+const refKey = s => String(s).trim().replace(/\s+/g, ' ').toLowerCase();
 /* フェンス（``` / ~~~）の中かどうかを 1 行ずつ判定する。中（または開始・終了の行）なら true */
 function fenceTracker() {
   let open = null;
@@ -1122,6 +1137,7 @@ function createParser(opts = {}) {
   const usedIds = new Set(opts.reserved || []);
   const fnDefs = new Map();
   const fnOrder = [];
+  const linkDefs = new Map();
   const sec = [0, 0];
   const figNo = { fig: 0, tbl: 0 };
   let tabSeq = 0;
@@ -1163,7 +1179,7 @@ function createParser(opts = {}) {
   function startsBlock(lines, i) {
     const l = lines[i];
     return RX.blank.test(l) || isFence(l) || RX.heading.test(l) || RX.hr.test(l) || RX.quote.test(l)
-      || RX.html.test(l) || RX.fnDef.test(l) || RX.container.test(l) || isListStart(l, true) || isTableStart(lines, i);
+      || RX.html.test(l) || RX.fnDef.test(l) || RX.linkDef.test(l) || RX.container.test(l) || isListStart(l, true) || isTableStart(lines, i);
   }
 
   function parseBlocks(lines, ctx = {}) {
@@ -1172,6 +1188,8 @@ function createParser(opts = {}) {
     while (i < lines.length) {
       const line = lines[i];
       if (RX.blank.test(line)) { i++; continue; }
+      // 参照形式の定義は parse() の最初にまとめて読んであるので、本文には出さない
+      if (RX.linkDef.test(line)) { i++; continue; }
 
       if (isFence(line)) {
         m = line.match(RX.fence);
@@ -1313,10 +1331,32 @@ function createParser(opts = {}) {
     return { html: '<' + tag + (ordered && start !== 1 ? ' start="' + start + '"' : '') + '>\n' + lis.join('\n') + '\n</' + tag + '>', next: i };
   }
 
+  /* 画像だけの段落（1 枚、またはライト用とダーク用の 2 枚）なら、表題にする代替テキストを返す（無ければ空文字）。図にしない段落は null */
+  function figureCaption(text) {
+    const imgs = [];
+    const rest = text.replace(/!\[([^\]]*)\](?:\(\s*((?:[^\s()]|\([^\s()]*\))*)(?:\s+(?:"[^"]*"|'[^']*'))?\s*\)|\[([^\]]*)\])?/g, (a, alt, url, ref) => {
+      const u = url != null ? url : (linkDefs.get(refKey(ref || alt)) || {}).url;
+      if (u == null) return a;
+      imgs.push({ alt, mode: (u.match(/#gh-(light|dark)-mode-only$/i) || [])[1] });
+      return '';
+    });
+    if (rest.trim() || !imgs.length || imgs.length > 2) return null;
+    if (imgs.length === 2 && imgs.map(x => (x.mode || '').toLowerCase()).sort().join() !== 'dark,light') return null;
+    return imgs.map(x => x.alt).find(Boolean) || '';
+  }
+  /* 画像の HTML。URL の末尾の #gh-light-mode-only / #gh-dark-mode-only は、テーマで出し分けるクラスにする */
+  function imgHtml(url, alt, title) {
+    let u = String(url).trim(), cls = '';
+    const t = u.match(/#gh-(light|dark)-mode-only$/i);
+    if (t) { cls = 'img-' + t[1].toLowerCase(); u = u.slice(0, -t[0].length); }
+    return '<img src="' + escAttr(safeUrl(u, true)) + '" alt="' + escAttr(stripTags(alt.replace(/\u0000\d+\u0000/g, ''))) + '"'
+      + (title ? ' title="' + escAttr(title) + '"' : '') + (cls ? ' class="' + cls + '"' : '') + '>';
+  }
+
   function renderParagraph(lines, tight) {
     const text = lines.map((l, k) => k ? l.replace(/^[ \t]+/, '') : l.replace(/^ {0,3}/, '')).join('\n').replace(/[ \t]+$/, '');
-    const fig = text.match(/^!\[([^\]]+)\]\(([^)]*)\)$/);
-    if (fig && !tight) return '<figure>' + parseInline(text) + '<figcaption>' + parseInline(fig[1]) + '</figcaption></figure>';
+    const cap = tight ? null : figureCaption(text);
+    if (cap != null) return '<figure>' + parseInline(text) + (cap ? '<figcaption>' + parseInline(cap) + '</figcaption>' : '') + '</figure>';
     const html = parseInline(text);
     return tight ? html : '<p>' + html + '</p>';
   }
@@ -1435,6 +1475,13 @@ function createParser(opts = {}) {
     return { f, list: firstList(f) };
   }
 
+  /* タブの見出しの列と中身（最初のタブを選んだ状態）。labels は HTML */
+  function tabsHtml(labels, bodies) {
+    const gid = uniqueId('tabs-' + (++tabSeq));
+    return '<div class="tab-list" role="tablist">' + labels.map((l, k) => '<button type="button" class="tab" role="tab" id="' + gid + '-t' + k + '" aria-controls="' + gid + '-p' + k + '" aria-selected="' + (k === 0) + '" data-tab="' + k + '">' + l + '</button>').join('') + '</div>'
+      + bodies.map((b, k) => '<div class="tab-panel' + (k === 0 ? ' is-active' : '') + '" role="tabpanel" id="' + gid + '-p' + k + '" aria-labelledby="' + gid + '-t' + k + '" data-label="' + escAttr(stripTags(labels[k])) + '">' + b + '</div>').join('');
+  }
+
   function renderContainer(info, lines) {
     const at = takeAttrs(info, true);
     const nm = at.text.trim().match(/^([A-Za-z][\w-]*)?\s*(.*)$/) || [];
@@ -1503,12 +1550,12 @@ function createParser(opts = {}) {
       }
       case 'tabs': {
         const ps = splitPanels(lines).map(panel);
-        const gid = uniqueId('tabs-' + (++tabSeq));
-        const labels = ps.map((x, k) => x.title || 'タブ ' + (k + 1));
-        return open('div', 'c-tabs') + title
-          + '<div class="tab-list" role="tablist">' + labels.map((l, k) => '<button type="button" class="tab" role="tab" id="' + gid + '-t' + k + '" aria-controls="' + gid + '-p' + k + '" aria-selected="' + (k === 0) + '" data-tab="' + k + '">' + l + '</button>').join('') + '</div>'
-          + ps.map((x, k) => '<div class="tab-panel' + (k === 0 ? ' is-active' : '') + '" role="tabpanel" id="' + gid + '-p' + k + '" aria-labelledby="' + gid + '-t' + k + '" data-label="' + escAttr(stripTags(labels[k])) + '">' + x.body + '</div>').join('')
-          + '</div>';
+        return open('div', 'c-tabs') + title + tabsHtml(ps.map((x, k) => x.title || 'タブ ' + (k + 1)), ps.map(x => x.body)) + '</div>';
+      }
+      case 'example': {
+        // 同じ Markdown から「表示」と「書き方」のタブを作る（2 か所に書かないので、見本と書き方がずれない）
+        const src = lines.join('\n').replace(/^(?:[ \t]*\n)+|\s+$/g, '');
+        return open('div', 'c-tabs c-example') + title + tabsHtml(['表示', '書き方'], [blocks(), renderCode(src, 'markdown')]) + '</div>';
       }
       case 'summary':
         return open('div', 'c-summary') + '<p class="c-title">' + (arg ? parseInline(arg) : '要旨') + '</p>' + blocks() + '</div>';
@@ -1829,12 +1876,21 @@ function createParser(opts = {}) {
       ? '<span class="menu-path">' + text.split(/\s*(?:>|＞|›)\s*/).filter(Boolean).map(p => '<span>' + parseInline(p, true) + '</span>').join('') + '</span>'
       : '<span class="lbl lbl-' + kind + '">' + parseInline(text, true) + '</span>'));
     // 画像とリンク
-    s = s.replace(/!\[([^\]]*)\]\(\s*((?:[^\s()]|\([^\s()]*\))*)(?:\s+(?:"([^"]*)"|'([^']*)'))?\s*\)/g, (a, alt, url, t1, t2) => {
-      const title = t1 ?? t2;
-      return hold('<img src="' + escAttr(safeUrl(url, true)) + '" alt="' + escAttr(stripTags(alt.replace(/\u0000\d+\u0000/g, ''))) + '"' + (title ? ' title="' + escAttr(title) + '"' : '') + '>');
+    s = s.replace(/!\[([^\]]*)\]\(\s*((?:[^\s()]|\([^\s()]*\))*)(?:\s+(?:"([^"]*)"|'([^']*)'))?\s*\)/g, (a, alt, url, t1, t2) => hold(imgHtml(url, alt, t1 ?? t2)));
+    // 参照形式の画像 ![代替][名前]・![代替][]・![代替]（定義があるときだけ）
+    s = s.replace(/!\[([^\]]*)\](?:\[([^\]]*)\])?/g, (a, alt, ref) => {
+      const d = linkDefs.get(refKey(ref || alt));
+      return d ? hold(imgHtml(d.url, alt, d.title)) : a;
     });
     s = s.replace(/\[((?:[^\[\]]|\[[^\[\]]*\])*)\]\(\s*((?:[^\s()]|\([^\s()]*\))*)(?:\s+(?:"([^"]*)"|'([^']*)'))?\s*\)/g,
       (a, text, url, t1, t2) => hold(linkHtml(url, parseInline(text, true, true), t1 ?? t2)));
+    // 参照形式のリンク [文字][名前]・[文字][]・[文字]（定義があるときだけ）
+    if (!inLink) {
+      s = s.replace(/\[((?:[^\[\]]|\[[^\[\]]*\])*)\](?:\[([^\]]*)\])?/g, (a, text, ref) => {
+        const d = linkDefs.size ? linkDefs.get(refKey(ref || text)) : null;
+        return d ? hold(linkHtml(d.url, parseInline(text, true, true), d.title)) : a;
+      });
+    }
     // 裸の URL（日本語の句読点の手前で止める）
     if (!inLink) {
       s = s.replace(/\bhttps?:\/\/[A-Za-z0-9\-._~:\/?#\[\]@!$&'()*+,;=%]+/g, url => {
@@ -1880,6 +1936,13 @@ function createParser(opts = {}) {
     parse(src) {
       const inFence = fenceTracker();
       const lines = src.split('\n').map(l => (inFence(l) ? l : l.replace(/^[ \t]+/, w => w.replace(/\t/g, '    '))));
+      // 参照形式の定義（[名前]: URL）を先に集める。定義は本文のどこに書いてもよい
+      const scan = fenceTracker();
+      for (const l of lines) {
+        if (scan(l)) continue;
+        const d = l.match(RX.linkDef);
+        if (d && !linkDefs.has(refKey(d[1]))) linkDefs.set(refKey(d[1]), { url: d[2].replace(/^<([^>]*)>$/, '$1'), title: d[3] ?? d[4] ?? d[5] ?? '' });
+      }
       const html = parseBlocks(lines, { top: true }) + renderFootnotes();
       return html.includes('class="xref') ? fillXrefs(html) : html;
     },
@@ -2929,6 +2992,37 @@ function splitter(node) {
       return c;
     } };
   }
+  if (node.matches('.c-tabs')) {
+    // タブ（example の見本を含む）は、選んでいるタブの中身を塊の単位で分ける。中の表・リスト・差分などはさらにその単位で分ける。
+    // どの部分にもタブの見出しとほかのタブを付けるので、続きのスライドでも「書き方」に切り替えられる
+    const panels = $$(':scope > .tab-panel', node);
+    const active = panels.find(p => p.classList.contains('is-active')) || panels[0];
+    if (!active) return null;
+    const units = [];
+    Array.from(active.children).forEach(ch => {
+      const s = splitter(ch);
+      if (s && s.count > 1) for (let i = 0; i < s.count; i++) units.push({ ch, s, i });
+      else units.push({ ch, s: null, i: 0 });
+    });
+    return { count: units.length, make(a, b) {
+      const n = node.cloneNode(false);
+      n.removeAttribute('id');
+      Array.from(node.children).forEach(k => {
+        if (k !== active) { n.append(k.cloneNode(true)); return; }
+        const p = active.cloneNode(false);
+        const part = units.slice(a, b);
+        for (let j = 0; j < part.length;) {
+          const u = part[j];
+          let e = j + 1;
+          while (e < part.length && part[e].ch === u.ch) e++;
+          p.append(u.s ? u.s.make(u.i, part[e - 1].i + 1) : u.ch.cloneNode(true));
+          j = e;
+        }
+        n.append(p);
+      });
+      return n;
+    } };
+  }
   if (node.matches('[data-split="items"]')) {
     const box = node.querySelector(':scope > .c-items');
     if (!box) return null;
@@ -3399,10 +3493,74 @@ els.slides.addEventListener('touchend', e => {
   if (Math.abs(dx) > 50) { if (dx < 0) Slides.next(); else Slides.prev(); }
 });
 
-/* ドラッグ＆ドロップで .md を読み込む（UTF-8 でなければ Shift_JIS として読む） */
+/* 編集欄に画像を貼り付け・ドロップすると、base64 にして埋め込む。
+   本文のカーソル位置には ![名前][名前] を、長い data: URL の定義は Markdown の末尾にまとめて置く */
+const isImageFile = f => /^image\//.test(f.type);
+const readDataUrl = f => new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result); r.onerror = () => reject(r.error); r.readAsDataURL(f); });
+async function embedImages(fileList) {
+  const files = Array.from(fileList).filter(isImageFile);
+  if (!files.length) return;
+  const ta = els.textarea;
+  const pos = ta.selectionStart;
+  const used = new Set(ta.value.split('\n').map(l => l.match(RX.linkDef)).filter(Boolean).map(d => refKey(d[1])));
+  const refs = [], defs = [];
+  let bytes = 0;
+  for (const f of files) {
+    let url;
+    try { url = await readDataUrl(f); } catch (err) { toast(f.name + ' を読み込めませんでした'); continue; }
+    bytes += url.length;
+    // ファイル名を代替テキスト（図の表題）と定義の名前にする。クリップボードの画像は名前が「image.png」なので、表題は空にして名前は image-2… と番号を振る
+    const stem = f.name && !/^image\.\w+$/i.test(f.name) ? f.name.replace(/\.[^.]+$/, '') : '';
+    const alt = stem.replace(/[\[\]]/g, '');
+    const base = alt.replace(/\s+/g, '-').slice(0, 40) || 'image';
+    let id = base, n = 1;
+    while (used.has(refKey(id))) id = base + '-' + (++n);
+    used.add(refKey(id));
+    refs.push('![' + alt + '][' + id + ']');
+    defs.push('[' + id + ']: ' + url);
+  }
+  if (!refs.length) return;
+  const v = ta.value;
+  const lastLine = v.replace(/\n+$/, '').split('\n').pop() || '';
+  const tail = (v.endsWith('\n') ? '' : '\n') + (RX.linkDef.test(lastLine) ? '' : '\n') + defs.join('\n') + '\n';
+  // 画像は 1 枚ずつ段落にする（画像だけの段落は図として中央に置かれる）。前後に空行が無ければ足す
+  const before = v.slice(0, pos), after = v.slice(pos);
+  const pre = !before || /\n\n$/.test(before) ? '' : before.endsWith('\n') ? '\n' : '\n\n';
+  const post = !after || /^\n\n/.test(after) ? '' : after.startsWith('\n') ? '\n' : '\n\n';
+  const refText = pre + refs.join('\n\n') + post;
+  const insert = (at, text) => {
+    ta.setSelectionRange(at, at);
+    if (!document.execCommand('insertText', false, text)) ta.setRangeText(text, at, at, 'end');
+  };
+  ta.focus();
+  insert(v.length, tail);   // 先に末尾へ定義を足す（カーソルより後ろなので、カーソルの位置はずれない）
+  insert(pos, refText);
+  const caret = pos + refText.length - post.length;
+  ta.setSelectionRange(caret, caret);
+  ta.dispatchEvent(new Event('input'));
+  const kb = Math.max(1, Math.round(bytes / 1024));
+  toast('画像を ' + refs.length + ' 枚埋め込みました（' + kb + 'KB）。定義は Markdown の末尾にあります' + (kb > 1024 ? '。大きいので、縮小してから入れることをおすすめします' : ''));
+}
+els.textarea.addEventListener('paste', e => {
+  const files = Array.from((e.clipboardData && e.clipboardData.files) || []);
+  if (!files.some(isImageFile)) return;
+  e.preventDefault();
+  embedImages(files);
+});
+
+/* ドラッグ＆ドロップで .md を読み込む（UTF-8 でなければ Shift_JIS として読む）。編集中は画像も受け付ける */
 let dragDepth = 0;
 const hasFiles = e => Array.from((e.dataTransfer && e.dataTransfer.types) || []).includes('Files');
-window.addEventListener('dragenter', e => { if (!hasFiles(e)) return; e.preventDefault(); if (++dragDepth === 1) els.drop.hidden = false; });
+const dragsImage = e => Array.from((e.dataTransfer && e.dataTransfer.items) || []).some(it => it.kind === 'file' && /^image\//.test(it.type));
+window.addEventListener('dragenter', e => {
+  if (!hasFiles(e)) return;
+  e.preventDefault();
+  if (++dragDepth === 1) {
+    $('div', els.drop).textContent = !dragsImage(e) ? 'Markdown ファイルをドロップして読み込む'
+      : Editor.isOpen() ? '画像をドロップして、カーソルの位置に埋め込む' : '画像は、編集欄（E）を開いてからドロップしてください';
+    els.drop.hidden = false;
+  }
+});
 window.addEventListener('dragover', e => { if (hasFiles(e)) e.preventDefault(); });
 window.addEventListener('dragleave', e => { if (!hasFiles(e)) return; if (--dragDepth <= 0) { dragDepth = 0; els.drop.hidden = true; } });
 window.addEventListener('drop', async e => {
@@ -3412,6 +3570,11 @@ window.addEventListener('drop', async e => {
   els.drop.hidden = true;
   const file = e.dataTransfer.files[0];
   if (!file) return;
+  if (isImageFile(file)) {
+    if (Editor.isOpen()) embedImages(e.dataTransfer.files);
+    else toast('画像は、編集欄（E）を開いてから貼り付けるかドロップすると埋め込めます');
+    return;
+  }
   if (!/\.(md|markdown|mdown|txt)$/i.test(file.name) && !/^text\//.test(file.type)) { toast('読み込めるのは .md・.markdown・.txt のファイルです'); return; }
   const buf = await file.arrayBuffer();
   let text;
