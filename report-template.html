@@ -11,6 +11,8 @@
   try {
     var t = localStorage.getItem('md-report:theme');
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    var w = parseInt(localStorage.getItem('md-report:measure'), 10);
+    if (w >= 480) document.documentElement.style.setProperty('--measure', w + 'px');
   } catch (e) {}
 </script>
 <style>
@@ -41,6 +43,13 @@
   --c-important: #6a45a6;
   --c-warning: #94600a;
   --c-caution: #c0392b;
+  /* 構文の色分け */
+  --tk-com: #6e7781; --tk-kw: #cf222e; --tk-str: #0a3069; --tk-num: #0550ae; --tk-fn: #8250df; --tk-type: #953800;
+  --tk-var: #953800; --tk-attr: #0550ae; --tk-tag: #116329; --tk-meta: #8250df; --tk-sec: #0550ae; --tk-op: #6e7781;
+  --tk-c0: #0550ae; --tk-c1: #953800; --tk-c2: #116329; --tk-c3: #8250df; --tk-c4: #cf222e; --tk-c5: #57606a;
+  /* グラフの系列の色（この順で割り当てる。色覚の多様性を考えて検証済みの並び） */
+  --chart-1: #2a78d6; --chart-2: #eb6834; --chart-3: #1baf7a; --chart-4: #eda100;
+  --chart-5: #e87ba4; --chart-6: #008300; --chart-7: #6250d6; --chart-8: #e34948; --chart-on-4: #0b0b0b;
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -49,6 +58,11 @@
   --accent: #93b2ec; --accent-soft: rgba(147, 178, 236, .13);
   --seal: #ff8b78; --mark: rgba(245, 205, 60, .28);
   --c-note: #93b2ec; --c-tip: #6fc597; --c-important: #bba0f0; --c-warning: #e0b052; --c-caution: #ff8b78;
+  --tk-com: #8b949e; --tk-kw: #ff7b72; --tk-str: #a5d6ff; --tk-num: #79c0ff; --tk-fn: #d2a8ff; --tk-type: #ffa657;
+  --tk-var: #ffa657; --tk-attr: #79c0ff; --tk-tag: #7ee787; --tk-meta: #d2a8ff; --tk-sec: #79c0ff; --tk-op: #8b949e;
+  --tk-c0: #79c0ff; --tk-c1: #ffa657; --tk-c2: #7ee787; --tk-c3: #d2a8ff; --tk-c4: #ff7b72; --tk-c5: #b1bac4;
+  --chart-1: #3987e5; --chart-2: #d95926; --chart-3: #199e70; --chart-4: #c98500;
+  --chart-5: #d55181; --chart-6: #008300; --chart-7: #9085e9; --chart-8: #e66767; --chart-on-4: #fff;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -58,6 +72,11 @@
     --accent: #93b2ec; --accent-soft: rgba(147, 178, 236, .13);
     --seal: #ff8b78; --mark: rgba(245, 205, 60, .28);
     --c-note: #93b2ec; --c-tip: #6fc597; --c-important: #bba0f0; --c-warning: #e0b052; --c-caution: #ff8b78;
+    --tk-com: #8b949e; --tk-kw: #ff7b72; --tk-str: #a5d6ff; --tk-num: #79c0ff; --tk-fn: #d2a8ff; --tk-type: #ffa657;
+    --tk-var: #ffa657; --tk-attr: #79c0ff; --tk-tag: #7ee787; --tk-meta: #d2a8ff; --tk-sec: #79c0ff; --tk-op: #8b949e;
+    --tk-c0: #79c0ff; --tk-c1: #ffa657; --tk-c2: #7ee787; --tk-c3: #d2a8ff; --tk-c4: #ff7b72; --tk-c5: #b1bac4;
+    --chart-1: #3987e5; --chart-2: #d95926; --chart-3: #199e70; --chart-4: #c98500;
+    --chart-5: #d55181; --chart-6: #008300; --chart-7: #9085e9; --chart-8: #e66767; --chart-on-4: #fff;
   }
 }
 
@@ -139,6 +158,9 @@ kbd {
   font-weight: 700; letter-spacing: .02em; font-feature-settings: "palt"; word-break: auto-phrase; text-wrap: balance;
 }
 .doc-header .doc-subtitle { margin: .55em 0 0; color: var(--ink-2); font-size: 1.05rem; line-height: 1.6; word-break: auto-phrase; }
+.doc-header .tb-logo { margin: 0 0 16px; }
+.doc-header .doc-logo { display: block; width: auto; max-width: min(240px, 60%); height: auto; max-height: 40px; }
+.title-slide .doc-header .doc-logo { max-height: 60px; }
 .doc-header .tb-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); margin: 0 -1px -1px 0; border-top: 1px solid var(--frame); }
 .doc-header .tb-meta > div { min-width: 0; padding: 8px 14px 9px; border-right: 1px solid var(--frame-inner); border-bottom: 1px solid var(--frame-inner); }
 .doc-header .tb-meta dt { font-size: 11.5px; line-height: 1.4; color: var(--ink-2); }
@@ -264,7 +286,129 @@ kbd {
 .gh-diff[data-view="unified"] .gh-split, .gh-diff[data-view="split"] .gh-unified { display: none; }
 .gh-diff.is-part .gh-view { display: none; }
 
-.table-wrap { margin: 1.3em 0; overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; }
+/* 構文の色分け */
+.tk-com { color: var(--tk-com); }
+.tk-kw { color: var(--tk-kw); }
+.tk-str { color: var(--tk-str); }
+.tk-num, .tk-lit { color: var(--tk-num); }
+.tk-fn { color: var(--tk-fn); }
+.tk-type { color: var(--tk-type); }
+.tk-var { color: var(--tk-var); }
+.tk-attr { color: var(--tk-attr); }
+.tk-tag { color: var(--tk-tag); }
+.tk-meta { color: var(--tk-meta); }
+.tk-sec { color: var(--tk-sec); font-weight: 700; }
+.tk-op { color: var(--tk-op); }
+.tk-strong { font-weight: 700; }
+.tk-em { font-style: italic; }
+.tk-del { color: var(--tk-com); text-decoration: line-through; }
+.tk-c0 { color: var(--tk-c0); } .tk-c1 { color: var(--tk-c1); } .tk-c2 { color: var(--tk-c2); }
+.tk-c3 { color: var(--tk-c3); } .tk-c4 { color: var(--tk-c4); } .tk-c5 { color: var(--tk-c5); }
+
+/* 表。.table-scroll が横のスクロールを受け持つ。横にはみ出さない表（.fits）は、見出しの行が画面の上に残る */
+.table-wrap { position: relative; margin: 1.3em 0; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; }
+.table-scroll.fits { overflow: visible; }
+.table-scroll.fits thead th { position: sticky; top: var(--header-h); z-index: 2; box-shadow: inset 0 -1px 0 var(--rule); }
+.table-scroll.fits thead tr:first-child th:first-child { border-top-left-radius: 5px; }
+.table-scroll.fits thead tr:first-child th:last-child { border-top-right-radius: 5px; }
+.table-wrap.is-long .table-scroll:not(.fits) { max-height: calc(100vh - var(--header-h) - 48px); overflow: auto; }
+.table-wrap.is-long .table-scroll:not(.fits) thead th { position: sticky; top: 0; z-index: 2; box-shadow: inset 0 -1px 0 var(--rule); }
+.tbl-tools { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin: 0 0 6px; color: var(--ink-2); font-size: 12.5px; line-height: 1.5; }
+.tbl-filter { width: min(15em, 55%); padding: 3px 9px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg); color: var(--ink); font: inherit; }
+.tbl-filter:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+.tbl-count { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.table-wrap.is-filtered .tbl-count { color: var(--accent); font-weight: 700; }
+.tbl-copy { padding: 2px 10px; border: 1px solid var(--rule); border-radius: 5px; background: var(--bg); color: var(--ink-2); font-size: 12px; line-height: 1.6; cursor: pointer; white-space: nowrap; }
+.tbl-copy:hover { color: var(--ink); border-color: var(--ink-2); }
+/* 行の少ない表は、マウスを重ねたときだけ右上にコピーのボタンを出す */
+.tbl-tools.is-mini { position: absolute; top: 5px; right: 6px; z-index: 3; margin: 0; opacity: 0; pointer-events: none; transition: opacity .15s; }
+.table-wrap:hover > .tbl-tools.is-mini, .table-wrap:focus-within > .tbl-tools.is-mini { opacity: 1; pointer-events: auto; }
+@media (hover: none) { .tbl-tools.is-mini { display: none; } }
+.md th.sortable { cursor: pointer; -webkit-user-select: none; user-select: none; }
+.md th.sortable::after { content: ""; display: inline-block; width: 5px; height: 5px; margin: 0 0 .2em .55em; border-right: 1.5px solid var(--ink-2); border-bottom: 1.5px solid var(--ink-2); transform: rotate(45deg); opacity: 0; vertical-align: middle; transition: opacity .15s; }
+.md th.sortable:hover::after { opacity: .45; }
+.md th[aria-sort="ascending"]::after { opacity: 1; border-color: var(--accent); transform: rotate(-135deg); margin-bottom: -.05em; }
+.md th[aria-sort="descending"]::after { opacity: 1; border-color: var(--accent); }
+.md .csv-title { margin: 1.3em 0 -.7em; font-size: .88em; font-weight: 700; }
+.slide-body .tbl-tools, body[data-view="compare"] .tbl-tools { display: none; }
+.slide-body .table-scroll { overflow: visible; }
+.slide-body thead th { position: static !important; }
+.slide-body th.sortable::after { display: none; }
+
+/* グラフ */
+.c-chart .chart-box { padding-top: .6em; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 8px; color: var(--ink-2); font-size: .82em; line-height: 1.5; }
+.chart-legend .lg { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend .sw { flex: none; width: 10px; height: 10px; border-radius: 2px; background: var(--c); }
+.chart-legend .sw.line { width: 14px; height: 2px; border-radius: 1px; }
+.chart-plot svg { display: block; max-width: 100%; height: auto; margin: 0 auto; overflow: visible; }
+.chart-svg text { fill: var(--ink-2); font-family: var(--font); font-variant-numeric: tabular-nums; }
+.chart-svg .chart-cat { fill: var(--ink); }
+.chart-svg .chart-val { fill: var(--ink); font-weight: 700; }
+.chart-svg .chart-in { font-weight: 700; }
+.chart-grid { stroke: var(--rule); stroke-width: 1; shape-rendering: crispEdges; }
+.chart-axis { stroke: var(--frame-inner); stroke-width: 1; shape-rendering: crispEdges; }
+.chart-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart-area { fill-opacity: .1; stroke: none; }
+.chart-dot { stroke: var(--bg); stroke-width: 2; }
+.chart-cross { stroke: var(--ink-2); stroke-width: 1; shape-rendering: crispEdges; pointer-events: none; }
+.chart-hit { fill: transparent; cursor: default; outline: none; }
+.chart-hit:hover, .chart-hit:focus-visible { fill: color-mix(in srgb, var(--ink) 5%, transparent); }
+.chart-hit[data-xs]:hover, .chart-hit[data-xs]:focus-visible { fill: transparent; }
+.md .chart-note { margin: .5em 0 0; color: var(--ink-2); font-size: .82em; }
+.slide-body .chart-plot svg { width: 100%; max-height: var(--media-max, 470px); }
+.slide-body .chart-hit { pointer-events: none; }
+
+/* 用語（:::glossary・*[略語]: の意味が添えられた語） */
+abbr.term { text-decoration: underline dotted color-mix(in srgb, var(--ink-2) 70%, transparent); text-underline-offset: .22em; cursor: help; }
+abbr.term[data-ref] { cursor: pointer; }
+.c-glossary > dl > div.is-flash { animation: term-flash 1.6s ease-out; }
+@keyframes term-flash { from { background: var(--mark); } to { background: transparent; } }
+
+/* ツールチップ（グラフの値・用語の意味） */
+.tip {
+  position: fixed; z-index: 96; max-width: min(320px, calc(100vw - 16px)); padding: 7px 10px 8px;
+  border: 1px solid var(--rule); border-radius: 6px; background: var(--bg); color: var(--ink);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .16); font-size: 12.5px; line-height: 1.55; pointer-events: none;
+}
+.tip-head { color: var(--ink-2); font-weight: 700; }
+.tip-row { display: flex; align-items: center; gap: 7px; margin-top: 2px; }
+.tip-row b { font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.tip-row span { color: var(--ink-2); }
+.tip-key { flex: none; width: 12px; height: 3px; border-radius: 2px; background: var(--c); }
+.tip-key.none { background: transparent; }
+.tip-body { margin-top: 2px; }
+.tip-hint { margin-top: 4px; color: var(--ink-2); font-size: 11.5px; }
+
+/* 文書内の検索 */
+.search-bar {
+  position: fixed; top: calc(var(--header-h) + 8px); right: 16px; z-index: 45; display: flex; align-items: center; gap: 2px;
+  padding: 4px 4px 4px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg); box-shadow: 0 6px 24px rgba(0, 0, 0, .14);
+}
+body.presenting .search-bar { top: 12px; z-index: 85; }
+.search-bar > svg { flex: none; width: 16px; height: 16px; margin-right: 4px; fill: none; stroke: var(--ink-2); stroke-width: 1.8; stroke-linecap: round; }
+.search-bar input { width: min(16em, 46vw); padding: 4px 2px; border: 0; outline: 0; background: transparent; color: var(--ink); font: inherit; font-size: 14px; }
+.search-bar input::-webkit-search-cancel-button { display: none; }
+.search-count { min-width: 4.8em; padding: 0 6px; color: var(--ink-2); font-size: 12.5px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.search-bar .icon-btn { width: 30px; height: 30px; }
+.search-bar .icon-btn svg { width: 16px; height: 16px; }
+::highlight(search-hit) { background-color: var(--mark); color: inherit; }
+::highlight(search-current) { background-color: #f59e0b; color: #111; }
+.toc a .toc-hits { flex: none; align-self: center; margin-left: auto; padding: 0 .5em; border-radius: 999px; background: var(--mark); color: var(--ink); font-size: 11px; font-weight: 700; line-height: 1.65; font-variant-numeric: tabular-nums; }
+
+/* 本文の幅を変える取っ手（本文の右端） */
+.main { position: relative; }
+.width-handle { position: absolute; top: 0; bottom: 0; left: -999px; z-index: 5; width: 16px; margin-left: -8px; cursor: col-resize; touch-action: none; outline: none; }
+.width-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 7px; width: 2px; background: var(--accent); opacity: 0; transition: opacity .15s; }
+.width-handle:hover::before, .width-handle:focus-visible::before, body.resizing .width-handle::before { opacity: .3; }
+.width-grip { position: sticky; top: calc(50vh - 22px); display: block; width: 6px; height: 44px; margin-left: 5px; border-radius: 3px; background: var(--rule); opacity: .8; transition: background .15s; }
+.width-handle:hover .width-grip, .width-handle:focus-visible .width-grip, body.resizing .width-grip { background: var(--accent); opacity: 1; }
+.width-label { position: absolute; top: 50%; left: 14px; display: none; padding: 2px 7px; border-radius: 4px; background: var(--ink); color: var(--bg); font-size: 12px; line-height: 1.6; white-space: nowrap; transform: translateY(-50%); font-variant-numeric: tabular-nums; }
+body.resizing .width-label, .width-handle:focus-visible .width-label { display: block; }
+body.resizing { cursor: col-resize; -webkit-user-select: none; user-select: none; }
+@media (max-width: 900px) { .width-handle { display: none; } }
+
 .md table { width: 100%; border-collapse: collapse; font-size: .93em; line-height: 1.6; }
 .md th, .md td { padding: .55em .9em; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
 .md td { font-variant-numeric: tabular-nums; }
@@ -448,6 +592,7 @@ kbd {
 .lbl-info { --c: var(--c-note); }
 .menu-path { padding: .05em .45em; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg-sunken); font-size: .92em; font-weight: 700; }
 .menu-path > span + span::before { content: "›"; margin: 0 .45em; color: var(--ink-2); font-weight: 400; }
+.swatch { display: inline-block; width: 1.05em; height: 1.05em; margin-right: .4em; border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 3px; background: var(--c); vertical-align: -.18em; }
 .md a.xref { text-decoration-style: dotted; }
 .md a.xref-missing { color: var(--c-caution); }
 
@@ -594,10 +739,12 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
 .slide-body { flex: 1 1 auto; min-height: 0; overflow: hidden; }
 .slide-body.is-overflow { overflow-y: auto; }
 .slide-foot { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 54px; font-size: 14px; color: var(--ink-2); }
+.slide-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.slide-logo { flex: none; width: auto; height: 22px; }
 .slide-doc { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .slide-num { font-variant-numeric: tabular-nums; }
 .slide-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--accent); transform: scaleX(var(--progress, 0)); transform-origin: left; transition: transform .25s ease; }
-.slide.is-title .slide-doc { visibility: hidden; }
+.slide.is-title .slide-brand { visibility: hidden; }
 .slide-body > :is(h1, h2, h3):first-child { font-size: 1.45em; margin: 0 0 .8em; padding: 0 0 .35em; border-bottom: 2px solid var(--accent); }
 .slide-body h3 { font-size: 1.12em; margin: 1.2em 0 .5em; }
 .slide-body .anchor, .slide-body .copy-btn { display: none; }
@@ -653,7 +800,7 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
 .drop-overlay > div { padding: 28px 40px; border: 2px dashed var(--accent); border-radius: 12px; background: var(--bg); color: var(--accent); font-weight: 700; }
 
 /* JavaScript が動かない環境（保存した HTML をプレビューで開いたときなど） */
-.no-js .topbar .icon-btn, .no-js .topbar-sep, .no-js .sidebar, .no-js .doc-footer, .no-js .copy-btn { display: none; }
+.no-js .topbar .icon-btn, .no-js .topbar-sep, .no-js .sidebar, .no-js .doc-footer, .no-js .copy-btn, .no-js .width-handle, .no-js .tbl-tools { display: none; }
 .no-js .layout { display: block; }
 .no-js .c-tabs .tab-list, .no-js .gh-view { display: none; }
 .no-js .c-tabs .tab-panel { display: block; }
@@ -670,6 +817,11 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
     --ink: #111827; --ink-2: #4b5563; --rule: #d1d5db; --frame: #374151; --frame-inner: #9ca3af;
     --accent: #24427a; --accent-soft: #eef2f9; --seal: #b3261e; --mark: #fbeea0;
     --c-note: #24427a; --c-tip: #276c43; --c-important: #5e3d96; --c-warning: #865606; --c-caution: #b3261e;
+    --tk-com: #6e7781; --tk-kw: #cf222e; --tk-str: #0a3069; --tk-num: #0550ae; --tk-fn: #8250df; --tk-type: #953800;
+    --tk-var: #953800; --tk-attr: #0550ae; --tk-tag: #116329; --tk-meta: #8250df; --tk-sec: #0550ae; --tk-op: #6e7781;
+    --tk-c0: #0550ae; --tk-c1: #953800; --tk-c2: #116329; --tk-c3: #8250df; --tk-c4: #cf222e; --tk-c5: #57606a;
+    --chart-1: #2a78d6; --chart-2: #eb6834; --chart-3: #1baf7a; --chart-4: #eda100;
+    --chart-5: #e87ba4; --chart-6: #008300; --chart-7: #6250d6; --chart-8: #e34948; --chart-on-4: #0b0b0b;
   }
   html { scroll-padding-top: 0; }
   body { background: #fff; font-size: 10.5pt; line-height: 1.75; }
@@ -686,7 +838,11 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
   .md :is(h1, h2, h3, h4) { break-after: avoid; }
   .md :is(figure, .alert, .mermaid-block, .codeblock, blockquote, img) { break-inside: avoid; }
   .md tr { break-inside: avoid; }
-  .table-wrap { overflow: visible; }
+  .table-scroll, .table-wrap.is-long .table-scroll:not(.fits) { overflow: visible; max-height: none; }
+  .md thead th { position: static !important; box-shadow: none !important; }
+  .tbl-tools, .width-handle, .search-bar, .tip { display: none !important; }
+  .md th.sortable::after { display: none; }
+  .chart-hit { fill: transparent !important; }
   .codeblock pre { white-space: pre-wrap; overflow-wrap: anywhere; }
   .md a { color: inherit; }
   .md a.show-url::after { content: " (" attr(href) ")"; font-size: .85em; color: var(--ink-2); overflow-wrap: anywhere; }
@@ -746,6 +902,8 @@ slide_level: 3
 - <kbd>D</kbd> キーで、元の Markdown をダウンロード
 - `:::` で囲むと、手順・カード・比較・タブなどの見せ方を指定できる（[](#sec-blocks)）
 - <kbd>V</kbd> キーで、確定した版を同じファイルの中に残し、版の間の変更を比べられる（[](#sec-versions)）
+- <kbd>/</kbd> キーで文書内を検索。閉じた折りたたみや、選んでいないタブの中も探す
+- 本文の右端にある取っ手をドラッグすると、本文の幅を変えられる（ダブルクリックで標準に戻る）
 
 > [!NOTE]
 > 外部のライブラリやサーバーがなくても、このファイルだけで動きます。外部と通信するのは、本文に Mermaid の図があるときに描画ライブラリを CDN から読み込む場合だけです。通信させたくない文書では、ファイル末尾にある `CONFIG.mermaidSrc` を空文字にしてください（図はソースのまま表示されます）。
@@ -787,6 +945,7 @@ slide_level: 3
 | キー | 動作 |
 |---|---|
 | <kbd>J</kbd> / <kbd>K</kbd> | 次 / 前の見出しへ移動 |
+| <kbd>/</kbd> | 文書内を検索（<kbd>Enter</kbd> で次へ、<kbd>Shift</kbd>+<kbd>Enter</kbd> で前へ、<kbd>Esc</kbd> で閉じる） |
 | <kbd>B</kbd> | 目次の表示を切り替え |
 | <kbd>T</kbd> | テーマを切り替え（OS に合わせる → ライト → ダーク） |
 | <kbd>S</kbd> | いま読んでいる位置からスライドを開始（<kbd>Shift</kbd>+<kbd>S</kbd> で最初から） |
@@ -799,6 +958,8 @@ slide_level: 3
 | <kbd>?</kbd> | ショートカットの一覧 |
 
 スライドの表示中は、<kbd>→</kbd> や <kbd>Space</kbd> で次へ、<kbd>←</kbd> で前へ進みます。数字を入力して <kbd>Enter</kbd> を押すとそのページへ移動し、<kbd>Esc</kbd> で終了します。
+
+本文の右端にある取っ手（縦の細い線）をドラッグすると、本文の幅を変えられます。取っ手を選んで <kbd>←</kbd> <kbd>→</kbd> でも変えられ、ダブルクリックで標準の幅に戻ります。変えた幅はブラウザが覚えるので、ほかの文書を開いたときも同じ幅になります（ファイルには保存しません）。
 
 ## スライドとして使う
 
@@ -904,8 +1065,46 @@ slide_level: 3
 | `slide_level` | `3` で H3 でもスライドを分ける | 2 |
 | `h2_pagebreak` | `true` で印刷時に H2 の前で改ページ | false |
 | `filename` | 保存するときのファイル名（拡張子なし） | design-v1 |
+| `palette` | 色の組み合わせ（[](#sec-look)） | teal |
+| `accent` | 強調の色を直接指定（[](#sec-look)） | "#0f6e6e" |
+| `font` / `mono` | 本文の書体・コードの書体（[](#sec-look)） | ud |
+| `logo` | 表紙とスライドの下に出すロゴ（[](#sec-look)） | logo |
 
 表に無いキー（`customer: 〇〇株式会社` など）も、表紙の欄にそのまま並びます。章番号を付けたくない見出しは、`## 改版履歴 {-}` のように末尾に `{-}` を付けます。見出しに `{#ID}` を付けると、その ID で参照できます。
+
+### 色・書体・ロゴ {#sec-look}
+
+会社や案件ごとの見た目は、フロントマターで指定します。
+
+~~~markdown
+---
+title: 〇〇システム 基本設計書
+palette: teal
+font: ud
+logo: logo
+---
+
+（本文）
+
+[logo]: data:image/png;base64,iVBORw0…
+~~~
+
+- **`palette`（色の組み合わせ）:** リンク、章番号、目次の印、タブ、スライドの見出しの線など、強調に使う色が変わります。ライト用とダーク用の色を組にしてあります（下の表）
+- **`accent`（色を直接指定）:** `accent: "#0f6e6e"` のように 1 色を書くと、ダーク用はその色を明るくして作ります。両方を決めるときは `accent: "#0f6e6e / #6fcfc9"` と書きます。`palette` と両方あるときは `accent` が優先です
+- **`font`（本文の書体）:** `gothic`（標準）・`ud`（BIZ UD ゴシック）・`meiryo`・`yugothic`・`noto`（Noto Sans JP）・`system`・`mincho`（明朝）から選ぶか、`font: "Noto Sans JP", sans-serif` のように書体名を並べます。見る人のパソコンに入っている書体だけが使われます
+- **`mono`（コードの書体）:** `mono: "Cascadia Code", Consolas` のように書体名を並べます
+- **`logo`（ロゴ）:** 表紙の左上と、スライドの下（表紙のスライドを除く）に出ます。URL・`data:` URL のほか、上のように参照形式の名前を書くと本文の末尾の定義を使うので、長い base64 をフロントマターに書かずに済みます
+
+| `palette` | ライト | ダーク |
+|---|---|---|
+| `indigo`（標準） | <span class="swatch" style="--c:#2b4c8c"></span>`#2b4c8c` | <span class="swatch" style="--c:#93b2ec"></span>`#93b2ec` |
+| `blue` | <span class="swatch" style="--c:#1f5fbf"></span>`#1f5fbf` | <span class="swatch" style="--c:#8ab4f8"></span>`#8ab4f8` |
+| `teal` | <span class="swatch" style="--c:#0f6e6e"></span>`#0f6e6e` | <span class="swatch" style="--c:#6fcfc9"></span>`#6fcfc9` |
+| `green` | <span class="swatch" style="--c:#2c6e3f"></span>`#2c6e3f` | <span class="swatch" style="--c:#7fcf96"></span>`#7fcf96` |
+| `wine` | <span class="swatch" style="--c:#8c2b4c"></span>`#8c2b4c` | <span class="swatch" style="--c:#f0a0b8"></span>`#f0a0b8` |
+| `orange` | <span class="swatch" style="--c:#a4501a"></span>`#a4501a` | <span class="swatch" style="--c:#f2a66b"></span>`#f2a66b` |
+| `purple` | <span class="swatch" style="--c:#5b3aa0"></span>`#5b3aa0` | <span class="swatch" style="--c:#c2a6f5"></span>`#c2a6f5` |
+| `gray` | <span class="swatch" style="--c:#3d4654"></span>`#3d4654` | <span class="swatch" style="--c:#b6bfcc"></span>`#b6bfcc` |
 
 ## 表現のための囲み {#sec-blocks}
 
@@ -934,6 +1133,8 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 | `tree` | ツリー（ディレクトリ構成など） | 入れ子のリスト |
 | `doc-only` / `slide-only` | 読み物だけ／スライドだけに表示 | 自由 |
 | `example` | 見本（「表示」と「書き方」のタブ） | 自由。中身を描いたものと、元の Markdown を並べる |
+| `chart` | グラフ（棒・横棒・積み上げ・折れ線・面・構成比） | Markdown の表か `` ```csv ``。1 列目が項目、2 列目以降が系列 |
+| `glossary` | 用語集。本文中の用語に意味を添える | リスト。「**用語**：意味」 |
 | 上記以外 | 自作のデザイン | `c-名前` のクラスが付くので CSS を足す |
 
 - 名前の後ろの文字は、タイトル・見出し・表題・出典として使います（`:::timeline 障害の経緯`）
@@ -1208,6 +1409,77 @@ systemctl status app
 :::
 ::::
 
+### グラフ（chart） {#sec-chart}
+
+`:::chart 種類 表題` の中に表を書くと、グラフにします。「グラフ」と「データ」のタブが付き、データのタブで元の表を見られます。マウスを重ねる（キーボードなら <kbd>Tab</kbd> で選ぶ）と値が出ます。
+
+| 種類 | 見せ方 | 向いている場面 |
+|---|---|---|
+| `bar`（省略時） | 縦棒 | 項目ごとの大きさを比べる |
+| `barh` | 横棒 | 項目名が長いとき、項目が多いとき |
+| `stacked` | 積み上げの縦棒 | 合計と内訳を一度に見せる |
+| `line` | 折れ線 | 時間による変化 |
+| `area` | 面 | 時間による変化と、量の大きさ |
+| `share`（`pie` でも可） | 構成比の帯 | 全体に占める割合（6 項目くらいまで） |
+
+- 表の 1 列目が項目、2 列目以降が系列です。Markdown の表のほか、`` ```csv `` でも書けます
+- `unit=万円` で単位を付けます。書かなければ、数値の後ろにそろって付いている単位（`%` など）を使います
+- `min=0 max=100` で縦軸（横棒は横軸）の範囲を決められます
+- 色は系列の順に、決まった順番で付きます（色の見え方が人によって違っても見分けやすい並び）。9 系列目以降は描きません
+- 円グラフは近い値の大小が読み取りにくいため、`pie` と書いても構成比の帯で描きます
+
+::::example
+:::chart line 画面の平均応答時間 unit=秒
+| 月 | 本番 | 検証 |
+|---|---:|---:|
+| 4月 | 1.4 | 2.3 |
+| 5月 | 1.2 | 2.0 |
+| 6月 | 1.1 | 1.8 |
+| 7月 | 0.9 | 1.6 |
+| 8月 | 0.8 | 1.5 |
+:::
+::::
+
+::::example
+:::chart stacked 月別の問い合わせ件数
+```csv
+月,障害,操作,要望
+4月,12,30,8
+5月,9,26,11
+6月,7,22,9
+7月,5,25,12
+```
+:::
+::::
+
+::::example
+:::chart share 開発費の内訳 unit=万円
+| 費目 | 金額 |
+|---|---:|
+| 人件費 | 1800 |
+| ライセンス | 420 |
+| 機器 | 260 |
+| その他 | 120 |
+:::
+::::
+
+### 用語集（glossary） {#sec-glossary}
+
+`:::glossary` に「**用語**：意味」のリストを書くと用語集になり、本文中のその用語に点線の下線が付きます。マウスを重ねると意味が出て、押すと用語集の項目へ移動します。下線が付くのは、H2 の章ごとに最初の 1 回だけです。
+
+用語集に載せるほどでもない略語は、本文のどこかに `*[略語]: 意味` と書きます（PHP Markdown Extra と同じ書き方）。この行は表示されず、本文中のその語に意味が添えられます。
+
+::::example
+障害時の目標は SLA に定め、RTO は 4 時間、RPO は 1 時間とする。
+
+:::glossary
+- **SLA**：サービス品質の合意。稼働率や対応時間を、提供者と利用者の間で約束する
+- **RTO**：目標復旧時間。障害が起きてから、業務を再開するまでの目標の時間
+:::
+
+*[RPO]: 目標復旧時点。どの時点のデータまで戻せればよいかの目標
+::::
+
 ### 自作のデザイン
 
 一覧に無い名前を付けると、`c-名前` のクラスが付いた囲みになります。CSS は、テンプレートの `<style>` に書くか、Markdown の中に `<style>` を書きます（Markdown の中に書くと、その文書だけに効きます）。
@@ -1262,9 +1534,44 @@ systemctl status app
 | 月額費用（円） | 1,200,000 | 850,000 | 税抜 |
 :::
 
+表の見出しを押すと、その列で並べ替えます（昇順 → 降順 → 元の順）。6 行以上の表には絞り込みの欄が付き、入れた文字を含む行だけを残します。「コピー」を押すと、Excel にそのまま貼れる形（タブ区切り）でコピーします（行の少ない表では、マウスを重ねると右上に出ます）。横にはみ出さない表は、下へスクロールしても見出しの行が画面の上に残ります。
+
+表は `` ```csv ``（タブ区切りなら `` ```tsv ``）でも書けます。1 行目が見出しで、数値だけの列は右に揃えます。引用符で囲めば、中に「,」や改行を入れられます。1 行目も中身として扱うときは `` ```csv noheader ``、ソースのまま色分けして見せるときは `` ```csv code `` と書きます。
+
+:::example
+```csv title="サーバー一覧"
+ホスト名,役割,CPU,メモリ,OS
+web01,Web,4,8GB,RHEL 9
+web02,Web,4,8GB,RHEL 9
+ap01,AP,8,32GB,RHEL 9
+ap02,AP,8,32GB,RHEL 9
+db01,"DB（主）",16,128GB,RHEL 9
+db02,"DB（従）",16,128GB,RHEL 9
+bat01,バッチ,4,16GB,RHEL 8
+```
+:::
+
 ### コード
 
-言語名の後ろに `:ファイル名` か `title="ファイル名"` を書くと、ファイル名を付けられます。
+言語名を書くと、色分けして表示します。言語名の後ろに `:ファイル名` か `title="ファイル名"` を書くと、ファイル名を付けられます。
+
+| 言語 | 書き方（どれでもよい） |
+|---|---|
+| C・C++ | `c` `cpp` `h` `hpp` |
+| C# | `cs` `csharp` |
+| Java | `java` |
+| JavaScript・TypeScript | `js` `javascript` `ts` `typescript` |
+| Python | `py` `python` |
+| シェル | `bash` `sh` `shell` `zsh` |
+| バッチファイル | `bat` `cmd` |
+| PowerShell | `powershell` `ps1` `pwsh` |
+| SQL | `sql`（`mysql` `postgresql` `tsql` なども） |
+| HTML・XML | `html` `xml` `svg` `xaml` |
+| CSS | `css` `scss` `less` |
+| Markdown | `md` `markdown` |
+| JSON・YAML・TOML | `json` `yaml` `yml` `toml` |
+| INI・設定ファイル | `ini` `conf` `cfg` `properties` `env` |
+| CSV・TSV | `csv code` `tsv code`（`code` を付けないと表になる） |
 
 :::example
 ```bash:deploy.sh
@@ -1280,6 +1587,41 @@ server:
 ```
 :::
 
+::::example
+:::tabs
+#### Python
+```python
+def total(items: list[dict]) -> int:
+    """税込みの合計を返す"""
+    return sum(int(i["price"] * 1.1) for i in items)
+```
+
+#### PowerShell
+```powershell
+Get-ChildItem -Path "D:\logs" -Filter *.log |
+  Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-30) } |
+  Remove-Item -WhatIf
+```
+
+#### SQL
+```sql
+SELECT dept, COUNT(*) AS cnt
+FROM employees
+WHERE joined_at >= '2026-04-01'
+GROUP BY dept;
+```
+
+#### Java
+```java
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("こんにちは");
+    }
+}
+```
+:::
+::::
+
 ### 差分（diff）
 
 コードブロックの言語に `diff`（または `patch`）を指定すると、`git diff` の出力を GitHub の差分画面のように表示します。
@@ -1288,6 +1630,7 @@ server:
 - 「統合」と「左右」で表示を切り替えられる。選んだ方法は、ほかの差分と次に開いたときにも使う。`` ```diff split `` と書くと最初から左右で表示する
 - 変更した行の中で、実際に変わった語をさらに濃い色で示す
 - 変更前と変更後の行番号を付ける。行番号と `+` `-` は表示だけで、コピーしたときは元の差分のまま
+- 差分の中のコードも色分けする。言語はファイル名の拡張子から決める（`.yml` なら YAML）。拡張子が無いときは `` ```diff lang=python `` のように書く
 
 :::example
 ```diff
@@ -1471,6 +1814,11 @@ h2_pagebreak: true
 ### 目的
 ### 対象範囲
 ### 用語
+
+:::glossary
+- **用語**：意味
+:::
+
 ## システム概要
 ## 方式設計
 ## 機能設計
@@ -1539,6 +1887,8 @@ slide_level: 3
 - <kbd>D</kbd> キーで、元の Markdown をダウンロード
 - `:::` で囲むと、手順・カード・比較・タブなどの見せ方を指定できる（[](#sec-blocks)）
 - <kbd>V</kbd> キーで、確定した版を同じファイルの中に残し、版の間の変更を比べられる（[](#sec-versions)）
+- <kbd>/</kbd> キーで文書内を検索。閉じた折りたたみや、選んでいないタブの中も探す
+- 本文の右端にある取っ手をドラッグすると、本文の幅を変えられる（ダブルクリックで標準に戻る）
 
 > [!NOTE]
 > 外部のライブラリやサーバーがなくても、このファイルだけで動きます。外部と通信するのは、本文に Mermaid の図があるときに描画ライブラリを CDN から読み込む場合だけです。通信させたくない文書では、ファイル末尾にある `CONFIG.mermaidSrc` を空文字にしてください（図はソースのまま表示されます）。
@@ -1580,6 +1930,7 @@ slide_level: 3
 | キー | 動作 |
 |---|---|
 | <kbd>J</kbd> / <kbd>K</kbd> | 次 / 前の見出しへ移動 |
+| <kbd>/</kbd> | 文書内を検索（<kbd>Enter</kbd> で次へ、<kbd>Shift</kbd>+<kbd>Enter</kbd> で前へ、<kbd>Esc</kbd> で閉じる） |
 | <kbd>B</kbd> | 目次の表示を切り替え |
 | <kbd>T</kbd> | テーマを切り替え（OS に合わせる → ライト → ダーク） |
 | <kbd>S</kbd> | いま読んでいる位置からスライドを開始（<kbd>Shift</kbd>+<kbd>S</kbd> で最初から） |
@@ -1592,6 +1943,8 @@ slide_level: 3
 | <kbd>?</kbd> | ショートカットの一覧 |
 
 スライドの表示中は、<kbd>→</kbd> や <kbd>Space</kbd> で次へ、<kbd>←</kbd> で前へ進みます。数字を入力して <kbd>Enter</kbd> を押すとそのページへ移動し、<kbd>Esc</kbd> で終了します。
+
+本文の右端にある取っ手（縦の細い線）をドラッグすると、本文の幅を変えられます。取っ手を選んで <kbd>←</kbd> <kbd>→</kbd> でも変えられ、ダブルクリックで標準の幅に戻ります。変えた幅はブラウザが覚えるので、ほかの文書を開いたときも同じ幅になります（ファイルには保存しません）。
 
 ## スライドとして使う
 
@@ -1697,8 +2050,46 @@ slide_level: 3
 | `slide_level` | `3` で H3 でもスライドを分ける | 2 |
 | `h2_pagebreak` | `true` で印刷時に H2 の前で改ページ | false |
 | `filename` | 保存するときのファイル名（拡張子なし） | design-v1 |
+| `palette` | 色の組み合わせ（[](#sec-look)） | teal |
+| `accent` | 強調の色を直接指定（[](#sec-look)） | "#0f6e6e" |
+| `font` / `mono` | 本文の書体・コードの書体（[](#sec-look)） | ud |
+| `logo` | 表紙とスライドの下に出すロゴ（[](#sec-look)） | logo |
 
 表に無いキー（`customer: 〇〇株式会社` など）も、表紙の欄にそのまま並びます。章番号を付けたくない見出しは、`## 改版履歴 {-}` のように末尾に `{-}` を付けます。見出しに `{#ID}` を付けると、その ID で参照できます。
+
+### 色・書体・ロゴ {#sec-look}
+
+会社や案件ごとの見た目は、フロントマターで指定します。
+
+~~~markdown
+---
+title: 〇〇システム 基本設計書
+palette: teal
+font: ud
+logo: logo
+---
+
+（本文）
+
+[logo]: data:image/png;base64,iVBORw0…
+~~~
+
+- **`palette`（色の組み合わせ）:** リンク、章番号、目次の印、タブ、スライドの見出しの線など、強調に使う色が変わります。ライト用とダーク用の色を組にしてあります（下の表）
+- **`accent`（色を直接指定）:** `accent: "#0f6e6e"` のように 1 色を書くと、ダーク用はその色を明るくして作ります。両方を決めるときは `accent: "#0f6e6e / #6fcfc9"` と書きます。`palette` と両方あるときは `accent` が優先です
+- **`font`（本文の書体）:** `gothic`（標準）・`ud`（BIZ UD ゴシック）・`meiryo`・`yugothic`・`noto`（Noto Sans JP）・`system`・`mincho`（明朝）から選ぶか、`font: "Noto Sans JP", sans-serif` のように書体名を並べます。見る人のパソコンに入っている書体だけが使われます
+- **`mono`（コードの書体）:** `mono: "Cascadia Code", Consolas` のように書体名を並べます
+- **`logo`（ロゴ）:** 表紙の左上と、スライドの下（表紙のスライドを除く）に出ます。URL・`data:` URL のほか、上のように参照形式の名前を書くと本文の末尾の定義を使うので、長い base64 をフロントマターに書かずに済みます
+
+| `palette` | ライト | ダーク |
+|---|---|---|
+| `indigo`（標準） | <span class="swatch" style="--c:#2b4c8c"></span>`#2b4c8c` | <span class="swatch" style="--c:#93b2ec"></span>`#93b2ec` |
+| `blue` | <span class="swatch" style="--c:#1f5fbf"></span>`#1f5fbf` | <span class="swatch" style="--c:#8ab4f8"></span>`#8ab4f8` |
+| `teal` | <span class="swatch" style="--c:#0f6e6e"></span>`#0f6e6e` | <span class="swatch" style="--c:#6fcfc9"></span>`#6fcfc9` |
+| `green` | <span class="swatch" style="--c:#2c6e3f"></span>`#2c6e3f` | <span class="swatch" style="--c:#7fcf96"></span>`#7fcf96` |
+| `wine` | <span class="swatch" style="--c:#8c2b4c"></span>`#8c2b4c` | <span class="swatch" style="--c:#f0a0b8"></span>`#f0a0b8` |
+| `orange` | <span class="swatch" style="--c:#a4501a"></span>`#a4501a` | <span class="swatch" style="--c:#f2a66b"></span>`#f2a66b` |
+| `purple` | <span class="swatch" style="--c:#5b3aa0"></span>`#5b3aa0` | <span class="swatch" style="--c:#c2a6f5"></span>`#c2a6f5` |
+| `gray` | <span class="swatch" style="--c:#3d4654"></span>`#3d4654` | <span class="swatch" style="--c:#b6bfcc"></span>`#b6bfcc` |
 
 ## 表現のための囲み {#sec-blocks}
 
@@ -1727,6 +2118,8 @@ Markdown だけでは表しにくい見せ方は、`:::名前` で始めて `:::
 | `tree` | ツリー（ディレクトリ構成など） | 入れ子のリスト |
 | `doc-only` / `slide-only` | 読み物だけ／スライドだけに表示 | 自由 |
 | `example` | 見本（「表示」と「書き方」のタブ） | 自由。中身を描いたものと、元の Markdown を並べる |
+| `chart` | グラフ（棒・横棒・積み上げ・折れ線・面・構成比） | Markdown の表か `` ```csv ``。1 列目が項目、2 列目以降が系列 |
+| `glossary` | 用語集。本文中の用語に意味を添える | リスト。「**用語**：意味」 |
 | 上記以外 | 自作のデザイン | `c-名前` のクラスが付くので CSS を足す |
 
 - 名前の後ろの文字は、タイトル・見出し・表題・出典として使います（`:::timeline 障害の経緯`）
@@ -2001,6 +2394,77 @@ systemctl status app
 :::
 ::::
 
+### グラフ（chart） {#sec-chart}
+
+`:::chart 種類 表題` の中に表を書くと、グラフにします。「グラフ」と「データ」のタブが付き、データのタブで元の表を見られます。マウスを重ねる（キーボードなら <kbd>Tab</kbd> で選ぶ）と値が出ます。
+
+| 種類 | 見せ方 | 向いている場面 |
+|---|---|---|
+| `bar`（省略時） | 縦棒 | 項目ごとの大きさを比べる |
+| `barh` | 横棒 | 項目名が長いとき、項目が多いとき |
+| `stacked` | 積み上げの縦棒 | 合計と内訳を一度に見せる |
+| `line` | 折れ線 | 時間による変化 |
+| `area` | 面 | 時間による変化と、量の大きさ |
+| `share`（`pie` でも可） | 構成比の帯 | 全体に占める割合（6 項目くらいまで） |
+
+- 表の 1 列目が項目、2 列目以降が系列です。Markdown の表のほか、`` ```csv `` でも書けます
+- `unit=万円` で単位を付けます。書かなければ、数値の後ろにそろって付いている単位（`%` など）を使います
+- `min=0 max=100` で縦軸（横棒は横軸）の範囲を決められます
+- 色は系列の順に、決まった順番で付きます（色の見え方が人によって違っても見分けやすい並び）。9 系列目以降は描きません
+- 円グラフは近い値の大小が読み取りにくいため、`pie` と書いても構成比の帯で描きます
+
+::::example
+:::chart line 画面の平均応答時間 unit=秒
+| 月 | 本番 | 検証 |
+|---|---:|---:|
+| 4月 | 1.4 | 2.3 |
+| 5月 | 1.2 | 2.0 |
+| 6月 | 1.1 | 1.8 |
+| 7月 | 0.9 | 1.6 |
+| 8月 | 0.8 | 1.5 |
+:::
+::::
+
+::::example
+:::chart stacked 月別の問い合わせ件数
+```csv
+月,障害,操作,要望
+4月,12,30,8
+5月,9,26,11
+6月,7,22,9
+7月,5,25,12
+```
+:::
+::::
+
+::::example
+:::chart share 開発費の内訳 unit=万円
+| 費目 | 金額 |
+|---|---:|
+| 人件費 | 1800 |
+| ライセンス | 420 |
+| 機器 | 260 |
+| その他 | 120 |
+:::
+::::
+
+### 用語集（glossary） {#sec-glossary}
+
+`:::glossary` に「**用語**：意味」のリストを書くと用語集になり、本文中のその用語に点線の下線が付きます。マウスを重ねると意味が出て、押すと用語集の項目へ移動します。下線が付くのは、H2 の章ごとに最初の 1 回だけです。
+
+用語集に載せるほどでもない略語は、本文のどこかに `*[略語]: 意味` と書きます（PHP Markdown Extra と同じ書き方）。この行は表示されず、本文中のその語に意味が添えられます。
+
+::::example
+障害時の目標は SLA に定め、RTO は 4 時間、RPO は 1 時間とする。
+
+:::glossary
+- **SLA**：サービス品質の合意。稼働率や対応時間を、提供者と利用者の間で約束する
+- **RTO**：目標復旧時間。障害が起きてから、業務を再開するまでの目標の時間
+:::
+
+*[RPO]: 目標復旧時点。どの時点のデータまで戻せればよいかの目標
+::::
+
 ### 自作のデザイン
 
 一覧に無い名前を付けると、`c-名前` のクラスが付いた囲みになります。CSS は、テンプレートの `<style>` に書くか、Markdown の中に `<style>` を書きます（Markdown の中に書くと、その文書だけに効きます）。
@@ -2055,9 +2519,44 @@ systemctl status app
 | 月額費用（円） | 1,200,000 | 850,000 | 税抜 |
 :::
 
+表の見出しを押すと、その列で並べ替えます（昇順 → 降順 → 元の順）。6 行以上の表には絞り込みの欄が付き、入れた文字を含む行だけを残します。「コピー」を押すと、Excel にそのまま貼れる形（タブ区切り）でコピーします（行の少ない表では、マウスを重ねると右上に出ます）。横にはみ出さない表は、下へスクロールしても見出しの行が画面の上に残ります。
+
+表は `` ```csv ``（タブ区切りなら `` ```tsv ``）でも書けます。1 行目が見出しで、数値だけの列は右に揃えます。引用符で囲めば、中に「,」や改行を入れられます。1 行目も中身として扱うときは `` ```csv noheader ``、ソースのまま色分けして見せるときは `` ```csv code `` と書きます。
+
+:::example
+```csv title="サーバー一覧"
+ホスト名,役割,CPU,メモリ,OS
+web01,Web,4,8GB,RHEL 9
+web02,Web,4,8GB,RHEL 9
+ap01,AP,8,32GB,RHEL 9
+ap02,AP,8,32GB,RHEL 9
+db01,"DB（主）",16,128GB,RHEL 9
+db02,"DB（従）",16,128GB,RHEL 9
+bat01,バッチ,4,16GB,RHEL 8
+```
+:::
+
 ### コード
 
-言語名の後ろに `:ファイル名` か `title="ファイル名"` を書くと、ファイル名を付けられます。
+言語名を書くと、色分けして表示します。言語名の後ろに `:ファイル名` か `title="ファイル名"` を書くと、ファイル名を付けられます。
+
+| 言語 | 書き方（どれでもよい） |
+|---|---|
+| C・C++ | `c` `cpp` `h` `hpp` |
+| C# | `cs` `csharp` |
+| Java | `java` |
+| JavaScript・TypeScript | `js` `javascript` `ts` `typescript` |
+| Python | `py` `python` |
+| シェル | `bash` `sh` `shell` `zsh` |
+| バッチファイル | `bat` `cmd` |
+| PowerShell | `powershell` `ps1` `pwsh` |
+| SQL | `sql`（`mysql` `postgresql` `tsql` なども） |
+| HTML・XML | `html` `xml` `svg` `xaml` |
+| CSS | `css` `scss` `less` |
+| Markdown | `md` `markdown` |
+| JSON・YAML・TOML | `json` `yaml` `yml` `toml` |
+| INI・設定ファイル | `ini` `conf` `cfg` `properties` `env` |
+| CSV・TSV | `csv code` `tsv code`（`code` を付けないと表になる） |
 
 :::example
 ```bash:deploy.sh
@@ -2073,6 +2572,41 @@ server:
 ```
 :::
 
+::::example
+:::tabs
+#### Python
+```python
+def total(items: list[dict]) -> int:
+    """税込みの合計を返す"""
+    return sum(int(i["price"] * 1.1) for i in items)
+```
+
+#### PowerShell
+```powershell
+Get-ChildItem -Path "D:\logs" -Filter *.log |
+  Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-30) } |
+  Remove-Item -WhatIf
+```
+
+#### SQL
+```sql
+SELECT dept, COUNT(*) AS cnt
+FROM employees
+WHERE joined_at >= '2026-04-01'
+GROUP BY dept;
+```
+
+#### Java
+```java
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("こんにちは");
+    }
+}
+```
+:::
+::::
+
 ### 差分（diff）
 
 コードブロックの言語に `diff`（または `patch`）を指定すると、`git diff` の出力を GitHub の差分画面のように表示します。
@@ -2081,6 +2615,7 @@ server:
 - 「統合」と「左右」で表示を切り替えられる。選んだ方法は、ほかの差分と次に開いたときにも使う。`` ```diff split `` と書くと最初から左右で表示する
 - 変更した行の中で、実際に変わった語をさらに濃い色で示す
 - 変更前と変更後の行番号を付ける。行番号と `+` `-` は表示だけで、コピーしたときは元の差分のまま
+- 差分の中のコードも色分けする。言語はファイル名の拡張子から決める（`.yml` なら YAML）。拡張子が無いときは `` ```diff lang=python `` のように書く
 
 :::example
 ```diff
@@ -2264,6 +2799,11 @@ h2_pagebreak: true
 ### 目的
 ### 対象範囲
 ### 用語
+
+:::glossary
+- **用語**：意味
+:::
+
 ## システム概要
 ## 方式設計
 ## 機能設計
@@ -2579,6 +3119,7 @@ h2_pagebreak: true
 <header class="topbar" id="ui-topbar">
   <button class="icon-btn" type="button" data-action="toc" title="目次の表示を切り替え（B）" aria-label="目次の表示を切り替え"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h11"/></svg></button>
   <div class="topbar-title"><span id="ui-title"></span><span class="topbar-crumb" id="ui-crumb"></span></div>
+  <button class="icon-btn" type="button" data-action="search" title="文書内を検索（/）" aria-label="文書内を検索"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></button>
   <button class="icon-btn theme-btn" type="button" data-action="theme" data-mode="auto" title="テーマ" aria-label="テーマ"><svg class="i-auto" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path class="fill" d="M12 4a8 8 0 0 0 0 16z"/></svg><svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.5A8 8 0 1 1 9.5 4.5a6.5 6.5 0 0 0 10 10z"/></svg></button>
   <button class="icon-btn" type="button" data-action="slides" title="スライドで表示（S）" aria-label="スライドで表示"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12.5" rx="1.5"/><path d="M12 16.5V20M8.5 20h7"/><path class="fill" d="M10.3 7.6v5.6l4.6-2.8z"/></svg></button>
   <button class="icon-btn" type="button" data-action="versions" title="版の管理（V）" aria-label="版の管理"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v3.8h3.8"/><path d="M12 8v4.2l2.8 1.8"/></svg></button>
@@ -2609,6 +3150,7 @@ h2_pagebreak: true
     <noscript><p class="noscript-msg">このページは JavaScript で Markdown を表示しています。JavaScript を有効にしてください。Markdown をそのまま読む場合は、このファイルをテキストエディタで開いてください。</p></noscript>
     <div class="ver-banner" id="ui-verbar" role="status" hidden></div>
     <article class="doc" id="ui-doc"></article>
+    <div class="width-handle" id="ui-width" role="separator" aria-orientation="vertical" tabindex="0" aria-label="本文の幅（ドラッグか ← → で変える。ダブルクリックか Enter で標準に戻す）" title="ドラッグで本文の幅を変える（ダブルクリックで標準に戻す）"><span class="width-grip"><span class="width-label"></span></span></div>
     <footer class="doc-footer">
       <span>この文書は Markdown から作られています。</span>
       <button class="text-btn" type="button" data-action="md">元の Markdown をダウンロード</button>
@@ -2641,9 +3183,11 @@ h2_pagebreak: true
         <h3>読む</h3>
         <dl>
           <div><dt><kbd>J</kbd> / <kbd>K</kbd></dt><dd>次 / 前の見出しへ</dd></div>
+          <div><dt><kbd>/</kbd></dt><dd>文書内を検索（<kbd>Enter</kbd> で次へ、<kbd>Shift</kbd>+<kbd>Enter</kbd> で前へ）</dd></div>
           <div><dt><kbd>B</kbd></dt><dd>目次の表示を切り替え</dd></div>
           <div><dt><kbd>T</kbd></dt><dd>テーマ（OS に合わせる → ライト → ダーク）</dd></div>
           <div><dt><kbd>F</kbd></dt><dd>全画面表示</dd></div>
+          <div><dt>本文の右端</dt><dd>ドラッグで本文の幅を変える（ダブルクリックで標準に戻す）</dd></div>
         </dl>
       </section>
       <section>
@@ -2688,6 +3232,15 @@ h2_pagebreak: true
   </div>
   <input type="file" id="ui-ver-file" accept=".md,.markdown,.txt,.html,.htm" hidden>
 </div>
+<div class="search-bar" id="ui-search" role="search" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>
+  <input type="search" id="ui-search-input" placeholder="文書内を検索" aria-label="文書内を検索" autocomplete="off" spellcheck="false">
+  <span class="search-count" id="ui-search-count" aria-live="polite"></span>
+  <button class="icon-btn" type="button" data-action="search-prev" title="前へ（Shift+Enter）" aria-label="前の一致へ"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
+  <button class="icon-btn" type="button" data-action="search-next" title="次へ（Enter）" aria-label="次の一致へ"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+  <button class="icon-btn" type="button" data-action="search-close" title="閉じる（Esc）" aria-label="検索を閉じる"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</div>
+<div class="tip" id="ui-tip" role="tooltip" hidden></div>
 <div class="drop-overlay" id="ui-drop" hidden><div>Markdown ファイルをドロップして読み込む</div></div>
 <div class="toast" id="ui-toast" role="status" aria-live="polite"></div>
 
@@ -2709,7 +3262,7 @@ const CONFIG = {
   // スライドで文字を縮める下限（%）。これより縮めないと入らない分は、次のスライドに送る
   slideMinScale: 80,
 };
-const ENGINE = 'md-report-7';
+const ENGINE = 'md-report-8';
 const KEY_THEME = 'md-report:theme';
 const KEY_TOC = 'md-report:toc';
 const KEY_DIFF = 'md-report:diffview';
@@ -2749,7 +3302,7 @@ const META_LABELS = {
   author: '作成', reviewer: 'レビュー', approver: '承認',
   customer: '顧客', project: '案件', org: '組織', dept: '部署',
 };
-const META_HIDDEN = new Set(['title', 'subtitle', 'status', 'classification', 'numbering', 'slide_level', 'h2_pagebreak', 'filename', 'breaks', 'lang']);
+const META_HIDDEN = new Set(['title', 'subtitle', 'status', 'classification', 'numbering', 'slide_level', 'h2_pagebreak', 'filename', 'breaks', 'lang', 'palette', 'accent', 'font', 'mono', 'logo']);
 const STATUS = {
   draft: ['下書き', 'draft'], wip: ['作成中', 'draft'], review: ['レビュー中', 'review'],
   approved: ['承認済', 'final'], final: ['確定', 'final'], obsolete: ['廃止', 'obsolete'],
@@ -2797,6 +3350,8 @@ const RX = {
   // [名前]: URL "タイトル"（参照形式の画像・リンクの定義）。URL らしいもの（スキーム付き・パス・ファイル名）だけを定義とみなし、
   // 「[注意]: 本文」のような文は普通の段落のままにする
   linkDef: /^ {0,3}\[(?!\^)([^\]]+)\]:[ \t]*(<[^>\n]*>|(?:data:|[A-Za-z][\w+.-]*:\/\/|mailto:|\.{0,2}\/|#)\S*|[\w.~%-]+(?:\/[\w.~%-]+)*\.[A-Za-z0-9]{1,5}(?:[?#]\S*)?)(?:[ \t]+(?:"([^"]*)"|'([^']*)'|\(([^)]*)\)))?[ \t]*$/,
+  // *[略語]: 意味（PHP Markdown Extra と同じ書き方）。本文には出さず、本文中の略語に意味を添える
+  abbrDef: /^ {0,3}\*\[([^\]\n]+)\]:[ \t]*(.*)$/,
 };
 /* 参照形式の名前は、大文字と小文字・空白の違いを区別しない */
 const refKey = s => String(s).trim().replace(/\s+/g, ' ').toLowerCase();
@@ -2814,12 +3369,610 @@ function fenceTracker() {
   };
 }
 
+/* ===== 構文の色分け（外部ライブラリなし） =====
+   言語ごとに「その位置で試す正規表現」を並べ、最初に当たったものを 1 語とする。当たらなければ識別子として
+   予約語・型・関数呼び出しを判定する。結果は行ごとの [種類, 文字列] の配列（行をまたぐ色は行ごとに閉じる）*/
+const HL = (() => {
+  const set = s => new Set(String(s).split(/\s+/).filter(Boolean));
+  const y = re => new RegExp(re.source, re.flags.replace('y', '') + 'y');
+  const WORD = y(/[A-Za-z_$][\w$]*/);
+  const CALL = y(/[ \t]*\(/);
+  const SPACE = y(/[ \t]+/);
+  const DQ = y(/"(?:[^"\\\n]|\\[\s\S])*"?/);
+  const SQ = y(/'(?:[^'\\\n]|\\[\s\S])*'?/);
+  const NUM = y(/(?<![\w$.])(?:0[xX][\dA-Fa-f_]+|0[bB][01_]+|0[oO][0-7_]+|(?:\d[\d_]*(?:\.\d[\d_]*)?|\.\d[\d_]*)(?:[eE][+-]?\d+)?)[A-Za-z]*/);
+  const C_COM = [['com', y(/\/\/[^\n]*/)], ['com', y(/\/\*[\s\S]*?(?:\*\/|$)/)]];
+  const DEFS = [
+    ['fn', y(/(?<=\b(?:function|def|func|sub|fn)[ \t]+\*?[ \t]*)[A-Za-z_$][\w$]*/)],
+    ['type', y(/(?<=\b(?:class|interface|struct|enum|record|trait|namespace|extends|implements|new)[ \t]+)[A-Za-z_$][\w$.]*/)],
+  ];
+  const L = {};
+  const def = (names, spec) => { const o = Object.assign({ word: WORD, call: true, kw: new Set(), rules: [] }, spec); names.split(' ').forEach(n => { L[n] = o; }); return o; };
+
+  function run(lang, code) {
+    const out = [];
+    let i = 0, plain = '';
+    const emit = (c, t) => {
+      if (!t) return;
+      if (!c) { plain += t; return; }
+      if (plain) { out.push(['', plain]); plain = ''; }
+      out.push([c, t]);
+    };
+    const n = code.length;
+    outer: while (i < n) {
+      SPACE.lastIndex = i;
+      const sp = SPACE.exec(code);
+      if (sp) { plain += sp[0]; i += sp[0].length; continue; }
+      for (const [act, re] of lang.rules) {
+        re.lastIndex = i;
+        const m = re.exec(code);
+        if (!m || !m[0]) continue;
+        if (typeof act === 'function') act(m, emit); else emit(act, m[0]);
+        i += m[0].length;
+        continue outer;
+      }
+      lang.word.lastIndex = i;
+      const w = lang.word.exec(code);
+      if (w && w[0]) { emit(classify(lang, w[0], code, i + w[0].length), w[0]); i += w[0].length; continue; }
+      plain += code[i++];
+    }
+    if (plain) out.push(['', plain]);
+    return out;
+  }
+  function classify(lang, w, code, end) {
+    if (lang.classify) { const c = lang.classify(w); if (c != null) return c; }
+    const k = lang.ci ? w.toLowerCase() : w;
+    if (lang.kw.has(k)) return 'kw';
+    if (lang.lit && lang.lit.has(k)) return 'lit';
+    if (lang.type && lang.type.has(k)) return 'type';
+    if (lang.fns && lang.fns.has(k)) return 'fn';
+    if (lang.call) { CALL.lastIndex = end; if (CALL.test(code)) return 'fn'; }
+    if (lang.capType && /^[A-Z][a-z0-9]\w*$/.test(w)) return 'type';
+    return '';
+  }
+
+  /* 文字列の中の変数（シェル・PowerShell の "…$x…"）を色分けする */
+  const withVars = re => (m, emit) => m[0].split(re).forEach((p, k) => emit(k % 2 ? 'var' : 'str', p));
+  /* HTML・XML のタグ（< と > は地の色、タグ名・属性名・値を色分け） */
+  const ATTR = y(/(\s+)([^\s"'>\/=]+)(?:(\s*=\s*)("[^"]*"|'[^']*'|[^\s"'=<>`]+))?/);
+  const tagTok = (m, emit) => {
+    const t = m[0];
+    const h = t.match(/^<\/?([^\s>\/]*)/);
+    emit('', h[0].slice(0, h[0].length - h[1].length));
+    emit('tag', h[1]);
+    let p = h[0].length;
+    for (;;) {
+      ATTR.lastIndex = p;
+      const a = ATTR.exec(t);
+      if (!a) break;
+      emit('', a[1]); emit('attr', a[2]);
+      if (a[3]) { emit('', a[3]); emit('str', a[4]); }
+      p += a[0].length;
+    }
+    emit('', t.slice(p));
+  };
+  const TAG = y(/<\/?[A-Za-z][\w:.-]*(?:\s+[^\s"'>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*\s*\/?>?/);
+  const embed = key => (m, emit) => {
+    const t = m[0], close = t.indexOf('>') + 1 || t.length;
+    tagTok([t.slice(0, close)], emit);
+    if (close < t.length) for (const [c, s] of run(L[key], t.slice(close))) emit(c, s);
+  };
+
+  /* --- C / C++ --- */
+  def('c cpp c++ cc cxx h hpp hh hxx ino arduino objc', {
+    rules: [...C_COM, ['meta', y(/(?<=^[ \t]*)#[ \t]*[A-Za-z]+/m)], ['str', y(/(?<=#[ \t]*include[ \t]*)<[^>\n]*>/)],
+      ['str', y(/(?:u8|[uUL])?R"([^()\\\s]{0,16})\([\s\S]*?\)\1"/)], ['str', DQ], ['str', SQ], ['num', NUM], ...DEFS],
+    kw: set('alignas alignof and asm auto bool break case catch char char8_t char16_t char32_t class concept const consteval constexpr constinit const_cast continue co_await co_return co_yield decltype default delete do double dynamic_cast else enum explicit export extern final float for friend goto if inline int long mutable namespace new noexcept not operator or override private protected public register reinterpret_cast requires return short signed sizeof static static_assert static_cast struct switch template this thread_local throw try typedef typeid typename union unsigned using virtual void volatile wchar_t while'),
+    lit: set('true false nullptr NULL'), type: set('size_t ssize_t ptrdiff_t intptr_t uintptr_t int8_t int16_t int32_t int64_t uint8_t uint16_t uint32_t uint64_t FILE std string vector map'), capType: true,
+  });
+  /* --- C# --- */
+  def('cs csharp c#', {
+    rules: [...C_COM, ['meta', y(/(?<=^[ \t]*)#[ \t]*[A-Za-z]+[^\n]*/m)], ['str', y(/\$?"""[\s\S]*?(?:"""|$)/)],
+      ['str', y(/(?:\$@|@\$|@)"(?:[^"]|"")*"?/)], ['str', y(/\$?"(?:[^"\\\n]|\\.)*"?/)], ['str', SQ],
+      ['meta', y(/(?<=^[ \t]*)\[[A-Z]\w*(?:\([^)\n]*\))?\]/m)], ['num', NUM], ...DEFS],
+    kw: set('abstract as async await base bool break byte case catch char checked class const continue decimal default delegate do double dynamic else enum event explicit extern file finally fixed float for foreach get global goto if implicit in init int interface internal is lock long nameof namespace new object operator out override params partial private protected public readonly record ref required return sbyte scoped sealed select set short sizeof stackalloc static string struct switch this throw try typeof uint ulong unchecked unsafe ushort using value var virtual void volatile when where while with yield from orderby group into join let'),
+    lit: set('true false null'), capType: true,
+  });
+  /* --- Java --- */
+  def('java', {
+    rules: [...C_COM, ['meta', y(/@[A-Za-z_][\w.]*/)], ['str', y(/"""[\s\S]*?(?:"""|$)/)], ['str', DQ], ['str', SQ], ['num', NUM], ...DEFS],
+    kw: set('abstract assert boolean break byte case catch char class const continue default do double else enum exports extends final finally float for goto if implements import instanceof int interface long module native new non-sealed package permits private protected public record requires return sealed short static strictfp super switch synchronized this throw throws transient try var void volatile while yield'),
+    lit: set('true false null'), capType: true,
+  });
+  /* --- JavaScript / TypeScript --- */
+  const JS_RULES = [...C_COM, ['meta', y(/(?<![\s\S])#![^\n]*/)], ['str', y(/`(?:[^`\\]|\\[\s\S])*`?/)], ['str', DQ], ['str', SQ],
+    ['str', y(/(?<=(?:^|[=(,:;!&|?{}\[+\-*%<>~^]|\b(?:return|typeof|case|do|else|in|of|void|yield|await))[ \t]*)\/(?![*\/])(?:[^\/\\\n\[]|\\.|\[(?:[^\]\\\n]|\\.)*\])+\/[dgimsuyv]*/m)],
+    ['meta', y(/@[A-Za-z_$][\w$.]*/)], ['num', NUM], ...DEFS];
+  const JS_KW = 'as async await break case catch class const continue debugger default delete do else export extends finally for from function get if import in instanceof let new of return set static super switch this throw try typeof var void while with yield';
+  def('js javascript jsx mjs cjs node', { rules: JS_RULES, kw: set(JS_KW), lit: set('true false null undefined NaN Infinity'), capType: true });
+  def('ts typescript tsx mts cts', {
+    rules: JS_RULES, capType: true,
+    kw: set(JS_KW + ' abstract asserts declare enum implements infer interface is keyof module namespace override private protected public readonly satisfies type unique'),
+    lit: set('true false null undefined NaN Infinity'), type: set('string number boolean any unknown never void object bigint symbol'),
+  });
+  /* --- Python --- */
+  def('py python python3 py3 pyw ipython', {
+    rules: [['com', y(/#[^\n]*/)], ['meta', y(/(?<=^[ \t]*)@[\w.]+/m)],
+      ['str', y(/[rRbBuUfF]{0,2}(?:"""[\s\S]*?(?:"""|$)|'''[\s\S]*?(?:'''|$))/)],
+      ['str', y(/[rRbBuUfF]{0,2}"(?:[^"\\\n]|\\[\s\S])*"?/)], ['str', y(/[rRbBuUfF]{0,2}'(?:[^'\\\n]|\\[\s\S])*'?/)], ['num', NUM], ...DEFS],
+    word: y(/[A-Za-z_]\w*/), capType: true,
+    kw: set('and as assert async await break case class continue def del elif else except finally for from global if import in is lambda match nonlocal not or pass raise return try type while with yield'),
+    lit: set('True False None self cls'), type: set('int str float bool bytes list dict set tuple object complex frozenset bytearray'),
+  });
+  /* --- シェル --- */
+  const SH_VAR = /(\$(?:\{[^}\n]*\}|[A-Za-z_]\w*|[@*#?$!0-9-]))/;
+  def('sh bash zsh shell ksh shellscript console terminal', {
+    rules: [['meta', y(/(?<![\s\S])#![^\n]*/)], ['com', y(/(?<![^\s;|&(])#[^\n]*/)],
+      ['str', y(/<<-?[ \t]*(['"]?)([A-Za-z_]\w*)\1[^\n]*\n[\s\S]*?(?:^[ \t]*\2[ \t]*$|$(?![\s\S]))/m)],
+      ['str', y(/'[^']*'?/)], [withVars(SH_VAR), y(/"(?:[^"\\]|\\[\s\S])*"?/)],
+      ['var', y(/\$(?:\{[^}\n]*\}|[A-Za-z_]\w*|[@*#?$!0-9-])/)], ['var', y(/(?<=(?:^|[\s;|&(]))[A-Za-z_]\w*(?==)/m)],
+      ['attr', y(/(?<=\s)--?[A-Za-z0-9][\w-]*/)], ['num', y(/(?<![\w.-])\d+(?:\.\d+)?(?![\w.])/)]],
+    word: y(/[A-Za-z_][\w.-]*/), call: false,
+    kw: set('if then else elif fi for while until do done case esac in function select time return break continue exit local export readonly declare typeset unset shift source alias trap eval exec set'),
+    fns: set('echo printf cd pwd read test cat grep egrep sed awk ls cp mv rm mkdir rmdir touch chmod chown chgrp ln sudo su find xargs curl wget git docker kubectl helm systemctl journalctl service tar gzip gunzip zip unzip ssh scp rsync sort uniq head tail cut tr wc ps kill pkill top df du free mount umount apt apt-get yum dnf rpm dpkg pip pip3 python python3 node npm npx make sleep date env which whoami hostname ping ip ifconfig netstat ss nc openssl tee basename dirname realpath true false'),
+  });
+  /* --- バッチファイル（cmd） --- */
+  def('bat cmd batch dos', {
+    rules: [['com', y(/(?<=^[ \t]*@?)(?:rem(?=[\s:]|$)[^\n]*|::[^\n]*)/im)], ['fn', y(/(?<=^[ \t]*):[A-Za-z_][\w.-]*/m)], ['meta', y(/(?<=^[ \t]*)@/m)],
+      ['var', y(/%~[a-zA-Z$:]*\d|%%~?[a-zA-Z]|%\d|%\*|%[^%\s"]+%|![^!\s"]+!/)], ['str', y(/"[^"\n]*"?/)],
+      ['attr', y(/(?<=\s)\/[A-Za-z?][\w:-]*/)], ['num', y(/(?<![\w.])\d+(?![\w.])/)]],
+    word: y(/[A-Za-z_][\w.-]*/), call: false, ci: true,
+    kw: set('if else for in do goto call exit set setlocal endlocal echo off on not exist defined errorlevel equ neq lss leq gtr geq pause shift start cd chdir pushd popd md mkdir rd rmdir del erase copy xcopy robocopy move ren rename type cls title choice timeout nul con cmd color ver path prompt find findstr where taskkill tasklist sc net reg powershell'),
+  });
+  /* --- PowerShell --- */
+  const PS_OPS = set('-eq -ne -gt -ge -lt -le -like -notlike -match -notmatch -contains -notcontains -in -notin -replace -split -join -and -or -not -xor -is -isnot -as -band -bor -bxor -bnot -shl -shr -f -ceq -cne -clike -cmatch -ieq -imatch');
+  def('ps1 powershell pwsh ps psm1 psd1', {
+    rules: [['com', y(/<#[\s\S]*?(?:#>|$)/)], ['com', y(/#[^\n]*/)],
+      ['str', y(/@"[ \t]*\n[\s\S]*?(?:\n"@|$)/)], ['str', y(/@'[ \t]*\n[\s\S]*?(?:\n'@|$)/)],
+      [withVars(/(\$(?:\{[^}\n]*\}|[\w:]+))/), y(/"(?:[^"`]|`[\s\S]|"")*"?/)], ['str', y(/'(?:[^']|'')*'?/)],
+      [(m, emit) => emit(/^\$(?:true|false|null)$/i.test(m[0]) ? 'lit' : 'var', m[0]), y(/\$(?:\{[^}\n]*\}|[\w:?^$]+)/)],
+      ['type', y(/\[[A-Za-z_][\w.`]*(?:\[[\w.,\s\[\]]*\])?\](?=[ \t]*[$\[\w(:]|[ \t]*$|::)/m)],
+      [(m, emit) => emit(PS_OPS.has(m[0].toLowerCase()) ? 'kw' : 'attr', m[0]), y(/(?<=^|[\s(])-[A-Za-z][\w]*/m)],
+      ['num', NUM], ...DEFS],
+    word: y(/[A-Za-z_][\w]*(?:-[A-Za-z][\w]*)*/), ci: true, call: false,
+    classify: w => (w.includes('-') ? 'fn' : null),
+    kw: set('begin break catch class continue data default define do dynamicparam else elseif end enum exit filter finally for foreach from function hidden if in param process return static switch throw trap try until using var while workflow'),
+  });
+  /* --- SQL --- */
+  def('sql mysql pgsql postgres postgresql plsql tsql mssql sqlite oracle psql mariadb bigquery snowflake hive', {
+    rules: [['com', y(/--[^\n]*/)], ['com', y(/\/\*[\s\S]*?(?:\*\/|$)/)], ['str', y(/[NnEe]?'(?:[^']|'')*'?/)],
+      ['attr', y(/"(?:[^"]|"")*"?|`[^`\n]*`?/)], ['var', y(/(?<![\w@:])[@:$][A-Za-z_]\w*/)], ['num', NUM]],
+    word: y(/[A-Za-z_][\w$#]*/), ci: true, call: false,
+    kw: set('add all alter analyze and any as asc begin between by cascade case check column commit constraint create cross current database declare default delete desc distinct drop else end except exec execute exists explain fetch first for foreign from full function grant group having if in index inner insert intersect into is join key lateral left like limit merge matched natural next not nulls offset on only or order outer over partition primary procedure recursive references rename replace return returns revoke right rollback rows schema select sequence set table temp temporary then to top transaction trigger truncate union unique update using vacuum values view when where while window with'),
+    type: set('int integer bigint smallint tinyint decimal numeric float real double precision char varchar nvarchar nchar text date time timestamp timestamptz datetime interval boolean bool blob clob bytea serial bigserial uuid json jsonb xml money bit'),
+    lit: set('true false null unknown'),
+    fns: set('count sum avg min max coalesce nullif cast convert concat substring substr trim ltrim rtrim upper lower length len replace round floor ceil ceiling abs now current_date current_time current_timestamp date_trunc extract to_char to_date to_number row_number rank dense_rank ntile lag lead first_value last_value ifnull isnull nvl iif greatest least string_agg group_concat array_agg json_agg json_extract datediff dateadd getdate sysdate format generate_series'),
+  });
+  /* --- HTML・XML --- */
+  def('html htm xhtml vue svelte', {
+    rules: [['com', y(/<[!]--[\s\S]*?(?:-->|$)/)], ['meta', y(/<![A-Za-z][^>]*>?/)],
+      [embed('js'), y(/<([s]cript)\b[^>]*>[\s\S]*?(?=<\/[s]cript\s*>|$(?![\s\S]))/i)],
+      [embed('css'), y(/<(style)\b[^>]*>[\s\S]*?(?=<\/style\s*>|$(?![\s\S]))/i)],
+      [tagTok, TAG], ['num', y(/&(?:#\d+|#x[\dA-Fa-f]+|[A-Za-z]\w*);/)]],
+    word: y(/[^\s<&]+/), call: false,
+  });
+  def('xml svg xaml xsl xslt plist csproj vbproj props targets nuspec resx wsdl xsd rss atom pom', {
+    rules: [['com', y(/<[!]--[\s\S]*?(?:-->|$)/)], ['meta', y(/<\?[\s\S]*?(?:\?>|$)/)], ['str', y(/<!\[CDATA\[[\s\S]*?(?:\]\]>|$)/)],
+      ['meta', y(/<![A-Za-z][^>]*>?/)], [tagTok, TAG], ['num', y(/&(?:#\d+|#x[\dA-Fa-f]+|[A-Za-z]\w*);/)]],
+    word: y(/[^\s<&]+/), call: false,
+  });
+  /* --- CSS --- */
+  def('css scss sass less', {
+    rules: [['com', y(/\/\*[\s\S]*?(?:\*\/|$)/)], ['com', y(/(?<![:\w])\/\/[^\n]*/)], ['str', DQ], ['str', SQ],
+      ['kw', y(/@[\w-]+/)], ['var', y(/--[\w-]+|\$[\w-]+/)],
+      ['attr', y(/(?<=(?:^|[{;])[ \t]*)[A-Za-z-][\w-]*(?=[ \t]*:(?![^;{}\n]*\{))/m)],
+      ['num', y(/#[\dA-Fa-f]{3,8}(?![\w-])/)], ['num', y(/(?<![\w-])-?(?:\d+\.?\d*|\.\d+)(?:%|[A-Za-z]+)?/)],
+      ['kw', y(/!important\b/)], ['type', y(/(?<![\w-])[.#][A-Za-z_-][\w-]*/)]],
+    word: y(/[A-Za-z_-][\w-]*/),
+  });
+  /* --- JSON・YAML・TOML・INI --- */
+  def('json jsonc json5 geojson webmanifest', {
+    rules: [...C_COM, ['attr', y(/"(?:[^"\\\n]|\\.)*"(?=\s*:)/)], ['str', DQ], ['str', SQ], ['num', y(/-?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/)]],
+    lit: set('true false null NaN Infinity'), call: false,
+  });
+  const YAML_KEY = /(?:"(?:[^"\\\n]|\\.)*"|'(?:[^'\n]|'')*'|[^\s#:'"\[\]{},&*!|>%@`-][^\n:#]*?|-[^\s#:][^\n:#]*?)/;
+  def('yaml yml', {
+    rules: [['com', y(/(?<![^\s])#[^\n]*/)], ['meta', y(/(?<=^)(?:---|\.\.\.)(?=[ \t]|$)/m)],
+      ['attr', new RegExp('(?<=^[ \\t]*(?:-[ \\t]+)*)' + YAML_KEY.source + '(?=[ \\t]*:(?:[ \\t]|$))', 'my')],
+      ['kw', y(/(?<=^[ \t]*)-(?=[ \t]|$)/m)], ['var', y(/[&*][\w-]+/)], ['type', y(/!{1,2}[\w!\/.-]*/)],
+      ['str', y(/"(?:[^"\\]|\\[\s\S])*"?|'(?:[^']|'')*'?/)], ['kw', y(/[|>][-+0-9]*(?=[ \t]*(?:#[^\n]*)?$)/m)],
+      ['num', y(/(?<![\w.-])[-+]?(?:0x[\dA-Fa-f]+|0o[0-7]+|\d[\d_]*(?:\.\d*)?(?:[eE][+-]?\d+)?|\.inf|\.nan)(?![\w.-]|[ \t]*[^\s#,\]}])/i)],
+      ['lit', y(/~(?=\s|$)/)]],
+    word: y(/[A-Za-z_][\w.-]*/), ci: true, call: false, lit: set('true false null yes no on off'),
+  });
+  def('toml', {
+    rules: [['com', y(/#[^\n]*/)], ['sec', y(/(?<=^[ \t]*)\[\[?[^\]\n]*\]\]?/m)],
+      ['attr', y(/(?<=^[ \t]*|[{,][ \t]*)(?:[\w-]+|"(?:[^"\\\n]|\\.)*"|'[^'\n]*')(?:[ \t]*\.[ \t]*(?:[\w-]+|"(?:[^"\\\n]|\\.)*"|'[^'\n]*'))*(?=[ \t]*=)/m)],
+      ['str', y(/"""[\s\S]*?(?:"""|$)|'''[\s\S]*?(?:'''|$)/)], ['str', DQ], ['str', y(/'[^'\n]*'?/)],
+      ['num', y(/\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})?)?|\d{2}:\d{2}:\d{2}(?:\.\d+)?/)],
+      ['num', y(/(?<![\w.])[+-]?(?:0x[\dA-Fa-f_]+|0o[0-7_]+|0b[01_]+|\d[\d_]*(?:\.[\d_]+)?(?:[eE][+-]?\d+)?|inf|nan)(?![\w.])/)]],
+    word: y(/[A-Za-z_][\w-]*/), call: false, lit: set('true false'),
+  });
+  def('ini conf cfg properties prop env dotenv editorconfig gitconfig desktop service cnf inf', {
+    rules: [['com', y(/(?<=^[ \t]*)[;#!][^\n]*/m)], ['sec', y(/(?<=^[ \t]*)\[[^\]\n]*\]/m)],
+      ['attr', y(/(?<=^[ \t]*)(?:export[ \t]+)?[^\s=:;#!\[][^=:\n]*?(?=[ \t]*[=:])/m)],
+      ['str', y(/"(?:[^"\\\n]|\\.)*"?|'[^'\n]*'?/)], ['var', y(/\$\{[^}\n]*\}|\$[A-Za-z_]\w*|%\([\w.]+\)s|%[A-Za-z_]\w*%/)],
+      ['num', y(/(?<![\w.])-?\d+(?:\.\d+)?(?![\w.])/)]],
+    word: y(/[A-Za-z_][\w.-]*/), call: false, ci: true, lit: set('true false yes no on off null none'),
+  });
+  /* --- Markdown（フェンスの中は、その言語で色分けする） --- */
+  const mdFence = (m, emit) => {
+    const open = m[1] + m[2], inner = m[3], rest = m[0].slice(open.length + 1 + inner.length);
+    emit('meta', open); emit('', '\n');
+    const lang = L[(m[2].trim().split(/[\s:{]/)[0] || '').toLowerCase()];
+    if (lang && inner) for (const [c, s] of run(lang, inner)) emit(c, s);
+    else emit('', inner);
+    emit('meta', rest);
+  };
+  const frontMatter = (m, emit) => {
+    const lines = m[0].split('\n');
+    emit('meta', lines[0]); emit('', '\n');
+    for (const [c, s] of run(L.yaml, lines.slice(1, -1).join('\n'))) emit(c, s);
+    emit('', '\n'); emit('meta', lines[lines.length - 1]);
+  };
+  const mdLink = (m, emit) => {
+    const k = m[0].indexOf('](') >= 0 ? m[0].indexOf('](') + 1 : m[0].indexOf('][') + 1;
+    emit('str', m[0].slice(0, k)); emit('attr', m[0].slice(k));
+  };
+  def('md markdown mdx', {
+    rules: [[frontMatter, y(/(?<![\s\S])---[ \t]*\n[\s\S]*?\n(?:---|\.\.\.)[ \t]*(?=\n|$)/)],
+      [mdFence, y(/(?<=^ {0,3})(`{3,}|~{3,})([^\n]*)\n([\s\S]*?)(?:^ {0,3}\1[`~]*[ \t]*$|$(?![\s\S]))/m)],
+      ['sec', y(/(?<=^ {0,3})#{1,6}(?=[ \t]|$)[^\n]*/m)], ['meta', y(/(?<=^ {0,3}):{3,}[^\n]*/m)],
+      ['meta', y(/(?<=^ {0,3})(?:-{3,}|\*{3,}|_{3,})[ \t]*$/m)],
+      ['kw', y(/(?<=^[ \t]*)(?:[-*+]|\d{1,9}[.)])(?=[ \t])/m)], ['kw', y(/(?<=^[ \t]*(?:[-*+]|\d+[.)])[ \t]+)\[[ xX]\]/m)],
+      ['com', y(/(?<=^ {0,3})>[ \t]?(?:\[![A-Za-z]+\])?/m)],
+      ['attr', y(/(?<=^ {0,3})\*?\[[^\]\n]+\]:[^\n]*/m)], ['', y(/\\[!-\/:-@\[-`{-~]/)],
+      ['str', y(/(`+)(?!`)[^\n]*?[^`\n]\1(?!`)/)], ['attr', y(/\[\^[^\]\s]+\]/)],
+      [mdLink, y(/!?\[(?:[^\[\]\n]|\[[^\[\]\n]*\])*\](?:\([^)\n]*\)|\[[^\]\n]*\])/)],
+      ['kw', y(/(?<![\w:]):(?:ok|ng|warn|info|tag|menu)(?=\[)/)],
+      ['strong', y(/\*\*(?=\S)[^\n]*?\S\*\*|(?<!\w)__(?=\S)[^\n]*?\S__(?!\w)/)],
+      ['em', y(/\*(?=[^\s*])[^\n*]*?[^\s*]\*|(?<!\w)_(?=[^\s_])[^\n_]*?[^\s_]_(?!\w)/)], ['del', y(/~~(?=\S)[^\n]*?\S~~/)],
+      ['com', y(/<[!]--[\s\S]*?(?:-->|$)/)], [tagTok, TAG], ['op', y(/\|/)]],
+    word: y(/[^\s`*_~\[\]<>!:|\\&]+/), call: false,
+  });
+
+  /* --- CSV・TSV（列ごとに色を変える。引用符の中の区切りと改行は列の中身） --- */
+  function csvTokens(code, tab) {
+    const sep = tab ? '\t' : ',';
+    const field = tab ? /"(?:[^"]|"")*"?|[^\t\n]*/y : /"(?:[^"]|"")*"?|[^,\n]*/y;
+    const rest = tab ? /[^\t\n]*/y : /[^,\n]*/y;
+    const out = [];
+    let i = 0, col = 0;
+    while (i <= code.length) {
+      field.lastIndex = i;
+      const m = field.exec(code);
+      let f = m ? m[0] : '';
+      // 引用符の後ろに文字が続く崩れた列（"ab"cd）は、区切りまでを同じ列にする
+      if (f[0] === '"') { rest.lastIndex = i + f.length; const r = rest.exec(code); if (r) f += r[0]; }
+      if (f) out.push(['c' + (col % 6), f]);
+      i += f.length;
+      if (i >= code.length) break;
+      if (code[i] === sep) { out.push(['op', sep]); col++; } else { out.push(['', '\n']); col = 0; }
+      i++;
+    }
+    return out;
+  }
+
+  const EXT = {
+    c: 'c', h: 'c', cpp: 'cpp', cc: 'cpp', cxx: 'cpp', hpp: 'cpp', hh: 'cpp', ino: 'cpp', cs: 'cs', java: 'java',
+    js: 'js', mjs: 'js', cjs: 'js', jsx: 'js', ts: 'ts', mts: 'ts', cts: 'ts', tsx: 'ts', py: 'py', pyw: 'py',
+    sh: 'sh', bash: 'sh', zsh: 'sh', ksh: 'sh', bat: 'bat', cmd: 'bat', ps1: 'ps1', psm1: 'ps1', psd1: 'ps1', sql: 'sql',
+    html: 'html', htm: 'html', xhtml: 'html', vue: 'html', svelte: 'html', css: 'css', scss: 'css', sass: 'css', less: 'css',
+    md: 'md', markdown: 'md', mdx: 'md', json: 'json', jsonc: 'json', json5: 'json', xml: 'xml', svg: 'xml', xaml: 'xml',
+    xsl: 'xml', xslt: 'xml', csproj: 'xml', vbproj: 'xml', props: 'xml', targets: 'xml', config: 'xml', plist: 'xml', resx: 'xml',
+    yml: 'yaml', yaml: 'yaml', toml: 'toml', ini: 'ini', conf: 'ini', cfg: 'ini', cnf: 'ini', properties: 'ini', env: 'ini',
+    editorconfig: 'ini', gitconfig: 'ini', service: 'ini', csv: 'csv', tsv: 'tsv',
+  };
+  const isCsv = k => k === 'csv' || k === 'tsv' || k === 'tab';
+  const known = k => isCsv(k) || !!L[k];
+  function tokens(code, key) {
+    if (isCsv(key)) return csvTokens(code, key !== 'csv' || (!/,/.test(code.split('\n')[0]) && /\t/.test(code)));
+    return run(L[key], code);
+  }
+  /* 字句を行に分ける（行をまたぐ字句は、行ごとに同じ種類で分ける） */
+  function lines(code, key) {
+    const out = [[]];
+    for (const [c, t] of tokens(code, key)) {
+      t.split('\n').forEach((p, k) => { if (k) out.push([]); if (p) out[out.length - 1].push([c, p]); });
+    }
+    return out;
+  }
+  const lineHtml = toks => toks.map(([c, t]) => (c ? '<span class="tk-' + c + '">' + escHtml(t) + '</span>' : escHtml(t))).join('');
+  return {
+    /* 言語名（大文字・小文字は区別しない）を、色分けできる言語のキーにする。できなければ '' */
+    lang: name => { const k = String(name || '').toLowerCase(); return known(k) ? k : ''; },
+    byFile: name => {
+      const b = String(name || '').split(/[\\/]/).pop().toLowerCase();
+      if (/^\.env(\.|$)/.test(b)) return 'ini';
+      const m = b.match(/\.([a-z0-9]+)$/) || b.match(/^\.([a-z0-9]+)$/);
+      return m && EXT[m[1]] ? EXT[m[1]] : '';
+    },
+    lines: (code, key) => (key && code.length <= 300000 ? lines(code, key) : null),
+    html: (code, key) => (key && code.length <= 300000 ? lines(code, key).map(lineHtml).join('\n') : escHtml(code)),
+    lineHtml,
+  };
+})();
+
+/* ===== グラフ（:::chart。Markdown の表から SVG を描く。外部ライブラリなし） =====
+   系列の色は --chart-1〜8 の順に固定で割り当てる（色覚の多様性を考えた並び。9 系列目以降は描かない）。
+   棒は 24px 以下で、値の側の角だけ丸める。線は 2px、点は 2px の地の色の縁取り付き。2 系列以上は凡例を付ける */
+const Chart = (() => {
+  const TYPES = { bar: 'bar', column: 'bar', vbar: 'bar', barh: 'barh', hbar: 'barh', stacked: 'stacked', stack: 'stacked', line: 'line', area: 'area', share: 'share', ratio: 'share', pie: 'share', donut: 'share' };
+  const MAX = 8;
+  const color = k => 'var(--chart-' + ((k % MAX) + 1) + ')';
+  const onColor = k => ((k % MAX) === 3 ? 'var(--chart-on-4)' : '#fff');
+  const r1 = v => Math.round(v * 10) / 10;
+  const tw = (s, fs) => Array.from(String(s)).reduce((w, ch) => w + (/[\u0000-ÿ]/.test(ch) ? 0.6 : 1), 0) * fs;
+  const trunc = (s, max, fs) => {
+    s = String(s);
+    if (tw(s, fs) <= max) return s;
+    const a = Array.from(s);
+    while (a.length > 1 && tw(a.join('') + '…', fs) > max) a.pop();
+    return a.join('') + '…';
+  };
+  const num = s => {
+    const t = String(s == null ? '' : s).replace(/[,，\s]/g, '').replace(/[−–]/g, '-');
+    const m = t.match(/[-+]?\d*\.?\d+/);
+    return m ? parseFloat(m[0]) : null;
+  };
+  const unitOf = cells => {
+    const sfx = cells.filter(c => num(c) != null).map(c => (c.replace(/[,，]/g, '').trim().match(/[-+−]?\d*\.?\d+\s*(.*)$/) || [])[1] || '');
+    return sfx.length && sfx.every(x => x === sfx[0]) && sfx[0].length <= 4 ? sfx[0].trim() : '';
+  };
+  const full = (v, unit) => (v == null ? '—' : v.toLocaleString('ja-JP', { maximumFractionDigits: 2 }) + (unit || ''));
+  const tick = v => {
+    const a = Math.abs(v), t = x => Number(x.toFixed(2)).toLocaleString('ja-JP');
+    return a >= 1e8 ? t(v / 1e8) + '億' : a >= 1e4 ? t(v / 1e4) + '万' : t(v);
+  };
+  /* 目盛り。整数だけのデータ（件数など）なら、目盛りも整数にする */
+  function nice(lo, hi, n, int = false) {
+    if (lo === hi) { if (lo === 0) hi = 1; else if (lo > 0) lo = 0; else hi = 0; }
+    const raw = (hi - lo) / Math.max(1, n), mag = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / mag;
+    let mult = f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10;
+    if (int && mult === 2.5) mult = 2;
+    const step = int ? Math.max(1, mult * mag) : mult * mag;
+    const a = Math.floor(lo / step + 1e-9) * step, b = Math.ceil(hi / step - 1e-9) * step;
+    const ticks = [];
+    for (let v = a; v <= b + step / 2; v += step) ticks.push(Number(v.toFixed(10)));
+    return { lo: a, hi: b, ticks };
+  }
+  /* 値の側の角だけを丸めた棒（up: 上向き / right: 右向き） */
+  function vbar(x, y, w, h, up) {
+    if (h <= 0.5 || w <= 0) return '';
+    const r = Math.min(4, w / 2, h);
+    return up
+      ? 'M' + r1(x) + ',' + r1(y + h) + 'V' + r1(y + r) + 'Q' + r1(x) + ',' + r1(y) + ' ' + r1(x + r) + ',' + r1(y) + 'H' + r1(x + w - r) + 'Q' + r1(x + w) + ',' + r1(y) + ' ' + r1(x + w) + ',' + r1(y + r) + 'V' + r1(y + h) + 'Z'
+      : 'M' + r1(x) + ',' + r1(y) + 'V' + r1(y + h - r) + 'Q' + r1(x) + ',' + r1(y + h) + ' ' + r1(x + r) + ',' + r1(y + h) + 'H' + r1(x + w - r) + 'Q' + r1(x + w) + ',' + r1(y + h) + ' ' + r1(x + w) + ',' + r1(y + h - r) + 'V' + r1(y) + 'Z';
+  }
+  function hbar(x, y, w, h, right) {
+    if (w <= 0.5 || h <= 0) return '';
+    const r = Math.min(4, h / 2, w);
+    return right
+      ? 'M' + r1(x) + ',' + r1(y) + 'H' + r1(x + w - r) + 'Q' + r1(x + w) + ',' + r1(y) + ' ' + r1(x + w) + ',' + r1(y + r) + 'V' + r1(y + h - r) + 'Q' + r1(x + w) + ',' + r1(y + h) + ' ' + r1(x + w - r) + ',' + r1(y + h) + 'H' + r1(x) + 'Z'
+      : 'M' + r1(x + w) + ',' + r1(y) + 'H' + r1(x + r) + 'Q' + r1(x) + ',' + r1(y) + ' ' + r1(x) + ',' + r1(y + r) + 'V' + r1(y + h - r) + 'Q' + r1(x) + ',' + r1(y + h) + ' ' + r1(x + r) + ',' + r1(y + h) + 'H' + r1(x + w) + 'Z';
+  }
+  const text = (x, y, s, cls, anchor, fs, extra = '') => '<text class="' + cls + '" x="' + r1(x) + '" y="' + r1(y) + '"' + (anchor ? ' text-anchor="' + anchor + '"' : '') + ' font-size="' + r1(fs) + '"' + extra + '>' + escHtml(s) + '</text>';
+  const hit = (x, y, w, h, attrs) => '<rect class="chart-hit" x="' + r1(x) + '" y="' + r1(y) + '" width="' + r1(Math.max(1, w)) + '" height="' + r1(Math.max(1, h)) + '"' + attrs + '/>';
+
+  /* 表（<table>）から、グラフのデータを作る。1 列目が項目、2 列目以降が系列 */
+  function data(table, type, opts = {}) {
+    const head = table.tHead && table.tHead.rows[0] ? Array.from(table.tHead.rows[0].cells).map(c => c.textContent.trim()) : [];
+    const rows = Array.from((table.tBodies[0] || { rows: [] }).rows).map(r => Array.from(r.cells).map(c => c.textContent.trim()));
+    const nCols = Math.max(head.length, ...rows.map(r => r.length), 0);
+    let cats = rows.map(r => r[0] || '');
+    let series = [];
+    for (let k = 1; k < nCols; k++) series.push({ name: head[k] || '系列 ' + k, values: rows.map(r => num(r[k])) });
+    const unit = opts.unit != null ? opts.unit : unitOf(rows.flatMap(r => r.slice(1)));
+    let dropped = Math.max(0, series.length - MAX), folded = 0;
+    series = series.slice(0, MAX);
+    // 構成比は、9 番目以降の項目を「その他」にまとめる
+    if (type === 'share' && cats.length > MAX) {
+      folded = cats.length - (MAX - 1);
+      cats = cats.slice(0, MAX - 1).concat(['その他']);
+      series = series.map(s => ({ name: s.name, values: s.values.slice(0, MAX - 1).concat([s.values.slice(MAX - 1).reduce((a, v) => a + Math.max(0, v || 0), 0)]) }));
+    }
+    return { type, cats, series, unit, dropped, folded, min: opts.min, max: opts.max, label: opts.label || '' };
+  }
+
+  function legend(d) {
+    const items = d.type === 'share' ? d.cats.map((c, k) => [c, k]) : d.series.length >= 2 ? d.series.map((s, k) => [s.name, k]) : [];
+    if (!items.length) return '';
+    const line = d.type === 'line';
+    return '<div class="chart-legend">' + items.map(([n, k]) => '<span class="lg"><i class="sw' + (line ? ' line' : '') + '" style="--c:' + color(k) + '"></i>' + escHtml(n) + '</span>').join('') + '</div>';
+  }
+  function note(d) {
+    const t = [];
+    if (d.dropped) t.push('系列が多いため、9 番目以降の ' + d.dropped + ' 系列はグラフに描いていません（データのタブには全部あります）。');
+    if (d.folded) t.push('8 番目以降の ' + d.folded + ' 項目は「その他」にまとめました。');
+    return t.length ? '<p class="chart-note">' + escHtml(t.join('')) + '</p>' : '';
+  }
+
+  /* 縦棒・積み上げ・折れ線・面 */
+  function vertical(d, W, fs) {
+    const S = d.series.length, N = d.cats.length, kind = d.type;
+    const H = Math.round(fs * 21);
+    const totals = d.cats.map((_, i) => d.series.reduce((a, s) => a + Math.max(0, s.values[i] || 0), 0));
+    const vals = kind === 'stacked' ? totals : d.series.flatMap(s => s.values.filter(v => v != null));
+    if (!vals.length) return { H, body: '' };
+    let lo = Math.min(...vals), hi = Math.max(...vals);
+    if (kind !== 'line' || (lo >= 0 && lo <= hi * 0.5)) { lo = Math.min(lo, 0); hi = Math.max(hi, 0); }
+    if (d.min != null && !isNaN(d.min)) lo = d.min;
+    if (d.max != null && !isNaN(d.max)) hi = d.max;
+    const sc = nice(lo, hi, 5, vals.every(Number.isInteger));
+    const labels = sc.ticks.map(tick);
+    const ends = (kind === 'line' || kind === 'area') && S >= 2 && S <= 4;
+    const padL = Math.ceil(Math.max(...labels.map(t => tw(t, fs)))) + 10;
+    const padR = ends ? Math.min(W * 0.25, Math.max(...d.series.map(s => tw(s.name, fs))) + 14) : (kind === 'line' || kind === 'area') && S === 1 ? Math.min(W * 0.2, tw(full(d.series[0].values.filter(v => v != null).pop(), d.unit), fs) / 2 + 8) : 8;
+    const padT = d.unit ? fs * 1.7 + 6 : fs + 6, padB = fs * 2 + 2;
+    const x0 = padL, x1 = W - padR, y0 = padT, y1 = H - padB;
+    const Y = v => y1 - (Math.max(sc.lo, Math.min(sc.hi, v)) - sc.lo) / (sc.hi - sc.lo) * (y1 - y0);
+    const yZero = Y(Math.max(sc.lo, Math.min(sc.hi, 0)));
+    let out = '';
+    sc.ticks.forEach((t, k) => {
+      const yy = r1(Y(t));
+      out += '<line class="chart-grid" x1="' + x0 + '" x2="' + r1(x1) + '" y1="' + yy + '" y2="' + yy + '"/>' + text(x0 - 8, Y(t) + fs * 0.35, labels[k], 'chart-tick', 'end', fs);
+    });
+    if (sc.lo <= 0 && sc.hi >= 0) out += '<line class="chart-axis" x1="' + x0 + '" x2="' + r1(x1) + '" y1="' + r1(yZero) + '" y2="' + r1(yZero) + '"/>';
+    if (d.unit) out += text(2, fs, '（' + d.unit + '）', 'chart-tick', 'start', fs * 0.9);
+    const bars = kind === 'bar' || kind === 'stacked';
+    const band = (x1 - x0) / Math.max(1, N);
+    const xs = d.cats.map((_, i) => (bars ? x0 + band * (i + 0.5) : N === 1 ? (x0 + x1) / 2 : x0 + 8 + i * (x1 - x0 - 16) / (N - 1)));
+    // 項目名。入りきらないときは間引き、長いものは省略する（全文はツールチップとデータのタブにある）
+    const step = bars ? band : N > 1 ? (x1 - x0 - 16) / (N - 1) : x1 - x0;
+    const every = Math.max(1, Math.ceil((Math.min(fs * 7, Math.max(...d.cats.map(c => tw(c, fs)))) + 10) / Math.max(1, step)));
+    d.cats.forEach((c, i) => { if (i % every === 0) out += text(xs[i], y1 + fs * 1.5, trunc(c, step * every - 6, fs), 'chart-cat', 'middle', fs); });
+    if (kind === 'bar') {
+      const gap = 2, bw = Math.max(2, Math.min(24, (band * 0.72 - gap * (S - 1)) / S)), gw = bw * S + gap * (S - 1);
+      d.series.forEach((s, k) => s.values.forEach((v, i) => {
+        if (v == null) return;
+        const x = xs[i] - gw / 2 + k * (bw + gap), yv = Y(v), top = Math.min(yv, yZero), h = Math.abs(yZero - yv);
+        out += '<path class="chart-mark" fill="' + color(k) + '" d="' + vbar(x, top, bw, h, v >= 0) + '"/>';
+        if (S === 1 && N <= 16) {
+          const lab = full(v, d.unit);
+          if (tw(lab, fs * 0.92) <= band - 4) out += text(x + bw / 2, v >= 0 ? top - 5 : top + h + fs, lab, 'chart-val', 'middle', fs * 0.92);
+        }
+        out += hit(x - gap / 2, y0, bw + gap, y1 - y0, ' data-i="' + i + '" data-s="' + k + '"');
+      }));
+    } else if (kind === 'stacked') {
+      const bw = Math.max(4, Math.min(24, band * 0.6));
+      d.cats.forEach((c, i) => {
+        let acc = 0;
+        const last = d.series.reduce((m, s, k) => ((s.values[i] || 0) > 0 ? k : m), -1);
+        d.series.forEach((s, k) => {
+          const v = s.values[i] || 0;
+          if (v <= 0) return;
+          const top = Y(acc + v), bot = Y(acc) - (acc > 0 ? 2 : 0);
+          out += k === last
+            ? '<path class="chart-mark" fill="' + color(k) + '" d="' + vbar(xs[i] - bw / 2, top, bw, bot - top, true) + '"/>'
+            : bot - top > 0.5 ? '<rect class="chart-mark" fill="' + color(k) + '" x="' + r1(xs[i] - bw / 2) + '" y="' + r1(top) + '" width="' + r1(bw) + '" height="' + r1(bot - top) + '"/>' : '';
+          acc += v;
+        });
+        if (N <= 16) {
+          const lab = full(totals[i], d.unit);
+          if (tw(lab, fs * 0.92) <= band - 4) out += text(xs[i], Y(totals[i]) - 5, lab, 'chart-val', 'middle', fs * 0.92);
+        }
+        out += hit(xs[i] - band / 2, y0, band, y1 - y0, ' data-i="' + i + '"');
+      });
+    } else {
+      // 折れ線・面。値の無い項目では線を切る
+      d.series.forEach((s, k) => {
+        let dd = '', seg = [];
+        const segs = [];
+        s.values.forEach((v, i) => { if (v == null) { if (seg.length) segs.push(seg); seg = []; } else seg.push([xs[i], Y(v)]); });
+        if (seg.length) segs.push(seg);
+        for (const g of segs) {
+          dd += g.map((p, j) => (j ? 'L' : 'M') + r1(p[0]) + ',' + r1(p[1])).join('');
+          if (kind === 'area' && g.length > 1) out += '<path class="chart-area" fill="' + color(k) + '" d="M' + r1(g[0][0]) + ',' + r1(yZero) + g.map(p => 'L' + r1(p[0]) + ',' + r1(p[1])).join('') + 'L' + r1(g[g.length - 1][0]) + ',' + r1(yZero) + 'Z"/>';
+        }
+        out += '<path class="chart-line" stroke="' + color(k) + '" d="' + dd + '"/>';
+        s.values.forEach((v, i) => {
+          if (v == null || (N > 24 && i !== s.values.length - 1)) return;
+          out += '<circle class="chart-dot" fill="' + color(k) + '" cx="' + r1(xs[i]) + '" cy="' + r1(Y(v)) + '" r="4"/>';
+        });
+      });
+      // 線の端の名前（2〜4 系列で、端どうしが離れているときだけ）。1 系列なら最後の値
+      const lastOf = s => { for (let i = s.values.length - 1; i >= 0; i--) if (s.values[i] != null) return i; return -1; };
+      if (ends) {
+        const pos = d.series.map((s, k) => ({ k, i: lastOf(s), name: s.name })).filter(p => p.i >= 0).map(p => ({ ...p, y: Y(d.series[p.k].values[p.i]) })).sort((a, b) => a.y - b.y);
+        if (pos.every((p, j) => !j || p.y - pos[j - 1].y >= fs + 2)) pos.forEach(p => { out += text(xs[p.i] + 8, p.y + fs * 0.35, trunc(p.name, padR - 10, fs), 'chart-end', 'start', fs); });
+      } else if (S === 1) {
+        const i = lastOf(d.series[0]);
+        if (i >= 0) out += text(xs[i], Y(d.series[0].values[i]) - 9, full(d.series[0].values[i], d.unit), 'chart-val', 'middle', fs * 0.92);
+      }
+      out += '<line class="chart-cross" x1="0" x2="0" y1="' + r1(y0) + '" y2="' + r1(y1) + '" visibility="hidden"/>';
+      out += hit(x0, y0, x1 - x0, y1 - y0, ' data-xs="' + xs.map(r1).join(',') + '" tabindex="0"');
+    }
+    return { H, body: out };
+  }
+  /* 横棒 */
+  function horizontal(d, W, fs) {
+    const S = d.series.length, N = d.cats.length;
+    const bw = S === 1 ? 18 : Math.max(6, Math.min(14, 44 / S)), gh = bw * S + 2 * (S - 1), rowH = Math.max(gh + 12, fs * 2);
+    const vals = d.series.flatMap(s => s.values.filter(v => v != null));
+    if (!vals.length) return { H: 40, body: '' };
+    let lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
+    if (d.min != null && !isNaN(d.min)) lo = d.min;
+    if (d.max != null && !isNaN(d.max)) hi = d.max;
+    const catW = Math.min(W * 0.35, Math.max(...d.cats.map(c => tw(c, fs)))) + 16;
+    const valW = S === 1 ? Math.max(...vals.map(v => tw(full(v, d.unit), fs * 0.92))) + 10 : 10;
+    const x0 = catW, x1 = W - valW;
+    const sc = nice(lo, hi, Math.max(2, Math.min(6, Math.floor((x1 - x0) / 90))), vals.every(Number.isInteger));
+    const padT = 4, H = Math.round(padT + N * rowH + fs + 12), yB = padT + N * rowH;
+    const X = v => x0 + (Math.max(sc.lo, Math.min(sc.hi, v)) - sc.lo) / (sc.hi - sc.lo) * (x1 - x0);
+    const xZero = X(Math.max(sc.lo, Math.min(sc.hi, 0)));
+    let out = '';
+    sc.ticks.forEach(t => {
+      const xx = r1(X(t));
+      out += '<line class="chart-grid" x1="' + xx + '" x2="' + xx + '" y1="' + padT + '" y2="' + r1(yB) + '"/>' + text(X(t), yB + fs + 6, tick(t), 'chart-tick', 'middle', fs);
+    });
+    out += '<line class="chart-axis" x1="' + r1(xZero) + '" x2="' + r1(xZero) + '" y1="' + padT + '" y2="' + r1(yB) + '"/>';
+    d.cats.forEach((c, i) => {
+      const top = padT + i * rowH, gy = top + (rowH - gh) / 2;
+      out += text(x0 - 10, top + rowH / 2 + fs * 0.35, trunc(c, catW - 14, fs), 'chart-cat', 'end', fs);
+      d.series.forEach((s, k) => {
+        const v = s.values[i];
+        if (v == null) return;
+        const y = gy + k * (bw + 2), xv = X(v), left = Math.min(xv, xZero), w = Math.abs(xv - xZero);
+        out += '<path class="chart-mark" fill="' + color(k) + '" d="' + hbar(left, y, w, bw, v >= 0) + '"/>';
+        if (S === 1) out += v >= 0 ? text(left + w + 6, y + bw / 2 + fs * 0.33, full(v, d.unit), 'chart-val', 'start', fs * 0.92) : text(left - 6, y + bw / 2 + fs * 0.33, full(v, d.unit), 'chart-val', 'end', fs * 0.92);
+        out += hit(x0, y - 1, x1 - x0, bw + 2, ' data-i="' + i + '" data-s="' + k + '"');
+      });
+    });
+    return { H, body: out };
+  }
+  /* 構成比（1 本の帯を項目で分ける。系列ごとに 1 本） */
+  function share(d, W, fs) {
+    const S = d.series.length, barH = 28, gapY = 12;
+    const labW = S > 1 ? Math.min(W * 0.3, Math.max(...d.series.map(s => tw(s.name, fs)))) + 12 : 0;
+    const H = S * (barH + gapY) - gapY + 4;
+    let out = '';
+    d.series.forEach((s, k) => {
+      const vals = s.values.map(v => Math.max(0, v || 0)), total = vals.reduce((a, v) => a + v, 0);
+      const y = k * (barH + gapY) + 2;
+      if (S > 1) out += text(labW - 10, y + barH / 2 + fs * 0.35, trunc(s.name, labW - 14, fs), 'chart-cat', 'end', fs);
+      if (!total) return;
+      const span = W - labW;
+      let x = labW;
+      const shown = vals.map((v, i) => [v, i]).filter(([v]) => v > 0);
+      shown.forEach(([v, i], j) => {
+        const w = span * v / total, bw = j < shown.length - 1 ? w - 2 : w;
+        if (bw > 0.5) out += '<rect class="chart-mark" fill="' + color(i) + '" x="' + r1(x) + '" y="' + r1(y) + '" width="' + r1(bw) + '" height="' + barH + '" rx="' + Math.min(4, bw / 2) + '"/>';
+        const pct = Math.round(v / total * 1000) / 10 + '%';
+        if (tw(pct, fs) + 12 <= bw) out += text(x + 6, y + barH / 2 + fs * 0.35, pct, 'chart-in', 'start', fs, ' style="fill:' + onColor(i) + '"');
+        out += hit(x, y - 3, Math.max(2, w), barH + 6, ' data-i="' + i + '" data-s="' + k + '"');
+        x += w;
+      });
+    });
+    return { H, body: out };
+  }
+  function svg(d, W, fs) {
+    W = Math.max(200, Math.round(W));
+    const r = d.type === 'barh' ? horizontal(d, W, fs) : d.type === 'share' ? share(d, W, fs) : vertical(d, W, fs);
+    const label = (d.label ? d.label + '（' : '（') + 'グラフ。値はデータのタブにあります）';
+    return '<svg class="chart-svg" viewBox="0 0 ' + W + ' ' + r.H + '" width="' + W + '" height="' + r.H + '" role="img" aria-label="' + escAttr(label) + '">' + r.body + '</svg>';
+  }
+  /* ツールチップの中身（[見出し, [[色, 値, 名前], …]]） */
+  function tipRows(d, i, s) {
+    if (d.type === 'share') {
+      const vals = d.series[s].values, total = vals.reduce((a, v) => a + Math.max(0, v || 0), 0);
+      const v = vals[i] || 0;
+      return [d.cats[i] + (d.series.length > 1 ? '（' + d.series[s].name + '）' : ''), [[color(i), full(v, d.unit) + '・' + (total ? Math.round(v / total * 1000) / 10 : 0) + '%', '']]];
+    }
+    const rows = (s != null ? [s] : d.series.map((_, k) => k)).map(k => [color(k), full(d.series[k].values[i], d.unit), d.series.length > 1 ? d.series[k].name : '']);
+    if (d.type === 'stacked' && s == null && d.series.length > 1) rows.push(['', full(d.series.reduce((a, x) => a + Math.max(0, x.values[i] || 0), 0), d.unit), '合計']);
+    return [d.cats[i], rows];
+  }
+  return { TYPES, data, legend, note, svg, tipRows };
+})();
+
 function createParser(opts = {}) {
   const slots = [];
   const usedIds = new Set(opts.reserved || []);
   const fnDefs = new Map();
   const fnOrder = [];
   const linkDefs = new Map();
+  // 用語の意味（*[略語]: 意味 と :::glossary の項目）。本文中の用語に、意味を添える
+  const abbrs = new Map(), glossary = new Map();
   const sec = [0, 0];
   const figNo = { fig: 0, tbl: 0 };
   let tabSeq = 0;
@@ -2861,7 +4014,7 @@ function createParser(opts = {}) {
   function startsBlock(lines, i) {
     const l = lines[i];
     return RX.blank.test(l) || isFence(l) || RX.heading.test(l) || RX.hr.test(l) || RX.quote.test(l)
-      || RX.html.test(l) || RX.fnDef.test(l) || RX.linkDef.test(l) || RX.container.test(l) || isListStart(l, true) || isTableStart(lines, i);
+      || RX.html.test(l) || RX.fnDef.test(l) || RX.linkDef.test(l) || RX.abbrDef.test(l) || RX.container.test(l) || isListStart(l, true) || isTableStart(lines, i);
   }
 
   function parseBlocks(lines, ctx = {}) {
@@ -2871,7 +4024,7 @@ function createParser(opts = {}) {
       const line = lines[i];
       if (RX.blank.test(line)) { i++; continue; }
       // 参照形式の定義は parse() の最初にまとめて読んであるので、本文には出さない
-      if (RX.linkDef.test(line)) { i++; continue; }
+      if (RX.linkDef.test(line) || RX.abbrDef.test(line)) { i++; continue; }
 
       if (isFence(line)) {
         m = line.match(RX.fence);
@@ -3298,10 +4451,24 @@ function createParser(opts = {}) {
         // 確定した版から改版履歴の表を作る（古い版から順に）
         const hist = (opts.history || []).slice().reverse();
         if (!hist.length) return open('div', 'c-history') + title + '<p class="c-history-empty">確定した版はまだありません。版を確定すると、ここに改版履歴が入ります。</p></div>';
-        return open('div', 'c-history') + title + '<div class="table-wrap"><table><thead><tr><th>版</th><th>日付</th><th>作成者</th><th>内容</th></tr></thead><tbody>'
+        return open('div', 'c-history') + title + tableBox('<thead><tr><th>版</th><th>日付</th><th>作成者</th><th>内容</th></tr></thead><tbody>'
           + hist.map(v => '<tr><td>' + escHtml(v.version) + '</td><td>' + escHtml(v.date) + '</td><td>' + escHtml(v.author) + '</td><td>' + parseInline(v.note || '') + '</td></tr>').join('')
-          + '</tbody></table></div></div>';
+          + '</tbody>') + '</div>';
       }
+      case 'glossary': {
+        // 用語集。項目は「**用語**：意味」。本文中のその用語には、意味が添えられる
+        const { list } = listOf(lines);
+        const rows = list ? Array.from(list.children).map(li => {
+          const { head, body } = splitHead(li, true);
+          const term = stripTags(head).trim();
+          const id = uniqueId('term-' + slugify(term));
+          if (term && !glossary.has(term)) glossary.set(term, { tip: stripTags(body).replace(/\s+/g, ' ').trim(), ref: id });
+          return '<div id="' + escAttr(id) + '"><dt>' + head + '</dt><dd>' + body + '</dd></div>';
+        }) : [];
+        return open('div', 'c-spec c-glossary', ' data-split="items"') + title + '<dl class="c-items">' + rows.join('') + '</dl></div>';
+      }
+      case 'chart':
+        return renderChart(arg, blocks(), open, extraCls);
       case 'tree':
       case 'doc-only':
       case 'slide-only':
@@ -3309,6 +4476,26 @@ function createParser(opts = {}) {
       default:
         return open('div', 'c-custom' + (name ? ' c-' + escAttr(name) : '')) + title + blocks() + '</div>';
     }
+  }
+
+  /* :::chart 種類 表題 unit=単位 min=下限 max=上限。中の表（Markdown の表か ```csv）からグラフを描き、「グラフ」と「データ」のタブにする */
+  function renderChart(arg, inner, open) {
+    let type = 'bar';
+    const opts = {}, rest = [];
+    arg.split(/\s+/).filter(Boolean).forEach((t, k) => {
+      const kv = t.match(/^(unit|min|max)=(.*)$/i);
+      if (kv) { const key = kv[1].toLowerCase(); opts[key] = key === 'unit' ? kv[2].replace(/^["']|["']$/g, '') : parseFloat(kv[2]); return; }
+      if (k === 0 && Chart.TYPES[t.toLowerCase()]) { type = Chart.TYPES[t.toLowerCase()]; return; }
+      rest.push(t);
+    });
+    const label = rest.join(' ');
+    const title = label ? '<p class="c-title">' + parseInline(label) + '</p>' : '';
+    const table = frag(inner).querySelector('table');
+    if (!table) return open('div', 'c-chart') + title + '<p class="chart-note">グラフにする表が見つかりません。:::chart の中に、Markdown の表か ```csv を書いてください。</p>' + inner + '</div>';
+    opts.label = stripTags(parseInline(label)).trim();
+    const d = Chart.data(table, type, opts);
+    const body = '<div class="chart-box">' + Chart.legend(d) + '<div class="chart-plot">' + Chart.svg(d, 720, 12) + '</div>' + Chart.note(d) + '</div>';
+    return open('div', 'c-tabs c-chart', ' data-chart="' + escAttr(JSON.stringify(d)) + '"') + title + tabsHtml(['グラフ', 'データ'], [body, inner]) + '</div>';
   }
 
   /* ----- ソースコードの差分（GitHub の差分画面に近い表示） ----- */
@@ -3376,13 +4563,15 @@ function createParser(opts = {}) {
     }
     return { ka, kb };
   }
-  function markRuns(tokens, keep, cls) {
-    let out = '', buf = '';
+  /* 残らなかった語の範囲（文字の位置）を [始め, 終わり] の配列にする */
+  function changedRanges(tokens, keep) {
+    const out = [];
+    let p = 0;
     tokens.forEach((t, k) => {
-      if (keep[k]) { if (buf) { out += '<span class="' + cls + '">' + escHtml(buf) + '</span>'; buf = ''; } out += escHtml(t); }
-      else buf += t;
+      if (!keep[k]) { const last = out[out.length - 1]; if (last && last[1] === p) last[1] += t.length; else out.push([p, p + t.length]); }
+      p += t.length;
     });
-    return out + (buf ? '<span class="' + cls + '">' + escHtml(buf) + '</span>' : '');
+    return out;
   }
   function wordMark(a, b) {
     const ta = diffTokens(a.s), tb = diffTokens(b.s);
@@ -3391,14 +4580,42 @@ function createParser(opts = {}) {
     const same = ta.reduce((sum, t, i) => sum + (r.ka[i] ? t.length : 0), 0);
     // ほとんど別の行になっているときは、行全体の色分けだけにする
     if (same < Math.max(a.s.length, b.s.length) * 0.35) return;
-    a.html = markRuns(ta, r.ka, 'wd');
-    b.html = markRuns(tb, r.kb, 'wa');
+    a.marks = changedRanges(ta, r.ka);
+    b.marks = changedRanges(tb, r.kb);
+  }
+  /* 1 行の HTML。構文の色（字句）と、語単位の変更の印を重ねる */
+  function segHtml(s, toks, marks, mcls) {
+    if (!(toks && toks.length) && !(marks && marks.length)) return escHtml(s);
+    const tk = [], cuts = new Set([0, s.length]);
+    let p = 0;
+    for (const [c, t] of toks || []) { tk.push([p, p + t.length, c]); cuts.add(p); p += t.length; cuts.add(p); }
+    for (const [a, b] of marks || []) { cuts.add(a); cuts.add(b); }
+    const pts = [...cuts].filter(x => x <= s.length).sort((a, b) => a - b);
+    let out = '';
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i + 1];
+      if (a >= b) continue;
+      const t = tk.find(r => r[0] <= a && a < r[1]);
+      const cls = [t && t[2] ? 'tk-' + t[2] : '', marks && marks.some(([x, y]) => x <= a && b <= y) ? mcls : ''].filter(Boolean).join(' ');
+      const txt = escHtml(s.slice(a, b));
+      out += cls ? '<span class="' + cls + '">' + txt + '</span>' : txt;
+    }
+    return out;
+  }
+  /* ハンクごとに、変更前（文脈＋削除）と変更後（文脈＋追加）の行を続けて色分けする（行をまたぐコメントなども正しく色が付く） */
+  function tokenizeHunk(h, key) {
+    const oldL = h.lines.filter(l => l.t === 'ctx' || l.t === 'del'), newL = h.lines.filter(l => l.t === 'ctx' || l.t === 'add');
+    const to = HL.lines(oldL.map(l => l.s).join('\n'), key), tn = HL.lines(newL.map(l => l.s).join('\n'), key);
+    if (!to || !tn) return;
+    oldL.forEach((l, k) => { if (l.t === 'del') l.tk = to[k]; });
+    newL.forEach((l, k) => { l.tk = tn[k]; });
   }
   /* 統合（unified）と左右（split）の 2 つの表の行を作る */
-  function diffTables(hunks) {
+  function diffTables(hunks, key) {
     let u = '', s = '';
     const num = v => (v === '' || v == null ? '' : String(v));
-    const cell = (l, mk) => '<span class="mk" aria-hidden="true">' + mk + '</span>' + (l.html != null ? l.html : escHtml(l.s));
+    const cell = (l, mk) => '<span class="mk" aria-hidden="true">' + mk + '</span>' + segHtml(l.s, l.tk, l.marks, l.t === 'del' ? 'wd' : 'wa');
+    if (key) hunks.forEach(h => tokenizeHunk(h, key));
     for (const h of hunks) {
       if (h.header) {
         u += '<tr class="gh-hunk"><td class="ln" colspan="2"></td><td class="code">' + escHtml(h.header) + '</td></tr>';
@@ -3438,7 +4655,8 @@ function createParser(opts = {}) {
     }
     return { u, s };
   }
-  function renderGhDiff(code, title, split) {
+  /* langHint: ```diff lang=yaml で決めた言語。無ければファイル名の拡張子から決める */
+  function renderGhDiff(code, title, split, langHint = '') {
     const files = parseUnifiedDiff(code);
     if (files.length === 1 && !files[0].oldName && !files[0].newName && title) files[0].newName = title;
     let A = 0, D = 0, maxLn = 0, numbered = false;
@@ -3463,7 +4681,7 @@ function createParser(opts = {}) {
       if (f.binary) body = '<p class="gh-note">バイナリファイルのため、差分は表示しません。</p>';
       else if (!f.hunks.length) body = '<p class="gh-note">内容の変更はありません。</p>';
       else {
-        const t = diffTables(f.hunks);
+        const t = diffTables(f.hunks, langHint || HL.byFile(f.status === 'deleted' ? f.oldName : f.newName || f.oldName) || HL.byFile(title));
         body = '<table class="gh-table gh-unified' + tCls + '"' + tAttr + '><colgroup><col class="c-ln"><col class="c-ln"><col></colgroup><tbody>' + t.u + '</tbody></table>'
           + '<table class="gh-table gh-split' + tCls + '"' + tAttr + '><colgroup><col class="c-ln"><col><col class="c-ln"><col></colgroup><tbody>' + t.s + '</tbody></table>';
       }
@@ -3489,12 +4707,22 @@ function createParser(opts = {}) {
     if (lang.toLowerCase() === 'mermaid') {
       return '<div class="mermaid-block" data-state="pending"><pre class="mermaid-src"><code>' + escHtml(code) + '</code></pre></div>';
     }
-    if (/^(diff|patch)$/i.test(lang)) return renderGhDiff(code, title, /(^|\s)split(\s|$)/i.test(info));
+    const flags = info.trim().split(/\s+/).slice(1).map(s => s.toLowerCase());
+    if (/^(diff|patch)$/i.test(lang)) {
+      const lm = info.match(/\blang=([\w#+.-]+)/i);
+      return renderGhDiff(code, title, flags.includes('split'), lm ? HL.lang(lm[1]) : '');
+    }
+    const key = HL.lang(lang);
+    // ```csv / ```tsv は表にする。ソースのまま（列ごとに色分け）見せるときは ```csv code
+    if ((key === 'csv' || key === 'tsv' || key === 'tab') && !flags.includes('code')) {
+      const t = renderCsvTable(code, key !== 'csv' || (!/,/.test(code.split('\n')[0]) && /\t/.test(code)), flags);
+      return (title ? '<p class="csv-title">' + escHtml(title) + '</p>\n' : '') + t;
+    }
     return '<div class="codeblock"><div class="code-head">'
       + (title ? '<span class="code-title">' + escHtml(title) + '</span>' : '')
       + (lang ? '<span class="code-lang">' + escHtml(lang) + '</span>' : '')
       + '<button type="button" class="copy-btn">コピー</button></div><pre><code'
-      + (lang ? ' class="language-' + escAttr(lang) + '"' : '') + '>' + escHtml(code) + '</code></pre></div>';
+      + (lang ? ' class="language-' + escAttr(lang) + '"' : '') + '>' + HL.html(code, key) + '</code></pre></div>';
   }
 
   function renderQuote(q) {
@@ -3508,11 +4736,46 @@ function createParser(opts = {}) {
     return '<blockquote>\n' + parseBlocks(q, {}) + '\n</blockquote>';
   }
 
+  /* 表の外枠。.table-scroll が横のスクロールを受け持つ（並べ替え・絞り込みの道具は、表示するときに .table-wrap に足す） */
+  const tableBox = inner => '<div class="table-wrap"><div class="table-scroll"><table>\n' + inner + '\n</table></div></div>';
   function renderTable(head, aligns, rows) {
     const cell = (tag, txt, k) => '<' + tag + (aligns[k] ? ' style="text-align:' + aligns[k] + '"' : '') + '>' + parseInline(txt || '') + '</' + tag + '>';
-    const thead = '<tr>' + head.map((c, k) => cell('th', c, k)).join('') + '</tr>';
-    const tbody = rows.map(r => '<tr>' + head.map((_, k) => cell('td', r[k], k)).join('') + '</tr>').join('\n');
-    return '<div class="table-wrap"><table>\n<thead>' + thead + '</thead>\n<tbody>\n' + tbody + '\n</tbody>\n</table></div>';
+    const thead = head ? '<thead><tr>' + head.map((c, k) => cell('th', c, k)).join('') + '</tr></thead>\n' : '';
+    const n = head ? head.length : Math.max(0, ...rows.map(r => r.length));
+    const tbody = rows.map(r => '<tr>' + Array.from({ length: n }, (_, k) => cell('td', r[k], k)).join('') + '</tr>').join('\n');
+    return tableBox(thead + '<tbody>\n' + tbody + '\n</tbody>');
+  }
+  /* CSV・TSV（RFC 4180: 引用符の中の区切り・改行・"" に対応）を行の配列にする */
+  function parseCsv(text, sep) {
+    const rows = [];
+    let row = [], f = '', q = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (q) {
+        if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; }
+        else f += ch;
+      } else if (ch === '"' && f === '') q = true;
+      else if (ch === sep) { row.push(f); f = ''; }
+      else if (ch === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+      else f += ch;
+    }
+    if (f !== '' || row.length) { row.push(f); rows.push(row); }
+    return rows.filter(r => r.some(c => c.trim() !== ''));
+  }
+  const NUM_CELL = /^[-+−]?[¥$€£]?\s*[-+−]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?\s*(?:%|％|[A-Za-z]{1,3}|[円件個人台回本秒分時日月年万億倍]{1,2})?$/;
+  /* ```csv / ```tsv を表にする。数値だけの列は右に揃える。noheader で 1 行目も中身として扱う */
+  function renderCsvTable(code, tab, flags) {
+    const sep = tab ? '\t' : ',';
+    const rows = parseCsv(code, sep);
+    if (!rows.length) return '';
+    const head = flags.includes('noheader') ? null : rows.shift();
+    const n = Math.max(head ? head.length : 0, ...rows.map(r => r.length));
+    const aligns = Array.from({ length: n }, (_, k) => {
+      const vals = rows.map(r => (r[k] || '').trim()).filter(Boolean);
+      return vals.length && vals.every(v => NUM_CELL.test(v)) ? 'right' : '';
+    });
+    const esc = s => String(s == null ? '' : s).replace(/\n/g, '<br>');
+    return renderTable(head ? Array.from({ length: n }, (_, k) => esc(head[k])) : null, aligns, rows.map(r => r.map(esc)));
   }
 
   function safeUrl(url, isImg) {
@@ -3624,12 +4887,53 @@ function createParser(opts = {}) {
         if (scan(l)) continue;
         const d = l.match(RX.linkDef);
         if (d && !linkDefs.has(refKey(d[1]))) linkDefs.set(refKey(d[1]), { url: d[2].replace(/^<([^>]*)>$/, '$1'), title: d[3] ?? d[4] ?? d[5] ?? '' });
+        const ab = l.match(RX.abbrDef);
+        if (ab && ab[1].trim() && !abbrs.has(ab[1].trim())) abbrs.set(ab[1].trim(), { tip: stripTags(parseInline(ab[2])).trim(), ref: '' });
       }
-      const html = parseBlocks(lines, { top: true }) + renderFootnotes();
-      return html.includes('class="xref') ? fillXrefs(html) : html;
+      let html = parseBlocks(lines, { top: true }) + renderFootnotes();
+      if (html.includes('class="xref')) html = fillXrefs(html);
+      return abbrs.size || glossary.size ? markTerms(html) : html;
     },
     ghDiff: renderGhDiff,
   };
+
+  /* 本文中の用語（:::glossary と *[略語]: の項目）に、意味を添える。印を付けるのは H2 の章ごとに最初の 1 回だけ */
+  function markTerms(html) {
+    const terms = new Map([...abbrs, ...glossary]);
+    const keys = [...terms.keys()].filter(Boolean).sort((a, b) => b.length - a.length);
+    const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(keys.map(k => (/^\w/.test(k) ? '(?<!\\w)' : '') + esc(k) + (/\w$/.test(k) ? '(?!\\w)' : '')).join('|'), 'g');
+    const SKIP = 'h1, h2, h3, h4, h5, h6, a, code, pre, kbd, abbr, button, textarea, svg, style, script, .c-glossary, .gh-diff, .codeblock, .mermaid-block, .fn-ref, .footnotes, .tab-list, .menu-path, .chart-box';
+    const f = frag(html);
+    let seen = new Set();
+    for (const top of Array.from(f.children)) {
+      if (top.tagName === 'H2') { seen = new Set(); continue; }
+      if (top.matches(SKIP)) continue;
+      const w = document.createTreeWalker(top, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement.closest(SKIP) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+      const nodes = [];
+      while (w.nextNode()) nodes.push(w.currentNode);
+      for (const node of nodes) {
+        const s = node.data, parts = [];
+        let m, last = 0;
+        re.lastIndex = 0;
+        while ((m = re.exec(s))) {
+          if (seen.has(m[0])) continue;
+          seen.add(m[0]);
+          const t = terms.get(m[0]);
+          const ab = document.createElement('abbr');
+          ab.className = 'term';
+          ab.title = t.tip;
+          ab.tabIndex = 0;
+          if (t.ref) ab.dataset.ref = t.ref;
+          ab.textContent = m[0];
+          parts.push(s.slice(last, m.index), ab);
+          last = m.index + m[0].length;
+        }
+        if (parts.length) { parts.push(s.slice(last)); node.replaceWith(...parts.filter(p => p !== '')); }
+      }
+    }
+    return htmlOf(Array.from(f.childNodes));
+  }
 
   /* [](#ID) を、参照先の図表番号（図 1・表 2）や章番号付きの見出しに置き換える */
   function fillXrefs(html) {
@@ -3659,7 +4963,7 @@ function createParser(opts = {}) {
 }
 
 /* ===== 文書全体の HTML ===== */
-function renderDocHeader(meta, title) {
+function renderDocHeader(meta, title, logo = '') {
   const marks = [];
   if (meta.status) {
     const st = STATUS[meta.status.toLowerCase()];
@@ -3670,9 +4974,12 @@ function renderDocHeader(meta, title) {
   const rank = k => (order.includes(k) ? order.indexOf(k) : order.length);
   const keys = Object.keys(meta).filter(k => !META_HIDDEN.has(k) && meta[k] !== '').sort((a, b) => rank(a) - rank(b));
   const cells = keys.map(k => '<div><dt>' + escHtml(META_LABELS[k] || k) + '</dt><dd>' + escHtml(meta[k]) + '</dd></div>');
-  if (!title && !marks.length && !cells.length) return '';
+  if (!title && !marks.length && !cells.length && !logo) return '';
+  const src = logo ? String(logo).trim() : '';
+  const logoOk = src && !/^(javascript|vbscript):/i.test(src.replace(/[\s\u0000-\u001f]/g, ''));
   return '<header class="doc-header"><div class="tb-head">'
     + (marks.length ? '<div class="tb-marks">' + marks.join('') + '</div>' : '')
+    + (logoOk ? '<div class="tb-logo"><img class="doc-logo" src="' + escAttr(src) + '" alt=""></div>' : '')
     + (title ? '<h1 class="doc-title">' + escHtml(title) + '</h1>' : '')
     + (meta.subtitle ? '<p class="doc-subtitle">' + escHtml(meta.subtitle) + '</p>' : '')
     + '</div>' + (cells.length ? '<dl class="tb-meta">' + cells.join('') + '</dl>' : '') + '</header>';
@@ -3689,7 +4996,9 @@ function renderDocument(md, opts = {}) {
   const history = opts.history || state.versions;
   const parser = createParser({ numbering: truthy(meta.numbering), breaks: truthy(meta.breaks), reserved: RESERVED, history });
   const content = parser.parse(text);
-  return renderDocHeader(meta, title)
+  const theme = docThemeCss(meta);
+  return (theme ? '<style class="doc-theme">' + theme + '</style>' : '')
+    + renderDocHeader(meta, title, docLogo(meta, body))
     + '<nav class="print-toc" id="ui-print-toc" aria-label="目次"></nav>'
     + '<div class="md' + (truthy(meta.h2_pagebreak) ? ' h2-break' : '') + '" id="ui-content">\n' + content + '\n</div>';
 }
@@ -3704,6 +5013,8 @@ const els = {
   help: $('#ui-help'), toast: $('#ui-toast'), drop: $('#ui-drop'), backdrop: $('#ui-backdrop'),
   pageStyle: $('#ui-page-style'),
   verbar: $('#ui-verbar'), versions: $('#ui-versions'), versionsBody: $('#ui-versions-body'), verFile: $('#ui-ver-file'),
+  main: $('.main'), widthHandle: $('#ui-width'), tip: $('#ui-tip'),
+  search: $('#ui-search'), searchInput: $('#ui-search-input'), searchCount: $('#ui-search-count'),
 };
 const RESERVED = $$('[id]').filter(e => !els.doc.contains(e)).map(e => e.id);
 const state = {
@@ -3802,8 +5113,13 @@ function enhance() {
   fillPrintToc(els.doc);
   els.pageStyle.textContent = docPageCss();
   syncDiffViews(els.doc);
+  initTables(els.doc);
   state.mermaidBlocks = $$('.mermaid-block', els.doc);
   renderMermaid();
+  drawCharts(els.doc);
+  state.logo = $('.doc-logo', els.doc)?.getAttribute('src') || '';
+  Width.place();
+  if (Search.q) Search.run();
   updateScroll();
 }
 
@@ -4252,7 +5568,9 @@ function renderCompare() {
     let add = 0, del = 0;
     text.split('\n').forEach(l => { if (/^\+(?!\+\+ )/.test(l)) add++; else if (/^-(?!-- )/.test(l)) del++; });
     state.diffStats = { lines: true, add, del };
-    els.doc.innerHTML = '<div class="md" id="ui-content">' + (text ? createParser({}).ghDiff(text, '', false) : '<p>Markdown に違いはありません。</p>') + '</div>';
+    const theme = docThemeCss(state.meta);
+    els.doc.innerHTML = (theme ? '<style class="doc-theme">' + theme + '</style>' : '')
+      + '<div class="md" id="ui-content">' + (text ? createParser({}).ghDiff(text, '', false) : '<p>Markdown に違いはありません。</p>') + '</div>';
     return;
   }
   const r = blockDiff(renderDocument(aMd, { history: verHistory(v.a) }), renderDocument(bMd, { history: verHistory(v.b) }), true);
@@ -4508,7 +5826,7 @@ function makeSlideShell() {
   const el = document.createElement('section');
   el.className = 'slide';
   el.innerHTML = '<div class="slide-crumb"></div><div class="slide-body md"></div>'
-    + '<div class="slide-foot"><span class="slide-doc"></span><span class="slide-num"></span></div><div class="slide-progress"></div>';
+    + '<div class="slide-foot"><span class="slide-brand"><img class="slide-logo" alt="" hidden><span class="slide-doc"></span></span><span class="slide-num"></span></div><div class="slide-progress"></div>';
   return el;
 }
 function titleSlideContent() {
@@ -4527,10 +5845,12 @@ function fitBody(body, minPct) {
   let size = 100;
   while (overflows(body) && size > minPct) { size -= 5; body.style.fontSize = size + '%'; }
   if (!overflows(body)) return true;
-  const media = $$('img, .mermaid-block .mm-light, .mermaid-block .mm-dark', body).filter(e => e.offsetHeight > 0);
+  // SVG 要素には offsetHeight が無いので clientHeight も見る（拡大縮小の影響を受けない高さ）
+  const hOf = e => e.offsetHeight || e.clientHeight || 0;
+  const media = $$('img, .mermaid-block .mm-light, .mermaid-block .mm-dark, .chart-plot svg', body).filter(e => hOf(e) > 0);
   if (media.length) {
-    const tallest = media.reduce((a, b) => (b.offsetHeight > a.offsetHeight ? b : a));
-    const target = tallest.offsetHeight - (body.scrollHeight - body.clientHeight) - 6;
+    const tallest = media.reduce((a, b) => (hOf(b) > hOf(a) ? b : a));
+    const target = hOf(tallest) - (body.scrollHeight - body.clientHeight) - 6;
     if (target >= 120) body.style.setProperty('--media-max', target + 'px');
   }
   return !overflows(body);
@@ -4556,6 +5876,8 @@ function fillShell(shell, slide, nodes) {
 function mountSlide(shell, slide, i, total) {
   const body = fillShell(shell, slide, slide.kind === 'title' ? [titleSlideContent()] : slide.nodes);
   $('.slide-doc', shell).textContent = state.title;
+  const lg = $('.slide-logo', shell);
+  if (state.logo) { if (lg.getAttribute('src') !== state.logo) lg.setAttribute('src', state.logo); lg.hidden = false; } else lg.hidden = true;
   $('.slide-num', shell).textContent = (i + 1) + ' / ' + total;
   shell.style.setProperty('--progress', ((i + 1) / total).toFixed(4));
   fitSlide(body);
@@ -4586,13 +5908,15 @@ function splitter(node) {
     const table = node.querySelector('table');
     const tbody = table && table.tBodies[0];
     if (!tbody) return null;
-    const rows = Array.from(tbody.rows);
+    // 絞り込みで隠している行は、スライドにも出さない
+    const rows = Array.from(tbody.rows).filter(r => !r.hidden);
+    const scroll = table.parentElement !== node ? table.parentElement : null;
     return { count: rows.length, make(a, b) {
       const w = node.cloneNode(false), t = table.cloneNode(false), tb = tbody.cloneNode(false);
       if (table.tHead) t.append(table.tHead.cloneNode(true));
       rows.slice(a, b).forEach(r => tb.append(r.cloneNode(true)));
       t.append(tb);
-      w.append(t);
+      if (scroll) { const sc = scroll.cloneNode(false); sc.append(t); w.append(sc); } else w.append(t);
       return w;
     } };
   }
@@ -4667,10 +5991,11 @@ function splitter(node) {
     } };
   }
   if (node.matches('.codeblock')) {
-    const lines = node.querySelector('code').textContent.replace(/\n$/, '').split('\n');
+    // 色分けの span は行ごとに閉じているので、HTML を改行で分ければ行の単位になる
+    const lines = node.querySelector('code').innerHTML.replace(/\n$/, '').split('\n');
     return { count: lines.length, make(a, b) {
       const c = node.cloneNode(true);
-      c.querySelector('code').textContent = lines.slice(a, b).join('\n');
+      c.querySelector('code').innerHTML = lines.slice(a, b).join('\n');
       return c;
     } };
   }
@@ -4813,6 +6138,7 @@ const Slides = {
     this.build();
     const k = this.list.findIndex(p => p.nodes.includes(anchor));
     this.go(k >= 0 ? k : this.index);
+    if (Search.q) Search.run();
   },
   enter(at) {
     if (this.active || !state.content) return;
@@ -4824,8 +6150,10 @@ const Slides = {
     this.active = true;
     document.body.classList.add('presenting');
     els.slides.hidden = false;
+    hideTip();
     this.layout();
     this.go(idx);
+    if (Search.q) Search.run();
   },
   indexOf(el) {
     if (!el) return 0;
@@ -4856,6 +6184,7 @@ const Slides = {
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     if (target) target.scrollIntoView({ block: 'start', behavior: 'instant' });
     else window.scrollTo({ top: 0, behavior: 'instant' });
+    if (Search.q) Search.run();
     updateScroll();
   },
   preparePrint() {
@@ -4963,6 +6292,7 @@ function exportHtml() {
   const doc = new DOMParser().parseFromString(PRISTINE, 'text/html');
   const root = doc.documentElement;
   root.removeAttribute('data-theme');
+  root.removeAttribute('style');   // 本文の幅は見る人ごとの設定なので、ファイルには残さない
   root.className = 'no-js';
   doc.title = state.title;
   const src = doc.getElementById('md-source');
@@ -5014,11 +6344,8 @@ function syncDiffViews(root) {
   list.forEach(d => { if (!d.classList.contains('is-part')) d.dataset.view = v; });
 }
 
-async function copyCode(btn) {
-  const raw = btn.closest('.gh-diff')?.querySelector(':scope > .gh-raw');
-  const text = raw ? raw.textContent : (btn.closest('.codeblock')?.querySelector('code')?.textContent ?? '');
-  let ok = false;
-  try { await navigator.clipboard.writeText(text); ok = true; }
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
   catch (e) {
     const ta = document.createElement('textarea');
     ta.value = text;
@@ -5026,11 +6353,413 @@ async function copyCode(btn) {
     ta.style.cssText = 'position:fixed;left:-9999px;top:0';
     document.body.append(ta);
     ta.select();
+    let ok = false;
     try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
     ta.remove();
+    return ok;
   }
+}
+async function copyCode(btn) {
+  const raw = btn.closest('.gh-diff')?.querySelector(':scope > .gh-raw');
+  const text = raw ? raw.textContent : (btn.closest('.codeblock')?.querySelector('code')?.textContent ?? '');
+  const ok = await copyText(text);
   btn.textContent = ok ? 'コピーしました' : 'コピーできませんでした';
   setTimeout(() => { btn.textContent = 'コピー'; }, 1600);
+}
+
+/* ----- 表の並べ替え・絞り込み・コピー ----- */
+const TABLE_FILTER_ROWS = 6;   // この行数以上の表に、絞り込みの欄を出す
+const normText = s => String(s).normalize('NFKC').toLowerCase();
+function initTables(root) {
+  $$('.table-wrap', root).forEach(w => {
+    if (w.closest('.slide-body') || w.querySelector(':scope > .tbl-tools')) return;
+    const table = w.querySelector('table'), tb = table && table.tBodies[0];
+    if (!tb || tb.rows.length < 2) return;
+    Array.from(tb.rows).forEach((r, k) => { r.dataset.order = k; });
+    const n = tb.rows.length, big = n >= TABLE_FILTER_ROWS;
+    const tools = document.createElement('div');
+    tools.className = 'tbl-tools' + (big ? '' : ' is-mini');
+    tools.innerHTML = (big ? '<input type="search" class="tbl-filter" placeholder="絞り込み" aria-label="表の行を絞り込む"><span class="tbl-count">' + n + ' 行</span>' : '')
+      + '<button type="button" class="tbl-copy" title="Excel などに貼れる形（タブ区切り）でコピー">コピー</button>';
+    w.prepend(tools);
+    w.classList.toggle('is-long', n >= 15);
+    const hr = table.tHead && table.tHead.rows[0];
+    if (hr) Array.from(hr.cells).forEach(th => { th.classList.add('sortable'); th.tabIndex = 0; th.setAttribute('aria-sort', 'none'); th.title = '押すと並べ替え（昇順 → 降順 → 元の順）'; });
+  });
+  fitTables(root);
+}
+/* 横にはみ出さない表は、スクロールしても見出しの行が画面の上に残るようにする */
+function fitTables(root) {
+  $$('.table-scroll', root).forEach(s => {
+    if (s.closest('.slide-body')) return;
+    s.classList.remove('fits');
+    s.classList.toggle('fits', s.scrollWidth <= s.clientWidth + 1);
+  });
+}
+const sortNum = s => { const m = String(s).replace(/[,，\s]/g, '').replace(/[−–]/g, '-').match(/[-+]?\d*\.?\d+/); return m ? parseFloat(m[0]) : NaN; };
+const RE_SORT_NUM = /^[-+−]?[¥$€£]?\s*[-+−]?[\d,，]*\.?\d+\s*\S{0,3}$/;
+function sortTable(th) {
+  const table = th.closest('table'), tb = table.tBodies[0];
+  if (!tb) return;
+  const idx = Array.from(th.parentElement.cells).indexOf(th);
+  const cur = th.getAttribute('aria-sort');
+  const next = cur === 'ascending' ? 'descending' : cur === 'descending' ? 'none' : 'ascending';
+  $$('th[aria-sort]', table.tHead).forEach(x => x.setAttribute('aria-sort', 'none'));
+  th.setAttribute('aria-sort', next);
+  const rows = Array.from(tb.rows);
+  if (next === 'none') rows.sort((a, b) => a.dataset.order - b.dataset.order);
+  else {
+    const val = r => (r.cells[idx] ? r.cells[idx].textContent.trim() : '');
+    const filled = rows.map(val).filter(Boolean);
+    const numeric = filled.length > 0 && filled.every(v => RE_SORT_NUM.test(v));
+    const coll = new Intl.Collator('ja', { numeric: true, sensitivity: 'base' });
+    rows.sort((a, b) => {
+      const x = val(a), y = val(b);
+      if (!x !== !y) return !x ? 1 : -1;   // 空の欄は、どちらの向きでも最後
+      const c = numeric ? sortNum(x) - sortNum(y) : coll.compare(x, y);
+      return next === 'ascending' ? c : -c;
+    });
+  }
+  tb.append(...rows);
+}
+function filterTable(input) {
+  const w = input.closest('.table-wrap'), tb = w.querySelector('tbody');
+  const terms = normText(input.value).split(/\s+/).filter(Boolean);
+  let shown = 0;
+  Array.from(tb.rows).forEach(r => {
+    const ok = !terms.length || terms.every(q => normText(r.textContent).includes(q));
+    r.hidden = !ok;
+    if (ok) shown++;
+  });
+  const cnt = w.querySelector('.tbl-count');
+  if (cnt) cnt.textContent = terms.length ? shown + ' / ' + tb.rows.length + ' 行' : tb.rows.length + ' 行';
+  w.classList.toggle('is-filtered', terms.length > 0);
+}
+/* 見出しの行と、見えている行を、タブ区切り（Excel に貼れる形）にする */
+function tableTsv(table) {
+  const cell = c => {
+    const t = c.textContent.replace(/\s+/g, ' ').trim();
+    return /[\t\n"]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+  };
+  const rows = Array.from(table.rows).filter(r => !r.hidden);
+  return rows.map(r => Array.from(r.cells).map(cell).join('\t')).join('\n') + '\n';
+}
+
+/* ----- グラフ（表示する幅に合わせて描き直す）とツールチップ ----- */
+const chartCache = new WeakMap();
+function chartDataOf(box) {
+  if (!chartCache.has(box)) { let d = null; try { d = JSON.parse(box.dataset.chart); } catch (e) { d = null; } chartCache.set(box, d); }
+  return chartCache.get(box);
+}
+function drawCharts(root) {
+  $$('.c-chart[data-chart]', root).forEach(box => {
+    const plot = box.querySelector('.chart-plot');
+    // スライドでは、描いたものをそのまま拡大する（文字も大きくなる）
+    if (!plot || plot.closest('.slide-body')) return;
+    const w = plot.clientWidth;
+    if (w < 120) return;
+    const fs = Math.round(Math.max(12, Math.min(15, parseFloat(getComputedStyle(plot).fontSize) * 0.78)) * 10) / 10;
+    const W = Math.min(Math.round(w), 1000), key = W + '/' + fs;
+    if (plot.dataset.w === key) return;
+    const d = chartDataOf(box);
+    if (!d) return;
+    plot.innerHTML = Chart.svg(d, W, fs);
+    plot.dataset.w = key;
+  });
+}
+let tipOwner = null;
+function showTip(owner, build, x, y, below = false) {
+  const t = els.tip;
+  tipOwner = owner;
+  t.replaceChildren();
+  build(t);
+  t.hidden = false;
+  const r = t.getBoundingClientRect();
+  let left = below ? x : x + 14, top = below ? y : y + 16;
+  if (left + r.width > innerWidth - 8) left = Math.max(8, (below ? innerWidth - 8 : x - 14) - r.width);
+  if (top + r.height > innerHeight - 8) top = Math.max(8, y - r.height - (below ? 32 : 12));
+  t.style.left = Math.max(8, left) + 'px';
+  t.style.top = Math.max(8, top) + 'px';
+}
+function hideTip() {
+  els.tip.hidden = true;
+  if (tipOwner && tipOwner.ownerSVGElement) tipOwner.ownerSVGElement.querySelector('.chart-cross')?.setAttribute('visibility', 'hidden');
+  tipOwner = null;
+}
+const tipLine = (t, cls, txt) => { const d = document.createElement('div'); d.className = cls; d.textContent = txt; t.append(d); return d; };
+function chartTip(target, e) {
+  const box = target.closest('.c-chart'), d = box && chartDataOf(box);
+  if (!d) return;
+  let i = target.dataset.i != null ? +target.dataset.i : 0;
+  const s = target.dataset.s != null ? +target.dataset.s : null;
+  const svg = target.ownerSVGElement;
+  if (target.dataset.xs) {
+    // 折れ線・面: 縦の線をいちばん近い項目に合わせ、全系列の値を出す
+    const xs = target.dataset.xs.split(',').map(Number);
+    if (e && e.clientX != null && svg.getScreenCTM()) {
+      const pt = svg.createSVGPoint();
+      pt.x = e.clientX; pt.y = e.clientY;
+      const px = pt.matrixTransform(svg.getScreenCTM().inverse()).x;
+      i = xs.reduce((best, x, k) => (Math.abs(x - px) < Math.abs(xs[best] - px) ? k : best), 0);
+    } else i = Math.max(0, Math.min(xs.length - 1, target._idx || 0));
+    target._idx = i;
+    const cross = svg.querySelector('.chart-cross');
+    if (cross) { cross.setAttribute('x1', xs[i]); cross.setAttribute('x2', xs[i]); cross.setAttribute('visibility', 'visible'); }
+  }
+  const [head, rows] = Chart.tipRows(d, i, s);
+  const rect = target.getBoundingClientRect();
+  let cx = e && e.clientX != null ? e.clientX : rect.left + rect.width / 2, cy = e && e.clientY != null ? e.clientY : rect.top + 8;
+  if (target.dataset.xs && !(e && e.clientX != null) && svg.getScreenCTM()) {
+    const pt = svg.createSVGPoint();
+    pt.x = target.dataset.xs.split(',').map(Number)[i]; pt.y = 0;
+    cx = pt.matrixTransform(svg.getScreenCTM()).x;
+  }
+  showTip(target, t => {
+    tipLine(t, 'tip-head', head);
+    for (const [c, v, n] of rows) {
+      const row = document.createElement('div');
+      row.className = 'tip-row';
+      const k = document.createElement('i');
+      k.className = 'tip-key' + (c ? '' : ' none');
+      if (c) k.style.setProperty('--c', c);
+      const b = document.createElement('b');
+      b.textContent = v;
+      row.append(k, b);
+      if (n) { const sp = document.createElement('span'); sp.textContent = n; row.append(sp); }
+      t.append(row);
+    }
+  }, cx, cy);
+}
+function termTip(el) {
+  if (el.title) { el.dataset.tip = el.title; el.removeAttribute('title'); }
+  const r = el.getBoundingClientRect();
+  showTip(el, t => {
+    tipLine(t, 'tip-head', el.textContent);
+    tipLine(t, 'tip-body', el.dataset.tip || '');
+    if (el.dataset.ref) tipLine(t, 'tip-hint', '押すと用語集へ移動');
+  }, r.left, r.bottom + 6, true);
+}
+
+/* ----- 文書内の検索（閉じた折りたたみ・選んでいないタブ・ほかのスライドの中も探す） ----- */
+const SEARCH_SKIP = 'script, style, svg, textarea, .gh-raw, .copy-btn, .anchor, .mk, .ln, .tbl-tools, .tab-list, .gh-view, .chart-box, .print-toc, .gh-diff[data-view="unified"] .gh-split, .gh-diff[data-view="split"] .gh-unified';
+const Search = {
+  hits: [], idx: -1, q: '',
+  isOpen: () => !els.search.hidden,
+  open() {
+    els.search.hidden = false;
+    els.searchInput.focus();
+    els.searchInput.select();
+    if (els.searchInput.value.trim()) this.run();
+  },
+  close() {
+    els.search.hidden = true;
+    this.clear();
+    this.q = '';
+    if (document.activeElement === els.searchInput) els.searchInput.blur();
+  },
+  clear() {
+    this.hits = []; this.idx = -1;
+    if (window.CSS && CSS.highlights) { CSS.highlights.delete('search-hit'); CSS.highlights.delete('search-current'); }
+    $$('.toc-hits', els.toc).forEach(x => x.remove());
+    els.searchCount.textContent = '';
+  },
+  /* 探す範囲: 読み物では表紙と本文、スライドでは各スライドの中身 */
+  roots() {
+    if (Slides.active) return Slides.list.map((s, k) => ({ k, nodes: s.kind === 'title' ? [] : s.nodes }));
+    return [{ k: -1, nodes: [$('.doc-header', els.doc), ...(state.content ? Array.from(state.content.children) : [])].filter(Boolean) }];
+  },
+  run() {
+    const q = normText(els.searchInput.value.trim()).replace(/\s+/g, ' ');
+    this.clear();
+    this.q = q;
+    if (!q) return;
+    for (const root of this.roots()) {
+      for (const node of root.nodes) {
+        const texts = [];
+        const w = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement && n.parentElement.closest(SEARCH_SKIP) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+        while (w.nextNode()) texts.push(w.currentNode);
+        // 正規化した文字列と、元の文字の位置の対応（全角・半角、大文字・小文字の違いは区別しない。空白は 1 つにまとめる）
+        let str = '';
+        const map = [];
+        texts.forEach((tn, ti) => {
+          let off = 0;
+          for (const ch of tn.data) {
+            let n = /\s/.test(ch) ? ' ' : normText(ch);
+            if (n === ' ' && str.endsWith(' ')) n = '';
+            for (let u = 0; u < n.length; u++) map.push([ti, off, ch.length]);
+            str += n;
+            off += ch.length;
+          }
+        });
+        for (let p = str.indexOf(q); p >= 0 && this.hits.length < 3000; p = str.indexOf(q, p + q.length)) {
+          const a = map[p], b = map[p + q.length - 1];
+          const range = document.createRange();
+          range.setStart(texts[a[0]], a[1]);
+          range.setEnd(texts[b[0]], b[1] + b[2]);
+          this.hits.push({ range, slide: root.k, block: node });
+        }
+      }
+    }
+    this.paint();
+    this.countToc();
+    this.updateCount();
+  },
+  paint() {
+    if (!(window.CSS && CSS.highlights && window.Highlight)) return;
+    CSS.highlights.set('search-hit', new Highlight(...this.hits.map(h => h.range)));
+    const cur = this.hits[this.idx];
+    if (cur) CSS.highlights.set('search-current', new Highlight(cur.range)); else CSS.highlights.delete('search-current');
+  },
+  updateCount() {
+    const n = this.hits.length;
+    els.searchCount.textContent = !this.q ? '' : !n ? '0 件' : (this.idx >= 0 ? (this.idx + 1) + ' / ' : '') + n + ' 件';
+  },
+  /* 目次に、章・節ごとの件数を出す（章の件数は、その中の節も含む） */
+  countToc() {
+    if (Slides.active || !state.content) return;
+    const owner = new Map();
+    let h2 = null, h3 = null;
+    for (const c of state.content.children) {
+      if (c.tagName === 'H2') { h2 = c.id; h3 = null; } else if (c.tagName === 'H3') h3 = c.id;
+      owner.set(c, [h2, h3]);
+    }
+    const count = new Map();
+    for (const h of this.hits) {
+      const o = owner.get(h.block);
+      if (!o) continue;
+      new Set(o.filter(Boolean)).forEach(id => count.set(id, (count.get(id) || 0) + 1));
+    }
+    count.forEach((n, id) => {
+      const a = els.toc.querySelector('a[data-id="' + CSS.escape(id) + '"]');
+      if (a) { const b = document.createElement('span'); b.className = 'toc-hits'; b.textContent = n; a.append(b); }
+    });
+  },
+  goto(dir) {
+    const n = this.hits.length;
+    if (!n) { if (this.q) toast('見つかりませんでした'); return; }
+    this.idx = (this.idx + dir + n) % n;
+    const h = this.hits[this.idx];
+    if (Slides.active && h.slide >= 0 && h.slide !== Slides.index) Slides.go(h.slide);
+    revealNode(h.range.startContainer);
+    this.paint();
+    this.updateCount();
+    if (!(window.CSS && CSS.highlights)) { const sel = getSelection(); sel.removeAllRanges(); sel.addRange(h.range); }
+    if (!Slides.active) {
+      const r = h.range.getBoundingClientRect();
+      if (r.top < headerH() + 60 || r.bottom > innerHeight - 40) window.scrollTo({ top: window.scrollY + r.top - innerHeight / 3, behavior: reduceMotion() ? 'auto' : 'smooth' });
+    } else {
+      const body = $('.slide-body', Slides.shell), r = h.range.getBoundingClientRect(), b = body.getBoundingClientRect();
+      if (body.classList.contains('is-overflow') && (r.top < b.top || r.bottom > b.bottom)) body.scrollTop += r.top - b.top - b.height / 3;
+    }
+  },
+};
+/* 閉じた折りたたみを開き、選んでいないタブに切り替えて、node を見えるようにする */
+function revealNode(node) {
+  for (let el = node.parentElement; el; el = el.parentElement) {
+    if (el.tagName === 'DETAILS' && !el.open) el.open = true;
+    if (el.classList.contains('tab-panel') && !el.classList.contains('is-active')) {
+      const box = el.parentElement;
+      activateTab(box, String($$(':scope > .tab-panel', box).indexOf(el)));
+    }
+  }
+}
+function activateTab(box, k) {
+  $$(':scope > .tab-list > .tab', box).forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === k)));
+  $$(':scope > .tab-panel', box).forEach((p, idx) => p.classList.toggle('is-active', String(idx) === k));
+  drawCharts(box);
+  fitTables(box);
+  if (Slides.active) Slides.refit();
+}
+
+/* ----- 本文の幅（右端の取っ手をドラッグ。ダブルクリックで標準に戻す） ----- */
+const KEY_MEASURE = 'md-report:measure';
+const Width = {
+  min: 480,
+  max() { const cs = getComputedStyle(els.main); return els.main.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight); },
+  place() { const d = els.doc; if (d.offsetWidth) els.widthHandle.style.left = (d.offsetLeft + d.offsetWidth + 10) + 'px'; },
+  set(px, save) {
+    if (px) document.documentElement.style.setProperty('--measure', Math.round(px) + 'px');
+    else document.documentElement.style.removeProperty('--measure');
+    if (save) store.set(KEY_MEASURE, px ? String(Math.round(px)) : '');
+    this.place();
+    const w = els.doc.offsetWidth;
+    els.widthHandle.setAttribute('aria-valuenow', String(w));
+    $('.width-label', els.widthHandle).textContent = w + 'px';
+  },
+  done() { drawCharts(els.doc); fitTables(els.doc); updateScroll(); },
+  start(e) {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    const h = els.widthHandle, startX = e.clientX, startW = els.doc.offsetWidth, max = this.max();
+    try { h.setPointerCapture(e.pointerId); } catch (err) { /* 取れなくてもドラッグはできる */ }
+    document.body.classList.add('resizing');
+    const move = ev => this.set(Math.max(this.min, Math.min(max, startW + 2 * (ev.clientX - startX))), false);
+    const up = () => {
+      h.removeEventListener('pointermove', move);
+      h.removeEventListener('pointerup', up);
+      h.removeEventListener('pointercancel', up);
+      document.body.classList.remove('resizing');
+      this.set(els.doc.offsetWidth, true);
+      this.done();
+    };
+    h.addEventListener('pointermove', move);
+    h.addEventListener('pointerup', up);
+    h.addEventListener('pointercancel', up);
+  },
+  step(dx) { this.set(Math.max(this.min, Math.min(this.max(), els.doc.offsetWidth + dx)), true); this.done(); },
+  reset() { this.set(null, true); this.done(); toast('本文の幅を標準に戻しました'); },
+};
+
+/* ----- 文書ごとの見た目（フロントマターの palette・accent・font・mono・logo） ----- */
+const PALETTES = {
+  indigo: ['#2b4c8c', '#93b2ec'], blue: ['#1f5fbf', '#8ab4f8'], teal: ['#0f6e6e', '#6fcfc9'], green: ['#2c6e3f', '#7fcf96'],
+  wine: ['#8c2b4c', '#f0a0b8'], orange: ['#a4501a', '#f2a66b'], purple: ['#5b3aa0', '#c2a6f5'], gray: ['#3d4654', '#b6bfcc'],
+};
+const PALETTE_ALIAS = { navy: 'indigo', '紺': 'indigo', '藍': 'indigo', '青': 'blue', '青緑': 'teal', '緑': 'green', red: 'wine', '赤': 'wine', 'えんじ': 'wine', brown: 'orange', '橙': 'orange', '茶': 'orange', '紫': 'purple', grey: 'gray', mono: 'gray', slate: 'gray', '灰': 'gray', '墨': 'gray' };
+const FONT_SANS = '"Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif';
+const FONTS = {
+  gothic: null, ud: '"BIZ UDPGothic", ' + FONT_SANS, meiryo: 'Meiryo, ' + FONT_SANS, yugothic: '"Yu Gothic", YuGothic, ' + FONT_SANS,
+  noto: '"Noto Sans JP", ' + FONT_SANS, system: 'system-ui, -apple-system, "Segoe UI", ' + FONT_SANS,
+  mincho: '"BIZ UDPMincho", "Yu Mincho", YuMincho, "Hiragino Mincho ProN", "Noto Serif JP", serif',
+};
+const FONT_ALIAS = { 'ゴシック': 'gothic', '明朝': 'mincho', 'メイリオ': 'meiryo', '游ゴシック': 'yugothic', 'ud': 'ud', serif: 'mincho', sans: 'gothic' };
+const safeColor = v => (/^(#[0-9a-f]{3,8}|(?:rgb|hsl|oklch|oklab|lab|lch)a?\([\d\s.,%\/+-]+\)|[a-z]{3,20})$/i.test(String(v).trim()) ? String(v).trim() : '');
+const safeFontList = v => (/^[^;{}<>\\]+$/.test(String(v)) ? String(v).trim() : '');
+function docThemeCss(meta) {
+  let css = '';
+  // 色: palette（名前）か accent（"#色" または "#ライト / #ダーク"）。accent が優先
+  let light = '', dark = '';
+  const p = String(meta.palette || '').trim().toLowerCase();
+  const pal = PALETTES[PALETTE_ALIAS[p] || p];
+  if (pal) [light, dark] = pal;
+  if (meta.accent) {
+    const [a, b] = String(meta.accent).split('/').map(safeColor);
+    if (a) { light = a; dark = b || 'color-mix(in oklab, ' + a + ' 55%, white)'; }
+  }
+  if (light) {
+    const L = '--accent:' + light + ';--accent-soft:color-mix(in srgb, ' + light + ' 10%, var(--bg));';
+    const D = '--accent:' + dark + ';--accent-soft:color-mix(in srgb, ' + dark + ' 13%, transparent);';
+    css += ':root:root{' + L + '}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){' + D + '}}:root[data-theme="dark"]{' + D + '}'
+      + '@media print{:root:not([data-print-none]){--accent:' + light + ';--accent-soft:color-mix(in srgb, ' + light + ' 8%, #fff);}}';
+  }
+  const fk = String(meta.font || '').trim();
+  const font = fk ? (Object.prototype.hasOwnProperty.call(FONTS, FONT_ALIAS[fk] || fk.toLowerCase()) ? FONTS[FONT_ALIAS[fk] || fk.toLowerCase()] : safeFontList(fk)) : null;
+  if (font) css += ':root:root{--font:"Backslash Sans", ' + font + ';}';
+  const mono = safeFontList(meta.mono || '');
+  if (mono) css += ':root:root{--mono:' + mono + ', Consolas, monospace;}';
+  return css;
+}
+/* logo は URL・data: URL・参照形式の名前（[logo]: data:… を本文の末尾に書いた場合）のどれでもよい */
+function docLogo(meta, body) {
+  const v = String(meta.logo || '').trim();
+  if (!v) return '';
+  const inFence = fenceTracker();
+  for (const l of body.split('\n')) {
+    if (inFence(l)) continue;
+    const d = l.match(RX.linkDef);
+    if (d && refKey(d[1]) === refKey(v)) return d[2].replace(/^<([^>]*)>$/, '$1');
+  }
+  return v;
 }
 
 /* ===== 操作 ===== */
@@ -5056,6 +6785,8 @@ const ACTIONS = {
   'ver-as-md': () => { if (state.view.mode === 'compare') setView({ ...state.view, as: 'md' }); },
   'ver-next': () => gotoChange(1),
   'ver-prev': () => gotoChange(-1),
+  // 文書内の検索
+  search: () => Search.open(), 'search-next': () => Search.goto(1), 'search-prev': () => Search.goto(-1), 'search-close': () => Search.close(),
 };
 document.addEventListener('click', e => {
   const btn = e.target.closest('[data-action]');
@@ -5071,14 +6802,61 @@ document.addEventListener('click', e => {
     return;
   }
   const tab = e.target.closest('.c-tabs .tab');
-  if (tab) {
-    const box = tab.closest('.c-tabs'), k = tab.dataset.tab;
-    $$(':scope > .tab-list > .tab', box).forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === k)));
-    $$(':scope > .tab-panel', box).forEach((p, idx) => p.classList.toggle('is-active', String(idx) === k));
-    if (Slides.active) Slides.refit();
+  if (tab) { activateTab(tab.closest('.c-tabs'), tab.dataset.tab); return; }
+  const th = e.target.closest('th.sortable');
+  if (th && !Slides.active && state.view.mode !== 'compare') { sortTable(th); return; }
+  const tcopy = e.target.closest('.tbl-copy');
+  if (tcopy) {
+    copyText(tableTsv(tcopy.closest('.table-wrap').querySelector('table'))).then(ok => {
+      tcopy.textContent = ok ? 'コピーしました' : 'コピーできませんでした';
+      setTimeout(() => { tcopy.textContent = 'コピー'; }, 1600);
+    });
+    return;
+  }
+  const term = e.target.closest('abbr.term[data-ref]');
+  if (term && !Slides.active) {
+    const t = document.getElementById(term.dataset.ref);
+    if (t) { hideTip(); t.scrollIntoView({ block: 'center', behavior: reduceMotion() ? 'auto' : 'smooth' }); t.classList.remove('is-flash'); void t.offsetWidth; t.classList.add('is-flash'); }
     return;
   }
   if (e.target.closest('#ui-toc a') && isNarrow()) closeDrawer();
+});
+document.addEventListener('input', e => { if (e.target.matches && e.target.matches('.tbl-filter')) filterTable(e.target); });
+/* ツールチップ: グラフ（棒・帯は棒ごと、折れ線は縦の線で項目ごと）と、用語の意味 */
+document.addEventListener('pointermove', e => {
+  const h = e.target.closest && e.target.closest('.chart-hit');
+  if (h) chartTip(h, e);
+  else if (tipOwner && tipOwner.classList && tipOwner.classList.contains('chart-hit')) hideTip();
+});
+document.addEventListener('pointerover', e => {
+  const t = e.target.closest && e.target.closest('abbr.term');
+  if (t && tipOwner !== t) termTip(t);
+});
+document.addEventListener('pointerout', e => {
+  const t = e.target.closest && e.target.closest('abbr.term, .chart-hit');
+  if (t && t === tipOwner && !(e.relatedTarget && t.contains(e.relatedTarget))) hideTip();
+});
+document.addEventListener('focusin', e => {
+  const t = e.target;
+  if (t.matches && t.matches('abbr.term')) termTip(t);
+  else if (t.matches && t.matches('.chart-hit')) chartTip(t, null);
+});
+document.addEventListener('focusout', e => { if (e.target === tipOwner) hideTip(); });
+window.addEventListener('scroll', () => { if (tipOwner) hideTip(); }, { passive: true });
+els.searchInput.addEventListener('input', debounce(() => Search.run(), 150));
+els.searchInput.addEventListener('keydown', e => {
+  if (e.isComposing) return;
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    if (Search.q !== normText(els.searchInput.value.trim()).replace(/\s+/g, ' ')) Search.run();
+    Search.goto(e.shiftKey ? -1 : 1);
+  } else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); Search.close(); }
+});
+els.widthHandle.addEventListener('pointerdown', e => Width.start(e));
+els.widthHandle.addEventListener('dblclick', () => Width.reset());
+els.widthHandle.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); Width.step(e.key === 'ArrowRight' ? 32 : -32); }
+  else if (e.key === 'Home' || e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); Width.reset(); }
 });
 els.backdrop.addEventListener('click', closeDrawer);
 els.help.addEventListener('click', e => { if (e.target === els.help) Help.close(); });
@@ -5094,6 +6872,16 @@ document.addEventListener('keydown', e => {
     if (k === 'Escape') e.target.blur();
     return;
   }
+  // 表の見出し（並べ替え）と、折れ線グラフ（← → で項目を移る）
+  if (e.target.matches && e.target.matches('th.sortable') && (k === 'Enter' || k === ' ')) { e.preventDefault(); sortTable(e.target); return; }
+  if (e.target.matches && e.target.matches('.chart-hit[data-xs]') && (k === 'ArrowLeft' || k === 'ArrowRight')) {
+    e.preventDefault();
+    e.target._idx = (e.target._idx || 0) + (k === 'ArrowRight' ? 1 : -1);
+    chartTip(e.target, null);
+    return;
+  }
+  if (k === '/' && els.help.hidden && els.versions.hidden) { e.preventDefault(); Search.open(); return; }
+  if (k === 'Escape' && Search.isOpen()) { e.preventDefault(); Search.close(); return; }
   if (!els.help.hidden) {
     if (k === 'Escape' || k === '?') { e.preventDefault(); Help.close(); }
     return;
@@ -5286,7 +7074,10 @@ window.addEventListener('afterprint', () => {
 });
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 window.addEventListener('scroll', onScroll, { passive: true });
-window.addEventListener('resize', () => { if (Slides.active) Slides.layout(); else onScroll(); });
+const relayout = debounce(() => { if (Slides.active) return; drawCharts(els.doc); fitTables(els.doc); Width.place(); }, 150);
+window.addEventListener('resize', () => { if (Slides.active) Slides.layout(); else { onScroll(); relayout(); } });
+// 目次や編集欄の開閉で本文の列の幅が変わったときも、グラフ・表・幅の取っ手を合わせる
+if (window.ResizeObserver) new ResizeObserver(relayout).observe(els.main);
 document.addEventListener('fullscreenchange', () => { if (Slides.active) Slides.layout(); });
 
 /* ===== 起動 ===== */
@@ -5294,6 +7085,8 @@ function init() {
   Slides.shell = makeSlideShell();
   els.stage.append(Slides.shell);
   if (store.get(KEY_TOC) === 'hidden') document.body.classList.add('toc-hidden');
+  const mw = parseInt(store.get(KEY_MEASURE), 10);
+  if (mw >= Width.min) document.documentElement.style.setProperty('--measure', mw + 'px');
   Theme.sync();
   const md = readSource();
   state.savedMd = md;
