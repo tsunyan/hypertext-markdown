@@ -1,0 +1,3 @@
+# このフォルダのテキストファイルは、どの git でコミットしても改行を LF で記録し、LF で取り出す。
+# git の設定（core.autocrlf）に頼らないので、設定の違う git でコミットしても CRLF にならない。
+* text=auto eol=lf
