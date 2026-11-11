@@ -1,6 +1,6 @@
 """テンプレートから、版付きの見本ファイルを作る。
 
-使い方: python -I make_sample.py <report-template.html> <出力先.html>
+使い方: python -I tools/make_sample.py <report-template.html> <出力先.html>
 """
 import re
 import sys
@@ -110,9 +110,10 @@ def esc_attr(s):
 
 
 def main(src_path, out_path):
-    src = open(src_path, encoding="utf-8").read()
+    with open(src_path, encoding="utf-8") as f:
+        src = f.read()
     # テンプレートに入っている見本の版（利用ガイドの版）は持ち込まない
-    src = re.sub(r'\n?<script type="text/markdown" class="md-version"[^>]*>.*?</script>', "", src, flags=re.S)
+    src = re.sub(r'\n?<script type="text/markdown" class="md-version"[^>]*>.*?</script>', "", src, flags=re.DOTALL)
     tag = '<script type="text/markdown" id="md-source">'
     a = src.index(tag)
     b = src.index("</script>", a) + len("</script>")
@@ -121,12 +122,11 @@ def main(src_path, out_path):
     blocks = [tag + "\n" + WORKING + "</script>"]
     for version, date, author, note, md in VERSIONS:
         blocks.append(
-            '<script type="text/markdown" class="md-version" data-version="{}" data-date="{}" data-author="{}" data-note="{}">\n{}</script>'.format(
-                esc_attr(version), esc_attr(date), esc_attr(author), esc_attr(note), md
-            )
+            f'<script type="text/markdown" class="md-version" data-version="{esc_attr(version)}" data-date="{esc_attr(date)}" data-author="{esc_attr(author)}" data-note="{esc_attr(note)}">\n{md}</script>'
         )
     out = src[:a] + "\n".join(blocks) + src[b:]
-    open(out_path, "w", encoding="utf-8", newline="\n").write(out)
+    with open(out_path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(out)
     print("wrote", out_path, len(out.encode("utf-8")) // 1024, "KB")
 
 
