@@ -6,6 +6,9 @@
 2. 埋め込んだ JavaScript に構文の誤りがない（node --check。node が無ければ失敗する）
 3. 見本（samples/sample-versioned.src.html）が、いまのテンプレートから作り直したものと同じ
 4. テンプレートの作業中の Markdown が、いちばん新しい見本の版と同じ（開いたときに「未確定の変更あり」を出さない）
+5. スキルの空のテンプレートが、いまの圧縮版から作り直したものと同じ
+6. スキルの authoring.md に、利用ガイドで使っている囲みの名前と、フロントマターのキーがすべて出てくる
+7. スキルの scripts/build.mjs に構文の誤りがない
 """
 import importlib.util
 import re
@@ -17,8 +20,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "template-guide.src.html"
+TEMPLATE_MIN = ROOT / "template-guide.min.html"
 SAMPLE = ROOT / "samples" / "sample-versioned.src.html"
-HTML_FILES = [TEMPLATE, SAMPLE]
+SKILL = ROOT / "skills" / "hypertext-markdown"
+SKELETON = SKILL / "assets" / "template.html"
+AUTHORING = SKILL / "references" / "authoring.md"
+BUILD = SKILL / "scripts" / "build.mjs"
+HTML_FILES = [TEMPLATE, SAMPLE, SKELETON]
+# 利用ガイドの見本にだけ出てくる、自作のデザインの名前
+CUSTOM_BLOCKS = {"my-box"}
 
 # HTML の構文では、script の中身は最初の </script で終わる（</script foo> のように属性が付いても閉じる）
 SCRIPT_RE = re.compile(r"<script\b([^>]*)>(.*?)</script\b[^>]*>", re.DOTALL | re.IGNORECASE)
@@ -63,8 +73,8 @@ def check_js_syntax(path, text, errors, workdir):
             errors.append(f"{path.name}: {line} 行目からの script に構文の誤りがある\n{r.stderr.strip()}")
 
 
-def load_make_sample():
-    spec = importlib.util.spec_from_file_location("make_sample", ROOT / "tools" / "make_sample.py")
+def load_tool(name):
+    spec = importlib.util.spec_from_file_location(name, ROOT / "tools" / f"{name}.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
@@ -72,7 +82,7 @@ def load_make_sample():
 
 def check_sample(errors, workdir):
     out = Path(workdir) / "sample.html"
-    make_sample = load_make_sample()
+    make_sample = load_tool("make_sample")
     make_sample.main(str(TEMPLATE), str(out))
     if out.read_bytes() != SAMPLE.read_bytes():
         errors.append(
@@ -106,6 +116,43 @@ def check_template_versions(text, errors):
         )
 
 
+def check_skeleton(errors):
+    made = load_tool("make_skeleton").make(TEMPLATE_MIN.read_bytes().decode("utf-8"))
+    if made.encode("utf-8") != SKELETON.read_bytes():
+        errors.append(
+            "skills/hypertext-markdown/assets/template.html が、いまの圧縮版から作ったものと違う。"
+            "python -I tools/minify_html.py のあと python -I tools/make_skeleton.py で作り直す"
+        )
+
+
+def check_authoring(text, errors):
+    work = normalize_md(next(b for a, b in scripts(text) if 'id="md-source"' in a))
+    authoring = AUTHORING.read_text(encoding="utf-8")
+    blocks = set(re.findall(r"^:{3,}([a-z][\w-]*)", work, re.MULTILINE)) - CUSTOM_BLOCKS
+    missing = sorted(b for b in blocks if not re.search(rf":::{re.escape(b)}(?![\w-])", authoring))
+    # 利用ガイドの「## フロントマター」の表の 1 列目に並ぶキー
+    section = re.search(r"^## フロントマター\n(.*?)^## ", work, re.MULTILINE | re.DOTALL)
+    keys = set(re.findall(r"`([a-z_]+)`", "\n".join(
+        row.split("|")[1] for row in (section.group(1) if section else "").splitlines() if row.startswith("| `")
+    )))
+    missing += sorted(f"フロントマターの {k}" for k in keys if f"`{k}`" not in authoring)
+    if not section:
+        errors.append("template-guide.src.html: 利用ガイドに「## フロントマター」の章が見つからない")
+    if missing:
+        errors.append(
+            "skills/hypertext-markdown/references/authoring.md に、利用ガイドにある書式の説明が無い: " + "、".join(missing)
+        )
+
+
+def check_build_script(errors):
+    node = shutil.which("node")
+    if not node:
+        return  # check_js_syntax が node の不足を知らせる
+    r = subprocess.run([node, "--check", str(BUILD)], capture_output=True, text=True, encoding="utf-8", check=False)
+    if r.returncode != 0:
+        errors.append(f"{BUILD.relative_to(ROOT)} に構文の誤りがある\n{r.stderr.strip()}")
+
+
 def main():
     # -I では PYTHONUTF8 が効かないので、Windows でパイプに出しても化けないように固定する
     sys.stdout.reconfigure(encoding="utf-8")
@@ -116,11 +163,15 @@ def main():
             check_script_blocks(path, text, errors)
             check_js_syntax(path, text, errors, workdir)
         check_sample(errors, workdir)
-        check_template_versions(TEMPLATE.read_text(encoding="utf-8"), errors)
+        template = TEMPLATE.read_text(encoding="utf-8")
+        check_template_versions(template, errors)
+        check_skeleton(errors)
+        check_authoring(template, errors)
+        check_build_script(errors)
     if errors:
         print("\n".join("NG " + e for e in errors))
         sys.exit(1)
-    print("OK: script 要素、JavaScript の構文、見本の同期、テンプレートの見本の版")
+    print("OK: script 要素、JavaScript の構文、見本の同期、テンプレートの見本の版、スキルのテンプレート・書式の説明・build.mjs")
 
 
 if __name__ == "__main__":

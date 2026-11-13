@@ -9,6 +9,30 @@ Markdown を内包した、1 つの HTML ファイルで配れるレポートの
   - テンプレートを直したら、`python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html` で作り直す（テンプレートに入っている利用ガイドの版は持ち込まない）
 - テンプレート自体にも、利用ガイドの見本の版（1.0・1.1）が入っている。中身は説明用で、実際の改版の経緯ではない
   - 新しい文書を作るときは、<kbd>V</kbd> の「版をすべて削除」で消す。`.md` をドロップしたときは、版を消すかを聞かれる
+- 本文も版も入っていない空のテンプレート: [skills/hypertext-markdown/assets/template.html](skills/hypertext-markdown/assets/template.html)（開くと、`.md` のドロップか <kbd>E</kbd> で書き始めるよう案内する）
+
+## AI エージェントで使う
+
+AI エージェントがこのテンプレートで文書を作るためのスキルを、[skills/hypertext-markdown/](skills/hypertext-markdown/) に置いている。[skills.sh](https://skills.sh) の CLI で入れる（Node.js が必要）。
+
+```bash
+npx skills add tsunyan/hypertext-markdown
+```
+
+エージェントは Markdown を書き、スキルの `scripts/build.mjs` で空のテンプレートに流し込んで HTML にする。
+
+| ファイル | 内容 |
+|---|---|
+| `SKILL.md` | 作る手順と、既存の HTML を直す手順 |
+| `references/authoring.md` | 標準の Markdown にない書式（フロントマター、`:::` の部品、文中の記法、雛形） |
+| `scripts/build.mjs` | `.md` を HTML にする。手元の画像を base64 で埋め込み、`</script>` を書き換え、`<title>` を文書名にする。`--extract` で HTML から Markdown を取り出し、`--template` と `--keep-versions` で既存の HTML を版を残したまま作り直す |
+| `assets/template.html` | 空のテンプレート（`tools/make_skeleton.py` が作る） |
+
+スキルを入れずに使うときも、Node.js があれば同じことができる。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md -o report.html
+```
 
 ## できること
 
@@ -128,8 +152,8 @@ HTML も直接書ける。文の中のタグはそのまま残り、行の先頭
 
 | ジョブ | 内容 |
 |---|---|
-| `lint` | ruff（`tools/`・`tests/`）と `tools/check.py`。script 要素の壊れ（途中で閉じる、閉じずに後ろを飲み込む）、埋め込んだ JavaScript の構文、見本が作り直したものと同じこと、テンプレートの作業中の Markdown が見本の版 1.1 と同じことを調べる |
-| `tests` | Chromium でテンプレートと見本を開くテスト（`tests/test_smoke.py`）。エラーが出ないこと、図が描けること、すべてのスライドが 80% 以上で収まること（比較中も）、版の比較に印が付くこと、保存した HTML を開き直せること、JavaScript なしでも本文が読めることを確かめる |
+| `lint` | ruff（`tools/`・`tests/`）と `tools/check.py`。script 要素の壊れ（途中で閉じる、閉じずに後ろを飲み込む）、埋め込んだ JavaScript の構文、見本とスキルの空のテンプレートが作り直したものと同じこと、テンプレートの作業中の Markdown が見本の版 1.1 と同じこと、スキルの `authoring.md` に利用ガイドの囲みとフロントマターのキーが揃っていることを調べる |
+| `tests` | Chromium でテンプレートと見本を開くテスト（`tests/test_smoke.py`）。エラーが出ないこと、図が描けること、すべてのスライドが 80% 以上で収まること（比較中も）、版の比較に印が付くこと、保存した HTML を開き直せること、JavaScript なしでも本文が読めること、スキルの `build.mjs` で作った HTML が元と同じように描けることを確かめる |
 | `secrets` | gitleaks で、履歴全体から秘密情報を探す |
 | `analyze` | CodeQL（HTML に埋め込んだ JavaScript、Python、ワークフロー） |
 
@@ -144,6 +168,16 @@ python -m pytest -q
 ```
 
 テンプレートの利用ガイドを直したら、同じ内容を見本の版 1.1 にも入れ、見本を作り直す。どちらかを忘れると `tools/check.py` が知らせる。
+
+テンプレートを直したあとは、見本・圧縮版・スキルの空のテンプレートをこの順で作り直す（空のテンプレートは圧縮版から作る）。
+
+```bash
+python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html
+python -I tools/minify_html.py
+python -I tools/make_skeleton.py
+```
+
+AI エージェント向けの開発の約束は [AGENTS.md](AGENTS.md) にある。
 
 ## 確認したこと（2026-11-11）
 
