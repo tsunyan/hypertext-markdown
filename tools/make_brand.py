@@ -1,11 +1,11 @@
 """テンプレートに、ロゴ・favicon・色を入れた版を作る。Markdown は変えない。
 
 今回のブランド見本を作成するための補助ツール。入力は CONFIG.accent・logo・logoDark が空で、favicon が未設定のテンプレートを想定する。
-ロゴ埋め込み済みの現在の report-template.html から、そのまま再生成する用途には対応していない。
+ロゴ埋め込み済みの現在の template-guide.src.html から、そのまま再生成する用途には対応していない。
 
-使い方: python -I tools/make_brand.py <report-template.html> <brand フォルダ> [キー ...]
+使い方: python -I tools/make_brand.py <template-guide.src.html> <brand フォルダ> [キー ...]
 
-brand フォルダの brands.json にあるキー（c1、h1 など）ごとに、テンプレートと同じ場所へ report-template-<キー>.html を書き出す。
+brand フォルダの brands.json にあるキー（c1、h1 など）ごとに、テンプレートと同じ場所へ template-guide-<キー>.src.html を書き出す。
 キーを省くと全部を作る。入れるのは次の 3 つ。
 
 - favicon: <キー>-favicon.png と <キー>-favicon.svg を、<head> の <link rel="icon"> にする
@@ -61,7 +61,8 @@ def main(template, brand_dir, keys):
     for key in keys or brands:
         if key not in brands:
             raise SystemExit(f"brands.json に {key} が無い")
-        dest = template.with_name(f"{template.stem}-{key}{template.suffix}")
+        stem = template.stem.removesuffix(".src")
+        dest = template.with_name(f"{stem}-{key}.src{template.suffix}")
         out = make(src, brand_dir, key, brands[key])
         with open(dest, "w", encoding="utf-8", newline="\n") as f:
             f.write(out)

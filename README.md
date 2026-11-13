@@ -2,10 +2,11 @@
 
 Markdown を内包した、1 つの HTML ファイルで配れるレポートのテンプレート。調査メモや設計書を、目次・スライド・版の管理付きで読めるようにする。
 
-- 本体: [report-template.html](report-template.html)
+- 本体: [template-guide.src.html](template-guide.src.html)
+- 圧縮版: [template-guide.min.html](template-guide.min.html)。Node.js と npm がある環境で `python -I tools/minify_html.py` を実行すると、esbuild で CSS・JavaScript だけを圧縮して再生成する（初回はツールを取得する）。埋め込み Markdown と版データは保持する
 - 使い方と全部品の見本はファイルの中に書いてある。ブラウザで開けばそのまま読める（<kbd>?</kbd> でショートカットの一覧、<kbd>E</kbd> で Markdown を表示）
-- 版管理の見本: [sample-versioned.html](sample-versioned.html)（版 1.0〜1.2 と未確定の変更が入った基本設計書。<kbd>V</kbd> で版の一覧を開いて比較できる）
-  - テンプレートを直したら、`python -I tools/make_sample.py report-template.html sample-versioned.html` で作り直す（テンプレートに入っている利用ガイドの版は持ち込まない）
+- 版管理の見本: [samples/sample-versioned.src.html](samples/sample-versioned.src.html)（版 1.0〜1.2 と未確定の変更が入った基本設計書。<kbd>V</kbd> で版の一覧を開いて比較できる）
+  - テンプレートを直したら、`python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html` で作り直す（テンプレートに入っている利用ガイドの版は持ち込まない）
 - テンプレート自体にも、利用ガイドの見本の版（1.0・1.1）が入っている。中身は説明用で、実際の改版の経緯ではない
   - 新しい文書を作るときは、<kbd>V</kbd> の「版をすべて削除」で消す。`.md` をドロップしたときは、版を消すかを聞かれる
 

@@ -10,8 +10,8 @@ import pytest
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
-TEMPLATE = ROOT / "report-template.html"
-SAMPLE = ROOT / "sample-versioned.html"
+TEMPLATE = ROOT / "template-guide.src.html"
+SAMPLE = ROOT / "samples" / "sample-versioned.src.html"
 MIN_SCALE = 80  # CONFIG.slideMinScale
 
 MERMAID_SETTLED = """() => [...document.querySelectorAll('.mermaid-block')]
