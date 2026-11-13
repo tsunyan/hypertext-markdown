@@ -147,7 +147,7 @@ kbd {
   position: sticky; top: var(--header-h);
   height: calc(100vh - var(--header-h)); height: calc(100dvh - var(--header-h));
   display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain;
-  padding: 28px 14px 24px 18px; background: var(--bg-side); border-right: 1px solid var(--rule);
+  padding: 28px 14px 24px 18px; background: var(--bg); border-right: 1px solid var(--rule);
 }
 .toc-label { margin: 0 0 10px 13px; font-size: 12px; font-weight: 700; color: var(--ink-2); letter-spacing: .16em; }
 /* 目次の左に 1 本の線を通し、読んでいる見出しのところだけ強調の色にする */
@@ -164,43 +164,51 @@ kbd {
 .doc, .doc-footer { max-width: var(--measure); margin: 0 auto; }
 .noscript-msg { max-width: var(--measure); margin: 0 auto 2rem; padding: 12px 16px; border: 1px solid var(--rule); }
 
-/* ---------- 表題欄（表紙） ---------- */
-/* スライドの表紙では .md の中に複製されるので、本文用の指定より強くしておく */
-/* 図面の表題欄。太い外枠と細い内枠で囲み、右上の角から方眼を敷く（題名のある左下に向かって薄くなる） */
-.doc-header { position: relative; margin: 0 0 3.6rem; border: 2px solid var(--frame); overflow: hidden; background: var(--bg); }
-.doc-header .tb-head { position: relative; isolation: isolate; padding: 36px 32px 30px; }
-.doc-header .tb-head::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background:
-    linear-gradient(var(--grid-major) 1px, transparent 1px) right -1px top -1px / 40px 40px,
-    linear-gradient(90deg, transparent 39px, var(--grid-major) 39px) right 0 top 0 / 40px 40px,
-    linear-gradient(var(--grid-minor) 1px, transparent 1px) right -1px top -1px / 8px 8px,
-    linear-gradient(90deg, transparent 7px, var(--grid-minor) 7px) right 0 top 0 / 8px 8px;
-  -webkit-mask-image: radial-gradient(135% 150% at 100% 0, #000 8%, transparent 64%);
-  mask-image: radial-gradient(135% 150% at 100% 0, #000 8%, transparent 64%);
-}
-.doc-header .tb-head::after { content: ""; display: block; clear: both; }
-.doc-header .tb-marks { float: right; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin: 2px 0 10px 18px; }
-.doc-header .doc-title {
-  margin: 0; padding: 0; border: 0; background: none; font-size: clamp(1.8rem, 1.25rem + 1.8vw, 2.45rem); line-height: 1.26;
-  font-weight: 700; letter-spacing: .015em; font-feature-settings: "palt"; word-break: auto-phrase; text-wrap: balance;
-}
-.doc-header .doc-subtitle { margin: .7em 0 0; color: var(--ink-2); font-size: 1.05rem; line-height: 1.6; word-break: auto-phrase; }
-.doc-header .tb-logo { margin: 0 0 16px; }
+/* ---------- 表紙 ---------- */
+/* 枠で囲まず、題名の大きさと余白で表紙にする。区切りの細い線は、左端だけを強調の色にする（章の見出しと同じ決まり）。
+   スライドの表紙では .md の中に複製されるので、本文用の指定より強くしておく */
+.doc-header { margin: 1.2rem 0 4.2rem; }
+.doc-header .tb-head { display: flex; flex-direction: column; align-items: flex-start; }
+.doc-header .tb-logo { order: -1; margin: 0 0 2.2rem; }
 .doc-header .doc-logo { display: block; width: auto; max-width: min(240px, 60%); height: auto; max-height: 40px; }
 .title-slide .doc-header .doc-logo { max-height: 60px; }
-.doc-header .tb-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); margin: 0 -1px -1px 0; border-top: 1.5px solid var(--frame); background: color-mix(in srgb, var(--bg-sunken) 45%, var(--bg)); }
-.doc-header .tb-meta > div { min-width: 0; padding: 8px 14px 10px; border-right: 1px solid var(--frame-inner); border-bottom: 1px solid var(--frame-inner); }
-.doc-header .tb-meta dt { font-size: 11px; line-height: 1.4; letter-spacing: .1em; color: var(--ink-2); }
-.doc-header .tb-meta dd { margin: 1px 0 0; font-family: var(--num); font-size: 16.5px; font-weight: 600; line-height: 1.4; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
-.stamp, .classif { display: inline-block; font-size: 13px; font-weight: 700; line-height: 1.5; letter-spacing: .08em; white-space: nowrap; }
-/* 状態は、紙に押した判子のように少し傾ける */
-.stamp { --c: var(--ink-2); color: var(--c); padding: 1px 10px; border: 3px double var(--c); border-radius: 5px; background: color-mix(in srgb, var(--bg) 78%, transparent); transform: rotate(-2.5deg); }
+.doc-header .tb-marks { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 1.4rem; }
+.doc-header .doc-title {
+  margin: 0; padding: 0; border: 0; background: none; font-size: clamp(2rem, 1.3rem + 2.8vw, 3.1rem); line-height: 1.22;
+  font-weight: 700; letter-spacing: .01em; font-feature-settings: "palt"; word-break: auto-phrase; text-wrap: pretty;
+}
+.doc-header .doc-subtitle { margin: 1em 0 0; color: var(--ink-2); font-size: clamp(1.02rem, .94rem + .45vw, 1.2rem); line-height: 1.65; word-break: auto-phrase; }
+.doc-header .tb-meta {
+  display: flex; flex-wrap: wrap; gap: 1rem 2.8rem; margin: 2.5rem 0 0; padding: 1.2rem 0 0;
+  background: linear-gradient(var(--accent), var(--accent)) left top / 3.4em 3px no-repeat, linear-gradient(var(--rule), var(--rule)) left top / 100% 1px no-repeat;
+}
+.doc-header .tb-meta > div { min-width: 0; }
+.doc-header .tb-meta dt { font-size: 11.5px; line-height: 1.4; letter-spacing: .08em; color: var(--ink-2); }
+.doc-header .tb-meta dd { margin: 3px 0 0; font-family: var(--num); font-size: 16px; font-weight: 400; line-height: 1.45; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+/* 状態と機密区分は、小さな札にする。状態は色の点を付け、機密区分は線で囲む */
+.stamp, .classif { display: inline-block; padding: 0 10px; border: 1px solid transparent; border-radius: 4px; font-size: 12px; font-weight: 700; line-height: 22px; letter-spacing: .08em; white-space: nowrap; }
+.stamp { --c: var(--ink-2); color: var(--c); border-color: color-mix(in srgb, var(--c) 30%, transparent); background: color-mix(in srgb, var(--c) 9%, transparent); }
+.stamp::before { content: ""; display: inline-block; width: 6px; height: 6px; margin: 0 .6em .1em 0; border-radius: 50%; background: currentColor; vertical-align: middle; }
 .stamp-draft { --c: var(--c-warning); }
 .stamp-review { --c: var(--c-note); }
-.stamp-final { --c: var(--seal); }
+.stamp-final { --c: var(--c-tip); }
 .stamp-obsolete { text-decoration: line-through; }
-.classif { color: var(--seal); padding: 2px 10px; border: 1.5px solid var(--seal); background: color-mix(in srgb, var(--bg) 78%, transparent); }
+.classif { color: var(--seal); border-color: color-mix(in srgb, var(--seal) 70%, transparent); }
+/* 開いたときに 1 度だけ、表紙を上から順に出す（.intro は読み込みの直後だけ付く） */
+@media (prefers-reduced-motion: no-preference) {
+  .intro .doc-header :is(.tb-logo, .tb-marks, .doc-title, .doc-subtitle, .tb-meta > div) { animation: rise .7s cubic-bezier(.2, .7, .2, 1) both; }
+  .intro .doc-header .doc-title { animation-delay: .06s; }
+  .intro .doc-header .doc-subtitle { animation-delay: .14s; }
+  .intro .doc-header .tb-meta { animation: rule-in .9s cubic-bezier(.3, .7, .2, 1) .22s both; }
+  .intro .doc-header .tb-meta > div { animation-delay: .42s; }
+  .intro .doc-header .tb-meta > div:nth-child(2) { animation-delay: .48s; }
+  .intro .doc-header .tb-meta > div:nth-child(3) { animation-delay: .54s; }
+  .intro .doc-header .tb-meta > div:nth-child(n+4) { animation-delay: .6s; }
+  .intro > .md { animation: fade .8s ease-out .3s both; }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+@keyframes fade { from { opacity: 0; } }
+@keyframes rule-in { from { background-size: 0 3px, 0 1px; } }
 
 /* ---------- 本文 ---------- */
 .md { container-type: inline-size; }
@@ -215,7 +223,7 @@ kbd {
 .md h3 { font-size: 1.16em; margin: 2.1em 0 .7em; }
 .md h4 { font-size: 1em; margin: 1.8em 0 .6em; }
 .md h5, .md h6 { font-size: .94em; margin: 1.6em 0 .5em; color: var(--ink-2); }
-.secno { margin-right: .55em; color: var(--accent); font-family: var(--num); font-size: 1.1em; font-weight: 600; line-height: 1; letter-spacing: 0; font-variant-numeric: tabular-nums; }
+.secno { margin-right: .55em; color: var(--accent); font-family: var(--num); font-size: 1.12em; font-weight: 400; line-height: 1; letter-spacing: 0; font-variant-numeric: tabular-nums; }
 .anchor { margin-left: .4em; color: var(--ink-2); font-weight: 400; text-decoration: none; opacity: 0; }
 .md :is(h2, h3, h4):hover .anchor, .anchor:focus-visible { opacity: .7; }
 .md p, .md ul, .md ol, .md dl, .md blockquote, .md figure { margin: 1em 0; }
@@ -235,7 +243,7 @@ kbd {
 .md figure { text-align: center; }
 .md figcaption { margin-top: .5em; font-size: .88em; color: var(--ink-2); }
 .md blockquote { padding: .1em 1.1em; border-left: 3px solid var(--frame-inner); color: var(--ink-2); }
-.md details { margin: 1em 0; padding: .5em 1em; border: 1px solid var(--rule); border-radius: 6px; }
+.md details { margin: 1em 0; padding: .55em 1.1em; border: 1px solid var(--rule); border-radius: 8px; }
 .md summary { cursor: pointer; font-weight: 700; list-style: none; }
 .md summary::-webkit-details-marker { display: none; }
 /* 折りたたみの印は、差分のファイル見出しと同じ線の矢印（閉じると右、開くと下） */
@@ -245,7 +253,7 @@ kbd {
 .md sup.fn-ref a { padding: 0 .15em; font-size: .8em; text-decoration: none; }
 .pagebreak { display: block; height: 0; }
 
-.codeblock { margin: 1.3em 0; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg-sunken); overflow: hidden; }
+.codeblock { margin: 1.3em 0; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg-sunken); overflow: hidden; }
 .code-head { display: flex; align-items: center; gap: 10px; min-height: 32px; padding: 3px 6px 3px 14px; border-bottom: 1px solid var(--rule); background: color-mix(in srgb, var(--bg) 50%, transparent); font-size: 12.5px; color: var(--ink-2); }
 .code-title { font-weight: 700; color: var(--ink); }
 .code-lang { font-family: var(--mono); }
@@ -261,7 +269,7 @@ kbd {
   --del-bg: color-mix(in srgb, var(--c-caution) 10%, transparent);
   --del-ln: color-mix(in srgb, var(--c-caution) 17%, transparent);
   --del-w: color-mix(in srgb, var(--c-caution) 30%, transparent);
-  margin: 1.3em 0; overflow: hidden; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg);
+  margin: 1.3em 0; overflow: hidden; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg);
 }
 .gh-toolbar { display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 4px 6px 4px 14px; border-bottom: 1px solid var(--rule); background: var(--bg-sunken); color: var(--ink-2); font-size: 12.5px; }
 .gh-title { color: var(--ink); font-weight: 700; }
@@ -340,11 +348,11 @@ kbd {
 
 /* 表。.table-scroll が横のスクロールを受け持つ。横にはみ出さない表（.fits）は、見出しの行が画面の上に残る */
 .table-wrap { position: relative; margin: 1.3em 0; }
-.table-scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; }
 .table-scroll.fits { overflow: visible; }
 .table-scroll.fits thead th { position: sticky; top: var(--header-h); z-index: 2; box-shadow: inset 0 -1px 0 var(--rule); }
-.table-scroll.fits thead tr:first-child th:first-child { border-top-left-radius: 5px; }
-.table-scroll.fits thead tr:first-child th:last-child { border-top-right-radius: 5px; }
+.table-scroll.fits thead tr:first-child th:first-child { border-top-left-radius: 7px; }
+.table-scroll.fits thead tr:first-child th:last-child { border-top-right-radius: 7px; }
 .table-wrap.is-long .table-scroll:not(.fits) { max-height: calc(100vh - var(--header-h) - 48px); overflow: auto; }
 .table-wrap.is-long .table-scroll:not(.fits) thead th { position: sticky; top: 0; z-index: 2; box-shadow: inset 0 -1px 0 var(--rule); }
 .tbl-tools { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin: 0 0 6px; color: var(--ink-2); font-size: 12.5px; line-height: 1.5; }
@@ -450,7 +458,7 @@ body.resizing { cursor: col-resize; -webkit-user-select: none; user-select: none
 .md tbody tr:last-child td { border-bottom: 0; }
 .table-scroll tbody tr:not([class]):hover td { background: color-mix(in srgb, var(--accent) 5%, transparent); }
 
-.alert { --c: var(--c-note); margin: 1.3em 0; padding: .75em 1.1em .8em; border-left: 3px solid var(--c); border-radius: 0 6px 6px 0; background: color-mix(in srgb, var(--c) 7%, transparent); }
+.alert { --c: var(--c-note); margin: 1.3em 0; padding: .8em 1.2em .85em; border-left: 3px solid var(--c); border-radius: 0 8px 8px 0; background: color-mix(in srgb, var(--c) 7%, transparent); }
 .md .alert-title { display: flex; align-items: center; gap: .45em; margin: 0 0 .25em; color: var(--c); font-weight: 700; }
 .alert-title svg { flex: none; width: 1.05em; height: 1.05em; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .md .alert > p:nth-child(2) { margin-top: 0; }
@@ -509,7 +517,7 @@ body.resizing { cursor: col-resize; -webkit-user-select: none; user-select: none
 
 /* 工程の流れ */
 .c-flow .c-items { display: flex; gap: 14px 30px; }
-.c-flow .c-items > li { position: relative; flex: 1 1 0; min-width: 0; padding: .65em .7em .7em; border: 1.5px solid var(--frame); border-radius: 4px; background: var(--bg); text-align: center; line-height: 1.55; }
+.c-flow .c-items > li { position: relative; flex: 1 1 0; min-width: 0; padding: .7em .7em .75em; border: 1px solid var(--frame-inner); border-radius: 8px; background: var(--bg); text-align: center; line-height: 1.55; }
 .c-flow .c-items > li:not(:last-child)::after { content: ""; position: absolute; top: 50%; right: -21px; width: 10px; height: 10px; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); transform: translateY(-50%) rotate(45deg); }
 .c-flow .item-title { display: block; }
 
@@ -524,20 +532,20 @@ body.resizing { cursor: col-resize; -webkit-user-select: none; user-select: none
 
 /* カード */
 .c-cards .c-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(13em, 1fr)); gap: 14px; }
-.c-cards .card { padding: .85em 1.1em 1em; border: 1px solid var(--rule); border-top: 3px solid var(--accent); border-radius: 3px; background: var(--bg); line-height: 1.7; }
+.c-cards .card { padding: 1em 1.2em 1.1em; border: 1px solid var(--rule); border-radius: 10px; background: color-mix(in srgb, var(--bg-sunken) 35%, var(--bg)); line-height: 1.7; }
 .md .c-cards .card-title, .c-cards .card .item-title { display: block; margin: 0 0 .35em; font-weight: 700; }
-.c-cards .card.is-best { border-color: var(--accent); }
+.c-cards .card.is-best { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 
 /* 段組み・比較・メリット/デメリット */
 .c-panels { display: grid; grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr)); gap: 16px 2em; }
 .c-compare .c-panels, .c-pros-cons .c-panels { gap: 14px; }
-.c-compare .panel { border: 1px solid var(--rule); border-radius: 3px; background: var(--bg); }
+.c-compare .panel { overflow: hidden; border: 1px solid var(--rule); border-radius: 10px; background: var(--bg); }
 .c-compare .panel-head { padding: .5em 1em; border-bottom: 1px solid var(--rule); background: var(--bg-sunken); font-weight: 700; }
 .c-compare .panel-body { padding: .7em 1em .9em; }
 .c-compare .panel.is-best { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .c-compare .panel.is-best .panel-head { border-bottom-color: var(--accent); background: var(--accent); color: var(--bg); }
 .c-compare .panel.is-best .panel-head::after { content: "推奨"; margin-left: .7em; padding: 0 .5em; border: 1px solid currentColor; border-radius: 3px; font-size: .78em; }
-.c-pros-cons .panel { --c: var(--ink-2); padding-top: .55em; border-top: 3px solid var(--c); }
+.c-pros-cons .panel { --c: var(--ink-2); padding-top: .6em; border-top: 2px solid var(--c); }
 .c-pros-cons .pros { --c: var(--c-tip); }
 .c-pros-cons .cons { --c: var(--c-caution); }
 .c-pros-cons .panel-head { margin-bottom: .3em; color: var(--c); font-weight: 700; }
@@ -554,16 +562,16 @@ body.resizing { cursor: col-resize; -webkit-user-select: none; user-select: none
 .c-tabs .tab-panel:not(.is-active) { display: none; }
 
 /* 要旨・キーメッセージ */
-.c-summary { padding: 1em 1.3em 1.1em; border: 1.5px solid var(--frame); }
-.md .c-summary .c-title { margin-bottom: .4em; color: var(--ink-2); font-size: .85em; letter-spacing: .1em; }
+.c-summary { padding: 1.1em 1.4em 1.2em; border-radius: 10px; background: var(--accent-soft); }
+.md .c-summary .c-title { margin-bottom: .4em; color: var(--accent); font-size: .85em; letter-spacing: .1em; }
 .c-lead { padding-left: .85em; border-left: 4px solid var(--accent); font-size: 1.3em; font-weight: 700; line-height: 1.6; letter-spacing: .02em; font-feature-settings: "palt"; word-break: auto-phrase; }
 .md .c-lead p { margin: .4em 0; }
 
 /* 数値の強調 */
-.c-metrics .c-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5em, 1fr)); border-top: 1.5px solid var(--frame); border-bottom: 1.5px solid var(--frame); }
-.c-metrics .metric { padding: .7em 1em .8em; }
-.c-metrics .metric + .metric { border-left: 1px solid var(--frame-inner); }
-.c-metrics .metric-value { color: var(--accent); font-family: var(--num); font-size: 2.2em; font-weight: 600; line-height: 1.15; letter-spacing: .01em; font-variant-numeric: tabular-nums; }
+.c-metrics .c-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5em, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.c-metrics .metric { padding: .9em 1.1em 1em; }
+.c-metrics .metric + .metric { border-left: 1px solid var(--rule); }
+.c-metrics .metric-value { color: var(--accent); font-family: var(--num); font-size: 2.4em; font-weight: 500; line-height: 1.15; letter-spacing: .01em; font-variant-numeric: tabular-nums; }
 .c-metrics .metric-label { margin-top: .25em; color: var(--ink-2); font-size: .86em; line-height: 1.5; }
 
 /* 進捗 */
@@ -747,15 +755,14 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
   .sidebar {
     position: fixed; top: var(--header-h); bottom: 0; left: 0; z-index: 35;
     width: min(320px, 86vw); height: auto; transform: translateX(-102%);
-    transition: transform .2s ease; box-shadow: 0 0 40px rgba(0, 0, 0, .18);
+    transition: transform .2s ease;
   }
-  body.toc-open .sidebar { transform: none; }
+  body.toc-open .sidebar { transform: none; box-shadow: 0 0 40px rgba(0, 0, 0, .18); }
   .backdrop { position: fixed; inset: var(--header-h) 0 0; z-index: 34; background: rgba(0, 0, 0, .32); }
   .main { padding: 28px 16px 72px; }
   body.editing .layout { grid-template-columns: minmax(0, 1fr); }
   .editor { position: relative; top: 0; height: 48vh; border-right: 0; border-bottom: 1px solid var(--rule); }
-  .doc-header .tb-head { padding: 20px 18px 18px; }
-  .doc-header .tb-marks { float: none; justify-content: flex-start; margin: 0 0 12px; }
+  .doc-header { margin-top: .4rem; }
 }
 @media (max-width: 600px) { .hide-sm, .topbar-crumb { display: none; } #ui-title { max-width: none; } }
 
@@ -799,14 +806,13 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
 .slide.is-section .slide-body > :is(h1, h2):first-child { margin: 0 0 1.2em; padding: 0 0 .45em; font-size: 2em; background-size: 3.4em 6px, 100% 2px; }
 .slide.is-section .secno { display: block; margin: 0 0 .1em; font-size: 3.2em; font-weight: 300; line-height: 1; letter-spacing: -.02em; }
 .title-slide .doc-header { margin: 0; }
-.title-slide .doc-header { border-width: 3px; }
-.title-slide .doc-header .tb-head { padding: 52px 48px 44px; }
-.title-slide .doc-header .doc-title { font-size: 2.1em; }
-.title-slide .doc-header .doc-subtitle { font-size: .8em; margin-top: .7em; }
-.title-slide .doc-header .tb-marks { margin-left: 28px; }
-.title-slide .stamp, .title-slide .classif { font-size: 16px; }
-.title-slide .doc-header .tb-meta > div { padding: 10px 18px 12px; }
-.title-slide .doc-header .tb-meta dt { font-size: 13px; }
+.title-slide .doc-header .tb-logo { margin-bottom: 1.6em; }
+.title-slide .doc-header .tb-marks { gap: 10px; margin-bottom: 1.2em; }
+.title-slide .stamp, .title-slide .classif { padding: 0 14px; font-size: 15px; line-height: 28px; }
+.title-slide .doc-header .doc-title { font-size: 2.4em; line-height: 1.2; }
+.title-slide .doc-header .doc-subtitle { margin-top: 1em; font-size: .95em; }
+.title-slide .doc-header .tb-meta { gap: 14px 60px; margin-top: 2.2em; padding-top: 1em; background-size: 3.4em 4px, 100% 2px; }
+.title-slide .doc-header .tb-meta dt { font-size: 14px; }
 .title-slide .doc-header .tb-meta dd { font-size: 21px; }
 .slide-controls {
   position: fixed; right: 14px; bottom: 14px; display: flex; gap: 4px; padding: 4px;
@@ -3156,6 +3162,8 @@ h2_pagebreak: true
 |---|---|---|---|
 | 1.0 | 2026-11-06 | 作成者名 | 初版 |
 </script>
+
+
 
 <header class="topbar" id="ui-topbar">
   <button class="icon-btn" type="button" data-action="toc" title="目次の表示を切り替え（B）" aria-label="目次の表示を切り替え"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h11"/></svg></button>
@@ -6204,8 +6212,13 @@ const Slides = {
   go(i) {
     if (!this.active) return;
     i = Math.max(0, Math.min(this.list.length - 1, i | 0));
+    const dir = i < this.index ? -1 : 1;
     this.index = i;
     mountSlide(this.shell, this.list[i], i, this.list.length);
+    const body = $('.slide-body', this.shell);
+    if (body.animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      body.animate([{ opacity: 0, transform: 'translateX(' + dir * 14 + 'px)' }, { opacity: 1, transform: 'none' }], { duration: 240, easing: 'cubic-bezier(.2, .7, .2, 1)' });
+    }
     setHash('#slide-' + (i + 1));
   },
   next() { if (this.index < this.list.length - 1) this.go(this.index + 1); },
@@ -6271,7 +6284,8 @@ const Theme = {
   },
   cycle() {
     const m = this.modes[(this.modes.indexOf(this.get()) + 1) % this.modes.length];
-    this.set(m);
+    if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.startViewTransition(() => this.set(m));
+    else this.set(m);
     toast('テーマ: ' + this.names[m]);
   },
   sync() {
@@ -7130,10 +7144,16 @@ function init() {
   if (mw >= Width.min) document.documentElement.style.setProperty('--measure', mw + 'px');
   Theme.sync();
   const md = readSource();
+  const drawnNow = !els.doc.firstElementChild;
   state.savedMd = md;
   state.versions = readVersions();
   state.savedVersionsKey = versionsKey();
   render(md, true);
+  // 開いたときに 1 度だけ、表紙を上から順に出す。編集のたびに繰り返さないように、終わったら外す
+  if (drawnNow && location.hash.length <= 1) {
+    els.doc.classList.add('intro');
+    setTimeout(() => els.doc.classList.remove('intro'), 2000);
+  }
   updateDirty();
   const sm = location.hash.match(/^#slide-(\d+)$/);
   const vh = viewFromHash(location.hash);
