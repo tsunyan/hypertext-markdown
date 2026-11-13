@@ -1,6 +1,6 @@
 """テンプレートから、版付きの見本ファイルを作る。
 
-使い方: python -I tools/make_sample.py <report-template.html> <出力先.html>
+使い方: python -I tools/make_sample.py <template-guide.src.html> <出力先.html>
 """
 import re
 import sys

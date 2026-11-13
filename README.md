@@ -2,10 +2,11 @@
 
 Markdown を内包した、1 つの HTML ファイルで配れるレポートのテンプレート。調査メモや設計書を、目次・スライド・版の管理付きで読めるようにする。
 
-- 本体: [report-template.html](report-template.html)
+- 本体: [template-guide.src.html](template-guide.src.html)
+- 圧縮版: [template-guide.min.html](template-guide.min.html)。Node.js と npm がある環境で `python -I tools/minify_html.py` を実行すると、esbuild で CSS・JavaScript だけを圧縮して再生成する（初回はツールを取得する）。埋め込み Markdown と版データは保持する
 - 使い方と全部品の見本はファイルの中に書いてある。ブラウザで開けばそのまま読める（<kbd>?</kbd> でショートカットの一覧、<kbd>E</kbd> で Markdown を表示）
-- 版管理の見本: [sample-versioned.html](sample-versioned.html)（版 1.0〜1.2 と未確定の変更が入った基本設計書。<kbd>V</kbd> で版の一覧を開いて比較できる）
-  - テンプレートを直したら、`python -I tools/make_sample.py report-template.html sample-versioned.html` で作り直す（テンプレートに入っている利用ガイドの版は持ち込まない）
+- 版管理の見本: [samples/sample-versioned.src.html](samples/sample-versioned.src.html)（版 1.0〜1.2 と未確定の変更が入った基本設計書。<kbd>V</kbd> で版の一覧を開いて比較できる）
+  - テンプレートを直したら、`python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html` で作り直す（テンプレートに入っている利用ガイドの版は持ち込まない）
 - テンプレート自体にも、利用ガイドの見本の版（1.0・1.1）が入っている。中身は説明用で、実際の改版の経緯ではない
   - 新しい文書を作るときは、<kbd>V</kbd> の「版をすべて削除」で消す。`.md` をドロップしたときは、版を消すかを聞かれる
 
@@ -44,6 +45,8 @@ Markdown で書けない見せ方は、`:::名前` 〜 `:::` の囲みで指定�
 
 Zenn と同じ `:::message`・`:::details タイトル` も使える。
 
+HTML も直接書ける。文の中のタグはそのまま残り、行の先頭をブロックのタグ（`<div>`・`<details>` など）で始めると、次の空行までが HTML になる。無害化はしないので、ほかの人から受け取った Markdown を開くときは中身を確かめる。
+
 コードブロックの言語を `diff`（または `patch`）にすると、`git diff` の出力を GitHub の差分画面のように表示する。
 
 - ファイルごとの枠（ファイル名、追加／削除／名前変更の区別、増減の行数とバー、折りたたみ）
@@ -58,7 +61,7 @@ Zenn と同じ `:::message`・`:::details タイトル` も使える。
 - **コードの色分け:** C・C++、C#、Java、JavaScript、TypeScript、Python、シェル、バッチファイル、PowerShell、SQL、HTML、CSS、Markdown、JSON、XML、YAML、TOML、INI（conf・properties）、CSV・TSV（`` ```csv code ``）。外部ライブラリは使わず、言語ごとの規則で字句を分ける。色は行ごとに閉じるので、スライドでも行の単位で分けられる。`example` の「書き方」タブの Markdown も、中のフェンスの言語まで色分けする
 - **CSV・TSV の表:** `` ```csv `` / `` ```tsv `` は表になる（引用符の中の区切り・改行・`""` に対応。数値だけの列は右揃え）。`noheader` で 1 行目も中身に、`title="…"` で表題を付ける
 - **表の操作:** 見出しを押すと並べ替え（昇順 → 降順 → 元の順。数値の列は数値として比べる）。6 行以上の表には絞り込みの欄が付く。「コピー」でタブ区切り（Excel にそのまま貼れる形）にする。横にはみ出さない表は、スクロールしても見出しの行が画面の上に残る
-- **グラフ:** `:::chart 種類 表題 unit=単位 min= max=`。種類は `bar`（省略時）・`barh`・`stacked`・`line`・`area`・`share`（`pie` も構成比の帯で描く）。系列の色は、色覚の多様性を考えて検証した 8 色を決まった順で使い、9 系列目以降は描かない。2 系列以上は凡例を付け、マウスを重ねるかキーボードで選ぶと値が出る。表示する幅に合わせて描き直し、スライドでは拡大する
+- **グラフ:** `:::chart 種類 表題 unit=単位 min= max=`。種類は `bar`（省略時）・`barh`・`stacked`・`line`・`area`・`share`（`pie` も構成比の帯で描く）。系列の色は、構文強調の `--tk-c0`〜`--tk-c5`・`--tk-str`・`--tk-com` と共通の 8 色を決まった順で使い、ライト・ダーク表示に追従する。9 系列目以降は描かない。2 系列以上は凡例を付け、マウスを重ねるかキーボードで選ぶと値が出る。表示する幅に合わせて描き直し、スライドでは拡大する
 - **用語集:** `:::glossary` の項目と `*[略語]: 意味` の語に、本文中で点線の下線を付け、マウスを重ねると意味を出す（H2 の章ごとに最初の 1 回だけ）。用語集の項目へは、押すと移動する
 
 ## 見た目の指定（フロントマター）

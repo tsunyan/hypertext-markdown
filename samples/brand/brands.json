@@ -1,0 +1,42 @@
+{
+  "c1": {
+    "name": "KITASORA",
+    "kind": "IT・クラウド",
+    "accent": "#1d4fd7 / #93b4ff"
+  },
+  "c2": {
+    "name": "葉月信託",
+    "kind": "金融",
+    "accent": "#0e6b4f / #6fd3ae"
+  },
+  "c3": {
+    "name": "アカガネ精機",
+    "kind": "製造",
+    "accent": "#c2410c / #ff9d73"
+  },
+  "c4": {
+    "name": "shion",
+    "kind": "コンサルティング",
+    "accent": "#6a3fc8 / #bda7f7"
+  },
+  "c5": {
+    "name": "ISHIZUE",
+    "kind": "建築・設計",
+    "accent": "#2a2e37 / #c5cad3"
+  },
+  "h1": {
+    "name": "hypertext-markdown",
+    "kind": "山かっこと #",
+    "accent": ""
+  },
+  "h2": {
+    "name": "hypertext-markdown",
+    "kind": "h と m をつないだ字",
+    "accent": ""
+  },
+  "h3": {
+    "name": "hypertext-markdown",
+    "kind": "見出しの下線",
+    "accent": ""
+  }
+}

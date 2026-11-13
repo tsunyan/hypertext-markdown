@@ -4,7 +4,7 @@
 
 1. script 要素が途中で終わったり、閉じずに後ろを飲み込んだりしない
 2. 埋め込んだ JavaScript に構文の誤りがない（node --check。node が無ければ失敗する）
-3. 見本（sample-versioned.html）が、いまのテンプレートから作り直したものと同じ
+3. 見本（samples/sample-versioned.src.html）が、いまのテンプレートから作り直したものと同じ
 4. テンプレートの作業中の Markdown が、いちばん新しい見本の版と同じ（開いたときに「未確定の変更あり」を出さない）
 """
 import importlib.util
@@ -16,8 +16,8 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-TEMPLATE = ROOT / "report-template.html"
-SAMPLE = ROOT / "sample-versioned.html"
+TEMPLATE = ROOT / "template-guide.src.html"
+SAMPLE = ROOT / "samples" / "sample-versioned.src.html"
 HTML_FILES = [TEMPLATE, SAMPLE]
 
 # HTML の構文では、script の中身は最初の </script で終わる（</script foo> のように属性が付いても閉じる）
@@ -76,8 +76,8 @@ def check_sample(errors, workdir):
     make_sample.main(str(TEMPLATE), str(out))
     if out.read_bytes() != SAMPLE.read_bytes():
         errors.append(
-            "sample-versioned.html が、いまのテンプレートから作った見本と違う。"
-            "python -I tools/make_sample.py report-template.html sample-versioned.html で作り直す"
+            "samples/sample-versioned.src.html が、いまのテンプレートから作った見本と違う。"
+            "python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html で作り直す"
         )
 
 
@@ -101,7 +101,7 @@ def check_template_versions(text, errors):
     if normalize_md(work[0]) != normalize_md(newest):
         ver = re.search(r'data-version="([^"]*)"', newest_attrs)
         errors.append(
-            f"report-template.html: 作業中の Markdown が見本の版 {ver.group(1) if ver else '?'} と違う。"
+            f"template-guide.src.html: 作業中の Markdown が見本の版 {ver.group(1) if ver else '?'} と違う。"
             "利用ガイドを直したら、同じ内容を見本の版にも入れる"
         )
 
