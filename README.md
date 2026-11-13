@@ -6,6 +6,14 @@
 </h1>
 
 <p align="center">
+  <a href="https://github.com/tsunyan/hypertext-markdown/actions/workflows/ci.yml"><img src="https://github.com/tsunyan/hypertext-markdown/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
+  <a href="https://github.com/tsunyan/hypertext-markdown/actions/workflows/codeql.yml"><img src="https://github.com/tsunyan/hypertext-markdown/actions/workflows/codeql.yml/badge.svg?branch=main" alt="CodeQL"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/tsunyan/hypertext-markdown" alt="License: MIT"></a>
+  <a href="template-guide.min.html"><img src="https://img.shields.io/badge/single%20file-HTML-e34f26?logo=html5&amp;logoColor=white" alt="single file: HTML"></a>
+  <a href="#ai-エージェントで使う"><img src="https://img.shields.io/badge/Agent%20Skill-skills.sh-555?logo=anthropic&amp;logoColor=white" alt="Agent Skill: skills.sh"></a>
+</p>
+
+<p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-views-dark.png">
     <img src="docs/images/readme-views-light.png" alt="同じ文書を、Markdown・HTML（ライト）・HTML（ダーク）・スライドで表示したところ">
