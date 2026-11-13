@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="generator" content="md-report-template 1.0">
+<meta name="generator" content="hypertext-markdown 1.0">
 <title>レポート</title>
 <script>
   document.documentElement.classList.remove('no-js');
   try {
-    var t = localStorage.getItem('md-report:theme');
+    var t = localStorage.getItem('hypertext-markdown:theme');
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
-    var w = parseInt(localStorage.getItem('md-report:measure'), 10);
+    var w = parseInt(localStorage.getItem('hypertext-markdown:measure'), 10);
     if (w >= 480) document.documentElement.style.setProperty('--measure', w + 'px');
   } catch (e) {}
 </script>
@@ -880,7 +880,7 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
 -->
 <script type="text/markdown" id="md-source">
 ---
-title: HTML レポートテンプレート 利用ガイド
+title: hypertext-markdown 利用ガイド
 subtitle: Markdown を 1 か所に書けば、読み物にもスライドにも PDF にもなる
 version: 1.1
 date: 2026-11-06
@@ -1865,7 +1865,7 @@ numbering: true
 </script>
 <script type="text/markdown" class="md-version" data-version="1.1" data-date="2026-11-10" data-author="作成者名" data-note="版の管理と、表現のための囲みの章を追加。スライドの自動分割に対応">
 ---
-title: HTML レポートテンプレート 利用ガイド
+title: hypertext-markdown 利用ガイド
 subtitle: Markdown を 1 か所に書けば、読み物にもスライドにも PDF にもなる
 version: 1.1
 date: 2026-11-06
@@ -2850,7 +2850,7 @@ numbering: true
 </script>
 <script type="text/markdown" class="md-version" data-version="1.0" data-date="2026-11-06" data-author="作成者名" data-note="初版">
 ---
-title: HTML レポートテンプレート 利用ガイド
+title: hypertext-markdown 利用ガイド
 subtitle: Markdown を 1 か所に書けば、読み物にもスライドにも PDF にもなる
 version: 1.0
 date: 2026-11-06
@@ -3262,10 +3262,10 @@ const CONFIG = {
   // スライドで文字を縮める下限（%）。これより縮めないと入らない分は、次のスライドに送る
   slideMinScale: 80,
 };
-const ENGINE = 'md-report-8';
-const KEY_THEME = 'md-report:theme';
-const KEY_TOC = 'md-report:toc';
-const KEY_DIFF = 'md-report:diffview';
+const ENGINE = 'hypertext-markdown-8';
+const KEY_THEME = 'hypertext-markdown:theme';
+const KEY_TOC = 'hypertext-markdown:toc';
+const KEY_DIFF = 'hypertext-markdown:diffview';
 
 /* ===== 小物 ===== */
 const $ = (s, r = document) => r.querySelector(s);
@@ -6672,7 +6672,7 @@ function activateTab(box, k) {
 }
 
 /* ----- 本文の幅（右端の取っ手をドラッグ。ダブルクリックで標準に戻す） ----- */
-const KEY_MEASURE = 'md-report:measure';
+const KEY_MEASURE = 'hypertext-markdown:measure';
 const Width = {
   min: 480,
   max() { const cs = getComputedStyle(els.main); return els.main.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight); },

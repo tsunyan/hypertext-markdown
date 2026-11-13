@@ -1,11 +1,11 @@
-# HTML レポートテンプレート
+# hypertext-markdown
 
-調査メモや設計書を、1 つの HTML ファイルで配るためのテンプレート。
+Markdown を内包した、1 つの HTML ファイルで配れるレポートのテンプレート。調査メモや設計書を、目次・スライド・版の管理付きで読めるようにする。
 
 - 本体: [report-template.html](report-template.html)
 - 使い方と全部品の見本はファイルの中に書いてある。ブラウザで開けばそのまま読める（<kbd>?</kbd> でショートカットの一覧、<kbd>E</kbd> で Markdown を表示）
 - 版管理の見本: [sample-versioned.html](sample-versioned.html)（版 1.0〜1.2 と未確定の変更が入った基本設計書。<kbd>V</kbd> で版の一覧を開いて比較できる）
-  - テンプレートを直したら、`python tools/make_sample.py report-template.html sample-versioned.html` で作り直す（テンプレートに入っている利用ガイドの版は持ち込まない）
+  - テンプレートを直したら、`python -I tools/make_sample.py report-template.html sample-versioned.html` で作り直す（テンプレートに入っている利用ガイドの版は持ち込まない）
 - テンプレート自体にも、利用ガイドの見本の版（1.0・1.1）が入っている。中身は説明用で、実際の改版の経緯ではない
   - 新しい文書を作るときは、<kbd>V</kbd> の「版をすべて削除」で消す。`.md` をドロップしたときは、版を消すかを聞かれる
 
@@ -119,6 +119,29 @@ Zenn と同じ `:::message`・`:::details タイトル` も使える。
 - **見た目の調整は CSS で行う。** テンプレートの `<style>` を変えた見た目は、保存しても引き継がれる。文書ごとの調整は Markdown の中に `<style>` を書く
 - 日本語向けの調整: 記号の直後で閉じる `**「強調」**` が効く、日本語どうしの改行が余計な空白にならない、`.md` が Shift_JIS でも読める、`\` が `¥` に化けない
 
+## 開発
+
+変更はプルリクエストで main に入れる。CI では次の 4 つを確かめ、すべて通らないとマージできない。
+
+| ジョブ | 内容 |
+|---|---|
+| `lint` | ruff（`tools/`・`tests/`）と `tools/check.py`。script 要素の壊れ（途中で閉じる、閉じずに後ろを飲み込む）、埋め込んだ JavaScript の構文、見本が作り直したものと同じこと、テンプレートの作業中の Markdown が見本の版 1.1 と同じことを調べる |
+| `tests` | Chromium でテンプレートと見本を開くテスト（`tests/test_smoke.py`）。エラーが出ないこと、図が描けること、すべてのスライドが 80% 以上で収まること（比較中も）、版の比較に印が付くこと、保存した HTML を開き直せること、JavaScript なしでも本文が読めることを確かめる |
+| `secrets` | gitleaks で、履歴全体から秘密情報を探す |
+| `analyze` | CodeQL（HTML に埋め込んだ JavaScript、Python、ワークフロー） |
+
+手元で同じ検査をするとき:
+
+```bash
+pip install -r requirements-dev.txt
+python -m playwright install chromium
+ruff check tools tests
+python -I tools/check.py
+python -m pytest -q
+```
+
+テンプレートの利用ガイドを直したら、同じ内容を見本の版 1.1 にも入れ、見本を作り直す。どちらかを忘れると `tools/check.py` が知らせる。
+
 ## 確認したこと（2026-11-11）
 
 Chrome（デスクトップ、ヘッドレス）とアプリ内ブラウザで確認した。
@@ -136,3 +159,7 @@ Chrome（デスクトップ、ヘッドレス）とアプリ内ブラウザで�
 - 版管理（テンプレートの見本の版で確認）: 改版履歴の自動作成、1.0 → 1.1 の比較（スライド 90 枚、すべて 80% 以上）、版 1.0 の表示、「版をすべて削除」、`.md` のドロップで版を消す場合と残す場合
 
 Firefox と Safari では確かめていない。印刷のヘッダーとページ番号（`@page` の余白欄）は Chrome・Edge のみ対応。
+
+## ライセンス
+
+MIT（[LICENSE](LICENSE)）

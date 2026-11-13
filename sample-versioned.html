@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="generator" content="md-report-template 1.0">
+<meta name="generator" content="hypertext-markdown 1.0">
 <title>レポート</title>
 <script>
   document.documentElement.classList.remove('no-js');
   try {
-    var t = localStorage.getItem('md-report:theme');
+    var t = localStorage.getItem('hypertext-markdown:theme');
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
-    var w = parseInt(localStorage.getItem('md-report:measure'), 10);
+    var w = parseInt(localStorage.getItem('hypertext-markdown:measure'), 10);
     if (w >= 480) document.documentElement.style.setProperty('--measure', w + 'px');
   } catch (e) {}
 </script>
@@ -1196,10 +1196,10 @@ const CONFIG = {
   // スライドで文字を縮める下限（%）。これより縮めないと入らない分は、次のスライドに送る
   slideMinScale: 80,
 };
-const ENGINE = 'md-report-8';
-const KEY_THEME = 'md-report:theme';
-const KEY_TOC = 'md-report:toc';
-const KEY_DIFF = 'md-report:diffview';
+const ENGINE = 'hypertext-markdown-8';
+const KEY_THEME = 'hypertext-markdown:theme';
+const KEY_TOC = 'hypertext-markdown:toc';
+const KEY_DIFF = 'hypertext-markdown:diffview';
 
 /* ===== 小物 ===== */
 const $ = (s, r = document) => r.querySelector(s);
@@ -4606,7 +4606,7 @@ function activateTab(box, k) {
 }
 
 /* ----- 本文の幅（右端の取っ手をドラッグ。ダブルクリックで標準に戻す） ----- */
-const KEY_MEASURE = 'md-report:measure';
+const KEY_MEASURE = 'hypertext-markdown:measure';
 const Width = {
   min: 480,
   max() { const cs = getComputedStyle(els.main); return els.main.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight); },

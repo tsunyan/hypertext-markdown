@@ -1,0 +1,5 @@
+# 検査とテストに使う道具。CI も同じ版を使う
+# pip install -r requirements-dev.txt のあと、python -m playwright install chromium
+playwright==1.65.0
+pytest==9.2.0
+ruff==0.17.4

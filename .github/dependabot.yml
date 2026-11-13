@@ -1,0 +1,24 @@
+version: 2
+updates:
+  # 検査とテストの道具（requirements-dev.txt）。既知の脆弱性の修正は、リポジトリの設定の
+  # 「Dependabot security updates」が別に出すので、これと重複はしない
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: cron
+      cronjob: "0 3 * * 3,6" # 水曜と土曜の 03:00
+      timezone: Asia/Tokyo
+    groups:
+      python-dependencies:
+        patterns: ["*"]
+
+  # Action はコミットで固定している（ci.yml を参照）ので、ほかに上げる仕組みがない
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: cron
+      cronjob: "0 3 * * 3,6" # 水曜と土曜の 03:00
+      timezone: Asia/Tokyo
+    groups:
+      github-actions:
+        patterns: ["*"]
