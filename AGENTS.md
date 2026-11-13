@@ -86,5 +86,6 @@ python -m pytest -q
 ## 書き方の慣習
 
 - 変更はブランチからプルリクエストで main に入れる。CI（lint・tests・secrets・analyze）が全部通らないとマージできない
+- プルリクエストは merge commit でマージする（`gh pr merge --merge`）。利用者が明示した場合を除き、squash merge と rebase merge は使わない
 - コミットメッセージは `type(scope): 日本語の要約`（`feat` `fix` `refactor` `docs` `chore`）。本文は「- 〜する」の箇条書き
 - 画面の文言、コメント、文書は、README と同じ平易な日本語で書く。「です・ます」は利用ガイドの本文だけで、ほかは「する・である」で短く書く
