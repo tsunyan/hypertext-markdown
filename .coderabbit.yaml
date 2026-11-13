@@ -1,0 +1,15 @@
+language: ja-JP
+
+reviews:
+  profile: chill
+  auto_review:
+    enabled: true
+    drafts: false
+  path_filters:
+    # 道具で作るファイル。手で書いていないコードへの指摘になるので見せない
+    - "!graft/**"
+    - "!**/*.lock"
+    - "!**/*.min.html"
+    - "!samples/**/*.src.html"
+    - "!skills/*/assets/template.html"
+  poem: false
