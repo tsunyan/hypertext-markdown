@@ -1765,6 +1765,34 @@ SVG は、本文に `<svg>` を直接書くこともできます。本文の一�
 [^note]: 脚注は文書の末尾にまとめて表示されます。
 :::
 
+### HTML を直接書く {#sec-html}
+
+Markdown や囲みで足りない表現は、HTML をそのまま書けます。書いた HTML は、手を加えずに本文に入ります。
+
+:::example
+文の中では <kbd>Ctrl</kbd>+<kbd>C</kbd>、H<sub>2</sub>O、<mark>目立たせたい語</mark> のように書けます。
+
+<div style="padding: .6em 1em; border-left: 4px solid var(--accent);">
+この枠は HTML の div で書いています。この中の **Markdown** は解釈されません。
+</div>
+
+<div style="padding: .6em 1em; border-left: 4px solid var(--accent);">
+
+タグの行との間に空行を入れると、**Markdown** として解釈されます。
+
+</div>
+:::
+
+- 文の中に書いたタグ（`<kbd>`・`<mark>`・`<sub>`・`<sup>`・`<br>` など）は、そのまま残る
+- 行の先頭を `<div>`・`<details>`・`<table>`・`<figure>` などのブロックのタグで始めると、次の空行までが HTML になる。その範囲の Markdown は解釈しない
+- HTML の中で Markdown を使うときは、タグの行と Markdown の間に空行を入れる（折りたたみの見本と同じ書き方）
+- `<pre>`・`<style>`・`<textarea>` とコメントは、途中に空行があっても閉じタグまでを 1 つの HTML として扱う
+- `<style>` の指定はページ全体に効く。テンプレートが使っているクラスを書き換えると、目次やツールバーの見た目も変わる（自作のデザインを参照）
+- script 要素は書いても実行されない
+
+> [!WARNING]
+> 書いた HTML は無害化（サニタイズ）しません。`onclick` や `onerror` などの属性に書いた JavaScript は、文書を開いた人のブラウザで動きます。ほかの人から受け取った `.md` や HTML は、中身を確かめてから開いてください。
+
 ## 雛形
 
 用途に合わせて、次の骨組みを Markdown のブロックに貼り付けて書き始めてください。
@@ -2749,6 +2777,34 @@ SVG は、本文に `<svg>` を直接書くこともできます。本文の一�
 [^src]: 出典の例：〇〇省「△△ガイドライン」2026 年版
 [^note]: 脚注は文書の末尾にまとめて表示されます。
 :::
+
+### HTML を直接書く {#sec-html}
+
+Markdown や囲みで足りない表現は、HTML をそのまま書けます。書いた HTML は、手を加えずに本文に入ります。
+
+:::example
+文の中では <kbd>Ctrl</kbd>+<kbd>C</kbd>、H<sub>2</sub>O、<mark>目立たせたい語</mark> のように書けます。
+
+<div style="padding: .6em 1em; border-left: 4px solid var(--accent);">
+この枠は HTML の div で書いています。この中の **Markdown** は解釈されません。
+</div>
+
+<div style="padding: .6em 1em; border-left: 4px solid var(--accent);">
+
+タグの行との間に空行を入れると、**Markdown** として解釈されます。
+
+</div>
+:::
+
+- 文の中に書いたタグ（`<kbd>`・`<mark>`・`<sub>`・`<sup>`・`<br>` など）は、そのまま残る
+- 行の先頭を `<div>`・`<details>`・`<table>`・`<figure>` などのブロックのタグで始めると、次の空行までが HTML になる。その範囲の Markdown は解釈しない
+- HTML の中で Markdown を使うときは、タグの行と Markdown の間に空行を入れる（折りたたみの見本と同じ書き方）
+- `<pre>`・`<style>`・`<textarea>` とコメントは、途中に空行があっても閉じタグまでを 1 つの HTML として扱う
+- `<style>` の指定はページ全体に効く。テンプレートが使っているクラスを書き換えると、目次やツールバーの見た目も変わる（自作のデザインを参照）
+- script 要素は書いても実行されない
+
+> [!WARNING]
+> 書いた HTML は無害化（サニタイズ）しません。`onclick` や `onerror` などの属性に書いた JavaScript は、文書を開いた人のブラウザで動きます。ほかの人から受け取った `.md` や HTML は、中身を確かめてから開いてください。
 
 ## 雛形
 
