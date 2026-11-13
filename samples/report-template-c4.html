@@ -58,9 +58,9 @@
   --tk-com: #6e7781; --tk-kw: #cf222e; --tk-str: #0a3069; --tk-num: #0550ae; --tk-fn: #8250df; --tk-type: #953800;
   --tk-var: #953800; --tk-attr: #0550ae; --tk-tag: #116329; --tk-meta: #8250df; --tk-sec: #0550ae; --tk-op: #6e7781;
   --tk-c0: #0550ae; --tk-c1: #953800; --tk-c2: #116329; --tk-c3: #8250df; --tk-c4: #cf222e; --tk-c5: #57606a;
-  /* グラフの系列の色（この順で割り当てる。色覚の多様性を考えて検証済みの並び） */
-  --chart-1: #2a78d6; --chart-2: #eb6834; --chart-3: #1baf7a; --chart-4: #eda100;
-  --chart-5: #e87ba4; --chart-6: #008300; --chart-7: #6250d6; --chart-8: #e34948; --chart-on-4: #0b0b0b;
+  /* グラフの系列の色（構文強調の --tk-* と共通。この順で割り当てる） */
+  --chart-1: var(--tk-c0); --chart-2: var(--tk-c1); --chart-3: var(--tk-c2); --chart-4: var(--tk-c3);
+  --chart-5: var(--tk-c4); --chart-6: var(--tk-c5); --chart-7: var(--tk-str); --chart-8: var(--tk-com); --chart-on: #fff;
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -75,8 +75,8 @@
   --tk-com: #8b949e; --tk-kw: #ff7b72; --tk-str: #a5d6ff; --tk-num: #79c0ff; --tk-fn: #d2a8ff; --tk-type: #ffa657;
   --tk-var: #ffa657; --tk-attr: #79c0ff; --tk-tag: #7ee787; --tk-meta: #d2a8ff; --tk-sec: #79c0ff; --tk-op: #8b949e;
   --tk-c0: #79c0ff; --tk-c1: #ffa657; --tk-c2: #7ee787; --tk-c3: #d2a8ff; --tk-c4: #ff7b72; --tk-c5: #b1bac4;
-  --chart-1: #3987e5; --chart-2: #d95926; --chart-3: #199e70; --chart-4: #c98500;
-  --chart-5: #d55181; --chart-6: #008300; --chart-7: #9085e9; --chart-8: #e66767; --chart-on-4: #fff;
+  --chart-1: var(--tk-c0); --chart-2: var(--tk-c1); --chart-3: var(--tk-c2); --chart-4: var(--tk-c3);
+  --chart-5: var(--tk-c4); --chart-6: var(--tk-c5); --chart-7: var(--tk-str); --chart-8: var(--tk-com); --chart-on: #0b0b0b;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -92,8 +92,8 @@
     --tk-com: #8b949e; --tk-kw: #ff7b72; --tk-str: #a5d6ff; --tk-num: #79c0ff; --tk-fn: #d2a8ff; --tk-type: #ffa657;
     --tk-var: #ffa657; --tk-attr: #79c0ff; --tk-tag: #7ee787; --tk-meta: #d2a8ff; --tk-sec: #79c0ff; --tk-op: #8b949e;
     --tk-c0: #79c0ff; --tk-c1: #ffa657; --tk-c2: #7ee787; --tk-c3: #d2a8ff; --tk-c4: #ff7b72; --tk-c5: #b1bac4;
-    --chart-1: #3987e5; --chart-2: #d95926; --chart-3: #199e70; --chart-4: #c98500;
-    --chart-5: #d55181; --chart-6: #008300; --chart-7: #9085e9; --chart-8: #e66767; --chart-on-4: #fff;
+    --chart-1: var(--tk-c0); --chart-2: var(--tk-c1); --chart-3: var(--tk-c2); --chart-4: var(--tk-c3);
+    --chart-5: var(--tk-c4); --chart-6: var(--tk-c5); --chart-7: var(--tk-str); --chart-8: var(--tk-com); --chart-on: #0b0b0b;
   }
 }
 
@@ -875,8 +875,8 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
     --tk-com: #6e7781; --tk-kw: #cf222e; --tk-str: #0a3069; --tk-num: #0550ae; --tk-fn: #8250df; --tk-type: #953800;
     --tk-var: #953800; --tk-attr: #0550ae; --tk-tag: #116329; --tk-meta: #8250df; --tk-sec: #0550ae; --tk-op: #6e7781;
     --tk-c0: #0550ae; --tk-c1: #953800; --tk-c2: #116329; --tk-c3: #8250df; --tk-c4: #cf222e; --tk-c5: #57606a;
-    --chart-1: #2a78d6; --chart-2: #eb6834; --chart-3: #1baf7a; --chart-4: #eda100;
-    --chart-5: #e87ba4; --chart-6: #008300; --chart-7: #6250d6; --chart-8: #e34948; --chart-on-4: #0b0b0b;
+    --chart-1: var(--tk-c0); --chart-2: var(--tk-c1); --chart-3: var(--tk-c2); --chart-4: var(--tk-c3);
+    --chart-5: var(--tk-c4); --chart-6: var(--tk-c5); --chart-7: var(--tk-str); --chart-8: var(--tk-com); --chart-on: #fff;
   }
   html { scroll-padding-top: 0; }
   body { background: #fff; font-size: 10.5pt; line-height: 1.75; }
@@ -1483,7 +1483,7 @@ systemctl status app
 - 表の 1 列目が項目、2 列目以降が系列です。Markdown の表のほか、`` ```csv `` でも書けます
 - `unit=万円` で単位を付けます。書かなければ、数値の後ろにそろって付いている単位（`%` など）を使います
 - `min=0 max=100` で縦軸（横棒は横軸）の範囲を決められます
-- 色は系列の順に、決まった順番で付きます（色の見え方が人によって違っても見分けやすい並び）。9 系列目以降は描きません
+- 色は系列の順に、決まった順番で付きます（構文強調の `--tk-...` と同じ配色）。9 系列目以降は描きません
 - 円グラフは近い値の大小が読み取りにくいため、`pie` と書いても構成比の帯で描きます
 
 ::::example
@@ -2496,7 +2496,7 @@ systemctl status app
 - 表の 1 列目が項目、2 列目以降が系列です。Markdown の表のほか、`` ```csv `` でも書けます
 - `unit=万円` で単位を付けます。書かなければ、数値の後ろにそろって付いている単位（`%` など）を使います
 - `min=0 max=100` で縦軸（横棒は横軸）の範囲を決められます
-- 色は系列の順に、決まった順番で付きます（色の見え方が人によって違っても見分けやすい並び）。9 系列目以降は描きません
+- 色は系列の順に、決まった順番で付きます（構文強調の `--tk-...` と同じ配色）。9 系列目以降は描きません
 - 円グラフは近い値の大小が読み取りにくいため、`pie` と書いても構成比の帯で描きます
 
 ::::example
@@ -3814,13 +3814,13 @@ const HL = (() => {
 })();
 
 /* ===== グラフ（:::chart。Markdown の表から SVG を描く。外部ライブラリなし） =====
-   系列の色は --chart-1〜8 の順に固定で割り当てる（色覚の多様性を考えた並び。9 系列目以降は描かない）。
+   系列の色は --chart-1〜8 の順に固定で割り当てる（構文強調の --tk-* と共通。9 系列目以降は描かない）。
    棒は 24px 以下で、値の側の角だけ丸める。線は 2px、点は 2px の地の色の縁取り付き。2 系列以上は凡例を付ける */
 const Chart = (() => {
   const TYPES = { bar: 'bar', column: 'bar', vbar: 'bar', barh: 'barh', hbar: 'barh', stacked: 'stacked', stack: 'stacked', line: 'line', area: 'area', share: 'share', ratio: 'share', pie: 'share', donut: 'share' };
   const MAX = 8;
   const color = k => 'var(--chart-' + ((k % MAX) + 1) + ')';
-  const onColor = k => ((k % MAX) === 3 ? 'var(--chart-on-4)' : '#fff');
+  const onColor = () => 'var(--chart-on)';
   const r1 = v => Math.round(v * 10) / 10;
   const tw = (s, fs) => Array.from(String(s)).reduce((w, ch) => w + (/[\u0000-ÿ]/.test(ch) ? 0.6 : 1), 0) * fs;
   const trunc = (s, max, fs) => {
