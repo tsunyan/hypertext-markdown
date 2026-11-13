@@ -30,8 +30,8 @@ HTML_FILES = [TEMPLATE, SAMPLE, SKELETON]
 # 利用ガイドの見本にだけ出てくる、自作のデザインの名前
 CUSTOM_BLOCKS = {"my-box"}
 
-# HTML の構文では、script の中身は最初の </script で終わる
-SCRIPT_RE = re.compile(r"<script\b([^>]*)>(.*?)</script\s*>", re.DOTALL | re.IGNORECASE)
+# HTML の構文では、script の中身は最初の </script で終わる（</script foo> のように属性が付いても閉じる）
+SCRIPT_RE = re.compile(r"<script\b([^>]*)>(.*?)</script\b[^>]*>", re.DOTALL | re.IGNORECASE)
 
 
 def scripts(text):
