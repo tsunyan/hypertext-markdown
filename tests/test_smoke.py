@@ -174,6 +174,126 @@ def test_save_round_trip(opened, path, tmp_path):
     assert not o.errors, "\n".join(o.errors)
 
 
+def test_raw_html_is_sanitized(opened, tmp_path):
+    """生 HTML は見た目に必要なものだけを残し、保存後も危険な内容を復活させない。"""
+    markdown = r"""# 生 HTML の安全性
+
+文中の <kbd id="safe-kbd" onclick="window.__rawHtmlXss=1">Ctrl</kbd> は残す。
+
+<a id="safe-link" href="https://example.com/" target="_blank">安全なリンク</a>
+<a id="bad-link" href="java&#x73;cript:window.__rawHtmlXss=2" target="_blank" data-action="html">危険なリンク</a>
+
+<div id="safe-box" class="sample" data-action="html" onclick="window.__rawHtmlXss=3" style="--c:#246; padding: 4px; border-left: 4px solid var(--accent); position: fixed; z-index: 9999; background-image: url(https://example.invalid/tracker.png)">
+表示用の div
+</div>
+
+<div id="escaped-css" style="--remote:u\72l(https://example.invalid/escaped.png); background:var(--remote)">CSS エスケープ</div>
+
+<img id="safe-image" alt="安全な画像" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" onerror="window.__rawHtmlXss=4">
+<img id="bad-image" alt="危険な画像" src="data:text/html,&lt;script&gt;window.__rawHtmlXss=5&lt;/script&gt;">
+<img id="unc-image" alt="UNC 画像" src="//example.invalid/tracker.png">
+
+<script>window.__rawHtmlXss=6</script>
+
+<style>#ui-doc { display:none } .sample { background:url(https://example.invalid/style.png) }</style>
+
+<iframe srcdoc="<script>parent.__rawHtmlXss=7</script>"></iframe>
+
+<form action="javascript:window.__rawHtmlXss=8"><button data-action="html" formaction="javascript:window.__rawHtmlXss=9">実行</button></form>
+
+<div id="ui-doc">予約 ID</div>
+
+<svg id="safe-svg" width="120" height="40" viewBox="0 0 120 40" role="img" aria-label="安全な図" onload="window.__rawHtmlXss=10">
+  <defs><linearGradient id="safe-gradient"><stop offset="0" stop-color="#246"/></linearGradient></defs>
+  <rect id="safe-rect" x="1" y="1" width="118" height="38" fill="url(#safe-gradient)"/>
+  <rect id="escaped-svg" x="1" y="1" width="10" height="10" fill="u\72l(https://example.invalid/svg.png)"/>
+  <foreignObject x="0" y="0" width="120" height="40"><div onclick="window.__rawHtmlXss=11">危険</div></foreignObject>
+</svg>
+"""
+    facts_js = """() => {
+      const root = document.querySelector('#ui-content');
+      const box = root.querySelector('#safe-box');
+      const link = root.querySelector('#safe-link');
+      const badLink = root.querySelector('#bad-link');
+      const badImage = root.querySelector('#bad-image');
+      const uncImage = root.querySelector('#unc-image');
+      const escapedCss = root.querySelector('#escaped-css');
+      const escapedSvg = root.querySelector('#escaped-svg');
+      return {
+        xss: window.__rawHtmlXss || 0,
+        dangerousTags: root.querySelectorAll('script, style, iframe, object, embed, form, button, input, textarea, foreignObject').length,
+        eventAttrs: [...root.querySelectorAll('*')].flatMap(e => [...e.attributes]).filter(a => /^on/i.test(a.name)).length,
+        dataAttrs: [...root.querySelectorAll('*')].flatMap(e => [...e.attributes]).filter(a => /^data-/i.test(a.name)).length,
+        uiDocIds: document.querySelectorAll('#ui-doc').length,
+        safeKbd: !!root.querySelector('kbd#safe-kbd'),
+        safeBox: !!box,
+        boxStyle: box ? { padding: box.style.padding, css: box.style.cssText, custom: box.style.getPropertyValue('--c'), position: box.style.position, z: box.style.zIndex, image: box.style.backgroundImage } : null,
+        safeLink: link ? { href: link.getAttribute('href'), target: link.target, rel: link.rel } : null,
+        badLink: badLink ? { href: badLink.getAttribute('href'), target: badLink.getAttribute('target') } : null,
+        badImageSrc: badImage ? badImage.getAttribute('src') : null,
+        uncImageSrc: uncImage ? uncImage.getAttribute('src') : null,
+        escapedCss: escapedCss ? { style: escapedCss.getAttribute('style'), image: getComputedStyle(escapedCss).backgroundImage } : null,
+        escapedSvgFill: escapedSvg ? escapedSvg.getAttribute('fill') : null,
+        svg: !!root.querySelector('svg#safe-svg rect#safe-rect'),
+        scriptText: root.textContent.includes('window.__rawHtmlXss=6'),
+        styleText: root.textContent.includes('example.invalid/style.png'),
+      };
+    }"""
+
+    def facts(page):
+        return page.evaluate(facts_js)
+
+    def assert_safe(got):
+        assert got["xss"] == 0
+        assert got["dangerousTags"] == 0
+        assert got["eventAttrs"] == 0
+        assert got["dataAttrs"] == 0
+        assert got["uiDocIds"] == 1
+        assert got["safeKbd"] and got["safeBox"] and got["svg"]
+        assert got["boxStyle"]["padding"] == "4px"
+        assert got["boxStyle"]["custom"] == "#246"
+        assert "border-left: 4px solid var(--accent)" in got["boxStyle"]["css"]
+        assert got["boxStyle"]["position"] == ""
+        assert got["boxStyle"]["z"] == ""
+        assert got["boxStyle"]["image"] == ""
+        assert got["safeLink"] == {
+            "href": "https://example.com/",
+            "target": "_blank",
+            "rel": "noopener noreferrer",
+        }
+        assert got["badLink"] == {"href": None, "target": None}
+        assert got["badImageSrc"] is None
+        assert got["uncImageSrc"] is None
+        assert not got["escapedCss"]["style"] or "--remote" not in got["escapedCss"]["style"]
+        assert got["escapedCss"]["image"] == "none"
+        assert got["escapedSvgFill"] is None
+        assert not got["scriptText"] and not got["styleText"]
+
+    o = opened()
+    page = o.goto(SKELETON)
+    page.keyboard.press("E")
+    page.fill("#ui-textarea", markdown)
+    page.wait_for_selector("#ui-content #safe-box")
+    page.wait_for_timeout(300)
+    assert_safe(facts(page))
+
+    with page.expect_download() as dl:
+        page.keyboard.press("Control+s")
+    saved = tmp_path / "sanitized.html"
+    dl.value.save_as(saved)
+
+    again = opened()
+    again.goto(saved)
+    again.page.wait_for_selector("#ui-content #safe-box")
+    assert_safe(facts(again.page))
+
+    nojs = opened(java_script_enabled=False)
+    nojs.goto(saved)
+    nojs.page.wait_for_selector("#ui-content #safe-box")
+    assert_safe(facts(nojs.page))
+    assert not o.errors and not again.errors, "\n".join(o.errors + again.errors)
+
+
 def test_skill_empty_template(opened):
     o = opened()
     page = o.goto(SKELETON)

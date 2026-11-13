@@ -1589,16 +1589,12 @@ systemctl status app
 
 ### 自作のデザイン
 
-一覧に無い名前を付けると、`c-名前` のクラスが付いた囲みになります。CSS は、テンプレートの `<style>` に書くか、Markdown の中に `<style>` を書きます（Markdown の中に書くと、その文書だけに効きます）。
+一覧に無い名前を付けると、`c-名前` のクラスが付いた囲みになります。CSS はテンプレート先頭の `<style>` に書きます。1 つの文書だけで見た目を変えるなら、HTML の `style` 属性に、余白・枠・色などの表示用 CSS を書けます。
 
 ::::example
-<style>
-.c-my-box { padding: .8em 1em; border: 2px dashed var(--accent); border-radius: 6px; }
-</style>
-
-:::my-box
+<div class="c-my-box" style="padding: .8em 1em; border: 2px dashed var(--accent); border-radius: 6px;">
 自作のデザインを当てた部分です。
-:::
+</div>
 ::::
 
 ## 書式の見本
@@ -1874,7 +1870,7 @@ SVG は、本文に `<svg>` を直接書くこともできます。本文の一�
 
 ### HTML を直接書く {#sec-html}
 
-Markdown や囲みで足りない表現は、HTML をそのまま書けます。書いた HTML は、手を加えずに本文に入ります。
+Markdown や囲みで足りない表現は、HTML を直接書けます。書いた HTML は、表示に必要な安全なタグ・属性・CSS だけを残して本文に入ります。
 
 :::example
 文の中では <kbd>Ctrl</kbd>+<kbd>C</kbd>、H<sub>2</sub>O、<mark>目立たせたい語</mark> のように書けます。
@@ -1893,12 +1889,14 @@ Markdown や囲みで足りない表現は、HTML をそのまま書けます。
 - 文の中に書いたタグ（`<kbd>`・`<mark>`・`<sub>`・`<sup>`・`<br>` など）は、そのまま残る
 - 行の先頭を `<div>`・`<details>`・`<table>`・`<figure>` などのブロックのタグで始めると、次の空行までが HTML になる。その範囲の Markdown は解釈しない
 - HTML の中で Markdown を使うときは、タグの行と Markdown の間に空行を入れる（折りたたみの見本と同じ書き方）
-- `<pre>`・`<style>`・`<textarea>` とコメントは、途中に空行があっても閉じタグまでを 1 つの HTML として扱う
-- `<style>` の指定はページ全体に効く。テンプレートが使っているクラスを書き換えると、目次やツールバーの見た目も変わる（自作のデザインを参照）
-- script 要素は書いても実行されない
+- `div`・表・文字装飾・安全なリンクと画像・表示用の SVG は残る
+- `script`・`style`・`iframe`・フォームと入力部品は取り除く。`onclick` などのイベント属性、`data-*`、`srcdoc` も残さない
+- `href`・`src` の危険なスキームと、外部通信や画面の乗っ取りにつながる CSS は取り除く。`style` 属性は余白・枠・色・配置などの表示用プロパティだけを残す
+- `ui-` で始まる ID と重複する ID は、画面の部品と衝突しないよう取り除く
+- コメントは取り除く。ただし `<!-- slide -->` と `<!-- pagebreak -->` は、スライド区切り・改ページとして使える
 
 > [!WARNING]
-> 書いた HTML は無害化（サニタイズ）しません。`onclick` や `onerror` などの属性に書いた JavaScript は、文書を開いた人のブラウザで動きます。ほかの人から受け取った `.md` や HTML は、中身を確かめてから開いてください。
+> 外部 URL の画像は表示時に読み込みます。通信させたくない文書では、画像を `data:` URL で埋め込んでください。
 
 ## 雛形
 
@@ -2602,16 +2600,12 @@ systemctl status app
 
 ### 自作のデザイン
 
-一覧に無い名前を付けると、`c-名前` のクラスが付いた囲みになります。CSS は、テンプレートの `<style>` に書くか、Markdown の中に `<style>` を書きます（Markdown の中に書くと、その文書だけに効きます）。
+一覧に無い名前を付けると、`c-名前` のクラスが付いた囲みになります。CSS はテンプレート先頭の `<style>` に書きます。1 つの文書だけで見た目を変えるなら、HTML の `style` 属性に、余白・枠・色などの表示用 CSS を書けます。
 
 ::::example
-<style>
-.c-my-box { padding: .8em 1em; border: 2px dashed var(--accent); border-radius: 6px; }
-</style>
-
-:::my-box
+<div class="c-my-box" style="padding: .8em 1em; border: 2px dashed var(--accent); border-radius: 6px;">
 自作のデザインを当てた部分です。
-:::
+</div>
 ::::
 
 ## 書式の見本
@@ -2887,7 +2881,7 @@ SVG は、本文に `<svg>` を直接書くこともできます。本文の一�
 
 ### HTML を直接書く {#sec-html}
 
-Markdown や囲みで足りない表現は、HTML をそのまま書けます。書いた HTML は、手を加えずに本文に入ります。
+Markdown や囲みで足りない表現は、HTML を直接書けます。書いた HTML は、表示に必要な安全なタグ・属性・CSS だけを残して本文に入ります。
 
 :::example
 文の中では <kbd>Ctrl</kbd>+<kbd>C</kbd>、H<sub>2</sub>O、<mark>目立たせたい語</mark> のように書けます。
@@ -2906,12 +2900,14 @@ Markdown や囲みで足りない表現は、HTML をそのまま書けます。
 - 文の中に書いたタグ（`<kbd>`・`<mark>`・`<sub>`・`<sup>`・`<br>` など）は、そのまま残る
 - 行の先頭を `<div>`・`<details>`・`<table>`・`<figure>` などのブロックのタグで始めると、次の空行までが HTML になる。その範囲の Markdown は解釈しない
 - HTML の中で Markdown を使うときは、タグの行と Markdown の間に空行を入れる（折りたたみの見本と同じ書き方）
-- `<pre>`・`<style>`・`<textarea>` とコメントは、途中に空行があっても閉じタグまでを 1 つの HTML として扱う
-- `<style>` の指定はページ全体に効く。テンプレートが使っているクラスを書き換えると、目次やツールバーの見た目も変わる（自作のデザインを参照）
-- script 要素は書いても実行されない
+- `div`・表・文字装飾・安全なリンクと画像・表示用の SVG は残る
+- `script`・`style`・`iframe`・フォームと入力部品は取り除く。`onclick` などのイベント属性、`data-*`、`srcdoc` も残さない
+- `href`・`src` の危険なスキームと、外部通信や画面の乗っ取りにつながる CSS は取り除く。`style` 属性は余白・枠・色・配置などの表示用プロパティだけを残す
+- `ui-` で始まる ID と重複する ID は、画面の部品と衝突しないよう取り除く
+- コメントは取り除く。ただし `<!-- slide -->` と `<!-- pagebreak -->` は、スライド区切り・改ページとして使える
 
 > [!WARNING]
-> 書いた HTML は無害化（サニタイズ）しません。`onclick` や `onerror` などの属性に書いた JavaScript は、文書を開いた人のブラウザで動きます。ほかの人から受け取った `.md` や HTML は、中身を確かめてから開いてください。
+> 外部 URL の画像は表示時に読み込みます。通信させたくない文書では、画像を `data:` URL で埋め込んでください。
 
 ## 雛形
 
@@ -3437,7 +3433,7 @@ const CONFIG = {
   logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOTcuMTUgNDgiIHdpZHRoPSI1OTQuMzEiIGhlaWdodD0iOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iaHlwZXJ0ZXh0LW1hcmtkb3duIj48ZyBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIHN0cm9rZT0iIzE4MjEzNCIgc3Ryb2tlLXdpZHRoPSI0LjYiIGQ9Ik0xNSAxMSA0IDI0IDE1IDM3TTYxIDExIDcyIDI0IDYxIDM3Ii8+PHBhdGggc3Ryb2tlPSIjMmI0YzhjIiBzdHJva2Utd2lkdGg9IjQuNCIgZD0iTTM1IDEwIDMxIDM4TTQ2IDEwIDQyIDM4TTI3IDE5SDUxTTI1IDI5SDQ5Ii8+PC9nPjxwYXRoIGZpbGw9IiMxODIxMzQiIGQ9Ik05MCAyOS41N1YxMy4yM0g5Mi4zNlYxNy41NUw5Mi4yNSAxOS43OVE5Mi45OSAxOS4wNSA5My44NyAxOC41M1E5NC43NiAxOCA5NS45IDE4UTk3LjcxIDE4IDk4LjU0IDE5LjE2UTk5LjM3IDIwLjMyIDk5LjM3IDIyLjQ3VjI5LjU3SDk3LjAxVjIyLjc2UTk3LjAxIDIxLjMgOTYuNTYgMjAuNjhROTYuMTEgMjAuMDUgOTUuMSAyMC4wNVE5NC4zMyAyMC4wNSA5My43MiAyMC40M1E5My4xMiAyMC44MSA5Mi4zNiAyMS41N1YyOS41N1pNMTAzLjUxIDM0LjI4UTEwMy4wNiAzNC4yOCAxMDIuNzIgMzQuMjJRMTAyLjM4IDM0LjE2IDEwMi4wNyAzNC4wNkwxMDIuNTMgMzIuMjFRMTAyLjY5IDMyLjI1IDEwMi45MSAzMi4zMVExMDMuMTQgMzIuMzcgMTAzLjM3IDMyLjM3UTEwNC4yOSAzMi4zNyAxMDQuODQgMzEuNzdRMTA1LjQgMzEuMTYgMTA1LjcgMzAuMjZMMTA1Ljk1IDI5LjQ4TDEwMS40OCAxOC4yN0gxMDMuODhMMTA1Ljk1IDI0LjA5UTEwNi4yMiAyNC44NSAxMDYuNDcgMjUuNjZRMTA2LjczIDI2LjQ3IDEwNi45OSAyNy4yN0gxMDcuMVExMDcuMyAyNi40OSAxMDcuNTMgMjUuNjdRMTA3Ljc1IDI0Ljg1IDEwNy45OCAyNC4wOUwxMDkuOCAxOC4yN0gxMTIuMDhMMTA3Ljk0IDMwLjI0UTEwNy41MSAzMS40NSAxMDYuOTIgMzIuMzZRMTA2LjM0IDMzLjI4IDEwNS41MiAzMy43OFExMDQuNyAzNC4yOCAxMDMuNTEgMzQuMjhaTTExNC4zNyAzNC4xNFYxOC4yN0gxMTYuM0wxMTYuNTEgMTkuNTJIMTE2LjU1UTExNy4zMSAxOC45MSAxMTguMTkgMTguNDVRMTE5LjA3IDE4IDEyMC4wMyAxOFExMjEuNDUgMTggMTIyLjQ1IDE4LjcyUTEyMy40NiAxOS40NCAxMjMuOTcgMjAuNzJRMTI0LjQ4IDIyIDEyNC40OCAyMy43NFExMjQuNDggMjUuNjcgMTIzLjc5IDI3LjA0UTEyMy4xMSAyOC40MiAxMjIgMjkuMTRRMTIwLjg5IDI5Ljg1IDExOS42MiAyOS44NVExMTguODggMjkuODUgMTE4LjEzIDI5LjUxUTExNy4zNyAyOS4xOCAxMTYuNjcgMjguNTZMMTE2LjczIDMwLjQ5VjM0LjE0Wk0xMTkuMTcgMjcuODZRMTE5Ljk5IDI3Ljg2IDEyMC42NCAyNy4zOVExMjEuMjggMjYuOTIgMTIxLjY2IDI2LjAxUTEyMi4wNCAyNS4xIDEyMi4wNCAyMy43OFExMjIuMDQgMjIuNiAxMjEuNzYgMjEuNzVRMTIxLjQ5IDIwLjg5IDEyMC45MSAyMC40M1ExMjAuMzQgMTkuOTcgMTE5LjQgMTkuOTdRMTE4Ljc0IDE5Ljk3IDExOC4xIDIwLjMxUTExNy40NSAyMC42NSAxMTYuNzMgMjEuMzVWMjYuODZRMTE3LjM5IDI3LjQxIDExOC4wMiAyNy42NFExMTguNjYgMjcuODYgMTE5LjE3IDI3Ljg2Wk0xMzIuMjUgMjkuODVRMTMwLjcxIDI5Ljg1IDEyOS40NiAyOS4xNVExMjguMjEgMjguNDQgMTI3LjQ3IDI3LjEyUTEyNi43NCAyNS43OSAxMjYuNzQgMjMuOTNRMTI2Ljc0IDIyLjU1IDEyNy4xNyAyMS40NlExMjcuNiAyMC4zNiAxMjguMzQgMTkuNTlRMTI5LjA3IDE4LjgyIDEzMCAxOC40MVExMzAuOTIgMTggMTMxLjg4IDE4UTEzMy4zOCAxOCAxMzQuNCAxOC42N1ExMzUuNDMgMTkuMzQgMTM1Ljk2IDIwLjU0UTEzNi40OSAyMS43MyAxMzYuNDkgMjMuMzNRMTM2LjQ5IDIzLjY4IDEzNi40NiAyNFExMzYuNDMgMjQuMzIgMTM2LjM3IDI0LjU0SDEyOS4wNVExMjkuMTYgMjUuNjEgMTI5LjYyIDI2LjM4UTEzMC4wOCAyNy4xNSAxMzAuODMgMjcuNTdRMTMxLjU3IDI3Ljk5IDEzMi41NCAyNy45OVExMzMuMyAyNy45OSAxMzMuOTUgMjcuNzZRMTM0LjYxIDI3LjU0IDEzNS4yMiAyNy4xNUwxMzYuMDQgMjguNjRRMTM1LjI2IDI5LjE2IDEzNC4zMSAyOS41UTEzMy4zNiAyOS44NSAxMzIuMjUgMjkuODVaTTEyOS4wMyAyMi45SDEzNC40NFExMzQuNDQgMjEuNDcgMTMzLjggMjAuNjdRMTMzLjE1IDE5Ljg3IDEzMS45MiAxOS44N1ExMzEuMjMgMTkuODcgMTMwLjYxIDIwLjIyUTEzMCAyMC41NyAxMjkuNTggMjEuMjRRMTI5LjE2IDIxLjkyIDEyOS4wMyAyMi45Wk0xMzkuMzggMjkuNTdWMTguMjdIMTQxLjMxTDE0MS41MiAyMC4zSDE0MS41NlExNDIuMTcgMTkuMjEgMTQzLjAxIDE4LjYxUTE0My44NSAxOCAxNDQuNzggMThRMTQ1LjE5IDE4IDE0NS40NyAxOC4wN1ExNDUuNzYgMTguMTMgMTQ2LjAzIDE4LjIzTDE0NS42MiAyMC4zUTE0NS4zMSAyMC4yIDE0NS4wNiAyMC4xNlExNDQuODIgMjAuMTIgMTQ0LjQ3IDIwLjEyUTE0My43OSAyMC4xMiAxNDMuMDMgMjAuNjZRMTQyLjI4IDIxLjIgMTQxLjc0IDIyLjU1VjI5LjU3Wk0xNTEuODEgMjkuODVRMTUwLjU0IDI5Ljg1IDE0OS43OSAyOS4zNVExNDkuMDQgMjguODUgMTQ4LjcxIDI3Ljk2UTE0OC4zOCAyNy4wNiAxNDguMzggMjUuODhWMjAuMThIMTQ2Ljc0VjE4LjQxTDE0OC41MSAxOC4yN0wxNDguNzcgMTUuMTVIMTUwLjc0VjE4LjI3SDE1My42N1YyMC4xOEgxNTAuNzRWMjUuOVExNTAuNzQgMjYuOSAxNTEuMTMgMjcuNDJRMTUxLjUyIDI3Ljk1IDE1Mi40IDI3Ljk1UTE1Mi42OSAyNy45NSAxNTMuMDIgMjcuODZRMTUzLjM0IDI3Ljc4IDE1My41OSAyNy42OEwxNTQuMDIgMjkuNDJRMTUzLjU3IDI5LjU3IDE1My4wMSAyOS43MVExNTIuNDQgMjkuODUgMTUxLjgxIDI5Ljg1Wk0xNjAuNjYgMjkuODVRMTU5LjEzIDI5Ljg1IDE1Ny44OCAyOS4xNVExNTYuNjIgMjguNDQgMTU1Ljg5IDI3LjEyUTE1NS4xNSAyNS43OSAxNTUuMTUgMjMuOTNRMTU1LjE1IDIyLjU1IDE1NS41OCAyMS40NlExNTYuMDEgMjAuMzYgMTU2Ljc1IDE5LjU5UTE1Ny40OSAxOC44MiAxNTguNDEgMTguNDFRMTU5LjMzIDE4IDE2MC4yOSAxOFExNjEuNzkgMTggMTYyLjgyIDE4LjY3UTE2My44NCAxOS4zNCAxNjQuMzcgMjAuNTRRMTY0LjkxIDIxLjczIDE2NC45MSAyMy4zM1ExNjQuOTEgMjMuNjggMTY0Ljg4IDI0UTE2NC44NSAyNC4zMiAxNjQuNzggMjQuNTRIMTU3LjQ3UTE1Ny41NyAyNS42MSAxNTguMDMgMjYuMzhRMTU4LjQ5IDI3LjE1IDE1OS4yNCAyNy41N1ExNTkuOTkgMjcuOTkgMTYwLjk1IDI3Ljk5UTE2MS43MSAyNy45OSAxNjIuMzcgMjcuNzZRMTYzLjAyIDI3LjU0IDE2My42NCAyNy4xNUwxNjQuNDYgMjguNjRRMTYzLjY4IDI5LjE2IDE2Mi43MiAyOS41UTE2MS43NyAyOS44NSAxNjAuNjYgMjkuODVaTTE1Ny40NCAyMi45SDE2Mi44NlExNjIuODYgMjEuNDcgMTYyLjIxIDIwLjY3UTE2MS41NyAxOS44NyAxNjAuMzQgMTkuODdRMTU5LjY0IDE5Ljg3IDE1OS4wMiAyMC4yMlExNTguNDEgMjAuNTcgMTU3Ljk5IDIxLjI0UTE1Ny41NyAyMS45MiAxNTcuNDQgMjIuOVpNMTY2LjAzIDI5LjU3IDE2OS42NiAyMy42OCAxNjYuMjggMTguMjdIMTY4Ljg0TDE3MC4xOCAyMC41NVExNzAuNDQgMjEuMDIgMTcwLjcxIDIxLjQ5UTE3MC45NyAyMS45NiAxNzEuMjQgMjIuNDVIMTcxLjM0UTE3MS41NSAyMS45NiAxNzEuNzggMjEuNDlRMTcyLjAyIDIxLjAyIDE3Mi4yNyAyMC41NUwxNzMuNDYgMTguMjdIMTc1LjkyTDE3Mi41MyAyMy45M0wxNzYuMTYgMjkuNTdIMTczLjZMMTcyLjEyIDI3LjE3UTE3MS44NiAyNi42OCAxNzEuNTcgMjYuMTZRMTcxLjI4IDI1LjY1IDE3MC45NSAyNS4xOEgxNzAuODVRMTcwLjYxIDI1LjY1IDE3MC4zNCAyNi4xNVExNzAuMDcgMjYuNjUgMTY5LjgxIDI3LjE3TDE2OC40OSAyOS41N1pNMTgxLjY2IDI5Ljg1UTE4MC4zOCAyOS44NSAxNzkuNjQgMjkuMzVRMTc4Ljg5IDI4Ljg1IDE3OC41NiAyNy45NlExNzguMjMgMjcuMDYgMTc4LjIzIDI1Ljg4VjIwLjE4SDE3Ni41OVYxOC40MUwxNzguMzUgMTguMjdMMTc4LjYyIDE1LjE1SDE4MC41OVYxOC4yN0gxODMuNTJWMjAuMThIMTgwLjU5VjI1LjlRMTgwLjU5IDI2LjkgMTgwLjk4IDI3LjQyUTE4MS4zNyAyNy45NSAxODIuMjUgMjcuOTVRMTgyLjU0IDI3Ljk1IDE4Mi44NyAyNy44NlExODMuMTkgMjcuNzggMTgzLjQ0IDI3LjY4TDE4My44NyAyOS40MlExODMuNDIgMjkuNTcgMTgyLjg1IDI5LjcxUTE4Mi4yOSAyOS44NSAxODEuNjYgMjkuODVaTTE4NC42NSAyNC42NVYyMi45SDE5MC4wNlYyNC42NVpNMTkzLjAzIDI5LjU3VjE4LjI3SDE5NC45NkwxOTUuMTcgMTkuODdIMTk1LjIxUTE5NS45NCAxOS4wOSAxOTYuNzkgMTguNTVRMTk3LjY1IDE4IDE5OC43MSAxOFExOTkuOTYgMTggMjAwLjcgMTguNTVRMjAxLjQ0IDE5LjA5IDIwMS44MSAyMC4wN1EyMDIuNjUgMTkuMTcgMjAzLjU0IDE4LjU5UTIwNC40MyAxOCAyMDUuNDggMThRMjA3LjI0IDE4IDIwOC4wOSAxOS4xNlEyMDguOTQgMjAuMzIgMjA4Ljk0IDIyLjQ3VjI5LjU3SDIwNi41NlYyMi43NlEyMDYuNTYgMjEuMyAyMDYuMTEgMjAuNjhRMjA1LjY2IDIwLjA1IDIwNC43IDIwLjA1UTIwNC4xMiAyMC4wNSAyMDMuNSAyMC40MlEyMDIuODcgMjAuNzkgMjAyLjE2IDIxLjU3VjI5LjU3SDE5OS44VjIyLjc2UTE5OS44IDIxLjMgMTk5LjM1IDIwLjY4UTE5OC45IDIwLjA1IDE5Ny45MSAyMC4wNVExOTcuMzYgMjAuMDUgMTk2LjcyIDIwLjQyUTE5Ni4wOSAyMC43OSAxOTUuMzkgMjEuNTdWMjkuNTdaTTIxNS4yOCAyOS44NVEyMTQuMzEgMjkuODUgMjEzLjU2IDI5LjQ0UTIxMi44MiAyOS4wMyAyMTIuMzggMjguMjlRMjExLjk1IDI3LjU2IDIxMS45NSAyNi41N1EyMTEuOTUgMjQuNzUgMjEzLjU2IDIzLjc1UTIxNS4xNyAyMi43NiAyMTguNyAyMi4zN1EyMTguNjggMjEuNzEgMjE4LjQ5IDIxLjE2UTIxOC4zMSAyMC42MSAyMTcuODUgMjAuMjdRMjE3LjM5IDE5LjkzIDIxNi41NSAxOS45M1EyMTUuNjYgMTkuOTMgMjE0Ljg0IDIwLjI4UTIxNC4wMyAyMC42MyAyMTMuMjkgMjEuMDhMMjEyLjQxIDE5LjQ4UTIxMyAxOS4xMSAyMTMuNzIgMTguNzdRMjE0LjQ0IDE4LjQzIDIxNS4yNSAxOC4yMlEyMTYuMDcgMTggMjE2Ljk2IDE4UTIxOC4zNyAxOCAyMTkuMjcgMTguNTdRMjIwLjE4IDE5LjEzIDIyMC42MiAyMC4yUTIyMS4wNiAyMS4yNiAyMjEuMDYgMjIuNzhWMjkuNTdIMjE5LjEzTDIxOC45NCAyOC4yN0gyMTguODZRMjE4LjEgMjguOTMgMjE3LjIgMjkuMzlRMjE2LjMgMjkuODUgMjE1LjI4IDI5Ljg1Wk0yMTUuOTkgMjcuOTdRMjE2LjczIDI3Ljk3IDIxNy4zNyAyNy42M1EyMTggMjcuMjkgMjE4LjcgMjYuNjNWMjMuODlRMjE3LjA0IDI0LjA3IDIxNi4wNSAyNC40M1EyMTUuMDcgMjQuNzkgMjE0LjY1IDI1LjI3UTIxNC4yMyAyNS43NSAyMTQuMjMgMjYuMzlRMjE0LjIzIDI3LjIzIDIxNC43NCAyNy42UTIxNS4yNSAyNy45NyAyMTUuOTkgMjcuOTdaTTIyNC42NCAyOS41N1YxOC4yN0gyMjYuNTdMMjI2Ljc4IDIwLjNIMjI2LjgyUTIyNy40MyAxOS4yMSAyMjguMjcgMTguNjFRMjI5LjExIDE4IDIzMC4wNCAxOFEyMzAuNDUgMTggMjMwLjczIDE4LjA3UTIzMS4wMiAxOC4xMyAyMzEuMjkgMTguMjNMMjMwLjg4IDIwLjNRMjMwLjU3IDIwLjIgMjMwLjMyIDIwLjE2UTIzMC4wOCAyMC4xMiAyMjkuNzMgMjAuMTJRMjI5LjA1IDIwLjEyIDIyOC4yOSAyMC42NlEyMjcuNTMgMjEuMiAyMjcgMjIuNTVWMjkuNTdaTTIzMy4yNyAyOS41N1YxMy4yM0gyMzUuNTlWMjMuNzRIMjM1LjY3TDI0MC4wNCAxOC4yN0gyNDIuNjZMMjM4Ljg1IDIyLjg4TDI0My4wOSAyOS41N0gyNDAuNTNMMjM3LjQ4IDI0LjQ2TDIzNS41OSAyNi42M1YyOS41N1pNMjQ4LjYxIDI5Ljg1UTI0Ny4yMSAyOS44NSAyNDYuMTcgMjkuMTZRMjQ1LjEyIDI4LjQ2IDI0NC41NSAyNy4xM1EyNDMuOTggMjUuNzkgMjQzLjk4IDIzLjkzUTI0My45OCAyMi4xIDI0NC42NiAyMC43N1EyNDUuMzUgMTkuNDQgMjQ2LjQ1IDE4LjcyUTI0Ny41NCAxOCAyNDguNzkgMThRMjQ5Ljc4IDE4IDI1MC40NiAxOC4zNFEyNTEuMTUgMTguNjggMjUxLjgzIDE5LjI3TDI1MS43NSAxNy40MVYxMy4yM0gyNTQuMVYyOS41N0gyNTIuMThMMjUxLjk3IDI4LjI5SDI1MS45MVEyNTEuMjcgMjguOTUgMjUwLjQzIDI5LjRRMjQ5LjU5IDI5Ljg1IDI0OC42MSAyOS44NVpNMjQ5LjE4IDI3Ljg2UTI0OS45IDI3Ljg2IDI1MC41MSAyNy41NFEyNTEuMTMgMjcuMjEgMjUxLjc1IDI2LjQ5VjIxUTI1MS4xMyAyMC40NCAyNTAuNTEgMjAuMjFRMjQ5LjkgMTkuOTcgMjQ5LjI2IDE5Ljk3UTI0OC40OSAxOS45NyAyNDcuODQgMjAuNDVRMjQ3LjE5IDIwLjk0IDI0Ni44IDIxLjgxUTI0Ni40MSAyMi42OCAyNDYuNDEgMjMuOTFRMjQ2LjQxIDI1LjE4IDI0Ni43NCAyNi4wN1EyNDcuMDcgMjYuOTYgMjQ3LjcgMjcuNDFRMjQ4LjMyIDI3Ljg2IDI0OS4xOCAyNy44NlpNMjYyLjQzIDI5Ljg1UTI2MS4wMyAyOS44NSAyNTkuODEgMjkuMTVRMjU4LjU5IDI4LjQ0IDI1Ny44NCAyNy4xMlEyNTcuMSAyNS43OSAyNTcuMSAyMy45M1EyNTcuMSAyMi4wNCAyNTcuODQgMjAuNzJRMjU4LjU5IDE5LjQgMjU5LjgxIDE4LjdRMjYxLjAzIDE4IDI2Mi40MyAxOFEyNjMuNDUgMTggMjY0LjQxIDE4LjRRMjY1LjM4IDE4LjggMjY2LjEyIDE5LjU2UTI2Ni44NSAyMC4zMiAyNjcuMjggMjEuNDJRMjY3LjcxIDIyLjUxIDI2Ny43MSAyMy45M1EyNjcuNzEgMjUuNzkgMjY2Ljk3IDI3LjEyUTI2Ni4yMiAyOC40NCAyNjUuMDIgMjkuMTVRMjYzLjgyIDI5Ljg1IDI2Mi40MyAyOS44NVpNMjYyLjQzIDI3Ljg4UTI2My4zMSAyNy44OCAyNjMuOTUgMjcuMzlRMjY0LjYgMjYuOSAyNjQuOTUgMjYuMDFRMjY1LjMgMjUuMTIgMjY1LjMgMjMuOTNRMjY1LjMgMjIuNzQgMjY0Ljk1IDIxLjg1UTI2NC42IDIwLjk2IDI2My45NSAyMC40NVEyNjMuMzEgMTkuOTUgMjYyLjQzIDE5Ljk1UTI2MS41MiAxOS45NSAyNjAuODggMjAuNDVRMjYwLjIzIDIwLjk2IDI1OS44OCAyMS44NVEyNTkuNTMgMjIuNzQgMjU5LjUzIDIzLjkzUTI1OS41MyAyNS4xMiAyNTkuODggMjYuMDFRMjYwLjIzIDI2LjkgMjYwLjg4IDI3LjM5UTI2MS41MiAyNy44OCAyNjIuNDMgMjcuODhaTTI3Mi4zNSAyOS41NyAyNjkuMzEgMTguMjdIMjcxLjY5TDI3My4xOSAyNC4zOFEyNzMuMzUgMjUuMiAyNzMuNSAyNS45OVEyNzMuNjQgMjYuNzggMjczLjggMjcuNkgyNzMuOTFRMjc0LjA3IDI2Ljc4IDI3NC4yNCAyNS45OVEyNzQuNDIgMjUuMiAyNzQuNjIgMjQuMzhMMjc2LjIyIDE4LjI3SDI3OC4zOUwyODAuMDEgMjQuMzhRMjgwLjIyIDI1LjIgMjgwLjQgMjUuOTlRMjgwLjU5IDI2Ljc4IDI4MC43NyAyNy42SDI4MC44OFEyODEuMDQgMjYuNzggMjgxLjE5IDI1Ljk5UTI4MS4zNSAyNS4yIDI4MS41MSAyNC4zOEwyODIuOTcgMTguMjdIMjg1LjJMMjgyLjI3IDI5LjU3SDI3OS40NEwyNzguMDEgMjMuOTlRMjc3LjggMjMuMTkgMjc3LjY0IDIyLjM5UTI3Ny40NyAyMS41OSAyNzcuMjkgMjAuNzNIMjc3LjE5UTI3NyAyMS41OSAyNzYuODUgMjIuNFEyNzYuNjkgMjMuMjEgMjc2LjQ5IDI0LjAxTDI3NS4wOSAyOS41N1pNMjg3Ljc4IDI5LjU3VjE4LjI3SDI4OS43MUwyODkuOTIgMTkuODVIMjg5Ljk2UTI5MC43NCAxOS4wOSAyOTEuNjQgMTguNTVRMjkyLjU0IDE4IDI5My42OSAxOFEyOTUuNDkgMTggMjk2LjMyIDE5LjE2UTI5Ny4xNSAyMC4zMiAyOTcuMTUgMjIuNDdWMjkuNTdIMjk0LjhWMjIuNzZRMjk0LjggMjEuMyAyOTQuMzQgMjAuNjhRMjkzLjg5IDIwLjA1IDI5Mi44OSAyMC4wNVEyOTIuMTEgMjAuMDUgMjkxLjUgMjAuNDNRMjkwLjkgMjAuODEgMjkwLjE0IDIxLjU3VjI5LjU3WiIvPjwvc3ZnPgo=',      // 表紙の左上とスライドの下に出すロゴ（URL か data: URL）
   logoDark: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOTcuMTUgNDgiIHdpZHRoPSI1OTQuMzEiIGhlaWdodD0iOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iaHlwZXJ0ZXh0LW1hcmtkb3duIj48ZyBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIHN0cm9rZT0iI2YxZjRmOSIgc3Ryb2tlLXdpZHRoPSI0LjYiIGQ9Ik0xNSAxMSA0IDI0IDE1IDM3TTYxIDExIDcyIDI0IDYxIDM3Ii8+PHBhdGggc3Ryb2tlPSIjOTNiMmVjIiBzdHJva2Utd2lkdGg9IjQuNCIgZD0iTTM1IDEwIDMxIDM4TTQ2IDEwIDQyIDM4TTI3IDE5SDUxTTI1IDI5SDQ5Ii8+PC9nPjxwYXRoIGZpbGw9IiNmMWY0ZjkiIGQ9Ik05MCAyOS41N1YxMy4yM0g5Mi4zNlYxNy41NUw5Mi4yNSAxOS43OVE5Mi45OSAxOS4wNSA5My44NyAxOC41M1E5NC43NiAxOCA5NS45IDE4UTk3LjcxIDE4IDk4LjU0IDE5LjE2UTk5LjM3IDIwLjMyIDk5LjM3IDIyLjQ3VjI5LjU3SDk3LjAxVjIyLjc2UTk3LjAxIDIxLjMgOTYuNTYgMjAuNjhROTYuMTEgMjAuMDUgOTUuMSAyMC4wNVE5NC4zMyAyMC4wNSA5My43MiAyMC40M1E5My4xMiAyMC44MSA5Mi4zNiAyMS41N1YyOS41N1pNMTAzLjUxIDM0LjI4UTEwMy4wNiAzNC4yOCAxMDIuNzIgMzQuMjJRMTAyLjM4IDM0LjE2IDEwMi4wNyAzNC4wNkwxMDIuNTMgMzIuMjFRMTAyLjY5IDMyLjI1IDEwMi45MSAzMi4zMVExMDMuMTQgMzIuMzcgMTAzLjM3IDMyLjM3UTEwNC4yOSAzMi4zNyAxMDQuODQgMzEuNzdRMTA1LjQgMzEuMTYgMTA1LjcgMzAuMjZMMTA1Ljk1IDI5LjQ4TDEwMS40OCAxOC4yN0gxMDMuODhMMTA1Ljk1IDI0LjA5UTEwNi4yMiAyNC44NSAxMDYuNDcgMjUuNjZRMTA2LjczIDI2LjQ3IDEwNi45OSAyNy4yN0gxMDcuMVExMDcuMyAyNi40OSAxMDcuNTMgMjUuNjdRMTA3Ljc1IDI0Ljg1IDEwNy45OCAyNC4wOUwxMDkuOCAxOC4yN0gxMTIuMDhMMTA3Ljk0IDMwLjI0UTEwNy41MSAzMS40NSAxMDYuOTIgMzIuMzZRMTA2LjM0IDMzLjI4IDEwNS41MiAzMy43OFExMDQuNyAzNC4yOCAxMDMuNTEgMzQuMjhaTTExNC4zNyAzNC4xNFYxOC4yN0gxMTYuM0wxMTYuNTEgMTkuNTJIMTE2LjU1UTExNy4zMSAxOC45MSAxMTguMTkgMTguNDVRMTE5LjA3IDE4IDEyMC4wMyAxOFExMjEuNDUgMTggMTIyLjQ1IDE4LjcyUTEyMy40NiAxOS40NCAxMjMuOTcgMjAuNzJRMTI0LjQ4IDIyIDEyNC40OCAyMy43NFExMjQuNDggMjUuNjcgMTIzLjc5IDI3LjA0UTEyMy4xMSAyOC40MiAxMjIgMjkuMTRRMTIwLjg5IDI5Ljg1IDExOS42MiAyOS44NVExMTguODggMjkuODUgMTE4LjEzIDI5LjUxUTExNy4zNyAyOS4xOCAxMTYuNjcgMjguNTZMMTE2LjczIDMwLjQ5VjM0LjE0Wk0xMTkuMTcgMjcuODZRMTE5Ljk5IDI3Ljg2IDEyMC42NCAyNy4zOVExMjEuMjggMjYuOTIgMTIxLjY2IDI2LjAxUTEyMi4wNCAyNS4xIDEyMi4wNCAyMy43OFExMjIuMDQgMjIuNiAxMjEuNzYgMjEuNzVRMTIxLjQ5IDIwLjg5IDEyMC45MSAyMC40M1ExMjAuMzQgMTkuOTcgMTE5LjQgMTkuOTdRMTE4Ljc0IDE5Ljk3IDExOC4xIDIwLjMxUTExNy40NSAyMC42NSAxMTYuNzMgMjEuMzVWMjYuODZRMTE3LjM5IDI3LjQxIDExOC4wMiAyNy42NFExMTguNjYgMjcuODYgMTE5LjE3IDI3Ljg2Wk0xMzIuMjUgMjkuODVRMTMwLjcxIDI5Ljg1IDEyOS40NiAyOS4xNVExMjguMjEgMjguNDQgMTI3LjQ3IDI3LjEyUTEyNi43NCAyNS43OSAxMjYuNzQgMjMuOTNRMTI2Ljc0IDIyLjU1IDEyNy4xNyAyMS40NlExMjcuNiAyMC4zNiAxMjguMzQgMTkuNTlRMTI5LjA3IDE4LjgyIDEzMCAxOC40MVExMzAuOTIgMTggMTMxLjg4IDE4UTEzMy4zOCAxOCAxMzQuNCAxOC42N1ExMzUuNDMgMTkuMzQgMTM1Ljk2IDIwLjU0UTEzNi40OSAyMS43MyAxMzYuNDkgMjMuMzNRMTM2LjQ5IDIzLjY4IDEzNi40NiAyNFExMzYuNDMgMjQuMzIgMTM2LjM3IDI0LjU0SDEyOS4wNVExMjkuMTYgMjUuNjEgMTI5LjYyIDI2LjM4UTEzMC4wOCAyNy4xNSAxMzAuODMgMjcuNTdRMTMxLjU3IDI3Ljk5IDEzMi41NCAyNy45OVExMzMuMyAyNy45OSAxMzMuOTUgMjcuNzZRMTM0LjYxIDI3LjU0IDEzNS4yMiAyNy4xNUwxMzYuMDQgMjguNjRRMTM1LjI2IDI5LjE2IDEzNC4zMSAyOS41UTEzMy4zNiAyOS44NSAxMzIuMjUgMjkuODVaTTEyOS4wMyAyMi45SDEzNC40NFExMzQuNDQgMjEuNDcgMTMzLjggMjAuNjdRMTMzLjE1IDE5Ljg3IDEzMS45MiAxOS44N1ExMzEuMjMgMTkuODcgMTMwLjYxIDIwLjIyUTEzMCAyMC41NyAxMjkuNTggMjEuMjRRMTI5LjE2IDIxLjkyIDEyOS4wMyAyMi45Wk0xMzkuMzggMjkuNTdWMTguMjdIMTQxLjMxTDE0MS41MiAyMC4zSDE0MS41NlExNDIuMTcgMTkuMjEgMTQzLjAxIDE4LjYxUTE0My44NSAxOCAxNDQuNzggMThRMTQ1LjE5IDE4IDE0NS40NyAxOC4wN1ExNDUuNzYgMTguMTMgMTQ2LjAzIDE4LjIzTDE0NS42MiAyMC4zUTE0NS4zMSAyMC4yIDE0NS4wNiAyMC4xNlExNDQuODIgMjAuMTIgMTQ0LjQ3IDIwLjEyUTE0My43OSAyMC4xMiAxNDMuMDMgMjAuNjZRMTQyLjI4IDIxLjIgMTQxLjc0IDIyLjU1VjI5LjU3Wk0xNTEuODEgMjkuODVRMTUwLjU0IDI5Ljg1IDE0OS43OSAyOS4zNVExNDkuMDQgMjguODUgMTQ4LjcxIDI3Ljk2UTE0OC4zOCAyNy4wNiAxNDguMzggMjUuODhWMjAuMThIMTQ2Ljc0VjE4LjQxTDE0OC41MSAxOC4yN0wxNDguNzcgMTUuMTVIMTUwLjc0VjE4LjI3SDE1My42N1YyMC4xOEgxNTAuNzRWMjUuOVExNTAuNzQgMjYuOSAxNTEuMTMgMjcuNDJRMTUxLjUyIDI3Ljk1IDE1Mi40IDI3Ljk1UTE1Mi42OSAyNy45NSAxNTMuMDIgMjcuODZRMTUzLjM0IDI3Ljc4IDE1My41OSAyNy42OEwxNTQuMDIgMjkuNDJRMTUzLjU3IDI5LjU3IDE1My4wMSAyOS43MVExNTIuNDQgMjkuODUgMTUxLjgxIDI5Ljg1Wk0xNjAuNjYgMjkuODVRMTU5LjEzIDI5Ljg1IDE1Ny44OCAyOS4xNVExNTYuNjIgMjguNDQgMTU1Ljg5IDI3LjEyUTE1NS4xNSAyNS43OSAxNTUuMTUgMjMuOTNRMTU1LjE1IDIyLjU1IDE1NS41OCAyMS40NlExNTYuMDEgMjAuMzYgMTU2Ljc1IDE5LjU5UTE1Ny40OSAxOC44MiAxNTguNDEgMTguNDFRMTU5LjMzIDE4IDE2MC4yOSAxOFExNjEuNzkgMTggMTYyLjgyIDE4LjY3UTE2My44NCAxOS4zNCAxNjQuMzcgMjAuNTRRMTY0LjkxIDIxLjczIDE2NC45MSAyMy4zM1ExNjQuOTEgMjMuNjggMTY0Ljg4IDI0UTE2NC44NSAyNC4zMiAxNjQuNzggMjQuNTRIMTU3LjQ3UTE1Ny41NyAyNS42MSAxNTguMDMgMjYuMzhRMTU4LjQ5IDI3LjE1IDE1OS4yNCAyNy41N1ExNTkuOTkgMjcuOTkgMTYwLjk1IDI3Ljk5UTE2MS43MSAyNy45OSAxNjIuMzcgMjcuNzZRMTYzLjAyIDI3LjU0IDE2My42NCAyNy4xNUwxNjQuNDYgMjguNjRRMTYzLjY4IDI5LjE2IDE2Mi43MiAyOS41UTE2MS43NyAyOS44NSAxNjAuNjYgMjkuODVaTTE1Ny40NCAyMi45SDE2Mi44NlExNjIuODYgMjEuNDcgMTYyLjIxIDIwLjY3UTE2MS41NyAxOS44NyAxNjAuMzQgMTkuODdRMTU5LjY0IDE5Ljg3IDE1OS4wMiAyMC4yMlExNTguNDEgMjAuNTcgMTU3Ljk5IDIxLjI0UTE1Ny41NyAyMS45MiAxNTcuNDQgMjIuOVpNMTY2LjAzIDI5LjU3IDE2OS42NiAyMy42OCAxNjYuMjggMTguMjdIMTY4Ljg0TDE3MC4xOCAyMC41NVExNzAuNDQgMjEuMDIgMTcwLjcxIDIxLjQ5UTE3MC45NyAyMS45NiAxNzEuMjQgMjIuNDVIMTcxLjM0UTE3MS41NSAyMS45NiAxNzEuNzggMjEuNDlRMTcyLjAyIDIxLjAyIDE3Mi4yNyAyMC41NUwxNzMuNDYgMTguMjdIMTc1LjkyTDE3Mi41MyAyMy45M0wxNzYuMTYgMjkuNTdIMTczLjZMMTcyLjEyIDI3LjE3UTE3MS44NiAyNi42OCAxNzEuNTcgMjYuMTZRMTcxLjI4IDI1LjY1IDE3MC45NSAyNS4xOEgxNzAuODVRMTcwLjYxIDI1LjY1IDE3MC4zNCAyNi4xNVExNzAuMDcgMjYuNjUgMTY5LjgxIDI3LjE3TDE2OC40OSAyOS41N1pNMTgxLjY2IDI5Ljg1UTE4MC4zOCAyOS44NSAxNzkuNjQgMjkuMzVRMTc4Ljg5IDI4Ljg1IDE3OC41NiAyNy45NlExNzguMjMgMjcuMDYgMTc4LjIzIDI1Ljg4VjIwLjE4SDE3Ni41OVYxOC40MUwxNzguMzUgMTguMjdMMTc4LjYyIDE1LjE1SDE4MC41OVYxOC4yN0gxODMuNTJWMjAuMThIMTgwLjU5VjI1LjlRMTgwLjU5IDI2LjkgMTgwLjk4IDI3LjQyUTE4MS4zNyAyNy45NSAxODIuMjUgMjcuOTVRMTgyLjU0IDI3Ljk1IDE4Mi44NyAyNy44NlExODMuMTkgMjcuNzggMTgzLjQ0IDI3LjY4TDE4My44NyAyOS40MlExODMuNDIgMjkuNTcgMTgyLjg1IDI5LjcxUTE4Mi4yOSAyOS44NSAxODEuNjYgMjkuODVaTTE4NC42NSAyNC42NVYyMi45SDE5MC4wNlYyNC42NVpNMTkzLjAzIDI5LjU3VjE4LjI3SDE5NC45NkwxOTUuMTcgMTkuODdIMTk1LjIxUTE5NS45NCAxOS4wOSAxOTYuNzkgMTguNTVRMTk3LjY1IDE4IDE5OC43MSAxOFExOTkuOTYgMTggMjAwLjcgMTguNTVRMjAxLjQ0IDE5LjA5IDIwMS44MSAyMC4wN1EyMDIuNjUgMTkuMTcgMjAzLjU0IDE4LjU5UTIwNC40MyAxOCAyMDUuNDggMThRMjA3LjI0IDE4IDIwOC4wOSAxOS4xNlEyMDguOTQgMjAuMzIgMjA4Ljk0IDIyLjQ3VjI5LjU3SDIwNi41NlYyMi43NlEyMDYuNTYgMjEuMyAyMDYuMTEgMjAuNjhRMjA1LjY2IDIwLjA1IDIwNC43IDIwLjA1UTIwNC4xMiAyMC4wNSAyMDMuNSAyMC40MlEyMDIuODcgMjAuNzkgMjAyLjE2IDIxLjU3VjI5LjU3SDE5OS44VjIyLjc2UTE5OS44IDIxLjMgMTk5LjM1IDIwLjY4UTE5OC45IDIwLjA1IDE5Ny45MSAyMC4wNVExOTcuMzYgMjAuMDUgMTk2LjcyIDIwLjQyUTE5Ni4wOSAyMC43OSAxOTUuMzkgMjEuNTdWMjkuNTdaTTIxNS4yOCAyOS44NVEyMTQuMzEgMjkuODUgMjEzLjU2IDI5LjQ0UTIxMi44MiAyOS4wMyAyMTIuMzggMjguMjlRMjExLjk1IDI3LjU2IDIxMS45NSAyNi41N1EyMTEuOTUgMjQuNzUgMjEzLjU2IDIzLjc1UTIxNS4xNyAyMi43NiAyMTguNyAyMi4zN1EyMTguNjggMjEuNzEgMjE4LjQ5IDIxLjE2UTIxOC4zMSAyMC42MSAyMTcuODUgMjAuMjdRMjE3LjM5IDE5LjkzIDIxNi41NSAxOS45M1EyMTUuNjYgMTkuOTMgMjE0Ljg0IDIwLjI4UTIxNC4wMyAyMC42MyAyMTMuMjkgMjEuMDhMMjEyLjQxIDE5LjQ4UTIxMyAxOS4xMSAyMTMuNzIgMTguNzdRMjE0LjQ0IDE4LjQzIDIxNS4yNSAxOC4yMlEyMTYuMDcgMTggMjE2Ljk2IDE4UTIxOC4zNyAxOCAyMTkuMjcgMTguNTdRMjIwLjE4IDE5LjEzIDIyMC42MiAyMC4yUTIyMS4wNiAyMS4yNiAyMjEuMDYgMjIuNzhWMjkuNTdIMjE5LjEzTDIxOC45NCAyOC4yN0gyMTguODZRMjE4LjEgMjguOTMgMjE3LjIgMjkuMzlRMjE2LjMgMjkuODUgMjE1LjI4IDI5Ljg1Wk0yMTUuOTkgMjcuOTdRMjE2LjczIDI3Ljk3IDIxNy4zNyAyNy42M1EyMTggMjcuMjkgMjE4LjcgMjYuNjNWMjMuODlRMjE3LjA0IDI0LjA3IDIxNi4wNSAyNC40M1EyMTUuMDcgMjQuNzkgMjE0LjY1IDI1LjI3UTIxNC4yMyAyNS43NSAyMTQuMjMgMjYuMzlRMjE0LjIzIDI3LjIzIDIxNC43NCAyNy42UTIxNS4yNSAyNy45NyAyMTUuOTkgMjcuOTdaTTIyNC42NCAyOS41N1YxOC4yN0gyMjYuNTdMMjI2Ljc4IDIwLjNIMjI2LjgyUTIyNy40MyAxOS4yMSAyMjguMjcgMTguNjFRMjI5LjExIDE4IDIzMC4wNCAxOFEyMzAuNDUgMTggMjMwLjczIDE4LjA3UTIzMS4wMiAxOC4xMyAyMzEuMjkgMTguMjNMMjMwLjg4IDIwLjNRMjMwLjU3IDIwLjIgMjMwLjMyIDIwLjE2UTIzMC4wOCAyMC4xMiAyMjkuNzMgMjAuMTJRMjI5LjA1IDIwLjEyIDIyOC4yOSAyMC42NlEyMjcuNTMgMjEuMiAyMjcgMjIuNTVWMjkuNTdaTTIzMy4yNyAyOS41N1YxMy4yM0gyMzUuNTlWMjMuNzRIMjM1LjY3TDI0MC4wNCAxOC4yN0gyNDIuNjZMMjM4Ljg1IDIyLjg4TDI0My4wOSAyOS41N0gyNDAuNTNMMjM3LjQ4IDI0LjQ2TDIzNS41OSAyNi42M1YyOS41N1pNMjQ4LjYxIDI5Ljg1UTI0Ny4yMSAyOS44NSAyNDYuMTcgMjkuMTZRMjQ1LjEyIDI4LjQ2IDI0NC41NSAyNy4xM1EyNDMuOTggMjUuNzkgMjQzLjk4IDIzLjkzUTI0My45OCAyMi4xIDI0NC42NiAyMC43N1EyNDUuMzUgMTkuNDQgMjQ2LjQ1IDE4LjcyUTI0Ny41NCAxOCAyNDguNzkgMThRMjQ5Ljc4IDE4IDI1MC40NiAxOC4zNFEyNTEuMTUgMTguNjggMjUxLjgzIDE5LjI3TDI1MS43NSAxNy40MVYxMy4yM0gyNTQuMVYyOS41N0gyNTIuMThMMjUxLjk3IDI4LjI5SDI1MS45MVEyNTEuMjcgMjguOTUgMjUwLjQzIDI5LjRRMjQ5LjU5IDI5Ljg1IDI0OC42MSAyOS44NVpNMjQ5LjE4IDI3Ljg2UTI0OS45IDI3Ljg2IDI1MC41MSAyNy41NFEyNTEuMTMgMjcuMjEgMjUxLjc1IDI2LjQ5VjIxUTI1MS4xMyAyMC40NCAyNTAuNTEgMjAuMjFRMjQ5LjkgMTkuOTcgMjQ5LjI2IDE5Ljk3UTI0OC40OSAxOS45NyAyNDcuODQgMjAuNDVRMjQ3LjE5IDIwLjk0IDI0Ni44IDIxLjgxUTI0Ni40MSAyMi42OCAyNDYuNDEgMjMuOTFRMjQ2LjQxIDI1LjE4IDI0Ni43NCAyNi4wN1EyNDcuMDcgMjYuOTYgMjQ3LjcgMjcuNDFRMjQ4LjMyIDI3Ljg2IDI0OS4xOCAyNy44NlpNMjYyLjQzIDI5Ljg1UTI2MS4wMyAyOS44NSAyNTkuODEgMjkuMTVRMjU4LjU5IDI4LjQ0IDI1Ny44NCAyNy4xMlEyNTcuMSAyNS43OSAyNTcuMSAyMy45M1EyNTcuMSAyMi4wNCAyNTcuODQgMjAuNzJRMjU4LjU5IDE5LjQgMjU5LjgxIDE4LjdRMjYxLjAzIDE4IDI2Mi40MyAxOFEyNjMuNDUgMTggMjY0LjQxIDE4LjRRMjY1LjM4IDE4LjggMjY2LjEyIDE5LjU2UTI2Ni44NSAyMC4zMiAyNjcuMjggMjEuNDJRMjY3LjcxIDIyLjUxIDI2Ny43MSAyMy45M1EyNjcuNzEgMjUuNzkgMjY2Ljk3IDI3LjEyUTI2Ni4yMiAyOC40NCAyNjUuMDIgMjkuMTVRMjYzLjgyIDI5Ljg1IDI2Mi40MyAyOS44NVpNMjYyLjQzIDI3Ljg4UTI2My4zMSAyNy44OCAyNjMuOTUgMjcuMzlRMjY0LjYgMjYuOSAyNjQuOTUgMjYuMDFRMjY1LjMgMjUuMTIgMjY1LjMgMjMuOTNRMjY1LjMgMjIuNzQgMjY0Ljk1IDIxLjg1UTI2NC42IDIwLjk2IDI2My45NSAyMC40NVEyNjMuMzEgMTkuOTUgMjYyLjQzIDE5Ljk1UTI2MS41MiAxOS45NSAyNjAuODggMjAuNDVRMjYwLjIzIDIwLjk2IDI1OS44OCAyMS44NVEyNTkuNTMgMjIuNzQgMjU5LjUzIDIzLjkzUTI1OS41MyAyNS4xMiAyNTkuODggMjYuMDFRMjYwLjIzIDI2LjkgMjYwLjg4IDI3LjM5UTI2MS41MiAyNy44OCAyNjIuNDMgMjcuODhaTTI3Mi4zNSAyOS41NyAyNjkuMzEgMTguMjdIMjcxLjY5TDI3My4xOSAyNC4zOFEyNzMuMzUgMjUuMiAyNzMuNSAyNS45OVEyNzMuNjQgMjYuNzggMjczLjggMjcuNkgyNzMuOTFRMjc0LjA3IDI2Ljc4IDI3NC4yNCAyNS45OVEyNzQuNDIgMjUuMiAyNzQuNjIgMjQuMzhMMjc2LjIyIDE4LjI3SDI3OC4zOUwyODAuMDEgMjQuMzhRMjgwLjIyIDI1LjIgMjgwLjQgMjUuOTlRMjgwLjU5IDI2Ljc4IDI4MC43NyAyNy42SDI4MC44OFEyODEuMDQgMjYuNzggMjgxLjE5IDI1Ljk5UTI4MS4zNSAyNS4yIDI4MS41MSAyNC4zOEwyODIuOTcgMTguMjdIMjg1LjJMMjgyLjI3IDI5LjU3SDI3OS40NEwyNzguMDEgMjMuOTlRMjc3LjggMjMuMTkgMjc3LjY0IDIyLjM5UTI3Ny40NyAyMS41OSAyNzcuMjkgMjAuNzNIMjc3LjE5UTI3NyAyMS41OSAyNzYuODUgMjIuNFEyNzYuNjkgMjMuMjEgMjc2LjQ5IDI0LjAxTDI3NS4wOSAyOS41N1pNMjg3Ljc4IDI5LjU3VjE4LjI3SDI4OS43MUwyODkuOTIgMTkuODVIMjg5Ljk2UTI5MC43NCAxOS4wOSAyOTEuNjQgMTguNTVRMjkyLjU0IDE4IDI5My42OSAxOFEyOTUuNDkgMTggMjk2LjMyIDE5LjE2UTI5Ny4xNSAyMC4zMiAyOTcuMTUgMjIuNDdWMjkuNTdIMjk0LjhWMjIuNzZRMjk0LjggMjEuMyAyOTQuMzQgMjAuNjhRMjkzLjg5IDIwLjA1IDI5Mi44OSAyMC4wNVEyOTIuMTEgMjAuMDUgMjkxLjUgMjAuNDNRMjkwLjkgMjAuODEgMjkwLjE0IDIxLjU3VjI5LjU3WiIvPjwvc3ZnPgo=',  // ダーク表示のときのロゴ（空なら logo をそのまま使う）
 };
-const ENGINE = 'hypertext-markdown-8';
+const ENGINE = 'hypertext-markdown-9';
 const KEY_THEME = 'hypertext-markdown:theme';
 const KEY_TOC = 'hypertext-markdown:toc';
 const KEY_DIFF = 'hypertext-markdown:diffview';
@@ -3533,6 +3529,29 @@ const RX = {
   // *[略語]: 意味（PHP Markdown Extra と同じ書き方）。本文には出さず、本文中の略語に意味を添える
   abbrDef: /^ {0,3}\*\[([^\]\n]+)\]:[ \t]*(.*)$/,
 };
+/* 生 HTML は、表示に必要なタグと属性だけをタグ単位で組み直す。断片全体を DOM にすると、
+   空行を挟んだ div などがブラウザに自動で閉じられ、HTML 内 Markdown の区切りが変わるため使わない */
+const RAW_HTML_TOKEN = /<[!]--[\s\S]*?-->|<\/?[A-Za-z][A-Za-z0-9-]*(?:\s+[A-Za-z_:@][\w:.@-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*\s*\/?>/g;
+const RAW_HTML_TAGS = new Set(('a abbr address article aside b bdi bdo blockquote br caption center cite code col colgroup dd del details dfn div dl dt em figcaption figure footer h1 h2 h3 h4 h5 h6 header hr i img ins kbd li main mark meter nav ol p picture pre progress q rp rt ruby s samp section small span strong sub summary sup table tbody td tfoot th thead time tr u ul var wbr').split(' '));
+const RAW_SVG_TAGS = new Set(('svg g path rect circle ellipse line polyline polygon text tspan defs lineargradient radialgradient stop clippath mask title desc').split(' '));
+const RAW_VOID_TAGS = new Set(('br col hr img wbr').split(' '));
+const RAW_DROP_CONTENT = new Set(('script style iframe object embed textarea template noscript').split(' '));
+const RAW_GLOBAL_ATTRS = new Set(('class title lang dir role tabindex style').split(' '));
+const RAW_TAG_ATTRS = {
+  a: new Set(['href', 'target', 'rel']),
+  blockquote: new Set(['cite']), q: new Set(['cite']),
+  img: new Set(['src', 'alt', 'width', 'height', 'loading', 'decoding']),
+  ol: new Set(['start', 'reversed', 'type']), li: new Set(['value']),
+  col: new Set(['span']), colgroup: new Set(['span']),
+  td: new Set(['colspan', 'rowspan', 'headers']), th: new Set(['colspan', 'rowspan', 'headers', 'scope', 'abbr']),
+  time: new Set(['datetime']), meter: new Set(['value', 'min', 'max', 'low', 'high', 'optimum']),
+  progress: new Set(['value', 'max']),
+};
+const RAW_SVG_ATTRS = new Set(('xmlns viewbox preserveaspectratio width height x y x1 y1 x2 y2 cx cy r rx ry d points pathlength transform fill fill-opacity fill-rule stroke stroke-opacity stroke-width stroke-linecap stroke-linejoin stroke-dasharray stroke-dashoffset color opacity font-family font-size font-style font-weight text-anchor dominant-baseline dx dy rotate textlength lengthadjust gradientunits gradienttransform spreadmethod offset stop-color stop-opacity clip-path clip-rule mask maskunits maskcontentunits').split(' '));
+const RAW_SVG_NAMES = { lineargradient: 'linearGradient', radialgradient: 'radialGradient', clippath: 'clipPath' };
+const RAW_SVG_ATTR_NAMES = { viewbox: 'viewBox', preserveaspectratio: 'preserveAspectRatio', pathlength: 'pathLength', textlength: 'textLength', lengthadjust: 'lengthAdjust', gradientunits: 'gradientUnits', gradienttransform: 'gradientTransform', spreadmethod: 'spreadMethod', maskunits: 'maskUnits', maskcontentunits: 'maskContentUnits' };
+const RAW_CSS_PROPS = new Set(('align-content align-items align-self background background-color border border-color border-style border-width border-top border-top-color border-top-style border-top-width border-right border-right-color border-right-style border-right-width border-bottom border-bottom-color border-bottom-style border-bottom-width border-left border-left-color border-left-style border-left-width border-radius box-shadow color display flex flex-basis flex-direction flex-flow flex-grow flex-shrink flex-wrap font font-family font-size font-style font-variant font-weight gap grid grid-area grid-auto-columns grid-auto-flow grid-auto-rows grid-column grid-row grid-template grid-template-areas grid-template-columns grid-template-rows height justify-content justify-items justify-self letter-spacing line-height margin margin-top margin-right margin-bottom margin-left max-height max-width min-height min-width opacity overflow overflow-wrap overflow-x overflow-y padding padding-top padding-right padding-bottom padding-left text-align text-decoration text-indent text-overflow text-transform transform transform-origin vertical-align white-space width word-break word-spacing').split(' '));
+const RAW_CSS_VARS = new Set(('--accent --accent-soft --bg --bg-side --bg-sunken --ink --ink-2 --rule --font --mono --frame --frame-inner --tint --c-note --c-tip --c-important --c-warning --c-caution --add-bg --del-bg --mark --chart-on').split(' '));
 /* 参照形式の名前は、大文字と小文字・空白の違いを区別しない */
 const refKey = s => String(s).trim().replace(/\s+/g, ' ').toLowerCase();
 /* フェンス（``` / ~~~）の中かどうかを 1 行ずつ判定する。中（または開始・終了の行）なら true */
@@ -4169,6 +4188,189 @@ function createParser(opts = {}) {
   }
   const slugify = t => t.toLowerCase().trim().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s+/g, '-').slice(0, 80);
 
+  function cleanRawStyle(raw) {
+    const probe = document.createElement('span');
+    probe.style.cssText = raw;
+    const out = [];
+    const decls = [];
+    let start = 0, quote = '', escaped = false, depth = 0;
+    const css = probe.style.cssText;
+    for (let i = 0; i < css.length; i++) {
+      const ch = css[i];
+      if (escaped) { escaped = false; continue; }
+      if (quote) {
+        if (ch === '\\') escaped = true;
+        else if (ch === quote) quote = '';
+      } else if (ch === '"' || ch === "'") quote = ch;
+      else if (ch === '(') depth++;
+      else if (ch === ')' && depth) depth--;
+      else if (ch === ';' && depth === 0) { decls.push(css.slice(start, i)); start = i + 1; }
+    }
+    decls.push(css.slice(start));
+    const parsed = [];
+    for (const decl of decls) {
+      const colon = decl.indexOf(':');
+      if (colon < 1) continue;
+      const prop = decl.slice(0, colon).trim().toLowerCase();
+      const value = decl.slice(colon + 1).trim().replace(/\s*!important\s*$/i, '');
+      const compact = value.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, '');
+      if (!value || value.includes('\\') || /@import|expression\(|behavior:|-moz-binding|javascript:|vbscript:/i.test(compact)
+          || /(?:url|src|image|image-set|cross-fade|element|paint|attr)\s*\(/i.test(value)) continue;
+      parsed.push({ prop, value, vars: [...value.matchAll(/var\(\s*(--[a-z0-9_-]+)/gi)].map(m => m[1].toLowerCase()) });
+    }
+    // 安全な値を持つ独自変数だけを、既定の色変数と同じように参照できるようにする
+    const custom = new Set();
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const d of parsed) {
+        if (!/^--[a-z0-9_-]+$/i.test(d.prop) || custom.has(d.prop)) continue;
+        if (d.vars.every(v => RAW_CSS_VARS.has(v) || custom.has(v))) { custom.add(d.prop); changed = true; }
+      }
+    }
+    for (const { prop, value, vars } of parsed) {
+      if (!RAW_CSS_PROPS.has(prop) && !custom.has(prop)) continue;
+      if (vars.some(v => !RAW_CSS_VARS.has(v) && !custom.has(v))) continue;
+      out.push(prop + ':' + value);
+    }
+    return out.join(';');
+  }
+
+  function cleanRawUrl(raw, kind) {
+    const value = String(raw).trim();
+    const compact = value.replace(/[\s\u0000-\u001f\u007f]+/g, '');
+    if (!value || !compact || /^[\\/]{2}/.test(compact)) return null;
+    if (kind === 'svg') return /^#[A-Za-z_][\w:.-]*$/.test(compact) ? compact : null;
+    const m = compact.match(/^([A-Za-z][\w+.-]*):/);
+    if (kind === 'img') {
+      if (/^data:/i.test(compact)) return /^data:image\/(?:png|gif|jpe?g|webp|avif|bmp|svg\+xml)(?:[;,]|$)/i.test(compact) ? value : null;
+      if (m && !/^(?:https?|blob)$/i.test(m[1])) return null;
+      return value;
+    }
+    if (m && !/^(?:https?|mailto|tel)$/i.test(m[1])) return null;
+    return value;
+  }
+
+  function cleanRawSvgValue(raw) {
+    const value = String(raw).trim();
+    if (!value || value.includes('\\') || /[\u0000-\u001f\u007f]/.test(value) || /(?:javascript|vbscript|data|https?):/i.test(value)) return null;
+    const urls = [...value.matchAll(/url\(([^)]*)\)/gi)];
+    if (urls.some(m => !/^\s*['"]?#[A-Za-z_][\w:.-]*['"]?\s*$/.test(m[1]))) return null;
+    return value;
+  }
+
+  function rawTagInfo(token) {
+    const m = token.match(/^<\s*(\/?)\s*([A-Za-z][A-Za-z0-9-]*)/);
+    return m ? { close: !!m[1], tag: m[2].toLowerCase(), head: m[0].length, self: /\/\s*>$/.test(token) } : null;
+  }
+
+  function rawAttributes(token, info) {
+    let text = token.slice(info.head).replace(/\/?\s*>$/, '').trim();
+    if (!text) return [];
+    const t = document.createElement('template');
+    t.innerHTML = '<span ' + text + '></span>';
+    const el = t.content.firstElementChild;
+    return el ? Array.from(el.attributes, a => [a.name.toLowerCase(), a.value]) : [];
+  }
+
+  function sanitizeRawTag(token) {
+    const info = rawTagInfo(token);
+    if (!info || (!RAW_HTML_TAGS.has(info.tag) && !RAW_SVG_TAGS.has(info.tag))) return '';
+    const tagName = RAW_SVG_NAMES[info.tag] || info.tag;
+    if (info.close) return RAW_VOID_TAGS.has(info.tag) ? '' : '</' + tagName + '>';
+    const attrs = rawAttributes(token, info);
+    const out = [];
+    let target = '', href = false;
+    for (const [name, raw] of attrs) {
+      if (/^on/i.test(name) || /^data-/i.test(name) || name === 'name' || name === 'is' || name === 'srcdoc'
+          || name === 'action' || name === 'formaction' || name === 'xlink:href') continue;
+      let value = raw, outName = name;
+      if (name === 'id') {
+        value = value.trim();
+        if (!/^[A-Za-z_][\w:.-]*$/.test(value) || /^ui-/i.test(value) || usedIds.has(value)) continue;
+        usedIds.add(value);
+      } else if (name === 'style') {
+        value = cleanRawStyle(value);
+        if (!value) continue;
+      } else if (name === 'class') {
+        value = value.replace(/[\u0000-\u001f\u007f]+/g, ' ').trim().replace(/\s+/g, ' ');
+        if (!value) continue;
+      } else if (name === 'dir') {
+        value = value.toLowerCase();
+        if (!/^(?:ltr|rtl|auto)$/.test(value)) continue;
+      } else if (name === 'tabindex') {
+        if (value !== '0' && value !== '-1') continue;
+      } else if (name === 'hidden' || (info.tag === 'details' && name === 'open') || (info.tag === 'ol' && name === 'reversed')) {
+        out.push(' ' + name);
+        continue;
+      } else if (name.startsWith('aria-') || ['title', 'lang', 'role'].includes(name)) {
+        // 文字列としてだけ使う属性
+      } else if (info.tag === 'a' && name === 'href') {
+        value = cleanRawUrl(value, 'href');
+        if (value == null) continue;
+        href = true;
+      } else if (info.tag === 'a' && name === 'target') {
+        value = value.toLowerCase();
+        if (value !== '_blank' && value !== '_self') continue;
+        target = value;
+        continue;
+      } else if (info.tag === 'a' && name === 'rel') {
+        continue;
+      } else if (info.tag === 'img' && name === 'src') {
+        value = cleanRawUrl(value, 'img');
+        if (value == null) continue;
+      } else if ((info.tag === 'blockquote' || info.tag === 'q') && name === 'cite') {
+        value = cleanRawUrl(value, 'href');
+        if (value == null) continue;
+      } else if (info.tag === 'img' && name === 'loading') {
+        value = value.toLowerCase();
+        if (value !== 'lazy' && value !== 'eager') continue;
+      } else if (info.tag === 'img' && name === 'decoding') {
+        value = value.toLowerCase();
+        if (!/^(?:sync|async|auto)$/.test(value)) continue;
+      } else if (RAW_SVG_ATTRS.has(name)) {
+        if (name === 'xmlns') {
+          if (value !== 'http://www.w3.org/2000/svg') continue;
+        } else {
+          value = cleanRawSvgValue(value);
+          if (value == null) continue;
+        }
+        outName = RAW_SVG_ATTR_NAMES[name] || name;
+      } else if (!(RAW_TAG_ATTRS[info.tag] && RAW_TAG_ATTRS[info.tag].has(name)) && !RAW_GLOBAL_ATTRS.has(name)) {
+        continue;
+      }
+      out.push(' ' + outName + '="' + escAttr(value) + '"');
+    }
+    if (info.tag === 'a' && href && target) {
+      out.push(' target="' + target + '"');
+      if (target === '_blank') out.push(' rel="noopener noreferrer"');
+    }
+    const open = '<' + tagName + out.join('') + '>';
+    if (RAW_VOID_TAGS.has(info.tag)) return open;
+    return info.self ? open + '</' + tagName + '>' : open;
+  }
+
+  function sanitizeRawHtml(raw) {
+    let out = '', last = 0, blocked = '', depth = 0, m;
+    RAW_HTML_TOKEN.lastIndex = 0;
+    while ((m = RAW_HTML_TOKEN.exec(raw))) {
+      if (!blocked) out += raw.slice(last, m.index).replace(/</g, '&lt;');
+      const token = m[0], info = token.startsWith('<!--') ? null : rawTagInfo(token);
+      if (blocked) {
+        if (info && info.tag === blocked) {
+          if (!info.close && !info.self) depth++;
+          else if (info.close && --depth === 0) blocked = '';
+        }
+      } else if (info && !info.close && !info.self && RAW_DROP_CONTENT.has(info.tag)) {
+        blocked = info.tag;
+        depth = 1;
+      } else if (info) out += sanitizeRawTag(token);
+      last = RAW_HTML_TOKEN.lastIndex;
+    }
+    if (!blocked) out += raw.slice(last).replace(/</g, '&lt;');
+    return out;
+  }
+
   function splitRow(line) {
     let s = line.trim();
     if (s.startsWith('|')) s = s.slice(1);
@@ -4278,7 +4480,7 @@ function createParser(opts = {}) {
         }
         if (end) { while (i < lines.length) { const l = lines[i++]; block.push(l); if (end(l)) break; } }
         else { while (i < lines.length && !RX.blank.test(lines[i])) block.push(lines[i++]); }
-        out.push(block.join('\n'));
+        out.push(sanitizeRawHtml(block.join('\n')));
         continue;
       }
       if (isListStart(line, false)) { const r = parseList(lines, i); out.push(r.html); i = r.next; continue; }
@@ -4992,8 +5194,8 @@ function createParser(opts = {}) {
     s = s.replace(/\\([!-\/:-@\[-`{-~])/g, (a, ch) => hold(escHtml(ch)));
     // <https://...> 形式の自動リンク
     s = s.replace(/<((?:https?|ftp):\/\/[^\s<>]+|mailto:[^\s<>]+)>/gi, (a, url) => hold(linkHtml(url, escHtml(url.replace(/^mailto:/i, '')))));
-    // HTML のタグとコメントはそのまま通す
-    s = s.replace(/<[!]--[\s\S]*?-->|<\/?[A-Za-z][A-Za-z0-9-]*(?:\s+[A-Za-z_:@][\w:.@-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*\s*\/?>/g, a => hold(a));
+    // HTML は表示用のタグと属性だけを残す
+    s = s.replace(/<[!]--[\s\S]*?-->|<\/?[A-Za-z][A-Za-z0-9-]*(?:\s+[A-Za-z_:@][\w:.@-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*\s*\/?>/g, a => hold(sanitizeRawHtml(a)));
     // 脚注の参照
     s = s.replace(/\[\^([^\]\s]+)\]/g, (a, id) => hold(footnoteRef(id)));
     // 文中のラベル :ok[完了] など、画面操作の経路 :menu[設定 > ネットワーク]

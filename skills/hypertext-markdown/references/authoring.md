@@ -50,7 +50,7 @@
 - `{#ID .クラス}` は省略できる。ID は `[](#ID)` で参照できる（`figure`・`table` は番号に置き換わる）
 - 入れ子にするときは外側を `::::` と長くする
 - Zenn と同じ `:::message`・`:::message alert`・`:::details タイトル` も使える
-- 一覧に無い名前は `c-名前` クラスの `div` になる（CSS は本文に `<style>` で書く）
+- 一覧に無い名前は `c-名前` クラスの `div` になる（CSS はテンプレート先頭の `<style>` に書く）
 
 ### 流れ
 
@@ -351,9 +351,11 @@ systemctl status app
 
 ## HTML を直接書く
 
-- 文の中のタグ（`<kbd>` `<mark>` `<sub>` `<sup>` `<br>` など）はそのまま残る
+- 文の中のタグ（`<kbd>` `<mark>` `<sub>` `<sup>` `<br>` など）は表示用の許可リストにあるものだけ残る
 - 行の先頭をブロックのタグ（`<div>` `<details>` `<table>` `<figure>` など）で始めると、次の空行までが HTML になり、その中の Markdown は解釈されない。中で Markdown を使うときは、タグの行との間に空行を入れる
-- `<style>` はページ全体に効く。script 要素は実行されない
+- `script`・`style`・`iframe`・フォーム、`onerror` などのイベント属性、`data-*`、危険な URL は取り除かれる
+- `style` 属性は余白・枠・色・配置などの表示用 CSS だけ使える。`url()`・`position`・`z-index` などは取り除かれる
+- `ui-` で始まる ID と重複する ID は使えない。SVG は表示用のタグと内部参照だけ使える
 - 本文に `</script>` と書くと Markdown のブロックが終わってしまう。`scripts/build.mjs` は自動で `<\/script>` に書き換える。HTML を手で編集するときは自分で書き換える
 
 ## 雛形
