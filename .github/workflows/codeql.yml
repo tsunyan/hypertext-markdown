@@ -24,4 +24,11 @@ jobs:
         with:
           # javascript-typescript は、HTML に埋め込んだスクリプトも読む。actions はワークフロー自体の検査
           languages: javascript-typescript, python, actions
+          # テンプレートの JavaScript は template-guide.src.html が正本。見本・圧縮版・スキルの空のテンプレートは同じコードの写しで、
+          # 調べると同じ指摘がファイルの数だけ並ぶので、正本だけを調べる
+          config: |
+            paths-ignore:
+              - "**/*.min.html"
+              - samples/**
+              - skills/*/assets/template.html
       - uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
