@@ -208,6 +208,9 @@ kbd {
 /* 枠で囲まず、題名の大きさと余白で表紙にする。区切りの細い線は、左端だけを強調の色にする（章の見出しと同じ決まり）。
    スライドの表紙では .md の中に複製されるので、本文用の指定より強くしておく */
 .doc-header { margin: 1.2rem 0 4.2rem; }
+.doc-empty { padding: 1.6rem 1.8rem; border: 1px dashed var(--rule); border-radius: 8px; color: var(--ink-2); }
+.doc-empty p { margin: .4em 0; }
+.doc-empty .doc-empty-title { color: var(--ink); font-size: 1.15rem; font-weight: 700; }
 .doc-header .tb-head { display: flex; flex-direction: column; align-items: flex-start; }
 .doc-header .tb-logo { order: -1; align-self: stretch; margin: 0 0 2.2rem; }
 .doc-header .doc-logo { display: block; width: auto; max-width: min(240px, 60%); height: auto; max-height: 40px; }
@@ -5170,8 +5173,14 @@ function renderDocument(md, opts = {}) {
   const parser = createParser({ numbering: truthy(meta.numbering), breaks: truthy(meta.breaks), reserved: RESERVED, history });
   const content = parser.parse(text);
   const theme = docThemeCss(meta);
+  // 本文が空のテンプレートをそのまま開いたときは、書き始め方を出す
+  const empty = !title && !text.trim()
+    ? '<div class="doc-empty"><p class="doc-empty-title">本文がまだありません</p>'
+      + '<p><code>.md</code> ファイルをこの画面にドロップするか、<kbd>E</kbd> キーで Markdown を書き始めてください。</p>'
+      + '<p><button class="text-btn" type="button" data-action="edit">書き始める</button></p></div>'
+    : '';
   return (theme ? '<style class="doc-theme">' + theme + '</style>' : '')
-    + renderDocHeader(meta, title, docLogo(meta, body))
+    + renderDocHeader(meta, title, docLogo(meta, body)) + empty
     + '<nav class="print-toc" id="ui-print-toc" aria-label="目次"></nav>'
     + '<div class="md' + (truthy(meta.h2_pagebreak) ? ' h2-break' : '') + '" id="ui-content">\n' + content + '\n</div>';
 }

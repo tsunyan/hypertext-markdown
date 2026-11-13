@@ -4,6 +4,8 @@
 図（Mermaid）は CDN から読むので、ネットワークにつながっている必要がある。
 """
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -12,6 +14,9 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "template-guide.src.html"
 SAMPLE = ROOT / "samples" / "sample-versioned.src.html"
+SKILL = ROOT / "skills" / "hypertext-markdown"
+SKELETON = SKILL / "assets" / "template.html"
+BUILD = SKILL / "scripts" / "build.mjs"
 MIN_SCALE = 80  # CONFIG.slideMinScale
 
 MERMAID_SETTLED = """() => [...document.querySelectorAll('.mermaid-block')]
@@ -167,3 +172,34 @@ def test_save_round_trip(opened, path, tmp_path):
     nojs.goto(saved)
     assert nojs.page.locator("#ui-doc h2").count() == before["h2"]
     assert not o.errors, "\n".join(o.errors)
+
+
+def test_skill_empty_template(opened):
+    o = opened()
+    page = o.goto(SKELETON)
+    page.wait_for_selector("#ui-doc .doc-empty")
+    page.click("#ui-doc .doc-empty [data-action=edit]")
+    page.wait_for_selector("#ui-textarea", state="visible")
+    assert not o.errors, "\n".join(o.errors)
+
+
+def test_skill_build_round_trip(opened, tmp_path):
+    """利用ガイドの Markdown を取り出し、スキルの build.mjs で空のテンプレートに流し込むと、元と同じように描ける。"""
+    node = shutil.which("node")
+    if not node:
+        pytest.skip("node が無い")
+    md, built = tmp_path / "guide.md", tmp_path / "guide.html"
+    subprocess.run([node, str(BUILD), "--extract", str(TEMPLATE), "-o", str(md)], check=True)
+    subprocess.run([node, str(BUILD), str(md), "-o", str(built)], check=True)
+    assert md_blocks(built.read_text(encoding="utf-8")) == (md_blocks(TEMPLATE.read_text(encoding="utf-8"))[0], 0)
+
+    o = opened()
+    page = o.goto(TEMPLATE)
+    o.wait_mermaid()
+    expected = doc_facts(page)
+    again = opened()
+    page = again.goto(built)
+    again.wait_mermaid()
+    assert doc_facts(page) == expected
+    assert page.title() == "hypertext-markdown 利用ガイド"
+    assert not again.errors, "\n".join(again.errors)
