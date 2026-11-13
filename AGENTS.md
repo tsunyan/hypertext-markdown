@@ -19,6 +19,7 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
 | `skills/hypertext-markdown/` のほかのファイル | 正本 | `SKILL.md`・`references/authoring.md`・`scripts/build.mjs` |
 | `samples/template-guide-<キー>.src.html` | 生成物（作り直せない） | `tools/make_brand.py` で作ったブランド見本。いまのテンプレートからは作り直せない（ツールの説明を参照）。テンプレートを直しても更新しない |
 | `samples/brand/` | 素材 | ブランド見本のロゴと色 |
+| `docs/images/readme-*.png` | 生成物 | `python tools/make_readme_images.py`（見本の画面を Playwright で撮り、README の先頭の画像をライトとダークの 2 枚ずつ作る。見た目を変えたら作り直す） |
 | `graft/` | 生成物 | コード検索の索引（git では管理しない） |
 
 ## 大きなファイルの歩き方
@@ -48,6 +49,7 @@ graft の索引があるときは、`graft grep "<名前>"` や `graft ask "<知
 2. `python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html`
 3. `python -I tools/minify_html.py`
 4. `python -I tools/make_skeleton.py`（3 の圧縮版から作るので、必ず 3 の後）
+5. 見た目が変わったら `python tools/make_readme_images.py`（README の画像）
 
 **利用ガイド（Markdown）を直す**
 

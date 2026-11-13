@@ -1,4 +1,25 @@
-# hypertext-markdown
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-title-dark.png">
+    <img src="docs/images/readme-title-light.png" alt="hypertext-markdown">
+  </picture>
+</h1>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-views-dark.png">
+    <img src="docs/images/readme-views-light.png" alt="同じ文書を、Markdown・HTML（ライト）・HTML（ダーク）・スライドで表示したところ">
+  </picture>
+</p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-versions-dark.png">
+    <img src="docs/images/readme-versions-light.png" alt="版の管理の一覧と、版 1.1 と 1.2 の比較">
+  </picture>
+</p>
+
+<!-- 画像は python tools/make_readme_images.py で作り直す -->
 
 Markdown を内包した、1 つの HTML ファイルで配れるレポートのテンプレート。調査メモや設計書を、目次・スライド・版の管理付きで読めるようにする。
 
