@@ -178,16 +178,19 @@ def test_raw_html_is_sanitized(opened, tmp_path):
     """生 HTML は見た目に必要なものだけを残し、保存後も危険な内容を復活させない。"""
     markdown = r"""# 生 HTML の安全性
 
-文中の <kbd id="safe-kbd" onclick="window.__rawHtmlXss=1">Ctrl</kbd> は残す。
+文中の <kbd id="safe-kbd" title="A &amp; B" onclick="window.__rawHtmlXss=1">Ctrl</kbd> は残す。
+
+インライン前<script>window.__rawHtmlXss=12</script>中<style>.inline{background:url(https://example.invalid/inline.png)}</style>後<!-- slide --><!-- pagebreak -->末尾
 
 <a id="safe-link" href="https://example.com/" target="_blank">安全なリンク</a>
-<a id="bad-link" href="java&#x73;cript:window.__rawHtmlXss=2" target="_blank" data-action="html">危険なリンク</a>
+<a id="bad-link" href="java&#x73;cript&colon;window.__rawHtmlXss=2" target="_blank" data-action="html">危険なリンク</a>
 
-<div id="safe-box" class="sample" data-action="html" onclick="window.__rawHtmlXss=3" style="--c:#246; padding: 4px; border-left: 4px solid var(--accent); position: fixed; z-index: 9999; background-image: url(https://example.invalid/tracker.png)">
+<div id="safe-box" class="c-sample slide-viewport search-bar copy-btn c-tabs tbl-copy" data-action="html" onclick="window.__rawHtmlXss=3" style="--c:#246; padding: 4px; border-left: 4px solid var(--accent); position: fixed; z-index: 9999; background-image: url(https://example.invalid/tracker.png)">
 表示用の div
 </div>
 
 <div id="escaped-css" style="--remote:u\72l(https://example.invalid/escaped.png); background:var(--remote)">CSS エスケープ</div>
+<div id="entity-css" style="color:red; background:u&#114;l(https://example.invalid/entity.png)">CSS 文字参照</div>
 
 <img id="safe-image" alt="安全な画像" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" onerror="window.__rawHtmlXss=4">
 <img id="bad-image" alt="危険な画像" src="data:text/html,&lt;script&gt;window.__rawHtmlXss=5&lt;/script&gt;">
@@ -218,6 +221,7 @@ def test_raw_html_is_sanitized(opened, tmp_path):
       const badImage = root.querySelector('#bad-image');
       const uncImage = root.querySelector('#unc-image');
       const escapedCss = root.querySelector('#escaped-css');
+      const entityCss = root.querySelector('#entity-css');
       const escapedSvg = root.querySelector('#escaped-svg');
       return {
         xss: window.__rawHtmlXss || 0,
@@ -225,18 +229,24 @@ def test_raw_html_is_sanitized(opened, tmp_path):
         eventAttrs: [...root.querySelectorAll('*')].flatMap(e => [...e.attributes]).filter(a => /^on/i.test(a.name)).length,
         dataAttrs: [...root.querySelectorAll('*')].flatMap(e => [...e.attributes]).filter(a => /^data-/i.test(a.name)).length,
         uiDocIds: document.querySelectorAll('#ui-doc').length,
-        safeKbd: !!root.querySelector('kbd#safe-kbd'),
+        safeKbd: root.querySelector('kbd#safe-kbd')?.title || '',
         safeBox: !!box,
+        safeBoxClass: box?.className || '',
         boxStyle: box ? { padding: box.style.padding, css: box.style.cssText, custom: box.style.getPropertyValue('--c'), position: box.style.position, z: box.style.zIndex, image: box.style.backgroundImage } : null,
         safeLink: link ? { href: link.getAttribute('href'), target: link.target, rel: link.rel } : null,
         badLink: badLink ? { href: badLink.getAttribute('href'), target: badLink.getAttribute('target') } : null,
         badImageSrc: badImage ? badImage.getAttribute('src') : null,
         uncImageSrc: uncImage ? uncImage.getAttribute('src') : null,
         escapedCss: escapedCss ? { style: escapedCss.getAttribute('style'), image: getComputedStyle(escapedCss).backgroundImage } : null,
+        entityCss: entityCss ? { style: entityCss.getAttribute('style'), image: getComputedStyle(entityCss).backgroundImage } : null,
         escapedSvgFill: escapedSvg ? escapedSvg.getAttribute('fill') : null,
         svg: !!root.querySelector('svg#safe-svg rect#safe-rect'),
         scriptText: root.textContent.includes('window.__rawHtmlXss=6'),
         styleText: root.textContent.includes('example.invalid/style.png'),
+        inlineText: root.textContent.includes('インライン前中後末尾'),
+        inlineScriptText: root.textContent.includes('window.__rawHtmlXss=12'),
+        inlineStyleText: root.textContent.includes('example.invalid/inline.png'),
+        inlineBreaks: root.querySelectorAll('.pagebreak').length,
       };
     }"""
 
@@ -249,7 +259,8 @@ def test_raw_html_is_sanitized(opened, tmp_path):
         assert got["eventAttrs"] == 0
         assert got["dataAttrs"] == 0
         assert got["uiDocIds"] == 1
-        assert got["safeKbd"] and got["safeBox"] and got["svg"]
+        assert got["safeKbd"] == "A & B" and got["safeBox"] and got["svg"]
+        assert got["safeBoxClass"] == "c-sample"
         assert got["boxStyle"]["padding"] == "4px"
         assert got["boxStyle"]["custom"] == "#246"
         assert "border-left: 4px solid var(--accent)" in got["boxStyle"]["css"]
@@ -266,8 +277,13 @@ def test_raw_html_is_sanitized(opened, tmp_path):
         assert got["uncImageSrc"] is None
         assert not got["escapedCss"]["style"] or "--remote" not in got["escapedCss"]["style"]
         assert got["escapedCss"]["image"] == "none"
+        assert got["entityCss"]["style"] is None
+        assert got["entityCss"]["image"] == "none"
         assert got["escapedSvgFill"] is None
         assert not got["scriptText"] and not got["styleText"]
+        assert got["inlineText"]
+        assert not got["inlineScriptText"] and not got["inlineStyleText"]
+        assert got["inlineBreaks"] == 0
 
     o = opened()
     page = o.goto(SKELETON)

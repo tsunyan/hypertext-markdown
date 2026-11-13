@@ -356,6 +356,7 @@ systemctl status app
 - `script`・`style`・`iframe`・フォーム、`onerror` などのイベント属性、`data-*`、危険な URL は取り除かれる
 - `style` 属性は余白・枠・色・配置などの表示用 CSS だけ使える。`url()`・`position`・`z-index` などは取り除かれる
 - `ui-` で始まる ID と重複する ID は使えない。SVG は表示用のタグと内部参照だけ使える
+- `class` は `c-` で始まる自作用の名前だけ使える。画面の部品と同じクラスは取り除かれる
 - 本文に `</script>` と書くと Markdown のブロックが終わってしまう。`scripts/build.mjs` は自動で `<\/script>` に書き換える。HTML を手で編集するときは自分で書き換える
 
 ## 雛形
