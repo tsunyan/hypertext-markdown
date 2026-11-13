@@ -23,6 +23,7 @@ OUT = ROOT / "docs" / "images"
 WIDTH = 1280  # 画像の幅（CSS ピクセル）。保存する PNG は SCALE 倍
 SCALE = 2
 DOC_VIEW = (960, 640)  # 文書の画面を撮る大きさ。狭くして文字を大きく見せる
+# 画像に入れる文言。TAGLINE・SUB は README の冒頭の説明と、VER_HEAD・VER_SUB は版の画像の alt とそろえている
 TAGLINE = "Markdown を内包した、1 つの HTML ファイルで配れる文書のテンプレート"
 SUB = "目次・スライド・ライトとダーク・版の管理まで、ファイル 1 つで"
 VER_HEAD = "版を確定して、ファイルの中に残す"

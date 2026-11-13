@@ -16,20 +16,20 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-views-dark.png">
-    <img src="docs/images/readme-views-light.png" alt="同じ文書を、Markdown・HTML（ライト）・HTML（ダーク）・スライドで表示したところ">
+    <img src="docs/images/readme-views-light.png" alt="同じ文書（受注管理システム 基本設計書）を、Markdown・HTML（ライトとダーク）・スライド（ライトとダーク）で表示したところ">
   </picture>
 </p>
 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-versions-dark.png">
-    <img src="docs/images/readme-versions-light.png" alt="版の管理の一覧と、版 1.1 と 1.2 の比較">
+    <img src="docs/images/readme-versions-light.png" alt="版を確定して、ファイルの中に残す。確定した版は全文でファイルに入る。どの 2 つの版でも、変わったところを文書の上で見比べられる（版の管理の一覧と、版 1.1 と 1.2 の比較の画面）">
   </picture>
 </p>
 
-<!-- 画像は python tools/make_readme_images.py で作り直す -->
+<!-- 画像は python tools/make_readme_images.py で作り直す。画像の文言を変えたら、alt も合わせる -->
 
-Markdown を内包した、1 つの HTML ファイルで配れるレポートのテンプレート。調査メモや設計書を、目次・スライド・版の管理付きで読めるようにする。
+Markdown を内包した、1 つの HTML ファイルで配れる文書のテンプレート。調査メモや設計書を、目次・スライド・版の管理付きで読めるようにする。
 
 - 本体: [template-guide.src.html](template-guide.src.html)
 - 圧縮版: [template-guide.min.html](template-guide.min.html)。Node.js と npm がある環境で `python -I tools/minify_html.py` を実行すると、esbuild で CSS・JavaScript だけを圧縮して再生成する（初回はツールを取得する）。埋め込み Markdown と版データは保持する
