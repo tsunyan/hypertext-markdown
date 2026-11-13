@@ -3381,7 +3381,12 @@ const store = {
 const escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const escAttr = s => escHtml(s).replace(/"/g, '&quot;');
 const escText = s => String(s).replace(/&(?!#?[A-Za-z0-9]+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const stripTags = s => String(s).replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+/* タグを除いて文字にする。<scr<b>ipt> のように、除いたあとにタグが残る形があるので、変わらなくなるまで繰り返す */
+const stripTags = s => {
+  let t = String(s), prev;
+  do { prev = t; t = t.replace(/<[^>]*>/g, ''); } while (t !== prev);
+  return t.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+};
 const truthy = v => /^(true|yes|on|1)$/i.test(String(v == null ? '' : v).trim());
 const cssString = s => '"' + String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/</g, '\\3c ').replace(/[\r\n]+/g, ' ') + '"';
 const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
