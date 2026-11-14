@@ -17,7 +17,10 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
 | `samples/sample-versioned.src.html` | 生成物 | `python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html` |
 | `skills/hypertext-markdown/assets/template.html` | 生成物 | `python -I tools/make_skeleton.py`（圧縮版から Markdown と版を抜いた空のテンプレート） |
 | `skills/hypertext-markdown/` のほかのファイル | 正本 | `SKILL.md`・`references/authoring.md`・`scripts/build.mjs` |
-| `samples/template-guide-<キー>.src.html` | 生成物（作り直せない） | `tools/make_brand.py` で作ったブランド見本。いまのテンプレートからは作り直せない（ツールの説明を参照）。テンプレートを直しても更新しない |
+| `samples/template-guide-<デザイン>.src.html` | 生成物 | `python -I tools/make_design.py`（デザインの見本。`cyber`・`cute`・`pop`・`natural` の 4 つ。テンプレートに `samples/design/` の CSS・ロゴ・favicon を重ねる） |
+| `samples/design/` | 正本 | デザインの素材。`designs.json`（一覧）、`<デザイン>.css`、`<デザイン>-logo.svg`・`-logo-dark.svg`・`-favicon.svg` |
+| `samples/design/overview-*.png` | 生成物 | `python tools/make_design_overview.py`（デザインの見本の表紙を並べた README 用の画像。デザインの見た目を変えたら作り直す） |
+| `samples/template-guide-<キー>.src.html`（`c1`〜`c5`・`f1`・`h1`〜`h3`） | 生成物（作り直せない） | `tools/make_brand.py` で作ったブランド見本。いまのテンプレートからは作り直せない（ツールの説明を参照）。テンプレートを直しても更新しない |
 | `samples/brand/` | 素材 | ブランド見本のロゴと色 |
 | `docs/images/readme-*.png` | 生成物 | `python tools/make_readme_images.py`（見本の画面を Playwright で撮り、README の先頭の画像をライトとダークの 2 枚ずつ作る。見た目を変えたら作り直す） |
 | `graft/` | 生成物 | コード検索の索引（git では管理しない） |
@@ -40,6 +43,7 @@ graft の索引があるときは、`graft grep "<名前>"` や `graft ask "<知
 - **描画結果を変えたら `ENGINE` を上げる。** 開いたときに、保存済みの描画結果を再利用するかを `ENGINE` と Markdown のハッシュで判定している。上げないと、古い描画のまま表示される
 - **script 要素を壊さない。** Markdown の中の `</script>` と `<script` は `<\/script>`・`<\script` で持つ（`escScript()` と `readScript()`）。JavaScript の中では `<!--` の後に `<script` と書かない（`tools/check.py` が調べる）
 - **スライドは 80% 以上で収める。** 部品を足したり CSS を変えたりしたら、利用ガイドと見本の全スライドが縮小 80% 以上で収まることをテストで確かめる
+- **デザインの見本は CSS だけで作る。** `samples/design/<デザイン>.css` は、テンプレートの `<style>` の後ろに重ねるだけで、Markdown と JavaScript は変えない。部品の HTML の作りやクラス名を変えたら、4 つの CSS も合わせる
 
 ## 変更の種類ごとの手順
 
@@ -49,12 +53,13 @@ graft の索引があるときは、`graft grep "<名前>"` や `graft ask "<知
 2. `python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html`
 3. `python -I tools/minify_html.py`
 4. `python -I tools/make_skeleton.py`（3 の圧縮版から作るので、必ず 3 の後）
-5. 見た目が変わったら `python tools/make_readme_images.py`（README の画像）
+5. `python -I tools/make_design.py`（デザインの見本）
+6. 見た目が変わったら `python tools/make_readme_images.py`（README の画像）
 
 **利用ガイド（Markdown）を直す**
 
 1. `md-source` を直し、同じ内容を、いちばん新しい見本の版（`class="md-version"` の 1.1）にも入れる。食い違うと `tools/check.py` が知らせる
-2. 上の 2〜4 を実行する
+2. 上の 2〜5 を実行する
 
 **部品（`:::名前`）や書式を足す**
 
@@ -62,6 +67,19 @@ graft の索引があるときは、`graft grep "<名前>"` や `graft ask "<知
 2. 利用ガイドに節と `example` の見本を足す（見本は 1 か所に書けば表示と書き方がずれない）
 3. `skills/hypertext-markdown/references/authoring.md` に、構文と最小の例を足す。利用ガイドにある囲みの名前とフロントマターのキーが authoring.md に無いと、`tools/check.py` が知らせる
 4. README の部品の表を直す
+
+**デザインの見本を直す・足す**
+
+1. `samples/design/<デザイン>.css` を直す。足すときは、`designs.json` にキーを足し、CSS・ロゴ（ライト用とダーク用）・favicon を置く
+2. `python -I tools/make_design.py` で見本を作り直す（キーを付けると、そのデザインだけ）
+3. 見た目が変わったら `python tools/make_design_overview.py`（README の画像）
+
+CSS の約束は次のとおり。
+
+- 色の変数は `:root:root` に、`light-dark(ライト用, ダーク用)` で 1 回だけ書く。テンプレートのダーク用の指定より強く、文書のフロントマターの `palette`・`accent` よりは弱い。印刷はテンプレートが `color-scheme: light` にするので、ライト用の色になる
+- 外から読むものを足さない（書体は、利用者の PC にあるものを順に並べる。絵は `data:` の SVG で持つ）
+- スライドの高さを増やす指定（余白・枠・行間）は、読み物だけに効くよう `#ui-content` を付ける。変えたら、全スライドが 80% 以上で収まることをテストで確かめる
+- フォーカスの枠が切れるので、ボタンやリンクに `clip-path` を使わない
 
 **スキルを直す**
 
@@ -79,8 +97,8 @@ python -I tools/check.py
 python -m pytest -q
 ```
 
-- `tools/check.py`: script 要素の壊れ、JavaScript の構文、生成物が正本から作り直したものと同じこと、authoring.md の網羅
-- `tests/test_smoke.py`: Chromium で開いてエラーが無いこと、全スライドが収まること、版の比較、保存と開き直し、スキルの空のテンプレートと `build.mjs` の往復
+- `tools/check.py`: script 要素の壊れ、JavaScript の構文、生成物（見本・デザインの見本・スキルのテンプレート）が正本から作り直したものと同じこと、authoring.md の網羅
+- `tests/test_smoke.py`: Chromium で開いてエラーが無いこと、全スライドが収まること（デザインの見本も）、版の比較、保存と開き直し、スキルの空のテンプレートと `build.mjs` の往復
 - 見た目の変更は、ライトとダーク、1366px 幅と 375px 幅で画面を見て確かめる。Firefox と Safari は確かめていない
 
 ## 書き方の慣習

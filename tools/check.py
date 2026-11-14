@@ -9,6 +9,7 @@
 5. スキルの空のテンプレートが、いまの圧縮版から作り直したものと同じ
 6. スキルの authoring.md に、利用ガイドで使っている囲みの名前と、フロントマターのキーがすべて出てくる
 7. スキルの scripts/build.mjs に構文の誤りがない
+8. デザインの見本（samples/template-guide-<キー>.src.html）が、いまのテンプレートと samples/design/ の素材から作り直したものと同じ
 """
 import importlib.util
 import re
@@ -91,6 +92,22 @@ def check_sample(errors, workdir):
         )
 
 
+def check_designs(template, errors):
+    make_design = load_tool("make_design")
+    stale = []
+    for key in make_design.designs():
+        dest = make_design.dest_path(key)
+        if not dest.exists() or make_design.build(template, key).encode("utf-8") != dest.read_bytes():
+            stale.append(key)
+            continue
+        check_script_blocks(dest, dest.read_text(encoding="utf-8"), errors)
+    if stale:
+        errors.append(
+            "デザインの見本が、いまのテンプレートと samples/design/ の素材から作ったものと違う: " + "、".join(stale)
+            + "。python -I tools/make_design.py で作り直す"
+        )
+
+
 def normalize_md(body):
     """テンプレートの readScript() と同じ正規化（先頭の空行と末尾の空白を除き、共通の字下げを取る）。"""
     raw = re.sub(r"\r\n?", "\n", body)
@@ -168,10 +185,11 @@ def main():
         check_skeleton(errors)
         check_authoring(template, errors)
         check_build_script(errors)
+        check_designs(template, errors)
     if errors:
         print("\n".join("NG " + e for e in errors))
         sys.exit(1)
-    print("OK: script 要素、JavaScript の構文、見本の同期、テンプレートの見本の版、スキルのテンプレート・書式の説明・build.mjs")
+    print("OK: script 要素、JavaScript の構文、見本の同期、テンプレートの見本の版、スキルのテンプレート・書式の説明・build.mjs、デザインの見本")
 
 
 if __name__ == "__main__":

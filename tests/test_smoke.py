@@ -3,6 +3,7 @@
 使い方: python -m pytest -q（事前に pip install -r requirements-dev.txt と python -m playwright install chromium）
 図（Mermaid）は CDN から読むので、ネットワークにつながっている必要がある。
 """
+import json
 import re
 import shutil
 import subprocess
@@ -18,6 +19,11 @@ SKILL = ROOT / "skills" / "hypertext-markdown"
 SKELETON = SKILL / "assets" / "template.html"
 BUILD = SKILL / "scripts" / "build.mjs"
 MIN_SCALE = 80  # CONFIG.slideMinScale
+# デザインの見本（samples/design/designs.json のキーごとに 1 つ）
+DESIGNS = [
+    ROOT / "samples" / f"template-guide-{key}.src.html"
+    for key in json.loads((ROOT / "samples" / "design" / "designs.json").read_text(encoding="utf-8"))
+]
 
 MERMAID_SETTLED = """() => [...document.querySelectorAll('.mermaid-block')]
   .every(b => b.dataset.state === 'done' || b.dataset.state === 'error' || b.querySelector('.mermaid-note'))"""
@@ -78,7 +84,7 @@ def doc_facts(page):
     )
 
 
-@pytest.mark.parametrize("path", [TEMPLATE, SAMPLE], ids=lambda p: p.name)
+@pytest.mark.parametrize("path", [TEMPLATE, SAMPLE, *DESIGNS], ids=lambda p: p.name)
 def test_renders_without_errors(opened, path):
     o = opened()
     page = o.goto(path)
@@ -93,8 +99,8 @@ def test_renders_without_errors(opened, path):
 
 @pytest.mark.parametrize(
     "path,view",
-    [(TEMPLATE, ""), (TEMPLATE, "compare=1.0..1.1"), (SAMPLE, ""), (SAMPLE, "compare=1.0..work")],
-    ids=["template", "template-compare", "sample", "sample-compare"],
+    [(TEMPLATE, ""), (TEMPLATE, "compare=1.0..1.1"), (SAMPLE, ""), (SAMPLE, "compare=1.0..work"), *[(d, "") for d in DESIGNS]],
+    ids=["template", "template-compare", "sample", "sample-compare", *[d.name for d in DESIGNS]],
 )
 def test_every_slide_fits(opened, path, view):
     o = opened()
@@ -146,7 +152,7 @@ def md_blocks(html):
     return work.strip(), len(re.findall(r'<script type="text/markdown" class="md-version"', html))
 
 
-@pytest.mark.parametrize("path", [TEMPLATE, SAMPLE], ids=lambda p: p.name)
+@pytest.mark.parametrize("path", [TEMPLATE, SAMPLE, *DESIGNS], ids=lambda p: p.name)
 def test_save_round_trip(opened, path, tmp_path):
     o = opened()
     page = o.goto(path)
