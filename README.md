@@ -36,9 +36,30 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
 - 使い方と全部品の見本はファイルの中に書いてある。ブラウザで開けばそのまま読める（<kbd>?</kbd> でショートカットの一覧、<kbd>E</kbd> で Markdown を表示）
 - 版管理の見本: [samples/sample-versioned.src.html](samples/sample-versioned.src.html)（版 1.0〜1.2 と未確定の変更が入った基本設計書。<kbd>V</kbd> で版の一覧を開いて比較できる）
   - テンプレートを直したら、`python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html` で作り直す（テンプレートに入っている利用ガイドの版は持ち込まない）
+- デザインの見本: 同じテンプレートに、CSS・ロゴ・favicon だけを重ねて見た目を変えたもの。中身は本体と同じ利用ガイドで、どれもライトとダークに対応している（下の「デザインの見本」を参照）
 - テンプレート自体にも、利用ガイドの見本の版（1.0・1.1）が入っている。中身は説明用で、実際の改版の経緯ではない
   - 新しい文書を作るときは、<kbd>V</kbd> の「版をすべて削除」で消す。`.md` をドロップしたときは、版を消すかを聞かれる
 - 本文も版も入っていない空のテンプレート: [skills/hypertext-markdown/assets/template.html](skills/hypertext-markdown/assets/template.html)（開くと、`.md` のドロップか <kbd>E</kbd> で書き始めるよう案内する）
+
+## デザインの見本
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="samples/design/overview-dark.png">
+    <img src="samples/design/overview-light.png" alt="デザインの見本 4 つの表紙。左上からサイバー、キュート、ポップ、ナチュラル">
+  </picture>
+</p>
+
+| 見本 | 系統 | 見た目 |
+|---|---|---|
+| [template-guide-cyber.src.html](samples/template-guide-cyber.src.html) | サイバー・テクノロジー系 | 計器盤と設計図。方眼の面、囲みの四隅の照準の印、見出しの下の目盛り、等幅の数字。ライトは群青と紅、ダークはシアンとマゼンタ |
+| [template-guide-cute.src.html](samples/template-guide-cute.src.html) | 可愛い系 | ファンシー文具とシール帳。水玉の台紙に載せた紙、丸い字、縫い目の点線、花形の章番号、マスキングテープのカード |
+| [template-guide-pop.src.html](samples/template-guide-pop.src.html) | ポップ系 | まんがと駄菓子の包み紙。太い線とずらした影、黄色の札の題名、極太の見出し、網点。コードは黒い板に載せる |
+| [template-guide-natural.src.html](samples/template-guide-natural.src.html) | ナチュラル系 | 植物標本と手すきの紙。明朝の見出し、欧文の斜体の番号、細い線、葉の形の角、苔と樹皮の色 |
+
+- 使い方は本体と同じ。`md-source` の Markdown を書き換えるか、`.md` をドロップする。フロントマターの `palette`・`accent`・`font`・`logo` も効く
+- 書体は、開いた PC に入っているものを使う（外からは読み込まない）。丸ゴシックや明朝が無い PC では、近い書体に置き換わる
+- 素材は [samples/design/](samples/design/) にある。CSS を直したら `python -I tools/make_design.py` で作り直す。画像は `python tools/make_design_overview.py`
 
 ## AI エージェントで使う
 
@@ -198,12 +219,13 @@ python -m pytest -q
 
 テンプレートの利用ガイドを直したら、同じ内容を見本の版 1.1 にも入れ、見本を作り直す。どちらかを忘れると `tools/check.py` が知らせる。
 
-テンプレートを直したあとは、見本・圧縮版・スキルの空のテンプレートをこの順で作り直す（空のテンプレートは圧縮版から作る）。
+テンプレートを直したあとは、見本・圧縮版・スキルの空のテンプレート・デザインの見本をこの順で作り直す（空のテンプレートは圧縮版から作る）。
 
 ```bash
 python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html
 python -I tools/minify_html.py
 python -I tools/make_skeleton.py
+python -I tools/make_design.py
 ```
 
 AI エージェント向けの開発の約束は [AGENTS.md](AGENTS.md) にある。

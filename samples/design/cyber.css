@@ -1,0 +1,329 @@
+/* ==========================================================================
+   サイバー（サイバー・テクノロジー系）
+   計器盤と設計図。面は方眼、囲みの四隅に照準の印、見出しの下は目盛り。
+   数字と記号は等幅の書体で、色はライトが群青と紅、ダークがシアンとマゼンタ。
+   色は light-dark() で 1 か所に書く（テーマと印刷は、テンプレートの color-scheme に従う）
+   ========================================================================== */
+:root:root {
+  --font: "Backslash Sans", "Segoe UI", "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", "BIZ UDPGothic", Meiryo, sans-serif;
+  --mono: "Cascadia Mono", "Cascadia Code", "SF Mono", Menlo, Consolas, "BIZ UDGothic", "Osaka-Mono", monospace;
+  --display: Bahnschrift, "DIN Alternate", "Avenir Next Condensed", "Segoe UI", "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", "BIZ UDPGothic", Meiryo, sans-serif;
+  --num: Bahnschrift, "DIN Alternate", var(--mono);
+
+  --accent: light-dark(#1146dc, #3de0ff);
+  --accent-2: light-dark(#cf1578, #ff53aa);
+  --tint: var(--accent);
+  --bg: light-dark(#f1f4f9, #070b14);
+  --bg-side: light-dark(#e8ecf4, #050810);
+  --bg-sunken: light-dark(#e2e7f1, #0d1422);
+  --panel: light-dark(#fbfcfe, #0a101c);
+  --ink: light-dark(#0b1530, #d6e2f5);
+  --ink-2: light-dark(#4b5a7b, #8195b8);
+  --rule: light-dark(#c4cde0, #1c2a44);
+  --frame: light-dark(#0b1530, #a3b7da);
+  --frame-inner: light-dark(#93a1bd, #3a4d70);
+  --accent-soft: color-mix(in srgb, var(--accent) 10%, transparent);
+  --grid-minor: color-mix(in srgb, var(--accent) 6%, transparent);
+  --grid-major: color-mix(in srgb, var(--accent) 13%, transparent);
+  --glow: light-dark(transparent, color-mix(in srgb, var(--accent) 45%, transparent));
+  --shadow-pop: 0 18px 44px -14px light-dark(rgb(11 21 48 / .35), rgb(0 0 0 / .8)), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+  --seal: var(--accent-2);
+  --mark: light-dark(#ffec80, rgb(255 226 80 / .28));
+  --c-note: light-dark(#1146dc, #3de0ff);
+  --c-tip: light-dark(#0b8552, #5cf0a2);
+  --c-important: light-dark(#7430dc, #b796ff);
+  --c-warning: light-dark(#9c5b00, #ffc24f);
+  --c-caution: light-dark(#cf1548, #ff6080);
+  --tk-com: light-dark(#6b7a99, #63779b); --tk-kw: light-dark(#cf1578, #ff53aa); --tk-str: light-dark(#0b7a56, #5cf0a2);
+  --tk-num: light-dark(#1146dc, #3de0ff); --tk-fn: light-dark(#7430dc, #b796ff); --tk-type: light-dark(#9c5b00, #ffc24f);
+  --tk-var: light-dark(#9c5b00, #ffc24f); --tk-attr: light-dark(#1146dc, #3de0ff); --tk-tag: light-dark(#0b7a56, #5cf0a2);
+  --tk-meta: light-dark(#7430dc, #b796ff); --tk-sec: light-dark(#1146dc, #3de0ff); --tk-op: light-dark(#4b5a7b, #8195b8);
+  --tk-c0: light-dark(#1146dc, #3de0ff); --tk-c1: light-dark(#cf1578, #ff53aa); --tk-c2: light-dark(#0b7a56, #5cf0a2);
+  --tk-c3: light-dark(#7430dc, #b796ff); --tk-c4: light-dark(#9c5b00, #ffc24f); --tk-c5: light-dark(#4b5a7b, #8195b8);
+  --chart-1: var(--tk-c0); --chart-2: var(--tk-c1); --chart-3: var(--tk-c2); --chart-4: var(--tk-c3);
+  --chart-5: var(--tk-c4); --chart-6: var(--tk-c5); --chart-7: light-dark(#0e7fa8, #8fb4ff); --chart-8: var(--tk-com);
+  --chart-on: light-dark(#fff, #050810);
+}
+
+/* 四隅の照準の印。--hc（色）・--hl（長さ）・--hw（太さ）・--hi（内側への寄せ）を、使う要素で決める */
+.doc-header, .alert, .c-summary, .help-card, .slide, .drop-overlay > div {
+  --hc: var(--accent); --hl: 14px; --hw: 2px; --hi: 0px;
+  --hud:
+    linear-gradient(var(--hc), var(--hc)) left var(--hi) top var(--hi) / var(--hl) var(--hw) no-repeat,
+    linear-gradient(var(--hc), var(--hc)) left var(--hi) top var(--hi) / var(--hw) var(--hl) no-repeat,
+    linear-gradient(var(--hc), var(--hc)) right var(--hi) top var(--hi) / var(--hl) var(--hw) no-repeat,
+    linear-gradient(var(--hc), var(--hc)) right var(--hi) top var(--hi) / var(--hw) var(--hl) no-repeat,
+    linear-gradient(var(--hc), var(--hc)) left var(--hi) bottom var(--hi) / var(--hl) var(--hw) no-repeat,
+    linear-gradient(var(--hc), var(--hc)) left var(--hi) bottom var(--hi) / var(--hw) var(--hl) no-repeat,
+    linear-gradient(var(--hc), var(--hc)) right var(--hi) bottom var(--hi) / var(--hl) var(--hw) no-repeat,
+    linear-gradient(var(--hc), var(--hc)) right var(--hi) bottom var(--hi) / var(--hw) var(--hl) no-repeat;
+}
+
+/* ---------- 土台 ---------- */
+body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(1100px 480px at 82% -6%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+  background-size: auto, 28px 28px, 28px 28px;
+  background-attachment: fixed, scroll, scroll;
+}
+::selection { background: var(--accent); color: var(--bg); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent); }
+kbd {
+  padding: .08em .5em; border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--rule)); border-bottom: 2px solid var(--accent);
+  border-radius: 0; background: var(--panel); color: var(--ink); font-size: .8em;
+}
+
+/* ---------- ツールバー ---------- */
+.topbar { background: color-mix(in srgb, var(--bg-side) 84%, transparent); border-bottom-color: var(--rule); }
+.topbar::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, var(--accent), transparent 42%); pointer-events: none; }
+.topbar-title { align-items: center; }
+#ui-title { font-family: var(--display); font-weight: 600; letter-spacing: .05em; }
+/* 題名の前の小さな灯り（角を 1 つ落とした四角）。このデザインの印として、目次やスライドにも置く */
+#ui-title::before, .toc-label::before, .slide-crumb::before {
+  content: ""; display: inline-block; width: .62em; height: .62em; margin-right: .7em; background: var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% 58%, 58% 100%, 0 100%); box-shadow: 0 0 10px var(--glow);
+}
+.topbar-crumb { font-family: var(--mono); font-size: 12.5px; letter-spacing: .01em; }
+.topbar-crumb > span + span::before { border-color: var(--accent); }
+.read-progress { z-index: 1; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow: 0 0 10px var(--glow); }
+.icon-btn, .theme-trigger { border-radius: 0; }
+.icon-btn:hover { background: color-mix(in srgb, var(--accent) 13%, transparent); box-shadow: inset 0 -2px 0 var(--accent); }
+.theme-menu { border-radius: 0; border-color: color-mix(in srgb, var(--accent) 35%, var(--rule)); background: var(--panel); box-shadow: var(--shadow-pop); }
+:root:root .theme-menu { box-shadow: var(--shadow-pop); }
+.theme-option { border-radius: 0; }
+.theme-option[aria-checked="true"] { box-shadow: inset 2px 0 0 var(--accent); }
+
+/* ---------- 目次 ---------- */
+.sidebar { background: color-mix(in srgb, var(--bg-side) 78%, transparent); }
+.toc-label { margin-left: 2px; font-family: var(--display); font-size: 12.5px; letter-spacing: .22em; color: var(--ink-2); }
+.toc { border-left-color: var(--rule); }
+.toc a { border-radius: 0; }
+.toc a:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.toc a.active { color: var(--ink); background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 17%, transparent), transparent 85%); }
+.toc .lv2 > a { font-family: var(--display); font-weight: 600; letter-spacing: .03em; }
+.toc-no { font-family: var(--mono); font-size: .92em; }
+.toc a .toc-hits { border-radius: 0; }
+
+/* ---------- 表紙 ---------- */
+#ui-doc .doc-header {
+  position: relative; margin: .4rem 0 4rem; padding: 2.3rem 2.2rem 2rem; border: 1px solid var(--rule); --hl: 22px;
+  background: var(--hud), linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent 62%), color-mix(in srgb, var(--panel) 72%, transparent);
+  background-origin: border-box;
+}
+.doc-header .doc-title { font-family: var(--display); font-weight: 700; letter-spacing: .03em; line-height: 1.25; }
+/* 題名の後ろのカーソル。開いたときに数回だけ点滅する */
+.doc-header .doc-title::after { content: ""; display: inline-block; width: .42em; height: .86em; margin-left: .16em; background: var(--accent); vertical-align: -.06em; box-shadow: 0 0 14px var(--glow); }
+.doc-header .doc-subtitle { color: var(--ink-2); }
+.doc-header .tb-meta {
+  gap: 1rem 2.6rem; padding-top: 1.4rem;
+  background: linear-gradient(var(--accent), var(--accent)) left top / 3.4em 5px no-repeat,
+    repeating-linear-gradient(90deg, var(--frame-inner) 0 2px, transparent 2px 6px) left top / 100% 5px no-repeat;
+}
+.doc-header .tb-meta dt { font-family: var(--display); letter-spacing: .12em; }
+.doc-header .tb-meta dd { font-family: var(--mono); font-size: 15px; letter-spacing: 0; }
+.stamp, .classif { border-radius: 0; font-family: var(--display); letter-spacing: .12em; }
+.stamp::before { border-radius: 0; box-shadow: 0 0 8px currentColor; }
+.classif { border-style: dashed; }
+.doc-empty { border-radius: 0; border-color: var(--frame-inner); }
+@media (prefers-reduced-motion: no-preference) {
+  .intro .doc-header .doc-title { animation: cy-type .9s steps(26, end) .1s both; }
+  .intro .doc-header .doc-title::after { animation: cy-blink .9s steps(1, end) 1s 4; }
+  .intro .doc-header .tb-meta { animation: cy-meter .9s cubic-bezier(.3, .7, .2, 1) .3s both; }
+}
+@keyframes cy-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 -1em 0 0); } }
+@keyframes cy-blink { 50% { opacity: 0; } }
+@keyframes cy-meter { from { background-size: 0 5px, 0 5px; } }
+
+/* ---------- 本文 ---------- */
+.md h1, .md h2, .md h3, .md h4 { font-family: var(--display); letter-spacing: .04em; }
+/* 章の見出しの下は目盛り。左端だけ強調の色で埋める */
+.md h2 {
+  padding-bottom: .58em;
+  background: linear-gradient(var(--accent), var(--accent)) left bottom / 3.4em 5px no-repeat,
+    repeating-linear-gradient(90deg, var(--frame-inner) 0 2px, transparent 2px 6px) left bottom / 100% 5px no-repeat;
+}
+.secno { font-family: var(--mono); font-size: .92em; font-weight: 700; letter-spacing: -.02em; }
+/* 章番号は、角を落とした札にする */
+.md h2 > .secno {
+  display: inline-block; margin-right: .75em; padding: .22em .62em .2em .5em; background: var(--accent); color: var(--bg);
+  font-size: .68em; line-height: 1.2; vertical-align: .22em;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - .5em), calc(100% - .5em) 100%, 0 100%);
+}
+.md h3 > .secno::after { content: " /"; color: var(--frame-inner); font-weight: 400; }
+.md h5, .md h6 { font-family: var(--display); letter-spacing: .1em; }
+.md a { text-decoration-style: dotted; text-decoration-thickness: 1.5px; text-decoration-color: color-mix(in srgb, currentColor 55%, transparent); }
+.md a:hover { text-decoration-style: solid; text-shadow: 0 0 12px var(--glow); }
+.md code { border-radius: 0; background: var(--accent-soft); color: color-mix(in oklab, var(--accent) 72%, var(--ink)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent); }
+.md hr { border: 0; height: 5px; background: repeating-linear-gradient(90deg, var(--frame-inner) 0 2px, transparent 2px 6px); }
+.md blockquote { border-left: 2px solid var(--accent-2); background: linear-gradient(90deg, color-mix(in srgb, var(--accent-2) 7%, transparent), transparent 70%); }
+.md details { border-radius: 0; background: color-mix(in srgb, var(--panel) 70%, transparent); }
+.md details:not(.gh-file) > summary::before { border-color: var(--accent); }
+.md li::marker { color: var(--accent); }
+.md ul { list-style-type: square; }
+.md li.task > input { accent-color: var(--accent); }
+
+.codeblock { border-radius: 0; border-left: 2px solid var(--accent); background: var(--bg-sunken); }
+.code-head { border-bottom-style: dashed; background: transparent; font-family: var(--mono); font-size: 12px; }
+.code-lang { color: var(--accent-2); }
+.copy-btn, .tbl-copy, .btn, .gh-view, .vb-seg, .tbl-filter { border-radius: 0; }
+.copy-btn, .tbl-copy { background: transparent; font-family: var(--mono); }
+.copy-btn:hover, .tbl-copy:hover, .btn:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 12px -2px var(--glow); }
+.md .codeblock code { color: inherit; }
+.gh-diff { border-radius: 0; }
+.gh-badge { border-radius: 0; }
+.mermaid-block .mermaid-src { border-radius: 0; }
+
+.table-scroll { border-radius: 0; background: color-mix(in srgb, var(--panel) 70%, transparent); }
+.table-scroll.fits thead tr:first-child th:first-child, .table-scroll.fits thead tr:first-child th:last-child { border-radius: 0; }
+.md thead th { background: color-mix(in oklab, var(--accent) 9%, var(--bg-sunken)); border-bottom: 2px solid var(--accent); font-family: var(--display); font-weight: 600; letter-spacing: .05em; }
+.md th + th, .md td + td { border-left-style: dotted; }
+.table-scroll tbody tr:not([class]):hover td { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+.md .gh-table td { border: 0; }
+
+.alert {
+  --hc: var(--c); --hl: 10px;
+  padding: .8em 1.2em .85em; border: 1px solid color-mix(in srgb, var(--c) 30%, transparent); border-radius: 0;
+  background: var(--hud), linear-gradient(90deg, color-mix(in srgb, var(--c) 11%, transparent), color-mix(in srgb, var(--c) 3%, transparent));
+  background-origin: border-box;
+}
+.md .alert-title { font-family: var(--display); letter-spacing: .08em; }
+
+.doc-footer { border-top: 0; padding-top: 1.4rem; background: repeating-linear-gradient(90deg, var(--frame-inner) 0 2px, transparent 2px 6px) left top / 100% 5px no-repeat; font-size: 12.5px; }
+
+/* ---------- 囲み ---------- */
+.md .c-title { font-family: var(--display); letter-spacing: .05em; }
+.md .item-title { font-family: var(--display); letter-spacing: .03em; }
+
+.c-steps .c-items > li::before {
+  border: 1px solid var(--accent); border-radius: 0; font-family: var(--mono); font-weight: 700;
+  background: linear-gradient(135deg, var(--accent) .42em, transparent 0), var(--panel);
+}
+.c-steps .c-items > li::after { border-left: 1px dashed var(--frame-inner); }
+
+.c-flow .c-items > li { border-radius: 0; border-color: var(--frame-inner); background: linear-gradient(225deg, var(--accent) 6px, transparent 0), var(--panel); }
+
+.c-timeline .tl-when { font-family: var(--mono); font-weight: 400; font-size: .92em; }
+.c-timeline .tl-what { border-left: 1px dashed var(--frame-inner); }
+.c-timeline .tl-what::before { left: -5px; border: 1.5px solid var(--accent); border-radius: 0; transform: rotate(45deg); box-shadow: 0 0 10px var(--glow); }
+
+.c-cards .card { border-radius: 0; border-color: var(--rule); background: linear-gradient(225deg, var(--accent) 7px, transparent 0), var(--panel); }
+.c-cards .card.is-best { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 22px -6px var(--glow); }
+.md .c-cards .card-title, .c-cards .card .item-title { font-family: var(--display); letter-spacing: .04em; }
+
+.c-compare .panel { border-radius: 0; background: var(--panel); }
+.c-compare .panel-head { background: var(--bg-sunken); font-family: var(--display); letter-spacing: .05em; }
+.c-compare .panel.is-best { box-shadow: 0 0 0 1px var(--accent), 0 0 22px -6px var(--glow); }
+.c-compare .panel.is-best .panel-head::after { border-radius: 0; }
+.c-pros-cons .panel-head { font-family: var(--display); letter-spacing: .06em; }
+
+.c-tabs .tab { font-family: var(--display); letter-spacing: .05em; }
+.c-tabs .tab[aria-selected="true"] { color: var(--accent); background: linear-gradient(0deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent); }
+
+.c-summary { --hl: 12px; border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent); border-radius: 0; background: var(--hud), var(--accent-soft); background-origin: border-box; }
+.md .c-summary .c-title { letter-spacing: .16em; }
+.c-lead {
+  padding-left: 1em; border-left: 0; font-family: var(--display); letter-spacing: .04em;
+  background: linear-gradient(var(--accent), var(--accent)) left / 4px 100% no-repeat, linear-gradient(var(--accent-2), var(--accent-2)) 7px 0 / 1px 100% no-repeat;
+}
+
+.c-metrics .metric { background: linear-gradient(var(--accent), var(--accent)) left top / 1.5em 2px no-repeat; }
+.c-metrics .c-items { border-top-style: solid; }
+.c-metrics .metric + .metric { border-left-style: dashed; }
+.c-metrics .metric-value { font-weight: 600; text-shadow: 0 0 22px var(--glow); }
+
+/* 進捗は、区切りのあるメーターにする */
+.c-progress .bar { height: .72em; border-radius: 0; background: var(--bg-sunken); box-shadow: inset 0 0 0 1px var(--rule); }
+.c-progress .bar > i { background: repeating-linear-gradient(90deg, var(--accent) 0 5px, transparent 5px 7px); }
+.c-progress .is-done .bar > i { background: repeating-linear-gradient(90deg, var(--c-tip) 0 5px, transparent 5px 7px); }
+.c-progress .bar-value { font-family: var(--mono); font-size: .88em; }
+
+.c-qa .q::before, .c-qa .a::before { top: .2em; width: 1.5em; border: 1px solid currentColor; font-family: var(--mono); font-size: .88em; line-height: 1.45; }
+.c-qa .a::before { color: var(--accent-2); }
+
+.md .c-quote blockquote { border-left: 2px solid var(--accent-2); }
+.c-figure .fig-no { color: var(--accent); font-family: var(--mono); font-size: .95em; }
+.c-spec dl > div { border-bottom-style: dashed; }
+.c-spec dt { font-family: var(--display); font-weight: 600; letter-spacing: .05em; }
+.c-tree li::before, .c-tree li::after { border-color: var(--accent); opacity: .55; }
+.lbl { border-radius: 0; font-family: var(--display); letter-spacing: .06em; }
+.menu-path { border-radius: 0; }
+.swatch { border-radius: 0; }
+
+/* ---------- 版・ダイアログ・通知 ---------- */
+.ver-banner { border-radius: 0; box-shadow: 0 0 22px -8px var(--glow); }
+.btn { background: transparent; font-family: var(--display); letter-spacing: .04em; }
+.btn.primary { background: var(--accent); color: var(--bg); font-weight: 700; }
+.btn.primary:hover { color: var(--bg); }
+.ver-form, .ver-form input, .ver-compare select { border-radius: 0; }
+.ver-table th { font-family: var(--display); letter-spacing: .06em; border-bottom-color: var(--accent); }
+.help { background: light-dark(rgb(11 21 48 / .42), rgb(2 4 10 / .7)); }
+.help-card {
+  --hl: 18px; border-radius: 0; border-color: color-mix(in srgb, var(--accent) 30%, var(--rule));
+  background: var(--hud), var(--panel); background-origin: border-box; box-shadow: var(--shadow-pop), 0 0 70px -24px var(--glow);
+}
+.help-head h2 { font-family: var(--display); letter-spacing: .08em; }
+.help h3 { font-family: var(--display); letter-spacing: .14em; }
+.help dl > div { border-top-style: dashed; }
+.toast { border: 1px solid var(--accent); border-radius: 0; background: var(--panel); color: var(--ink); font-family: var(--display); letter-spacing: .04em; box-shadow: var(--shadow-pop); }
+.search-bar { border-radius: 0; border-color: color-mix(in srgb, var(--accent) 45%, var(--rule)); background: var(--panel); }
+.tip { border-radius: 0; border-color: color-mix(in srgb, var(--accent) 40%, var(--rule)); background: var(--panel); }
+.drop-overlay > div { --hl: 18px; border: 1px dashed var(--accent); border-radius: 0; background: var(--hud), var(--panel); background-origin: border-box; font-family: var(--display); letter-spacing: .06em; }
+.width-grip { border-radius: 0; }
+.width-label { border-radius: 0; font-family: var(--mono); }
+.editor { background: var(--bg-side); }
+.editor-head strong { font-family: var(--display); letter-spacing: .1em; }
+
+/* ---------- スライド ---------- */
+.slide {
+  --hc: color-mix(in srgb, var(--accent) 70%, transparent); --hl: 26px; --hi: 22px;
+  background: var(--hud),
+    radial-gradient(900px 420px at 88% -10%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px) 0 0 / 40px 40px,
+    var(--bg);
+}
+.slide .slide-crumb { font-family: var(--display); font-weight: 600; letter-spacing: .1em; }
+.slide-num { font-family: var(--mono); letter-spacing: 0; }
+.slide-progress { background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow: 0 0 14px var(--glow); }
+.slide-body > :is(h1, h2, h3):first-child {
+  background: linear-gradient(var(--accent), var(--accent)) left bottom / 3.4em 6px no-repeat,
+    repeating-linear-gradient(90deg, var(--frame-inner) 0 3px, transparent 3px 9px) left bottom / 100% 6px no-repeat;
+}
+.slide.is-section .slide-body > :is(h1, h2):first-child { background-size: 3.4em 8px, 100% 8px; }
+/* 章の扉は、章番号を線だけの大きな数字にする */
+.slide.is-section .slide-body > :is(h1, h2):first-child > .secno {
+  display: block; margin: 0 0 .12em; padding: 0; background: none; clip-path: none; vertical-align: baseline;
+  font-family: var(--display); font-size: 3.4em; font-weight: 700; line-height: 1; letter-spacing: 0;
+  color: transparent; -webkit-text-stroke: 2px var(--accent); filter: drop-shadow(0 0 16px var(--glow));
+}
+.title-slide .doc-header .tb-meta { background-size: 3.4em 6px, 100% 6px; }
+.title-slide .doc-header .tb-meta dd { font-size: 20px; }
+
+/* ---------- 図（Mermaid）。図の中の色を、このデザインの色に合わせる ---------- */
+.mermaid-block .node :is(rect, polygon, circle, ellipse, path), .mermaid-block :is(rect.actor, .labelBox, .note) { fill: var(--panel) !important; stroke: var(--accent) !important; }
+.mermaid-block .cluster rect { fill: var(--accent-soft) !important; stroke: var(--frame-inner) !important; }
+.mermaid-block :is(.nodeLabel, .edgeLabel, .label, .cluster-label) { color: var(--ink) !important; }
+.mermaid-block :is(text, tspan) { fill: var(--ink) !important; }
+.mermaid-block :is(.edgeLabel, .edgeLabel p, .labelBkg) { background-color: var(--bg) !important; }
+.mermaid-block :is(.flowchart-link, .messageLine0, .messageLine1, .actor-line, .relation, .loopLine) { stroke: var(--ink-2) !important; }
+/* 手順の番号（丸の中の数字）。線の太さを変えると丸の大きさも変わるので、手順の線の太さは変えない */
+.mermaid-block marker circle { fill: var(--ink-2) !important; }
+.mermaid-block .sequenceNumber { fill: var(--bg) !important; }
+.mermaid-block :is(.marker, .arrowheadPath, marker path) { fill: var(--ink-2) !important; stroke: var(--ink-2) !important; }
+
+/* ---------- 狭い幅（目次は本文の上に重なるので、透かさない） ---------- */
+@media (max-width: 900px) {
+  .sidebar { background: var(--bg-side); }
+  #ui-doc .doc-header { padding: 1.8rem 1.3rem 1.5rem; }
+}
+
+/* ---------- 印刷 ---------- */
+@media print {
+  :root:root:not([data-print-none]) { --bg: #fff; --bg-side: #fff; --panel: #fff; --glow: transparent; }
+  body { background-image: none; }
+  #ui-doc .doc-header { background: var(--hud); background-origin: border-box; }
+  .doc-header .doc-title::after { display: none; }
+}
