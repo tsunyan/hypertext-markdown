@@ -17,9 +17,9 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
 | `samples/sample-versioned.src.html` | 生成物 | `python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html` |
 | `skills/hypertext-markdown/assets/template.html` | 生成物 | `python -I tools/make_skeleton.py`（圧縮版から Markdown と版を抜いた空のテンプレート） |
 | `skills/hypertext-markdown/` のほかのファイル | 正本 | `SKILL.md`・`references/authoring.md`・`scripts/build.mjs` |
-| `samples/template-guide-<デザイン>.src.html` | 生成物 | `python -I tools/make_design.py`（デザインの見本。`cyber`・`cute`・`pop`・`natural` の 4 つ。テンプレートに `samples/design/` の CSS・ロゴ・favicon を重ねる） |
-| `samples/design/` | 正本 | デザインの素材。`designs.json`（一覧）、`<デザイン>.css`、`<デザイン>-logo.svg`・`-logo-dark.svg`・`-favicon.svg` |
-| `samples/design/overview-*.png` | 生成物 | `python tools/make_design_overview.py`（デザインの見本の表紙を並べた README 用の画像。デザインの見た目を変えたら作り直す） |
+| `samples/template-guide-<デザイン>.src.html` | 生成物 | `python -I tools/make_design.py`（デザインの見本。`cyber`・`cute`・`pop`・`natural` の 4 つと、配色の見本 `cc-1`〜`cc-7` の 7 つ。テンプレートに `samples/design/` の CSS・ロゴ・favicon を重ねる） |
+| `samples/design/` | 正本 | デザインの素材。`designs.json`（一覧。`group` は一覧画像の組）、`<デザイン>.css`、`<デザイン>-logo.svg`・`-logo-dark.svg`・`-favicon.svg` |
+| `samples/design/overview-*.png` | 生成物 | `python tools/make_design_overview.py`（デザインの見本の表紙を並べた README 用の画像。`designs.json` の `group` ごとに 1 組で、`group` が無いものは `overview-{light,dark}.png`、`cc` は `overview-cc-{light,dark}.png`。デザインの見た目を変えたら作り直す） |
 | `samples/template-guide-<キー>.src.html`（`c1`〜`c5`・`f1`・`h1`〜`h3`） | 生成物（作り直せない） | `tools/make_brand.py` で作ったブランド見本。いまのテンプレートからは作り直せない（ツールの説明を参照）。テンプレートを直しても更新しない |
 | `samples/brand/` | 素材 | ブランド見本のロゴと色 |
 | `docs/images/readme-*.png` | 生成物 | `python tools/make_readme_images.py`（見本の画面を Playwright で撮り、README の先頭の画像をライトとダークの 2 枚ずつ作る。見た目を変えたら作り直す） |
@@ -70,7 +70,7 @@ graft の索引があるときは、`graft grep "<名前>"` や `graft ask "<知
 
 **デザインの見本を直す・足す**
 
-1. `samples/design/<デザイン>.css` を直す。足すときは、`designs.json` にキーを足し、CSS・ロゴ（ライト用とダーク用）・favicon を置く
+1. `samples/design/<デザイン>.css` を直す。足すときは、`designs.json` にキーを足し、CSS・ロゴ（ライト用とダーク用）・favicon を置き、`samples/index.html` にリンクを足す
 2. `python -I tools/make_design.py` で見本を作り直す（キーを付けると、そのデザインだけ）
 3. 見た目が変わったら `python tools/make_design_overview.py`（README の画像）
 
@@ -80,6 +80,7 @@ CSS の約束は次のとおり。
 - 外から読むものを足さない（書体は、利用者の PC にあるものを順に並べる。絵は `data:` の SVG で持つ）
 - スライドの高さを増やす指定（余白・枠・行間）は、読み物だけに効くよう `#ui-content` を付ける。変えたら、全スライドが 80% 以上で収まることをテストで確かめる
 - フォーカスの枠が切れるので、ボタンやリンクに `clip-path` を使わない
+- 配色の見本（`cc-<番号>`）は、色のデザインの見本として作る。固有名詞、既存のロゴやそれに似た形、専用の書体を、CSS・ロゴ・`designs.json`・文書のどこにも入れない（ロゴの印は `#` にする）
 
 **スキルを直す**
 

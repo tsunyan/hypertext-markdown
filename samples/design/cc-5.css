@@ -1,0 +1,220 @@
+/* ==========================================================================
+   CC-5（赤と黒）
+   制作ツールの画面。ツールバーと目次は濃い灰のパネル（ライトでも濃い）、本文はアートボード。
+   題名と推しのカードは「選択中」の枠とハンドルで囲み、表紙には色相の帯を引く。
+   進捗はスライダー、時系列はキーフレームのひし形。コードは、濃い灰のエディターに載せる。
+   色は light-dark() で 1 か所に書く（テーマと印刷は、テンプレートの color-scheme に従う）
+   ========================================================================== */
+:root:root {
+  --font: "Backslash Sans", "Segoe UI", "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", "BIZ UDPGothic", Meiryo, sans-serif;
+  --num: "Segoe UI", "Helvetica Neue", "Hiragino Sans", "Noto Sans JP", sans-serif;
+
+  --red: light-dark(#d7100a, #ff5a4d);
+  --blue: light-dark(#0265dc, #6aadff);
+  --sel: light-dark(#1473e6, #4b9cf5);
+  --panel: light-dark(#2c2c2c, #262626);
+  --hue: linear-gradient(90deg, #eb1000, #ff7a00, #ffd400, #2dc76d, #12b5cb, #1473e6, #7b4be6, #e0339c);
+  --accent: light-dark(#d7100a, #ff5a4d);
+  --tint: #808080;
+  --bg: light-dark(#fff, #1d1d1d);
+  --bg-side: light-dark(#f8f8f8, #171717);
+  --bg-sunken: light-dark(#f3f3f3, #2a2a2a);
+  --ink: light-dark(#222, #ebebeb);
+  --ink-2: light-dark(#6d6d6d, #a6a6a6);
+  --rule: light-dark(#e1e1e1, #3f3f3f);
+  --frame: light-dark(#464646, #d1d1d1);
+  --frame-inner: light-dark(#b1b1b1, #5c5c5c);
+  --accent-soft: light-dark(#eaf2fd, #1f2c3d);
+  --seal: var(--red);
+  --mark: light-dark(#ffe9a3, rgb(255 212 0 / .3));
+  --c-note: light-dark(#0265dc, #6aadff);
+  --c-tip: light-dark(#007a4d, #4fd09a);
+  --c-important: light-dark(#6a3fd6, #b39cff);
+  --c-warning: light-dark(#b35a00, #ffa037);
+  --c-caution: light-dark(#d7100a, #ff5a4d);
+  --tk-com: light-dark(#6e7781, #8e8e8e); --tk-kw: light-dark(#cf222e, #ff7b72); --tk-str: light-dark(#0a3069, #a5d6ff);
+  --tk-num: light-dark(#0550ae, #79c0ff); --tk-fn: light-dark(#8250df, #d2a8ff); --tk-type: light-dark(#953800, #ffa657);
+  --tk-var: light-dark(#953800, #ffa657); --tk-attr: light-dark(#0550ae, #79c0ff); --tk-tag: light-dark(#116329, #7ee787);
+  --tk-meta: light-dark(#8250df, #d2a8ff); --tk-sec: light-dark(#0550ae, #79c0ff); --tk-op: light-dark(#6e7781, #8e8e8e);
+  --tk-c0: light-dark(#0550ae, #79c0ff); --tk-c1: light-dark(#953800, #ffa657); --tk-c2: light-dark(#116329, #7ee787);
+  --tk-c3: light-dark(#8250df, #d2a8ff); --tk-c4: light-dark(#cf222e, #ff7b72); --tk-c5: light-dark(#57606a, #b8b8b8);
+  --chart-1: light-dark(#d7100a, #ff5a4d); --chart-2: light-dark(#0265dc, #6aadff); --chart-3: light-dark(#e68600, #ffa037);
+  --chart-4: light-dark(#6a3fd6, #b39cff); --chart-5: light-dark(#007a4d, #4fd09a); --chart-6: light-dark(#6d6d6d, #a6a6a6);
+  --chart-7: light-dark(#c2248a, #f574c0); --chart-8: light-dark(#b1b1b1, #5c5c5c); --chart-on: light-dark(#fff, #1d1d1d);
+  /* 選択の枠のハンドル（四隅の小さな四角）。枠の外へ 4px はみ出した要素の背景として描く */
+  --handles:
+    linear-gradient(var(--bg), var(--bg)) 1px 1px / 5px 5px no-repeat, linear-gradient(var(--sel), var(--sel)) 0 0 / 7px 7px no-repeat,
+    linear-gradient(var(--bg), var(--bg)) calc(100% - 1px) 1px / 5px 5px no-repeat, linear-gradient(var(--sel), var(--sel)) 100% 0 / 7px 7px no-repeat,
+    linear-gradient(var(--bg), var(--bg)) 1px calc(100% - 1px) / 5px 5px no-repeat, linear-gradient(var(--sel), var(--sel)) 0 100% / 7px 7px no-repeat,
+    linear-gradient(var(--bg), var(--bg)) calc(100% - 1px) calc(100% - 1px) / 5px 5px no-repeat, linear-gradient(var(--sel), var(--sel)) 100% 100% / 7px 7px no-repeat;
+}
+
+/* ---------- 土台 ---------- */
+::selection { background: light-dark(#cfe1fb, #1d4f8f); }
+:focus-visible { outline: 2px solid var(--sel); outline-offset: 2px; }
+kbd { border-radius: 4px; }
+
+/* ---------- ツールバーと目次（濃い灰のパネル） ---------- */
+.topbar { background: var(--panel); border-bottom: 1px solid #111; color: #ebebeb; -webkit-backdrop-filter: none; backdrop-filter: none; }
+#ui-title { color: #fff; font-weight: 700; }
+.topbar-crumb { color: #b1b1b1; }
+.topbar-crumb:not(:empty) { border-left-color: #555; }
+.topbar-crumb > span + span::before { border-color: #8e8e8e; }
+.topbar-sep { background: #555; }
+.read-progress { height: 2px; background: var(--hue); }
+.icon-btn, .theme-trigger { border-radius: 4px; color: #d1d1d1; }
+.icon-btn:hover, .theme-trigger:hover, .theme-trigger[aria-expanded="true"] { background: #464646; color: #fff; border-color: transparent; }
+.theme-menu { border-radius: 4px; }
+.theme-option { border-radius: 4px; }
+.theme-option[aria-checked="true"] { background: var(--accent-soft); color: var(--ink); }
+.sidebar {
+  --ink: #ebebeb; --ink-2: #b1b1b1; --rule: #4a4a4a; --frame-inner: #6d6d6d; --accent: #ff5a4d; --accent-soft: #3f3f3f;
+  background: var(--panel); border-right: 1px solid #111; color: var(--ink);
+}
+.toc-label { letter-spacing: .1em; }
+.toc { border-left-color: #4a4a4a; }
+.toc a { border-radius: 0 4px 4px 0; }
+.toc a:hover { background: #383838; }
+.toc a.active { border-left-color: #ff5a4d; background: #464646; color: #fff; }
+.toc-no { color: #8e8e8e; }
+.toc a.active .toc-no { color: #ff8a80; }
+
+/* ---------- 表紙（題名は選択中の枠、情報の上に色相の帯） ---------- */
+.doc-header .doc-title { position: relative; margin: 4px 0 0 4px; padding: .1em .32em .14em; outline: 1px solid var(--sel); font-weight: 800; letter-spacing: -.015em; }
+.doc-header .doc-title::after { content: ""; position: absolute; inset: -4px; pointer-events: none; background: var(--handles); }
+.doc-header .doc-subtitle { margin-top: 1.3em; }
+.doc-header .tb-meta { gap: .9rem 1rem; padding-top: 1.5rem; background: var(--hue) left top / 100% 5px no-repeat; }
+.doc-header .tb-meta > div { display: flex; align-items: center; gap: .7em; }
+.doc-header .tb-meta dt { letter-spacing: .02em; }
+/* 値は、プロパティの入力欄のように見せる */
+.doc-header .tb-meta dd { margin: 0; padding: 2px 10px; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg-sunken); font-size: 14px; }
+.stamp, .classif { border-radius: 4px; }
+.doc-empty { border-radius: 4px; }
+@media (max-width: 600px) { .doc-header .tb-meta > div { flex: 1 1 100%; } .doc-header .tb-meta dt { min-width: 4.5em; } }
+
+/* ---------- 本文 ---------- */
+.md h1, .md h2, .md h3, .md h4 { letter-spacing: -.005em; }
+.md h2 { background: linear-gradient(var(--red), var(--red)) left bottom / 2.2em 3px no-repeat, linear-gradient(var(--rule), var(--rule)) left bottom / 100% 1px no-repeat; }
+.secno { color: var(--red); font-weight: 700; }
+.md li::marker { color: var(--ink-2); }
+.md a { color: var(--blue); text-decoration-color: transparent; }
+.md a:hover { text-decoration-color: currentColor; }
+.md code { border-radius: 3px; box-shadow: none; }
+.md blockquote { border-left-color: var(--frame-inner); }
+.md details { border-radius: 4px; }
+
+/* コードは濃い灰のエディター。中の色は、ダーク用の色を使う（印刷では明るい色に戻る） */
+.codeblock { border: 1px solid light-dark(#111, #3f3f3f); border-radius: 4px; background: light-dark(#1d1d1d, #141414); }
+.codeblock pre { color-scheme: dark; color: var(--ink); }
+.code-head { border-bottom: 1px solid #111; background: #2c2c2c; color: #b1b1b1; }
+.code-title { color: #ebebeb; }
+.copy-btn, .tbl-copy { border-radius: 999px; }
+.code-head .copy-btn { border-color: #6d6d6d; background: none; color: #ebebeb; }
+.code-head .copy-btn:hover { border-color: #ebebeb; background: #464646; }
+.md .codeblock code { background: none; color: inherit; }
+.gh-diff, .mermaid-block .mermaid-src { border-radius: 4px; }
+.gh-view, .vb-seg { border-radius: 999px; overflow: hidden; }
+
+.table-scroll { border-radius: 4px; }
+.table-scroll.fits thead tr:first-child th:first-child { border-top-left-radius: 3px; }
+.table-scroll.fits thead tr:first-child th:last-child { border-top-right-radius: 3px; }
+.md th + th, .md td + td { border-left: 0; }
+.md thead th { color: var(--ink-2); font-size: .86em; letter-spacing: .04em; }
+.table-scroll tbody tr:not([class]):hover td { background: var(--accent-soft); }
+.tbl-filter { border-radius: 4px; }
+
+.alert { padding: calc(.8em - 2px) calc(1.2em - 2px) calc(.85em - 2px); border: 2px solid var(--c); border-radius: 4px; background: none; }
+
+/* ---------- 囲み ---------- */
+/* 色相の順に 1 色ずつ */
+:is(.c-flow .c-items > li, .c-metrics .metric) { --pc: #eb1000; }
+:is(.c-flow .c-items > li, .c-metrics .metric):nth-child(6n+2) { --pc: #ff7a00; }
+:is(.c-flow .c-items > li, .c-metrics .metric):nth-child(6n+3) { --pc: #2dc76d; }
+:is(.c-flow .c-items > li, .c-metrics .metric):nth-child(6n+4) { --pc: #1473e6; }
+:is(.c-flow .c-items > li, .c-metrics .metric):nth-child(6n+5) { --pc: #7b4be6; }
+:is(.c-flow .c-items > li, .c-metrics .metric):nth-child(6n+6) { --pc: #e0339c; }
+
+.c-steps .c-items > li::before { border: 0; border-radius: 4px; background: light-dark(#464646, #545454); color: #fff; font-weight: 700; }
+.c-flow .c-items > li { border: 1px solid var(--rule); border-radius: 4px; background: var(--bg-sunken); box-shadow: inset 0 3px 0 var(--pc); }
+.c-flow .c-items > li:not(:last-child)::after { border-color: var(--frame-inner); }
+/* 時系列の点は、キーフレームのひし形 */
+.c-timeline .tl-when { color: var(--ink); }
+.c-timeline .tl-what::before { left: -5.75px; top: .58em; width: 10px; height: 10px; border: 0; border-radius: 0; background: var(--sel); transform: rotate(45deg); }
+
+.c-cards .card { position: relative; border-radius: 4px; background: var(--bg); }
+.c-cards .card:hover { border-color: var(--sel); }
+/* 推しのカードは「選択中」 */
+.c-cards .card.is-best { border-color: var(--sel); box-shadow: none; }
+.c-cards .card.is-best::after { content: ""; position: absolute; inset: -4px; pointer-events: none; background: var(--handles); }
+.c-compare .panel { border-radius: 4px; }
+.c-compare .panel.is-best { border-color: var(--sel); box-shadow: 0 0 0 1px var(--sel); }
+.c-compare .panel.is-best .panel-head { border-bottom-color: var(--sel); background: light-dark(#1473e6, #1f5fb8); color: #fff; }
+.c-compare .panel.is-best .panel-head::after { border-radius: 999px; padding: 0 .7em; }
+.c-pros-cons .panel { border-radius: 4px; }
+
+.c-tabs .tab[aria-selected="true"] { border-bottom-color: var(--ink); }
+
+.c-summary { border-radius: 4px; background: var(--hue) left top / 100% 4px no-repeat, var(--bg-sunken); }
+.c-lead { border-left-color: var(--red); font-weight: 800; letter-spacing: -.005em; }
+
+.c-metrics .metric { box-shadow: inset 0 -3px 0 var(--pc); }
+.c-metrics .metric-value { color: var(--ink); font-weight: 800; letter-spacing: -.02em; }
+/* 進捗はスライダー */
+.c-progress .bar { height: 4px; overflow: visible; background: var(--rule); }
+.c-progress .bar > i { position: relative; border-radius: 999px; background: var(--sel); }
+.c-progress .bar > i::after { content: ""; position: absolute; top: 50%; right: -7px; width: 14px; height: 14px; margin-top: -7px; border: 2px solid var(--sel); border-radius: 50%; background: var(--bg); box-sizing: border-box; }
+.c-progress .is-done .bar > i { background: var(--c-tip); }
+.c-progress .is-done .bar > i::after { border-color: var(--c-tip); background: var(--c-tip); }
+
+.c-qa .q, .c-qa .a { padding-left: 2.2em; }
+.c-qa .q::before, .c-qa .a::before { top: .16em; width: 1.65em; height: 1.65em; border-radius: 4px; background: var(--red); color: light-dark(#fff, #1d1d1d); font-size: .8em; line-height: 1.65; }
+.c-qa .a::before { background: light-dark(#464646, #d1d1d1); }
+.c-figure .fig-no { color: var(--red); }
+.lbl, .menu-path { border-radius: 4px; }
+
+/* ---------- 版・ダイアログ・通知 ---------- */
+.ver-banner, .ver-form { border-radius: 4px; }
+.btn { padding: 3px 14px; border: 2px solid var(--frame-inner); border-radius: 999px; font-weight: 700; }
+.btn:hover { border-color: var(--ink); background: var(--bg-sunken); }
+.btn.primary { border-color: light-dark(#0265dc, #3d8bf2); background: light-dark(#0265dc, #3d8bf2); color: #fff; }
+.btn.danger { border-color: currentColor; }
+.ver-form input, .ver-compare select { border-radius: 4px; }
+.help-card { border-radius: 6px; }
+.help h3 { color: var(--ink-2); letter-spacing: .06em; }
+.toast { border-radius: 4px; background: #2c2c2c; color: #fff; box-shadow: inset 4px 0 0 #1473e6; }
+.search-bar { border-radius: 4px; }
+.tip { border-radius: 4px; }
+.drop-overlay > div { border-radius: 4px; border-color: var(--sel); }
+
+/* ---------- スライド（左に色相の帯） ---------- */
+.slide { background: linear-gradient(180deg, #eb1000, #ff7a00, #ffd400, #2dc76d, #12b5cb, #1473e6, #7b4be6, #e0339c) left / 10px 100% no-repeat, var(--bg); }
+.slide .slide-crumb { color: var(--ink-2); letter-spacing: .08em; }
+.slide-progress { background: var(--sel); }
+.slide-body > :is(h1, h2, h3):first-child { background: linear-gradient(var(--red), var(--red)) left bottom / 2.2em 4px no-repeat, linear-gradient(var(--rule), var(--rule)) left bottom / 100% 2px no-repeat; }
+.slide.is-section .secno { font-weight: 800; }
+.title-slide .doc-header .doc-title { font-size: 2.2em; }
+.title-slide .doc-header .tb-meta { gap: 14px 26px; padding-top: 1.1em; background: var(--hue) left top / 100% 6px no-repeat; }
+.title-slide .doc-header .tb-meta dd { font-size: 19px; padding: 2px 14px; }
+
+/* ---------- 図（Mermaid）とグラフ ---------- */
+.mermaid-block .node :is(rect, polygon, circle, ellipse, path), .mermaid-block :is(rect.actor, .labelBox, .note) { fill: var(--bg-sunken) !important; stroke: var(--frame-inner) !important; stroke-width: 1px !important; }
+.mermaid-block .node rect, .mermaid-block rect.actor { rx: 4px; ry: 4px; }
+.mermaid-block .cluster rect { fill: color-mix(in srgb, var(--accent) 6%, transparent) !important; stroke: var(--frame-inner) !important; rx: 4px; ry: 4px; }
+.mermaid-block :is(.nodeLabel, .edgeLabel, .label, .cluster-label) { color: var(--ink) !important; }
+.mermaid-block :is(text, tspan) { fill: var(--ink) !important; }
+.mermaid-block :is(.edgeLabel, .edgeLabel p, .labelBkg) { background-color: var(--bg) !important; }
+.mermaid-block :is(.flowchart-link, .messageLine0, .messageLine1, .actor-line, .relation, .loopLine) { stroke: var(--ink-2) !important; }
+/* 手順の番号（丸の中の数字）。線の太さを変えると丸の大きさも変わるので、手順の線の太さは変えない */
+.mermaid-block marker circle { fill: var(--ink-2) !important; }
+.mermaid-block .sequenceNumber { fill: var(--bg) !important; }
+.mermaid-block :is(.marker, .arrowheadPath, marker path) { fill: var(--ink-2) !important; stroke: var(--ink-2) !important; }
+.chart-line { stroke-width: 2; }
+
+/* ---------- 印刷 ---------- */
+@media print {
+  .codeblock { border-color: var(--rule); background: #f3f3f3; }
+  .codeblock pre { color-scheme: light; }
+  .code-head { border-bottom-color: var(--rule); background: none; color: var(--ink-2); }
+  .code-title { color: var(--ink); }
+  .sidebar { --ink: #222; --ink-2: #6d6d6d; }
+}

@@ -1,0 +1,210 @@
+/* ==========================================================================
+   CC-2（深緑と生成り）
+   コーヒー店の黒板と紙袋。ツールバーは深緑の看板、紙は生成り、囲みは白い紙に薄い影。
+   ボタンと札は丸く、数字と添え書き（引用・キーメッセージ）は明朝。コードは黒板に書く。
+   色は light-dark() で 1 か所に書く（テーマと印刷は、テンプレートの color-scheme に従う）
+   ========================================================================== */
+:root:root {
+  --font: "Backslash Sans", "Hiragino Sans", "Yu Gothic UI", "Noto Sans JP", "BIZ UDPGothic", Meiryo, sans-serif;
+  --serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "BIZ UDPMincho", Georgia, serif;
+  --num: Georgia, "Times New Roman", var(--serif);
+
+  --green: light-dark(#00704a, #7fcfae);
+  --house: #1e3932;
+  --gold: light-dark(#9a7426, #dcbb7a);
+  --gold-line: light-dark(#cba258, #b8975a);
+  --card: light-dark(#fff, #1d2b26);
+  --accent: light-dark(#00704a, #7fcfae);
+  --tint: var(--accent);
+  --bg: light-dark(#f9f8f4, #141d1a);
+  --bg-side: light-dark(#f2f0eb, #101815);
+  --bg-sunken: light-dark(#eeebe3, #1f2e28);
+  --ink: light-dark(#1e2a26, #f2f0eb);
+  --ink-2: light-dark(#5d6964, #a6b5ad);
+  --rule: light-dark(#e0dcd1, #30423a);
+  --frame: light-dark(#1e3932, #d4e9e2);
+  --frame-inner: light-dark(#a9b3ad, #56695f);
+  --accent-soft: light-dark(#d4e9e2, #223a31);
+  --shadow-card: 0 0 .5px light-dark(rgb(0 0 0 / .14), transparent), 0 1px 1px light-dark(rgb(0 0 0 / .2), rgb(0 0 0 / .5));
+  --seal: light-dark(#a8402f, #f09a86);
+  --mark: light-dark(#f1e2b8, rgb(203 162 88 / .35));
+  --c-note: light-dark(#2b5f87, #8fc1e6);
+  --c-tip: light-dark(#00704a, #7fcfae);
+  --c-important: light-dark(#6b4a8c, #c4a8e2);
+  --c-warning: light-dark(#8a6414, #dcbb7a);
+  --c-caution: light-dark(#a8402f, #f09a86);
+  --tk-com: light-dark(#6e7781, #8ea399); --tk-kw: light-dark(#cf222e, #f09a86); --tk-str: light-dark(#0a3069, #b9e0c9);
+  --tk-num: light-dark(#0550ae, #dcbb7a); --tk-fn: light-dark(#8250df, #c4a8e2); --tk-type: light-dark(#953800, #e8b98a);
+  --tk-var: light-dark(#953800, #e8b98a); --tk-attr: light-dark(#0550ae, #8fc1e6); --tk-tag: light-dark(#116329, #7fcfae);
+  --tk-meta: light-dark(#8250df, #c4a8e2); --tk-sec: light-dark(#0550ae, #dcbb7a); --tk-op: light-dark(#6e7781, #8ea399);
+  --tk-c0: light-dark(#0550ae, #8fc1e6); --tk-c1: light-dark(#953800, #e8b98a); --tk-c2: light-dark(#116329, #7fcfae);
+  --tk-c3: light-dark(#8250df, #c4a8e2); --tk-c4: light-dark(#cf222e, #f09a86); --tk-c5: light-dark(#57606a, #b7c4bd);
+  --chart-1: light-dark(#00704a, #7fcfae); --chart-2: light-dark(#cba258, #dcbb7a); --chart-3: light-dark(#1e3932, #d4e9e2);
+  --chart-4: light-dark(#a8402f, #f09a86); --chart-5: light-dark(#2b5f87, #8fc1e6); --chart-6: light-dark(#7a6a55, #b3a591);
+  --chart-7: light-dark(#6b4a8c, #c4a8e2); --chart-8: light-dark(#a9b3ad, #56695f); --chart-on: light-dark(#fff, #141d1a);
+}
+
+/* ---------- 土台 ---------- */
+::selection { background: light-dark(#d4e9e2, #2f5547); }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+kbd { border-radius: 6px; }
+
+/* ---------- ツールバー（深緑の看板） ---------- */
+.topbar { background: light-dark(#1e3932, #0d1512); border-bottom: 0; color: #f2f0eb; -webkit-backdrop-filter: none; backdrop-filter: none; }
+#ui-title { color: #f2f0eb; letter-spacing: .03em; }
+.topbar-crumb { color: #b9cbc3; }
+.topbar-crumb:not(:empty) { border-left-color: rgb(242 240 235 / .3); }
+.topbar-crumb > span + span::before { border-color: #cba258; }
+.topbar-sep { background: rgb(242 240 235 / .3); }
+.read-progress { bottom: -3px; height: 3px; background: #cba258; }
+.icon-btn, .theme-trigger { border-radius: 999px; color: #f2f0eb; }
+.icon-btn:hover, .theme-trigger:hover, .theme-trigger[aria-expanded="true"] { background: rgb(242 240 235 / .16); color: #fff; border-color: transparent; }
+.theme-menu { border-radius: 12px; }
+.theme-option { border-radius: 999px; }
+.theme-option[aria-checked="true"] { background: var(--accent-soft); color: var(--ink); }
+
+/* ---------- 目次 ---------- */
+.sidebar { background: var(--bg-side); }
+.toc-label { color: var(--gold); letter-spacing: .24em; }
+.toc a { border-radius: 0 999px 999px 0; }
+.toc a.active { border-left-color: var(--green); background: var(--accent-soft); color: var(--ink); font-weight: 700; }
+.toc-no { font-family: var(--num); color: var(--gold); }
+
+/* ---------- 表紙（薄緑の紙の札。ダークは深緑） ---------- */
+.doc-header {
+  --ink-2: light-dark(#3d5a50, #b9cbc3); --rule: light-dark(#a9cfc1, #3d5f52);
+  position: relative; overflow: hidden; padding: 2.1rem 2.3rem 2.2rem; border-radius: 12px; background: light-dark(#d4e9e2, #1e3932); color: light-dark(#1e3932, #f2f0eb);
+}
+/* 右端に、紙袋の斜めの縞 */
+.doc-header::after {
+  content: ""; position: absolute; inset: 0 0 0 auto; width: min(42%, 320px); pointer-events: none;
+  background: repeating-linear-gradient(115deg, light-dark(rgb(0 112 74 / .13), rgb(212 233 226 / .09)) 0 2px, transparent 2px 15px);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000); mask-image: linear-gradient(90deg, transparent, #000);
+}
+.doc-header > * { position: relative; z-index: 1; }
+.doc-header .doc-title { letter-spacing: -.005em; }
+.doc-header .doc-subtitle { font-family: var(--serif); }
+.doc-header .tb-meta { background: linear-gradient(var(--gold-line), var(--gold-line)) left top / 3.4em 3px no-repeat, linear-gradient(var(--rule), var(--rule)) left top / 100% 1px no-repeat; }
+.doc-header .tb-meta dt { color: light-dark(#7a5a14, #dcbb7a); font-weight: 700; letter-spacing: .14em; }
+.stamp, .classif { padding: 0 12px; border-radius: 999px; }
+.stamp { background: light-dark(#fff, rgb(0 0 0 / .25)); border-color: transparent; }
+.classif { border-color: currentColor; background: light-dark(#fff, rgb(0 0 0 / .25)); }
+.doc-empty { border-radius: 12px; }
+@media (max-width: 600px) { .doc-header { padding: 1.5rem 1.3rem 1.6rem; } }
+
+/* ---------- 本文 ---------- */
+.md h1, .md h2, .md h3, .md h4 { color: light-dark(#1e3932, #f2f0eb); letter-spacing: 0; }
+.md h2 { background: linear-gradient(var(--gold-line), var(--gold-line)) left bottom / 3.4em 3px no-repeat, linear-gradient(var(--rule), var(--rule)) left bottom / 100% 1px no-repeat; }
+.secno { color: var(--gold); font-style: italic; }
+.md li::marker { color: var(--green); }
+.md code { border-radius: 6px; background: var(--bg-sunken); box-shadow: none; }
+.md hr { border-top: 1px solid var(--gold-line); }
+.md blockquote { border-left: 3px solid var(--gold-line); font-family: var(--serif); color: var(--ink); }
+.md details { border-radius: 12px; }
+
+/* コードは黒板。中の色は、ダーク用の色を使う（印刷では明るい色に戻る） */
+.codeblock { border: 0; border-radius: 12px; background: light-dark(#1e3932, #0d1512); }
+.codeblock pre { color-scheme: dark; color: var(--ink); }
+.code-head { border-bottom: 1px solid rgb(242 240 235 / .16); background: none; color: #b9cbc3; }
+.code-title { color: #dcbb7a; }
+.copy-btn, .tbl-copy { border-radius: 999px; }
+.code-head .copy-btn { border-color: rgb(242 240 235 / .35); background: none; color: #f2f0eb; }
+.code-head .copy-btn:hover { background: #f2f0eb; color: #1e3932; }
+.md .codeblock code { background: none; color: inherit; }
+.gh-diff, .mermaid-block .mermaid-src { border-radius: 12px; }
+.gh-view, .vb-seg { border-radius: 999px; overflow: hidden; }
+
+.table-scroll { border-radius: 12px; background: var(--card); box-shadow: var(--shadow-card); border-color: transparent; }
+.table-scroll.fits thead tr:first-child th:first-child { border-top-left-radius: 12px; }
+.table-scroll.fits thead tr:first-child th:last-child { border-top-right-radius: 12px; }
+.md tbody tr:last-child td:first-child { border-bottom-left-radius: 12px; }
+.md tbody tr:last-child td:last-child { border-bottom-right-radius: 12px; }
+.md th + th, .md td + td { border-left: 0; }
+.md thead th { background: var(--accent-soft); color: light-dark(#1e3932, #f2f0eb); }
+.md .gh-table td, .md .gh-table tr:last-child td { border-radius: 0; }
+.tbl-filter { border-radius: 999px; }
+
+.alert { border-left: 0; border-radius: 12px; background: color-mix(in srgb, var(--c) 9%, var(--card)); box-shadow: var(--shadow-card); }
+.doc-footer { border-top-color: var(--gold-line); }
+
+/* ---------- 囲み ---------- */
+.c-steps .c-items > li::before { border: 0; background: light-dark(#00704a, #2f6a55); color: #fff; }
+.c-flow .c-items > li { border: 1.5px solid var(--green); border-radius: 22px; background: var(--card); }
+.c-flow .c-items > li:not(:last-child)::after { border-color: var(--gold-line); }
+.c-timeline .tl-when { color: var(--gold); }
+.c-timeline .tl-what::before { border-color: var(--gold-line); }
+
+.c-cards .card { border: 0; border-radius: 12px; background: var(--card); box-shadow: var(--shadow-card); }
+.c-cards .card.is-best { box-shadow: 0 0 0 2px var(--green); background: var(--accent-soft); }
+.c-compare .panel { border: 0; border-radius: 12px; background: var(--card); box-shadow: var(--shadow-card); }
+.c-compare .panel-head { border-bottom-color: var(--rule); background: none; }
+.c-compare .panel.is-best { box-shadow: 0 0 0 2px var(--green); }
+.c-compare .panel.is-best .panel-head { border-bottom-color: transparent; background: light-dark(#00704a, #2f6a55); color: #fff; }
+.c-compare .panel.is-best .panel-head::after { border: 0; border-radius: 999px; background: #dcbb7a; color: #1e3932; padding: 0 .7em; }
+.c-pros-cons .panel { border-radius: 12px; }
+
+.c-tabs .tab[aria-selected="true"] { border-bottom-color: var(--green); color: var(--green); }
+
+/* 要旨は深緑の看板 */
+.c-summary { --ink: #f2f0eb; --ink-2: #b9cbc3; --accent: #9fdcc2; border-radius: 12px; background: light-dark(#1e3932, #1e3932); color: var(--ink); }
+.md .c-summary .c-title { color: #dcbb7a; letter-spacing: .12em; }
+.c-summary code { background: rgb(242 240 235 / .14); color: inherit; }
+.c-lead { border-left: 3px solid var(--gold-line); color: light-dark(#1e3932, #f2f0eb); font-family: var(--serif); font-weight: 600; }
+
+.c-metrics .c-items { overflow: hidden; border: 0; border-radius: 12px; background: var(--card); box-shadow: var(--shadow-card); }
+.c-metrics .metric-value { font-weight: 400; }
+.c-progress .bar { background: var(--accent-soft); }
+.c-progress .bar > i { background: var(--green); }
+.c-progress .is-done .bar > i { background: var(--gold-line); }
+
+.c-qa .q::before { color: var(--green); }
+.c-qa .a::before { color: var(--gold); }
+.md .c-quote blockquote { font-family: var(--serif); }
+.c-figure .fig-no { color: var(--gold); font-family: var(--num); }
+.lbl, .menu-path { border-radius: 999px; }
+
+/* ---------- 版・ダイアログ・通知 ---------- */
+.ver-banner, .ver-form { border-radius: 12px; }
+.btn { padding: 3px 14px; border-color: var(--green); border-radius: 999px; color: var(--green); font-weight: 700; }
+.btn:hover { border-color: var(--green); background: var(--accent-soft); }
+.btn.primary { border-color: light-dark(#00704a, #7fcfae); background: light-dark(#00704a, #7fcfae); color: light-dark(#fff, #141d1a); }
+.btn.danger { border-color: currentColor; }
+.ver-form input, .ver-compare select { border-radius: 999px; }
+.help-card { border: 0; border-radius: 12px; }
+.help h3 { color: var(--gold); letter-spacing: .12em; }
+.toast { border-radius: 999px; background: #1e3932; color: #f2f0eb; }
+.search-bar { border-radius: 999px; }
+.tip { border-radius: 8px; }
+.drop-overlay > div { border-radius: 12px; }
+
+/* ---------- スライド（上に深緑の帯） ---------- */
+.slide { box-shadow: inset 0 12px 0 #1e3932; }
+.slide .slide-crumb { color: var(--gold); letter-spacing: .12em; }
+.slide-progress { background: #cba258; }
+.slide-body > :is(h1, h2, h3):first-child { background: linear-gradient(var(--gold-line), var(--gold-line)) left bottom / 3.4em 4px no-repeat, linear-gradient(var(--rule), var(--rule)) left bottom / 100% 2px no-repeat; }
+.slide.is-title { box-shadow: none; }
+.title-slide .doc-header { padding: 46px 56px 50px; border-radius: 16px; }
+.title-slide .doc-header .tb-meta { background-size: 3.4em 4px, 100% 2px; }
+
+/* ---------- 図（Mermaid）とグラフ ---------- */
+.mermaid-block .node :is(rect, polygon, circle, ellipse, path), .mermaid-block :is(rect.actor, .labelBox, .note) { fill: var(--card) !important; stroke: var(--green) !important; stroke-width: 1.5px !important; }
+.mermaid-block .node rect, .mermaid-block rect.actor { rx: 10px; ry: 10px; }
+.mermaid-block .cluster rect { fill: color-mix(in srgb, var(--accent) 6%, transparent) !important; stroke: var(--frame-inner) !important; rx: 10px; ry: 10px; }
+.mermaid-block :is(.nodeLabel, .edgeLabel, .label, .cluster-label) { color: var(--ink) !important; }
+.mermaid-block :is(text, tspan) { fill: var(--ink) !important; }
+.mermaid-block :is(.edgeLabel, .edgeLabel p, .labelBkg) { background-color: var(--bg) !important; }
+.mermaid-block :is(.flowchart-link, .messageLine0, .messageLine1, .actor-line, .relation, .loopLine) { stroke: var(--ink-2) !important; }
+/* 手順の番号（丸の中の数字）。線の太さを変えると丸の大きさも変わるので、手順の線の太さは変えない */
+.mermaid-block marker circle { fill: var(--ink-2) !important; }
+.mermaid-block .sequenceNumber { fill: var(--bg) !important; }
+.mermaid-block :is(.marker, .arrowheadPath, marker path) { fill: var(--ink-2) !important; stroke: var(--ink-2) !important; }
+.chart-line { stroke-width: 1.6; }
+
+/* ---------- 印刷 ---------- */
+@media print {
+  :root:root:not([data-print-none]) { --bg: #fff; --bg-side: #fff; }
+  .codeblock { background: #eeebe3; }
+  .codeblock pre { color-scheme: light; }
+  .code-head { border-bottom-color: var(--rule); color: var(--ink-2); }
+  .code-title { color: var(--ink); }
+}
