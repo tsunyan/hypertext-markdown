@@ -1,0 +1,226 @@
+/* ==========================================================================
+   CC-6（紺と水色）
+   自動車のカタログ。字も線も細く軽く、余白を広く取る。面は塗らず、紺の細い線と水色の短い線で区切る。
+   見出しは細い字を大きく、番号は 01・02 と 2 桁で振る。ダークは、深い紺の地に白と水色。
+   色は light-dark() で 1 か所に書く（テーマと印刷は、テンプレートの color-scheme に従う）
+   ========================================================================== */
+:root:root {
+  --font: "Backslash Sans", "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", "Segoe UI", "BIZ UDPGothic", Meiryo, sans-serif;
+
+  --navy: #001e50;
+  --hi: #00b0f0;
+  --accent: light-dark(#0040c5, #00b0f0);
+  --tint: var(--accent);
+  --bg: light-dark(#fff, #001e50);
+  --bg-side: light-dark(#fff, #001e50);
+  --bg-sunken: light-dark(#f1f4f7, #0a2c66);
+  --ink: light-dark(#001e50, #fff);
+  --ink-2: light-dark(#5a6b82, #a9b9d4);
+  --rule: light-dark(#dfe4e8, #24437c);
+  --frame: light-dark(#001e50, #fff);
+  --frame-inner: light-dark(#a8b3c0, #5571a3);
+  --accent-soft: light-dark(#e8f6fd, #0b3270);
+  --seal: light-dark(#c2002f, #ff8fa3);
+  --mark: light-dark(#c8ecfb, rgb(0 176 240 / .35));
+  --c-note: light-dark(#0040c5, #6fc8f5);
+  --c-tip: light-dark(#00796b, #5fd6c4);
+  --c-important: light-dark(#5b3fb0, #b8a5f2);
+  --c-warning: light-dark(#946100, #f2c14e);
+  --c-caution: light-dark(#c2002f, #ff8fa3);
+  --tk-com: light-dark(#6e7781, #8fa3c7); --tk-kw: light-dark(#cf222e, #ff9aa8); --tk-str: light-dark(#0a3069, #b4e4fb);
+  --tk-num: light-dark(#0550ae, #6fd3f7); --tk-fn: light-dark(#8250df, #cdb9ff); --tk-type: light-dark(#953800, #f2c14e);
+  --tk-var: light-dark(#953800, #f2c14e); --tk-attr: light-dark(#0550ae, #6fd3f7); --tk-tag: light-dark(#116329, #7fe3c8);
+  --tk-meta: light-dark(#8250df, #cdb9ff); --tk-sec: light-dark(#0550ae, #6fd3f7); --tk-op: light-dark(#6e7781, #8fa3c7);
+  --tk-c0: light-dark(#0550ae, #6fd3f7); --tk-c1: light-dark(#953800, #f2c14e); --tk-c2: light-dark(#116329, #7fe3c8);
+  --tk-c3: light-dark(#8250df, #cdb9ff); --tk-c4: light-dark(#cf222e, #ff9aa8); --tk-c5: light-dark(#57606a, #c3d0e6);
+  --chart-1: light-dark(#001e50, #fff); --chart-2: light-dark(#00b0f0, #00b0f0); --chart-3: light-dark(#0040c5, #7da2ff);
+  --chart-4: light-dark(#7a8ba3, #8fa3c7); --chart-5: light-dark(#00796b, #5fd6c4); --chart-6: light-dark(#c2002f, #ff8fa3);
+  --chart-7: light-dark(#946100, #f2c14e); --chart-8: light-dark(#c2cacf, #456196); --chart-on: light-dark(#fff, #001e50);
+}
+
+/* ---------- 土台 ---------- */
+body { letter-spacing: .01em; }
+::selection { background: light-dark(#c8ecfb, #0f52a8); }
+:focus-visible { outline: 2px solid var(--hi); outline-offset: 2px; }
+strong, b { font-weight: 600; }
+kbd { border-radius: 2px; }
+
+/* ---------- ツールバー ---------- */
+.topbar { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+#ui-title { font-weight: 400; letter-spacing: .06em; }
+.read-progress { background: var(--hi); }
+.icon-btn, .theme-trigger { border-radius: 999px; }
+.icon-btn svg, .theme-picker svg { stroke-width: 1.3; }
+.icon-btn:hover, .theme-trigger:hover, .theme-trigger[aria-expanded="true"] { background: var(--ink); color: var(--bg); border-color: transparent; }
+.theme-menu { border-radius: 0; }
+.theme-option { border-radius: 0; }
+.theme-option[aria-checked="true"] { background: none; box-shadow: inset 2px 0 0 var(--hi); color: var(--ink); }
+
+/* ---------- 目次 ---------- */
+.toc-label { font-weight: 400; letter-spacing: .3em; }
+.toc { border-left-color: var(--rule); }
+.toc a { border-radius: 0; }
+.toc a:hover { background: none; color: var(--ink); }
+.toc a.active { border-left-color: var(--hi); background: none; color: var(--ink); font-weight: 600; }
+.toc-no { color: var(--ink-2); font-weight: 300; }
+
+/* ---------- 表紙（上に紺の細い線と、水色の短い線） ---------- */
+.doc-header { padding-top: 2.4rem; background: linear-gradient(var(--hi), var(--hi)) left top / 4.2em 4px no-repeat, linear-gradient(var(--ink), var(--ink)) left top / 100% 1px no-repeat; }
+.doc-header .doc-title { font-size: clamp(2.2rem, 1.3rem + 3.4vw, 3.6rem); font-weight: 300; letter-spacing: -.01em; line-height: 1.18; }
+.doc-header .doc-subtitle { font-weight: 300; }
+.doc-header .tb-meta { gap: 0; margin-top: 3rem; padding-top: 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: none; }
+.doc-header .tb-meta > div { flex: 1 1 0; padding: 1rem 1.4rem 1.1rem 0; }
+.doc-header .tb-meta > div + div { padding-left: 1.4rem; border-left: 1px solid var(--rule); }
+.doc-header .tb-meta dt { letter-spacing: .2em; }
+.doc-header .tb-meta dd { margin-top: 6px; font-size: 21px; font-weight: 300; letter-spacing: .01em; white-space: nowrap; }
+.stamp, .classif { padding: 0 14px; border-radius: 999px; background: none; font-weight: 400; letter-spacing: .14em; }
+.stamp { border-color: var(--frame-inner); color: var(--ink); }
+.stamp::before { background: var(--c); }
+.classif { border-color: var(--ink); color: var(--ink); }
+.doc-empty { border-radius: 0; }
+@media (max-width: 720px) {
+  .doc-header .tb-meta > div { flex: 1 1 40%; padding: .8rem 0 .9rem; }
+  .doc-header .tb-meta > div + div { padding-left: 0; border-left: 0; }
+  .doc-header .tb-meta > div:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  .doc-header .tb-meta dd { font-size: 18px; }
+}
+
+/* ---------- 本文 ---------- */
+.md h1, .md h2, .md h3, .md h4 { font-weight: 400; letter-spacing: 0; }
+.md h2 { font-weight: 300; }
+#ui-content .md h2 { font-size: 1.75em; }
+.md h3 { font-weight: 600; }
+.md h2 { background: linear-gradient(var(--hi), var(--hi)) left bottom / 2.6em 3px no-repeat, linear-gradient(var(--rule), var(--rule)) left bottom / 100% 1px no-repeat; }
+.secno { font-weight: 300; }
+.md h2 > .secno { margin-right: .7em; color: var(--ink-2); }
+.md li::marker { color: var(--hi); }
+.md a { text-decoration-color: var(--hi); }
+.md code { border-radius: 2px; box-shadow: none; }
+.md blockquote { border-left: 1px solid var(--ink); color: var(--ink); font-weight: 300; }
+.md details { border-radius: 0; }
+
+/* コードは紺の板。中の色は、ダーク用の色を使う（印刷では明るい色に戻る） */
+.codeblock { border: 0; border-radius: 0; background: light-dark(#001e50, #00163d); }
+.codeblock pre { color-scheme: dark; color: var(--ink); }
+.code-head { border-bottom: 1px solid rgb(255 255 255 / .2); background: none; color: #a9b9d4; }
+.code-title { color: #fff; font-weight: 400; letter-spacing: .06em; }
+.copy-btn, .tbl-copy { border-radius: 999px; }
+.code-head .copy-btn { border-color: rgb(255 255 255 / .45); background: none; color: #fff; }
+.code-head .copy-btn:hover { border-color: #fff; background: #fff; color: #001e50; }
+.md .codeblock code { background: none; color: inherit; }
+.gh-diff, .mermaid-block .mermaid-src { border-radius: 0; }
+.gh-view, .vb-seg { border-radius: 999px; overflow: hidden; }
+
+.table-scroll { border: 0; border-top: 1px solid var(--ink); border-radius: 0; }
+.table-scroll.fits thead tr:first-child th:first-child, .table-scroll.fits thead tr:first-child th:last-child { border-radius: 0; }
+.md th + th, .md td + td { border-left: 0; }
+.md thead th { border-bottom: 1px solid var(--ink); background: var(--bg); color: var(--ink-2); font-weight: 400; font-size: .86em; letter-spacing: .1em; }
+.table-scroll.fits thead th { box-shadow: none; }
+.table-scroll tbody tr:not([class]):hover td { background: var(--accent-soft); }
+.tbl-filter { border-radius: 999px; }
+
+.alert { border-left-width: 2px; border-radius: 0; background: none; }
+.md .alert-title { font-weight: 600; letter-spacing: .04em; }
+.alert-title svg { stroke-width: 1.3; }
+.doc-footer { border-top-color: var(--ink); }
+
+/* ---------- 囲み ---------- */
+.md .c-title { font-weight: 400; letter-spacing: .14em; }
+.md .item-title { font-weight: 600; }
+/* 手順の番号は、丸で囲まず 2 桁で */
+.c-steps .c-items > li::before { content: counter(list-item, decimal-leading-zero); justify-items: start; border: 0; border-radius: 0; background: none; color: var(--accent); font-size: 1.25em; font-weight: 300; top: 0; height: 1.5em; }
+.c-steps .c-items > li::after { left: .55em; top: 2.2em; border-left: 1px solid var(--rule); }
+.c-flow .c-items > li { border: 1px solid var(--ink); border-radius: 0; background: none; }
+.c-flow .c-items > li:not(:last-child)::after { border-width: 1px; border-color: var(--ink); }
+.c-timeline .tl-when { color: var(--ink); font-weight: 300; font-size: 1.05em; }
+.c-timeline .tl-what { border-left: 1px solid var(--rule); }
+.c-timeline .tl-what::before { left: -4px; top: .7em; width: 7px; height: 7px; border: 0; background: var(--hi); }
+
+.c-cards .card { border: 0; border-top: 2px solid var(--ink); border-radius: 0; background: var(--bg-sunken); }
+.md .c-cards .card-title, .c-cards .card .item-title { font-weight: 600; }
+.c-cards .card.is-best { --ink: #fff; --ink-2: #c3d0e6; --accent: #6fd3f7; border-top: 4px solid var(--hi); padding-top: calc(1em - 2px); background: light-dark(#001e50, #0b3a85); color: #fff; box-shadow: none; }
+.c-compare .panel { border: 0; border-top: 2px solid var(--ink); border-radius: 0; background: var(--bg-sunken); }
+.c-compare .panel-head { border-bottom-color: var(--rule); background: none; font-weight: 600; }
+.c-compare .panel.is-best { border-top-color: var(--hi); box-shadow: none; }
+.c-compare .panel.is-best .panel-head { border-bottom-color: transparent; background: light-dark(#001e50, #0b3a85); color: #fff; }
+.c-compare .panel.is-best .panel-head::after { border-color: var(--hi); border-radius: 999px; padding: 0 .8em; color: #6fd3f7; }
+.c-pros-cons .panel { border-radius: 0; }
+
+.c-tabs .tab { font-weight: 400; letter-spacing: .06em; }
+.c-tabs .tab[aria-selected="true"] { border-bottom-color: var(--hi); font-weight: 600; }
+
+.c-summary { border-top: 2px solid var(--ink); border-radius: 0; background: var(--bg-sunken); }
+.c-lead { padding-left: 1em; border-left: 2px solid var(--hi); font-weight: 300; letter-spacing: 0; }
+
+.c-metrics .c-items { border-top: 1px solid var(--ink); }
+.c-metrics .metric-value { color: var(--ink); font-weight: 300; }
+.c-metrics .metric-label { letter-spacing: .08em; }
+.c-progress .bar { height: 3px; border-radius: 0; background: var(--rule); }
+.c-progress .bar > i { background: var(--hi); }
+.c-progress .is-done .bar > i { background: var(--ink); }
+.c-progress .bar-value { font-weight: 300; font-size: 1.05em; }
+
+.c-qa .qa + .qa { border-top: 1px solid var(--rule); }
+.c-qa .q::before, .c-qa .a::before { font-weight: 300; font-size: 1.3em; line-height: 1.3; }
+.c-qa .q::before { color: var(--accent); }
+.c-qa .a::before { color: var(--ink-2); }
+.md .c-quote blockquote { font-weight: 300; }
+.c-figure .fig-no { font-weight: 400; letter-spacing: .14em; color: var(--ink-2); }
+.md .c-spec dl { border-top: 1px solid var(--ink); }
+.c-spec dt { font-weight: 400; letter-spacing: .08em; }
+.lbl, .menu-path { border-radius: 999px; }
+
+/* ---------- 版・ダイアログ・通知 ---------- */
+.ver-banner, .ver-form { border-radius: 0; }
+.btn { padding: 3px 16px; border-color: var(--ink); border-radius: 999px; letter-spacing: .04em; }
+.btn:hover { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+.btn.primary { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+.btn.primary:hover { border-color: var(--hi); background: var(--hi); color: #001e50; }
+.btn.danger { border-color: currentColor; }
+.btn.danger:hover { background: var(--c-caution); border-color: var(--c-caution); color: var(--bg); }
+.ver-form input, .ver-compare select { border-radius: 0; }
+.ver-table th { color: var(--ink-2); font-weight: 400; letter-spacing: .1em; }
+.help-card { border-radius: 0; border-color: var(--ink); }
+.help-head h2 { font-weight: 300; }
+.help h3 { color: var(--ink-2); font-weight: 400; letter-spacing: .2em; }
+.toast { border-radius: 999px; background: light-dark(#001e50, #fff); color: light-dark(#fff, #001e50); }
+.search-bar { border-radius: 999px; }
+.tip { border-radius: 0; }
+.drop-overlay > div { border-radius: 0; }
+.editor-head strong { font-weight: 600; }
+
+/* ---------- スライド（上に細い線と、水色の短い線） ---------- */
+.slide::before { content: ""; position: absolute; left: 88px; right: 88px; top: 34px; height: 3px; background: linear-gradient(var(--hi), var(--hi)) left / 72px 3px no-repeat, linear-gradient(var(--rule), var(--rule)) left bottom / 100% 1px no-repeat; }
+.slide .slide-crumb { color: var(--ink-2); font-weight: 400; letter-spacing: .14em; }
+.slide-progress { height: 3px; background: var(--hi); }
+.slide-body > :is(h1, h2, h3):first-child { font-weight: 300; background: linear-gradient(var(--hi), var(--hi)) left bottom / 2.6em 3px no-repeat, linear-gradient(var(--rule), var(--rule)) left bottom / 100% 1px no-repeat; }
+.slide.is-section .secno { color: var(--accent); font-weight: 200; }
+.slide.is-title::before { display: none; }
+.title-slide .doc-header { padding-top: 46px; }
+.title-slide .doc-header .doc-title { font-size: 2.5em; }
+.title-slide .doc-header .tb-meta { gap: 0; margin-top: 1.8em; padding-top: 0; background: none; }
+.title-slide .doc-header .tb-meta > div { padding: 16px 30px 18px 0; }
+.title-slide .doc-header .tb-meta > div + div { padding-left: 30px; }
+.title-slide .doc-header .tb-meta dd { font-size: 26px; }
+
+/* ---------- 図（Mermaid）とグラフ ---------- */
+.mermaid-block .node :is(rect, polygon, circle, ellipse, path), .mermaid-block :is(rect.actor, .labelBox, .note) { fill: var(--bg) !important; stroke: var(--ink) !important; stroke-width: 1px !important; }
+.mermaid-block .node rect, .mermaid-block rect.actor { rx: 0; ry: 0; }
+.mermaid-block .cluster rect { fill: color-mix(in srgb, var(--accent) 6%, transparent) !important; stroke: var(--frame-inner) !important; rx: 0; ry: 0; }
+.mermaid-block :is(.nodeLabel, .edgeLabel, .label, .cluster-label) { color: var(--ink) !important; }
+.mermaid-block :is(text, tspan) { fill: var(--ink) !important; }
+.mermaid-block :is(.edgeLabel, .edgeLabel p, .labelBkg) { background-color: var(--bg) !important; }
+.mermaid-block :is(.flowchart-link, .messageLine0, .messageLine1, .actor-line, .relation, .loopLine) { stroke: var(--ink) !important; }
+/* 手順の番号（丸の中の数字）。線の太さを変えると丸の大きさも変わるので、手順の線の太さは変えない */
+.mermaid-block marker circle { fill: var(--ink) !important; }
+.mermaid-block .sequenceNumber { fill: var(--bg) !important; }
+.mermaid-block :is(.marker, .arrowheadPath, marker path) { fill: var(--ink) !important; stroke: var(--ink) !important; }
+.chart-line { stroke-width: 1.4; }
+
+/* ---------- 印刷 ---------- */
+@media print {
+  .codeblock { background: #f1f4f7; }
+  .codeblock pre { color-scheme: light; }
+  .code-head { border-bottom-color: var(--rule); color: var(--ink-2); }
+  .code-title { color: var(--ink); }
+}

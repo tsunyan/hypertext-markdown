@@ -61,6 +61,29 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
 - 書体は、開いた PC に入っているものを使う（外からは読み込まない）。丸ゴシックや明朝が無い PC では、近い書体に置き換わる
 - 素材は [samples/design/](samples/design/) にある。CSS を直したら `python -I tools/make_design.py` で作り直す。画像は `python tools/make_design_overview.py`
 
+### 配色の見本（cc-1〜cc-7）
+
+色のデザインの見本。配色ごとに、色に合う雰囲気でまとめている。ロゴの印は、どれも Markdown の見出しの記号（`#`）にしている。
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="samples/design/overview-cc-dark.png">
+    <img src="samples/design/overview-cc-light.png" alt="配色の見本 7 つの表紙。上の段の左から cc-1（赤と黄）、cc-2（深緑と生成り）、cc-3（青と黄）、cc-4（濃紺と橙）、下の段の左から cc-5（赤と黒）、cc-6（紺と水色）、cc-7（空色と白）">
+  </picture>
+</p>
+
+| 見本 | 配色 | 見た目 |
+|---|---|---|
+| [template-guide-cc-1.src.html](samples/template-guide-cc-1.src.html) | 赤と黄 | ファストフードの店先。赤いツールバー、黄色の札の表紙（ダークは赤い札）、太い字、大きな丸み。コードは焦げ茶の板に載せる |
+| [template-guide-cc-2.src.html](samples/template-guide-cc-2.src.html) | 深緑と生成り | コーヒー店の黒板と紙袋。深緑のツールバー、生成りの紙、薄い影の白いカード、丸いボタン、明朝の数字と添え書き。コードは黒板に載せる |
+| [template-guide-cc-3.src.html](samples/template-guide-cc-3.src.html) | 青と黄 | 北欧の家具店。青い帯、黄色の値札、極太の黒い字、丸めない角。手順と流れは、組み立て説明書のように太い線と番号で描く |
+| [template-guide-cc-4.src.html](samples/template-guide-cc-4.src.html) | 濃紺と橙 | 通販の荷物。表紙は配送ラベル（黒い枠、バーコード、等幅の数字）、工程の流れは段ボールの箱、ボタンは丸い黄色 |
+| [template-guide-cc-5.src.html](samples/template-guide-cc-5.src.html) | 赤と黒 | 制作ツールの画面。ツールバーと目次は濃い灰のパネル、題名と推しのカードは選択中の枠とハンドル、色相の帯、スライダーの進捗 |
+| [template-guide-cc-6.src.html](samples/template-guide-cc-6.src.html) | 紺と水色 | 自動車のカタログ。細い字と細い線、広い余白、2 桁の番号。ダークは深い紺の地に白と水色 |
+| [template-guide-cc-7.src.html](samples/template-guide-cc-7.src.html) | 空色と白 | SNS のタイムライン。表紙はプロフィール（空色の帯に丸い札のロゴ）、丸い枠の囲み、線でつないだ手順。ダークは青みの紺 |
+
+- 作り方と使い方は、上のデザインの見本と同じ（素材は `samples/design/cc-<番号>.css` など）
+
 ## AI エージェントで使う
 
 AI エージェントがこのテンプレートで文書を作るためのスキルを、[skills/hypertext-markdown/](skills/hypertext-markdown/) に置いている。[skills.sh](https://skills.sh) の CLI で入れる（Node.js が必要）。

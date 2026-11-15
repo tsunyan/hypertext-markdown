@@ -1,0 +1,225 @@
+/* ==========================================================================
+   CC-3（青と黄）
+   北欧の家具店。ツールバーは青い帯、表紙の情報は黄色の値札、見出しは極太の黒い字。
+   角は丸めない（丸いのはボタンだけ）。手順と流れは、組み立て説明書のように太い線と番号で描く。
+   色は light-dark() で 1 か所に書く（テーマと印刷は、テンプレートの color-scheme に従う）
+   ========================================================================== */
+:root:root {
+  --font: "Backslash Sans", "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", "BIZ UDPGothic", Meiryo, sans-serif;
+  --num: "Arial Black", "Segoe UI Black", "Noto Sans JP", "Hiragino Sans", sans-serif;
+
+  --blue: #0058a3;
+  --yellow: #ffdb00;
+  --accent: light-dark(#0058a3, #ffdb00);
+  --tint: var(--accent);
+  --bg: light-dark(#fff, #111);
+  --bg-side: light-dark(#fff, #111);
+  --bg-sunken: light-dark(#f5f5f5, #1f1f1f);
+  --ink: light-dark(#111, #fff);
+  --ink-2: light-dark(#484848, #b8b8b8);
+  --rule: light-dark(#dfdfdf, #3a3a3a);
+  --frame: light-dark(#111, #fff);
+  --frame-inner: light-dark(#929292, #6b6b6b);
+  --accent-soft: light-dark(#fff8c2, #2e2a0a);
+  --seal: light-dark(#cc0008, #ff6b70);
+  --mark: light-dark(#ffdb00, rgb(255 219 0 / .4));
+  --c-note: light-dark(#0058a3, #6db3ee);
+  --c-tip: light-dark(#0a8a00, #6fd466);
+  --c-important: light-dark(#6f3bb5, #c2a1f0);
+  --c-warning: light-dark(#a86400, #ffdb00);
+  --c-caution: light-dark(#cc0008, #ff6b70);
+  --chart-1: light-dark(#0058a3, #6db3ee); --chart-2: light-dark(#e6b800, #ffdb00); --chart-3: light-dark(#111, #fff);
+  --chart-4: light-dark(#cc0008, #ff6b70); --chart-5: light-dark(#0a8a00, #6fd466); --chart-6: light-dark(#929292, #8a8a8a);
+  --chart-7: light-dark(#6f3bb5, #c2a1f0); --chart-8: light-dark(#c9c9c9, #555); --chart-on: light-dark(#fff, #111);
+}
+
+/* ---------- 土台 ---------- */
+::selection { background: var(--yellow); color: #111; }
+:focus-visible { outline: 3px solid light-dark(#0058a3, #6db3ee); outline-offset: 2px; }
+strong, b { font-weight: 800; }
+kbd { border-radius: 0; border-color: var(--ink); font-weight: 700; }
+
+/* ---------- ツールバー（青い帯） ---------- */
+.topbar { background: var(--blue); border-bottom: 0; color: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+#ui-title { color: #fff; font-weight: 800; }
+.topbar-crumb { color: rgb(255 255 255 / .86); }
+.topbar-crumb:not(:empty) { border-left-color: rgb(255 255 255 / .4); }
+.topbar-crumb > span + span::before { border-color: var(--yellow); }
+.topbar-sep { background: rgb(255 255 255 / .4); }
+.read-progress { bottom: -5px; height: 5px; background: var(--yellow); }
+.icon-btn, .theme-trigger { border-radius: 999px; color: #fff; }
+.icon-btn svg, .theme-picker svg { stroke-width: 2; }
+.icon-btn:hover, .theme-trigger:hover, .theme-trigger[aria-expanded="true"] { background: var(--yellow); color: #111; border-color: transparent; }
+.theme-menu { border: 2px solid var(--ink); border-radius: 0; }
+.theme-option { border-radius: 0; font-weight: 700; }
+.theme-option[aria-checked="true"] { background: var(--yellow); color: #111; }
+
+/* ---------- 目次 ---------- */
+.sidebar { border-right: 2px solid var(--ink); }
+.toc-label { color: var(--ink); font-weight: 900; }
+.toc { margin-left: 0; border-left: 0; }
+.toc a { margin-left: 0; padding-left: 10px; border-left: 6px solid transparent; border-radius: 0; color: var(--ink); }
+.toc a:hover { background: var(--bg-sunken); }
+.toc a.active { border-left-color: var(--yellow); background: var(--bg-sunken); font-weight: 800; }
+.toc .lv2 > a { font-weight: 800; }
+.toc-no { color: var(--ink); font-weight: 900; }
+
+/* ---------- 表紙（上に青い帯、下に黄色の値札） ---------- */
+.doc-header { padding-top: 2rem; border-top: 16px solid var(--blue); }
+.doc-header .doc-title { font-weight: 900; letter-spacing: -.01em; line-height: 1.16; }
+.doc-header .doc-subtitle { color: var(--ink); font-weight: 700; }
+.doc-header .tb-meta {
+  --ink: #111; --ink-2: #111;
+  align-self: flex-start; display: inline-flex; gap: 0; margin-top: 2.2rem; padding: 0; background: var(--yellow); color: #111;
+}
+.doc-header .tb-meta > div { padding: .6em 1.2em .65em; }
+.doc-header .tb-meta > div + div { box-shadow: -2px 0 0 #111; }
+.doc-header .tb-meta dt { font-weight: 700; letter-spacing: .04em; }
+.doc-header .tb-meta dd { margin-top: 1px; font-size: 18px; font-weight: 900; letter-spacing: -.01em; }
+.stamp, .classif { border-radius: 0; font-weight: 800; }
+.stamp { background: var(--bg-sunken); border-color: transparent; color: var(--ink); }
+.stamp::before { border-radius: 0; background: var(--c); }
+.classif { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+.doc-empty { border-radius: 0; }
+@media (max-width: 600px) {
+  .doc-header .tb-meta { display: flex; }
+  .doc-header .tb-meta > div { padding: .5em .8em .55em; flex: 1 1 40%; box-shadow: 0 0 0 1px #111; }
+  .doc-header .tb-meta > div + div { box-shadow: 0 0 0 1px #111; }
+}
+
+/* ---------- 本文 ---------- */
+.md h1, .md h2, .md h3, .md h4 { font-weight: 900; letter-spacing: 0; }
+.md h2 { background: linear-gradient(var(--ink), var(--ink)) left bottom / 100% 3px no-repeat; }
+/* 章番号は、黄色の札 */
+.md h2 > .secno { display: inline-block; margin-right: .5em; padding: .12em .42em .14em; background: var(--yellow); color: #111; font-size: .82em; font-weight: 900; line-height: 1.2; vertical-align: .1em; }
+.md h3 { padding-left: .55em; border-left: .5em solid var(--blue); }
+.secno { color: var(--ink); font-weight: 900; }
+.md li::marker { color: var(--ink); font-weight: 800; }
+.md a { color: var(--ink); font-weight: 700; text-decoration-color: currentColor; }
+.md a:hover { color: light-dark(#0058a3, #ffdb00); text-decoration-thickness: 2px; }
+.md code { border-radius: 0; box-shadow: none; }
+.md hr { border-top: 3px solid var(--ink); }
+.md blockquote { border-left: 6px solid var(--yellow); color: var(--ink); }
+.md details { border-radius: 0; }
+.md summary { font-weight: 800; }
+
+.codeblock { border: 0; border-radius: 0; }
+.code-head { border-bottom: 0; background: light-dark(#111, #000); color: #dfdfdf; }
+.code-title { color: #fff; font-weight: 800; }
+.copy-btn, .tbl-copy { border-radius: 999px; font-weight: 700; }
+.code-head .copy-btn { border-color: #fff; background: none; color: #fff; }
+.code-head .copy-btn:hover { background: var(--yellow); border-color: var(--yellow); color: #111; }
+.gh-diff, .mermaid-block .mermaid-src { border-radius: 0; }
+.gh-view, .vb-seg { border-radius: 999px; overflow: hidden; }
+.gh-diff[data-view="unified"] [data-diffview="unified"], .gh-diff[data-view="split"] [data-diffview="split"], .vb-seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); font-weight: 700; }
+
+.table-scroll { border: 0; border-top: 3px solid var(--ink); border-radius: 0; }
+.table-scroll.fits thead tr:first-child th:first-child, .table-scroll.fits thead tr:first-child th:last-child { border-radius: 0; }
+.md th + th, .md td + td { border-left: 0; }
+.md thead th { border-bottom: 2px solid var(--ink); background: var(--bg); font-weight: 900; }
+.table-scroll.fits thead th { box-shadow: none; }
+.table-scroll tbody tr:not([class]):hover td { background: var(--accent-soft); }
+.tbl-filter { border-radius: 999px; }
+
+.alert { border-left-width: 8px; border-radius: 0; background: var(--bg-sunken); }
+.md .alert-title { font-weight: 900; }
+.doc-footer { border-top: 3px solid var(--ink); font-weight: 700; }
+
+/* ---------- 囲み（組み立て説明書の線と番号） ---------- */
+.md .c-title, .md .item-title { font-weight: 900; }
+.c-steps .c-items > li::before { width: 2.1em; height: 2.1em; border: 2.5px solid var(--ink); background: var(--bg); color: var(--ink); font-weight: 900; }
+.c-steps .c-items > li::after { left: calc(1em - 1.25px); top: 2.2em; border-left: 2.5px solid var(--ink); }
+.c-flow .c-items > li { border: 2.5px solid var(--ink); border-radius: 0; font-weight: 700; }
+.c-flow .c-items > li:not(:last-child)::after { right: -20px; width: 9px; height: 9px; border-width: 3.5px; border-color: var(--ink); }
+.c-timeline .tl-when { color: var(--ink); font-weight: 900; }
+.c-timeline .tl-what { border-left: 2.5px solid var(--ink); }
+.c-timeline .tl-what::before { left: -7.25px; top: .55em; width: 12px; height: 12px; border: 0; border-radius: 0; background: var(--yellow); box-shadow: 0 0 0 2.5px var(--ink); }
+
+.c-cards .card { border: 0; border-radius: 0; background: var(--bg-sunken); }
+.md .c-cards .card-title, .c-cards .card .item-title { font-weight: 900; }
+.c-cards .card.is-best { --ink: #111; --ink-2: #333; --accent: #0058a3; background: var(--yellow); color: #111; box-shadow: none; }
+.c-compare .panel { border: 2.5px solid var(--ink); border-radius: 0; }
+.c-compare .panel-head { border-bottom: 2.5px solid var(--ink); background: var(--bg); font-weight: 900; }
+.c-compare .panel.is-best { border-color: var(--ink); box-shadow: 8px 8px 0 var(--yellow); }
+.c-compare .panel.is-best .panel-head { border-bottom-color: var(--ink); background: var(--blue); color: #fff; }
+.c-compare .panel.is-best .panel-head::after { border: 0; border-radius: 0; background: var(--yellow); color: #111; font-weight: 900; }
+.c-pros-cons .panel { border-radius: 0; }
+.c-pros-cons .panel-head { font-weight: 900; }
+
+.c-tabs .tab-list { box-shadow: inset 0 -2px 0 var(--rule); }
+.c-tabs .tab { border-bottom-width: 4px; font-weight: 800; }
+.c-tabs .tab[aria-selected="true"] { border-bottom-color: var(--ink); }
+
+/* 要旨は青い札 */
+.c-summary { --ink: #fff; --ink-2: #d6e6f5; --accent: #ffdb00; border-radius: 0; background: var(--blue); color: #fff; }
+.md .c-summary .c-title { color: var(--yellow); }
+.c-summary code { background: rgb(255 255 255 / .18); color: inherit; }
+.c-lead { padding-left: .7em; border-left: 14px solid var(--yellow); font-weight: 900; letter-spacing: 0; }
+
+.c-metrics .c-items { border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); }
+.c-metrics .metric-value { color: var(--ink); font-weight: 900; letter-spacing: -.02em; }
+.c-metrics .metric-label { color: var(--ink); font-weight: 700; }
+.c-progress .bar { height: .75em; border-radius: 0; }
+.c-progress .bar > i { background: var(--blue); }
+.c-progress .is-done .bar > i { background: var(--yellow); }
+.c-progress .bar-label { font-weight: 700; }
+
+.c-qa .qa + .qa { border-top: 2px solid var(--ink); }
+.c-qa .q, .c-qa .a { padding-left: 2.4em; }
+.c-qa .q::before, .c-qa .a::before { top: .12em; width: 1.7em; height: 1.7em; background: var(--ink); color: var(--bg); font-size: .82em; font-weight: 900; line-height: 1.7; }
+.c-qa .a::before { background: var(--yellow); color: #111; }
+.md .c-quote blockquote { border-left: 6px solid var(--yellow); font-weight: 700; }
+.c-figure .fig-no { padding: 0 .5em; background: var(--ink); color: var(--bg); font-weight: 900; }
+.md .c-spec dl { border-top: 3px solid var(--ink); }
+.c-spec dt { color: var(--ink); font-weight: 900; }
+.lbl, .menu-path { border-radius: 0; font-weight: 800; }
+
+/* ---------- 版・ダイアログ・通知 ---------- */
+.ver-banner, .ver-form { border-radius: 0; }
+.btn { padding: 3px 14px; border: 1.5px solid var(--ink); border-radius: 999px; font-weight: 700; }
+.btn:hover { background: var(--bg-sunken); border-color: var(--ink); }
+.btn.primary { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+.btn.danger { border-color: currentColor; }
+.ver-form input, .ver-compare select { border-radius: 0; border-color: var(--ink); }
+.ver-table th { border-bottom: 2px solid var(--ink); color: var(--ink); font-weight: 900; }
+.help-card { border: 3px solid var(--ink); border-radius: 0; }
+.help-head h2 { font-weight: 900; }
+.help h3 { color: var(--ink); font-weight: 900; }
+.toast { border-radius: 0; background: var(--yellow); color: #111; font-weight: 800; }
+.search-bar { border: 2px solid var(--ink); border-radius: 999px; }
+.tip { border-radius: 0; }
+.drop-overlay > div { border-radius: 0; }
+.editor-head strong { font-weight: 900; }
+
+/* ---------- スライド（左に青い帯） ---------- */
+.slide { box-shadow: inset 26px 0 0 var(--blue); }
+.slide .slide-crumb { color: var(--ink); font-weight: 900; }
+.slide-doc { font-weight: 700; }
+.slide-num { color: var(--ink); }
+.slide-progress { height: 8px; background: var(--yellow); }
+.slide-body > :is(h1, h2, h3):first-child { background: linear-gradient(var(--ink), var(--ink)) left bottom / 100% 4px no-repeat; }
+.slide-body > h3:first-child { padding-left: 0; border-left: 0; }
+.slide.is-section .slide-body > :is(h1, h2):first-child { background-size: 100% 6px; }
+.slide.is-section .slide-body > :is(h1, h2):first-child > .secno { display: table; margin: 0 0 .3em; padding: .08em .3em .1em; font-size: 2.6em; line-height: 1; letter-spacing: -.03em; vertical-align: baseline; }
+.title-slide .doc-header { padding-top: 40px; border-top-width: 22px; }
+.title-slide .doc-header .tb-meta { gap: 0; margin-top: 1.6em; padding: 0; background: var(--yellow); }
+.title-slide .doc-header .tb-meta dd { font-size: 22px; }
+
+/* ---------- 図（Mermaid）とグラフ ---------- */
+.mermaid-block .node :is(rect, polygon, circle, ellipse, path), .mermaid-block :is(rect.actor, .labelBox, .note) { fill: var(--bg) !important; stroke: var(--ink) !important; stroke-width: 2.5px !important; }
+.mermaid-block .node rect, .mermaid-block rect.actor { rx: 0; ry: 0; }
+.mermaid-block .cluster rect { fill: color-mix(in srgb, var(--accent) 6%, transparent) !important; stroke: var(--frame-inner) !important; rx: 0; ry: 0; }
+.mermaid-block :is(.nodeLabel, .edgeLabel, .label, .cluster-label) { color: var(--ink) !important; }
+.mermaid-block :is(text, tspan) { fill: var(--ink) !important; }
+.mermaid-block :is(.edgeLabel, .edgeLabel p, .labelBkg) { background-color: var(--bg) !important; }
+.mermaid-block :is(.flowchart-link, .messageLine0, .messageLine1, .actor-line, .relation, .loopLine) { stroke: var(--ink) !important; }
+/* 手順の番号（丸の中の数字）。線の太さを変えると丸の大きさも変わるので、手順の線の太さは変えない */
+.mermaid-block marker circle { fill: var(--ink) !important; }
+.mermaid-block .sequenceNumber { fill: var(--bg) !important; }
+.mermaid-block :is(.marker, .arrowheadPath, marker path) { fill: var(--ink) !important; stroke: var(--ink) !important; }
+.chart-line { stroke-width: 2.5; }
+
+/* ---------- 印刷 ---------- */
+@media print {
+  .code-head { background: #111; }
+}
