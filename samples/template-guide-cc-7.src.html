@@ -976,8 +976,8 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
 <style id="design-style" data-design="cc-7">
 /* ==========================================================================
    CC-7（空色と白）
-   SNS のタイムライン。表紙はプロフィール（空色の帯に、丸い札のロゴを重ねる）。
-   囲みは丸い枠の投稿、手順は 1 本の線でつないだスレッド。線は細い罫だけで、ボタンと札は丸い。
+   表紙は空色の帯に丸いロゴを重ねる。
+   囲みは角の丸い枠、手順は 1 本の線でつないだ丸い印。線は細い罫だけで、ボタンと札は丸い。
    ダークは、黒ではなく青みの紺。
    色は light-dark() で 1 か所に書く（テーマと印刷は、テンプレートの color-scheme に従う）
    ========================================================================== */
@@ -1038,7 +1038,7 @@ kbd { border-radius: 6px; }
 .toc-no { color: var(--ink-2); }
 .toc a.active .toc-no { color: inherit; }
 
-/* ---------- 表紙（プロフィール。空色の帯に、ロゴの丸い札を重ねる） ---------- */
+/* ---------- 表紙（空色の帯に丸いロゴを重ねる） ---------- */
 .doc-header { padding: 116px 1.7rem 1.5rem; border: 1px solid var(--rule); border-radius: 16px; background: linear-gradient(var(--sky), var(--sky)) top / 100% 96px no-repeat, var(--bg); }
 .doc-header:has(.tb-logo) { padding-top: 66px; }
 .doc-header .tb-logo { align-self: flex-start; margin: 0 0 1.3rem -4px; padding: 11px 20px; border: 4px solid var(--bg); border-radius: 999px; background: var(--bg); box-shadow: 0 0 0 1px var(--rule); }
@@ -1091,7 +1091,7 @@ kbd { border-radius: 6px; }
 
 /* ---------- 囲み ---------- */
 .md .c-title, .md .item-title { font-weight: 800; }
-/* 手順は、1 本の線でつないだスレッド */
+/* 手順は、1 本の線でつないだ丸い印 */
 .c-steps .c-items > li::before { border: 0; background: var(--sky-fill); color: #fff; font-weight: 800; }
 .c-steps .c-items > li::after { left: calc(.95em - 1px); border-left: 2px solid var(--rule); }
 .c-flow .c-items > li { border: 1px solid var(--rule); border-radius: 22px; font-weight: 700; }

@@ -1,7 +1,7 @@
 /* ==========================================================================
    CC-4（濃紺と橙）
-   通販の荷物。ツールバーは濃紺、表紙は配送ラベル（黒い枠、バーコード、等幅の数字）。
-   工程の流れは段ボールの箱、ボタンは丸い黄色、進み具合は橙の線で描く。
+   ツールバーは濃紺、表紙は黒い枠、太さの異なる縦線、等幅の数字。
+   工程の流れは上辺に橙の帯を置いた枠、ボタンは丸い黄色、進み具合は橙の線で描く。
    色は light-dark() で 1 か所に書く（テーマと印刷は、テンプレートの color-scheme に従う）
    ========================================================================== */
 :root:root {
@@ -65,9 +65,9 @@ kbd { border-radius: 4px; }
 .toc .lv2 > a { font-weight: 700; color: var(--ink); }
 .toc-no { color: var(--orange-ink); font-weight: 700; }
 
-/* ---------- 表紙（配送ラベル） ---------- */
+/* ---------- 表紙（黒い枠と縦線） ---------- */
 .doc-header { position: relative; overflow: hidden; padding: 1.7rem 1.9rem 0; border: 2px solid var(--frame); border-radius: 10px; background: var(--card); box-shadow: inset 0 10px 0 var(--orange); }
-/* 右上にバーコード */
+/* 右上に太さの異なる縦線 */
 .doc-header::after {
   content: ""; position: absolute; top: calc(10px + 1.6rem); right: 1.9rem; width: 148px; height: 46px; pointer-events: none;
   background: repeating-linear-gradient(90deg, var(--frame) 0 2px, transparent 2px 5px, var(--frame) 5px 9px, transparent 9px 11px, var(--frame) 11px 12px, transparent 12px 16px, var(--frame) 16px 19px, transparent 19px 21px, var(--frame) 21px 22px, transparent 22px 24px, var(--frame) 24px 28px, transparent 28px 31px, var(--frame) 31px 33px, transparent 33px 37px);
@@ -113,7 +113,7 @@ kbd { border-radius: 4px; }
 /* ---------- 囲み ---------- */
 .c-steps .c-items > li::before { border: 0; background: light-dark(#232f3e, #37475a); color: #fff; font-weight: 700; }
 .c-steps .c-items > li::after { border-left: 2px dashed var(--orange); }
-/* 工程の流れは、段ボールの箱（上にテープ） */
+/* 工程の流れは、枠（上辺に橙の帯） */
 .c-flow .c-items > li { border: 1px solid var(--kraft-line); border-radius: 4px; background: linear-gradient(var(--kraft-line), var(--kraft-line)) top / 22px 7px no-repeat, var(--kraft); }
 .c-flow .c-items > li:not(:last-child)::after { border-color: var(--orange); border-width: 3px; }
 .c-timeline .tl-when { color: var(--ink); font-weight: 700; }
