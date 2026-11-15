@@ -976,8 +976,8 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
 <style id="design-style" data-design="cc-3">
 /* ==========================================================================
    CC-3（青と黄）
-   北欧の家具店。ツールバーは青い帯、表紙の情報は黄色の値札、見出しは極太の黒い字。
-   角は丸めない（丸いのはボタンだけ）。手順と流れは、組み立て説明書のように太い線と番号で描く。
+   ツールバーは青い帯、表紙の情報は黄色の面、見出しは極太の黒い字。
+   角は丸めない（丸いのはボタンだけ）。手順と流れは、太い線と番号で描く。
    色は light-dark() で 1 か所に書く（テーマと印刷は、テンプレートの color-scheme に従う）
    ========================================================================== */
 :root:root {
@@ -1040,7 +1040,7 @@ kbd { border-radius: 0; border-color: var(--ink); font-weight: 700; }
 .toc .lv2 > a { font-weight: 800; }
 .toc-no { color: var(--ink); font-weight: 900; }
 
-/* ---------- 表紙（上に青い帯、下に黄色の値札） ---------- */
+/* ---------- 表紙（上に青い帯、下に黄色の面） ---------- */
 .doc-header { padding-top: 2rem; border-top: 16px solid var(--blue); }
 .doc-header .doc-title { font-weight: 900; letter-spacing: -.01em; line-height: 1.16; }
 .doc-header .doc-subtitle { color: var(--ink); font-weight: 700; }
@@ -1101,7 +1101,7 @@ kbd { border-radius: 0; border-color: var(--ink); font-weight: 700; }
 .md .alert-title { font-weight: 900; }
 .doc-footer { border-top: 3px solid var(--ink); font-weight: 700; }
 
-/* ---------- 囲み（組み立て説明書の線と番号） ---------- */
+/* ---------- 囲み（太い線と番号） ---------- */
 .md .c-title, .md .item-title { font-weight: 900; }
 .c-steps .c-items > li::before { width: 2.1em; height: 2.1em; border: 2.5px solid var(--ink); background: var(--bg); color: var(--ink); font-weight: 900; }
 .c-steps .c-items > li::after { left: calc(1em - 1.25px); top: 2.2em; border-left: 2.5px solid var(--ink); }

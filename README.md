@@ -9,7 +9,7 @@
   <a href="https://github.com/tsunyan/hypertext-markdown/actions/workflows/ci.yml"><img src="https://github.com/tsunyan/hypertext-markdown/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
   <a href="https://github.com/tsunyan/hypertext-markdown/actions/workflows/codeql.yml"><img src="https://github.com/tsunyan/hypertext-markdown/actions/workflows/codeql.yml/badge.svg?branch=main" alt="CodeQL"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/tsunyan/hypertext-markdown" alt="License: MIT"></a>
-  <a href="template-guide.min.html"><img src="https://img.shields.io/badge/single%20file-HTML-e34f26?logo=html5&amp;logoColor=white" alt="single file: HTML"></a>
+  <a href="https://tsunyan.github.io/hypertext-markdown/template-guide.min.html"><img src="https://img.shields.io/badge/single%20file-HTML-e34f26?logo=html5&amp;logoColor=white" alt="single file: HTML"></a>
   <a href="#ai-エージェントで使う"><img src="https://img.shields.io/badge/Agent%20Skill-skills.sh-555?logo=anthropic&amp;logoColor=white" alt="Agent Skill: skills.sh"></a>
 </p>
 
@@ -31,15 +31,15 @@
 
 Markdown を内包した、1 つの HTML ファイルで配れる文書のテンプレート。調査メモや設計書を、目次・スライド・版の管理付きで読めるようにする。
 
-- 本体: [template-guide.src.html](template-guide.src.html)
-- 圧縮版: [template-guide.min.html](template-guide.min.html)。Node.js と npm がある環境で `python -I tools/minify_html.py` を実行すると、esbuild で CSS・JavaScript だけを圧縮して再生成する（初回はツールを取得する）。埋め込み Markdown と版データは保持する
+- 本体（ブラウザで開く）: [template-guide.src.html](https://tsunyan.github.io/hypertext-markdown/template-guide.src.html)
+- 圧縮版（ブラウザで開く）: [template-guide.min.html](https://tsunyan.github.io/hypertext-markdown/template-guide.min.html)。Node.js と npm がある環境で `python -I tools/minify_html.py` を実行すると、esbuild で CSS・JavaScript だけを圧縮して再生成する（初回はツールを取得する）。埋め込み Markdown と版データは保持する
 - 使い方と全部品の見本はファイルの中に書いてある。ブラウザで開けばそのまま読める（<kbd>?</kbd> でショートカットの一覧、<kbd>E</kbd> で Markdown を表示）
-- 版管理の見本: [samples/sample-versioned.src.html](samples/sample-versioned.src.html)（版 1.0〜1.2 と未確定の変更が入った基本設計書。<kbd>V</kbd> で版の一覧を開いて比較できる）
+- 版管理の見本: [samples/sample-versioned.src.html](https://tsunyan.github.io/hypertext-markdown/samples/sample-versioned.src.html)（版 1.0〜1.2 と未確定の変更が入った基本設計書。<kbd>V</kbd> で版の一覧を開いて比較できる）
   - テンプレートを直したら、`python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html` で作り直す（テンプレートに入っている利用ガイドの版は持ち込まない）
 - デザインの見本: 同じテンプレートに、CSS・ロゴ・favicon だけを重ねて見た目を変えたもの。中身は本体と同じ利用ガイドで、どれもライトとダークに対応している（下の「デザインの見本」を参照）
 - テンプレート自体にも、利用ガイドの見本の版（1.0・1.1）が入っている。中身は説明用で、実際の改版の経緯ではない
   - 新しい文書を作るときは、<kbd>V</kbd> の「版をすべて削除」で消す。`.md` をドロップしたときは、版を消すかを聞かれる
-- 本文も版も入っていない空のテンプレート: [skills/hypertext-markdown/assets/template.html](skills/hypertext-markdown/assets/template.html)（開くと、`.md` のドロップか <kbd>E</kbd> で書き始めるよう案内する）
+- 本文も版も入っていない空のテンプレート: [skills/hypertext-markdown/assets/template.html](https://tsunyan.github.io/hypertext-markdown/skills/hypertext-markdown/assets/template.html)（開くと、`.md` のドロップか <kbd>E</kbd> で書き始めるよう案内する）
 
 ## デザインの見本
 
@@ -52,10 +52,10 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
 
 | 見本 | 系統 | 見た目 |
 |---|---|---|
-| [template-guide-cyber.src.html](samples/template-guide-cyber.src.html) | サイバー・テクノロジー系 | 計器盤と設計図。方眼の面、囲みの四隅の照準の印、見出しの下の目盛り、等幅の数字。ライトは群青と紅、ダークはシアンとマゼンタ |
-| [template-guide-cute.src.html](samples/template-guide-cute.src.html) | 可愛い系 | ファンシー文具とシール帳。水玉の台紙に載せた紙、丸い字、縫い目の点線、花形の章番号、マスキングテープのカード |
-| [template-guide-pop.src.html](samples/template-guide-pop.src.html) | ポップ系 | まんがと駄菓子の包み紙。太い線とずらした影、黄色の札の題名、極太の見出し、網点。コードは黒い板に載せる |
-| [template-guide-natural.src.html](samples/template-guide-natural.src.html) | ナチュラル系 | 植物標本と手すきの紙。明朝の見出し、欧文の斜体の番号、細い線、葉の形の角、苔と樹皮の色 |
+| [template-guide-cyber.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cyber.src.html) | サイバー・テクノロジー系 | 計器盤と設計図。方眼の面、囲みの四隅の照準の印、見出しの下の目盛り、等幅の数字。ライトは群青と紅、ダークはシアンとマゼンタ |
+| [template-guide-cute.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cute.src.html) | 可愛い系 | ファンシー文具とシール帳。水玉の台紙に載せた紙、丸い字、縫い目の点線、花形の章番号、マスキングテープのカード |
+| [template-guide-pop.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-pop.src.html) | ポップ系 | まんがと駄菓子の包み紙。太い線とずらした影、黄色の札の題名、極太の見出し、網点。コードは黒い板に載せる |
+| [template-guide-natural.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-natural.src.html) | ナチュラル系 | 植物標本と手すきの紙。明朝の見出し、欧文の斜体の番号、細い線、葉の形の角、苔と樹皮の色 |
 
 - 使い方は本体と同じ。`md-source` の Markdown を書き換えるか、`.md` をドロップする。フロントマターの `palette`・`accent`・`font`・`logo` も効く
 - 書体は、開いた PC に入っているものを使う（外からは読み込まない）。丸ゴシックや明朝が無い PC では、近い書体に置き換わる
@@ -74,13 +74,13 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
 
 | 見本 | 配色 | 見た目 |
 |---|---|---|
-| [template-guide-cc-1.src.html](samples/template-guide-cc-1.src.html) | 赤と黄 | ファストフードの店先。赤いツールバー、黄色の札の表紙（ダークは赤い札）、太い字、大きな丸み。コードは焦げ茶の板に載せる |
-| [template-guide-cc-2.src.html](samples/template-guide-cc-2.src.html) | 深緑と生成り | コーヒー店の黒板と紙袋。深緑のツールバー、生成りの紙、薄い影の白いカード、丸いボタン、明朝の数字と添え書き。コードは黒板に載せる |
-| [template-guide-cc-3.src.html](samples/template-guide-cc-3.src.html) | 青と黄 | 北欧の家具店。青い帯、黄色の値札、極太の黒い字、丸めない角。手順と流れは、組み立て説明書のように太い線と番号で描く |
-| [template-guide-cc-4.src.html](samples/template-guide-cc-4.src.html) | 濃紺と橙 | 通販の荷物。表紙は配送ラベル（黒い枠、バーコード、等幅の数字）、工程の流れは段ボールの箱、ボタンは丸い黄色 |
-| [template-guide-cc-5.src.html](samples/template-guide-cc-5.src.html) | 赤と黒 | 制作ツールの画面。ツールバーと目次は濃い灰のパネル、題名と推しのカードは選択中の枠とハンドル、色相の帯、スライダーの進捗 |
-| [template-guide-cc-6.src.html](samples/template-guide-cc-6.src.html) | 紺と水色 | 自動車のカタログ。細い字と細い線、広い余白、2 桁の番号。ダークは深い紺の地に白と水色 |
-| [template-guide-cc-7.src.html](samples/template-guide-cc-7.src.html) | 空色と白 | SNS のタイムライン。表紙はプロフィール（空色の帯に丸い札のロゴ）、丸い枠の囲み、線でつないだ手順。ダークは青みの紺 |
+| [template-guide-cc-1.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-1.src.html) | 赤と黄 | 赤いツールバー、黄色の表紙（ダークは赤）、太い字、大きな丸み。コードの背景は焦げ茶 |
+| [template-guide-cc-2.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-2.src.html) | 深緑と生成り | 深緑のツールバー、生成りの背景、薄い影の白いカード、丸いボタン、明朝の数字と添え書き。コードの背景は濃い緑 |
+| [template-guide-cc-3.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-3.src.html) | 青と黄 | 青い帯、黄色の面、極太の黒い字、丸めない角。手順と流れは太い線と番号で描く |
+| [template-guide-cc-4.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-4.src.html) | 濃紺と橙 | 濃紺のツールバー、黒い枠と太さの異なる縦線、等幅の数字。工程の枠の上辺は橙の帯、ボタンは黄色で丸い |
+| [template-guide-cc-5.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-5.src.html) | 赤と黒 | 濃い灰のツールバーと目次、四隅に小さな四角を置いた枠、色相の帯、丸い印を付けた進捗バー |
+| [template-guide-cc-6.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-6.src.html) | 紺と水色 | 細い字と細い線、広い余白、2 桁の番号。ダークは深い紺の背景に白と水色 |
+| [template-guide-cc-7.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-7.src.html) | 空色と白 | 空色の帯に丸いロゴを重ねた表紙、角の丸い囲み、線でつないだ手順。ダークは青みの紺 |
 
 - 作り方と使い方は、上のデザインの見本と同じ（素材は `samples/design/cc-<番号>.css` など）
 

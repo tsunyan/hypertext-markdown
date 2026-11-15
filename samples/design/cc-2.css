@@ -1,7 +1,7 @@
 /* ==========================================================================
    CC-2（深緑と生成り）
-   コーヒー店の黒板と紙袋。ツールバーは深緑の看板、紙は生成り、囲みは白い紙に薄い影。
-   ボタンと札は丸く、数字と添え書き（引用・キーメッセージ）は明朝。コードは黒板に書く。
+   ツールバーは深緑の面、紙は生成り、囲みは白い紙に薄い影。
+   ボタンと札は丸く、数字と添え書き（引用・キーメッセージ）は明朝。コードの背景は濃い緑。
    色は light-dark() で 1 か所に書く（テーマと印刷は、テンプレートの color-scheme に従う）
    ========================================================================== */
 :root:root {
@@ -49,7 +49,7 @@
 :focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 kbd { border-radius: 6px; }
 
-/* ---------- ツールバー（深緑の看板） ---------- */
+/* ---------- ツールバー（深緑の面） ---------- */
 .topbar { background: light-dark(#1e3932, #0d1512); border-bottom: 0; color: #f2f0eb; -webkit-backdrop-filter: none; backdrop-filter: none; }
 #ui-title { color: #f2f0eb; letter-spacing: .03em; }
 .topbar-crumb { color: #b9cbc3; }
@@ -75,7 +75,7 @@ kbd { border-radius: 6px; }
   --ink-2: light-dark(#3d5a50, #b9cbc3); --rule: light-dark(#a9cfc1, #3d5f52);
   position: relative; overflow: hidden; padding: 2.1rem 2.3rem 2.2rem; border-radius: 12px; background: light-dark(#d4e9e2, #1e3932); color: light-dark(#1e3932, #f2f0eb);
 }
-/* 右端に、紙袋の斜めの縞 */
+/* 右端に、斜めの縞 */
 .doc-header::after {
   content: ""; position: absolute; inset: 0 0 0 auto; width: min(42%, 320px); pointer-events: none;
   background: repeating-linear-gradient(115deg, light-dark(rgb(0 112 74 / .13), rgb(212 233 226 / .09)) 0 2px, transparent 2px 15px);
@@ -102,7 +102,7 @@ kbd { border-radius: 6px; }
 .md blockquote { border-left: 3px solid var(--gold-line); font-family: var(--serif); color: var(--ink); }
 .md details { border-radius: 12px; }
 
-/* コードは黒板。中の色は、ダーク用の色を使う（印刷では明るい色に戻る） */
+/* コードの背景は濃い緑。中の色は、ダーク用の色を使う（印刷では明るい色に戻る） */
 .codeblock { border: 0; border-radius: 12px; background: light-dark(#1e3932, #0d1512); }
 .codeblock pre { color-scheme: dark; color: var(--ink); }
 .code-head { border-bottom: 1px solid rgb(242 240 235 / .16); background: none; color: #b9cbc3; }
@@ -145,7 +145,7 @@ kbd { border-radius: 6px; }
 
 .c-tabs .tab[aria-selected="true"] { border-bottom-color: var(--green); color: var(--green); }
 
-/* 要旨は深緑の看板 */
+/* 要旨は深緑の面 */
 .c-summary { --ink: #f2f0eb; --ink-2: #b9cbc3; --accent: #9fdcc2; border-radius: 12px; background: light-dark(#1e3932, #1e3932); color: var(--ink); }
 .md .c-summary .c-title { color: #dcbb7a; letter-spacing: .12em; }
 .c-summary code { background: rgb(242 240 235 / .14); color: inherit; }

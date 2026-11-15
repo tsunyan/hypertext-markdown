@@ -976,9 +976,9 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
 <style id="design-style" data-design="cc-5">
 /* ==========================================================================
    CC-5（赤と黒）
-   制作ツールの画面。ツールバーと目次は濃い灰のパネル（ライトでも濃い）、本文はアートボード。
-   題名と推しのカードは「選択中」の枠とハンドルで囲み、表紙には色相の帯を引く。
-   進捗はスライダー、時系列はキーフレームのひし形。コードは、濃い灰のエディターに載せる。
+   ツールバーと目次は濃い灰のパネル（ライトでも濃い）、本文は明るい面。
+   題名と推しのカードは四隅に小さな四角を置いた枠で囲み、表紙には色相の帯を引く。
+   進捗は丸い印を付けた棒、時系列はひし形。コードは、濃い灰の面に載せる。
    色は light-dark() で 1 か所に書く（テーマと印刷は、テンプレートの color-scheme に従う）
    ========================================================================== */
 :root:root {
@@ -1017,7 +1017,7 @@ body.editing .layout { grid-template-columns: minmax(340px, 46%) minmax(0, 1fr);
   --chart-1: light-dark(#d7100a, #ff5a4d); --chart-2: light-dark(#0265dc, #6aadff); --chart-3: light-dark(#e68600, #ffa037);
   --chart-4: light-dark(#6a3fd6, #b39cff); --chart-5: light-dark(#007a4d, #4fd09a); --chart-6: light-dark(#6d6d6d, #a6a6a6);
   --chart-7: light-dark(#c2248a, #f574c0); --chart-8: light-dark(#b1b1b1, #5c5c5c); --chart-on: light-dark(#fff, #1d1d1d);
-  /* 選択の枠のハンドル（四隅の小さな四角）。枠の外へ 4px はみ出した要素の背景として描く */
+  /* 枠の四隅の小さな四角。枠の外へ 4px はみ出した要素の背景として描く */
   --handles:
     linear-gradient(var(--bg), var(--bg)) 1px 1px / 5px 5px no-repeat, linear-gradient(var(--sel), var(--sel)) 0 0 / 7px 7px no-repeat,
     linear-gradient(var(--bg), var(--bg)) calc(100% - 1px) 1px / 5px 5px no-repeat, linear-gradient(var(--sel), var(--sel)) 100% 0 / 7px 7px no-repeat,
@@ -1055,7 +1055,7 @@ kbd { border-radius: 4px; }
 .toc-no { color: #8e8e8e; }
 .toc a.active .toc-no { color: #ff8a80; }
 
-/* ---------- 表紙（題名は選択中の枠、情報の上に色相の帯） ---------- */
+/* ---------- 表紙（題名は四隅に小さな四角を置いた枠、情報の上に色相の帯） ---------- */
 .doc-header .doc-title { position: relative; margin: 4px 0 0 4px; padding: .1em .32em .14em; outline: 1px solid var(--sel); font-weight: 800; letter-spacing: -.015em; }
 .doc-header .doc-title::after { content: ""; position: absolute; inset: -4px; pointer-events: none; background: var(--handles); }
 .doc-header .doc-subtitle { margin-top: 1.3em; }
@@ -1079,7 +1079,7 @@ kbd { border-radius: 4px; }
 .md blockquote { border-left-color: var(--frame-inner); }
 .md details { border-radius: 4px; }
 
-/* コードは濃い灰のエディター。中の色は、ダーク用の色を使う（印刷では明るい色に戻る） */
+/* コードは濃い灰の面。中の色は、ダーク用の色を使う（印刷では明るい色に戻る） */
 .codeblock { border: 1px solid light-dark(#111, #3f3f3f); border-radius: 4px; background: light-dark(#1d1d1d, #141414); }
 .codeblock pre { color-scheme: dark; color: var(--ink); }
 .code-head { border-bottom: 1px solid #111; background: #2c2c2c; color: #b1b1b1; }
@@ -1113,13 +1113,13 @@ kbd { border-radius: 4px; }
 .c-steps .c-items > li::before { border: 0; border-radius: 4px; background: light-dark(#464646, #545454); color: #fff; font-weight: 700; }
 .c-flow .c-items > li { border: 1px solid var(--rule); border-radius: 4px; background: var(--bg-sunken); box-shadow: inset 0 3px 0 var(--pc); }
 .c-flow .c-items > li:not(:last-child)::after { border-color: var(--frame-inner); }
-/* 時系列の点は、キーフレームのひし形 */
+/* 時系列の点は、ひし形 */
 .c-timeline .tl-when { color: var(--ink); }
 .c-timeline .tl-what::before { left: -5.75px; top: .58em; width: 10px; height: 10px; border: 0; border-radius: 0; background: var(--sel); transform: rotate(45deg); }
 
 .c-cards .card { position: relative; border-radius: 4px; background: var(--bg); }
 .c-cards .card:hover { border-color: var(--sel); }
-/* 推しのカードは「選択中」 */
+/* 推しのカードは四隅に小さな四角を置いた枠 */
 .c-cards .card.is-best { border-color: var(--sel); box-shadow: none; }
 .c-cards .card.is-best::after { content: ""; position: absolute; inset: -4px; pointer-events: none; background: var(--handles); }
 .c-compare .panel { border-radius: 4px; }
@@ -1135,7 +1135,7 @@ kbd { border-radius: 4px; }
 
 .c-metrics .metric { box-shadow: inset 0 -3px 0 var(--pc); }
 .c-metrics .metric-value { color: var(--ink); font-weight: 800; letter-spacing: -.02em; }
-/* 進捗はスライダー */
+/* 進捗は丸い印を付けた棒 */
 .c-progress .bar { height: 4px; overflow: visible; background: var(--rule); }
 .c-progress .bar > i { position: relative; border-radius: 999px; background: var(--sel); }
 .c-progress .bar > i::after { content: ""; position: absolute; top: 50%; right: -7px; width: 14px; height: 14px; margin-top: -7px; border: 2px solid var(--sel); border-radius: 50%; background: var(--bg); box-sizing: border-box; }
