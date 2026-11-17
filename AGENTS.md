@@ -45,7 +45,7 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
 | `samples/template-guide-<デザイン>.src.html` | 生成物 | `python -I tools/make_design.py`（デザインの見本。`cyber`・`cute`・`pop`・`natural` の 4 つと、配色の見本 `cc-1`〜`cc-7` の 7 つ。テンプレートに `samples/design/` の CSS・ロゴ・favicon を重ねる） |
 | `samples/design/` | 正本 | デザインの素材。`designs.json`（一覧。`group` は一覧画像の組）、`<デザイン>.css`、`<デザイン>-logo.svg`・`-logo-dark.svg`・`-favicon.svg` |
 | `samples/design/overview-*.png` | 生成物 | `python tools/make_design_overview.py`（デザインの見本の表紙を並べた README 用の画像。`designs.json` の `group` ごとに 1 組で、`group` が無いものは `overview-{light,dark}.png`、`cc` は `overview-cc-{light,dark}.png`。デザインの見た目を変えたら作り直す） |
-| `samples/template-guide-<キー>.src.html`（`c1`〜`c5`・`f1`・`h1`〜`h3`） | 生成物（作り直せない） | `tools/make_brand.py` で作ったブランド見本。いまのテンプレートからは作り直せない（ツールの説明を参照）。テンプレートを直しても更新しない |
+| `samples/template-guide-<キー>.src.html`（`c1`〜`c5`・`f1`・`h1`〜`h3`） | ブランド見本 | 旧テンプレートで作った見本。利用ガイドの変更は `md-source` と見本の版 1.1 の本文だけを正本から同期し、CSS・JavaScript・ロゴ・配色・過去の版を保持する。`tools/make_brand.py` はロゴ・配色が空の入力を想定しているため、現行テンプレートからの全体再生成には調整が必要 |
 | `samples/brand/` | 素材 | ブランド見本のロゴと色 |
 | `docs/images/readme-*.png` | 生成物 | `python tools/make_readme_images.py`（見本の画面を Playwright で撮り、README の先頭の画像をライトとダークの 2 枚ずつ作る。見た目を変えたら作り直す） |
 | `graft/` | 生成物 | コード検索の索引（git では管理しない） |
@@ -86,7 +86,9 @@ graft の索引があるときは、`graft grep "<名前>"` や `graft ask "<知
 1. `md-source` を直し、同じ内容を、いちばん新しい見本の版（`class="md-version"` の 1.1）にも入れる。食い違うと `tools/check.py` が知らせる
 2. 上の 2〜5 を実行する
 
-利用者が正本での内容確認を先に指定した場合は、1 の段階でガイドの表示・リンク・スライド・保存を確かめる。生成物との同期は内容確定後にまとめて行い、確認中は同期の検査が未完了であることを伝える。ガイドだけの変更では空のテンプレートに本文を入れず、再生成できないブランド見本も更新しない。
+ブランド見本（`c1`〜`c5`・`f1`・`h1`〜`h3`）にも、正本の `md-source` と見本の版 1.1 の本文を同期する。script 要素の属性と、それ以外の HTML は変更しない。全体を再生成するツールの制約を、ガイド本文の同期を省く理由にしない。
+
+利用者が正本での内容確認を先に指定した場合は、1 の段階でガイドの表示・リンク・スライド・保存を確かめる。生成物との同期は内容確定後にまとめて行い、確認中は同期の検査が未完了であることを伝える。ガイドだけの変更では空のテンプレートに本文を入れない。
 
 **部品（`:::名前`）や書式を足す**
 
