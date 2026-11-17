@@ -147,14 +147,17 @@ def check_authoring(text, errors):
     authoring = AUTHORING.read_text(encoding="utf-8")
     blocks = set(re.findall(r"^:{3,}([a-z][\w-]*)", work, re.MULTILINE)) - CUSTOM_BLOCKS
     missing = sorted(b for b in blocks if not re.search(rf":::{re.escape(b)}(?![\w-])", authoring))
-    # 利用ガイドの「## フロントマター」の表の 1 列目に並ぶキー
-    section = re.search(r"^## フロントマター\n(.*?)^## ", work, re.MULTILINE | re.DOTALL)
+    # フロントマターは独立した章、またはリファレンス内の節に置く。次の章・節までの表を調べる。
+    section = re.search(
+        r"^#{2,3} フロントマター(?: \{#[\w-]+\})?\n(.*?)(?=^#{1,3} |\Z)",
+        work, re.MULTILINE | re.DOTALL,
+    )
     keys = set(re.findall(r"`([a-z_]+)`", "\n".join(
         row.split("|")[1] for row in (section.group(1) if section else "").splitlines() if row.startswith("| `")
     )))
     missing += sorted(f"フロントマターの {k}" for k in keys if f"`{k}`" not in authoring)
     if not section:
-        errors.append("template-guide.src.html: 利用ガイドに「## フロントマター」の章が見つからない")
+        errors.append("template-guide.src.html: 利用ガイドに「フロントマター」の章・節が見つからない")
     if missing:
         errors.append(
             "skills/hypertext-markdown/references/authoring.md に、利用ガイドにある書式の説明が無い: " + "、".join(missing)
