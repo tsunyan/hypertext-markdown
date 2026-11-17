@@ -25,6 +25,7 @@
 | `status` | `draft` / `review` / `approved` / `final` / `obsolete`。表紙に印が付く |
 | `classification` | 機密区分（`社外秘` など）。表紙と印刷時のヘッダーに出る |
 | `numbering` | `true` で H2・H3 に章番号を振る |
+| `breaks` | `true` で段落内の通常の改行も表示に反映する（省略時は無効） |
 | `slide_level` | `3` で H3 でもスライドを分ける（既定は `2`） |
 | `h2_pagebreak` | `true` で印刷時に H2 の前で改ページ |
 | `filename` | 画面で保存するときのファイル名（拡張子なし） |

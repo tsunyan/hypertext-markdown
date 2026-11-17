@@ -91,7 +91,7 @@ def test_renders_without_errors(opened, path):
     o.wait_mermaid()
     facts = doc_facts(page)
     assert facts["toc"] >= 5, "目次ができていない"
-    assert facts["h2"] >= 5
+    assert facts["h2"] >= 3  # 利用ガイドは入門・実践・リファレンスの3部
     for k, ex in enumerate(facts["examples"]):
         assert ex["tabs"] == 2 and ex["empty"] == 0, f"{k + 1} 番目の :::example のタブがおかしい: {ex}"
     assert not o.errors, "\n".join(o.errors)
