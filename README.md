@@ -13,12 +13,100 @@
   <a href="#ai-エージェントで使う"><img src="https://img.shields.io/badge/Agent%20Skill-skills.sh-555?logo=anthropic&amp;logoColor=white" alt="Agent Skill: skills.sh"></a>
 </p>
 
+Markdown で書き、HTML ひとつで渡す。**hypertext-markdown** は、目次・スライド・版の管理を備えた文書テンプレート。調査メモや設計書を、読むときも、説明するときも、同じ文書のまま使える。
+
+**[利用ガイドを開く](https://tsunyan.github.io/hypertext-markdown/template-guide.min.html)** · **[空のテンプレートで始める](https://tsunyan.github.io/hypertext-markdown/skills/hypertext-markdown/assets/template.html)** · **[版管理の見本を見る](https://tsunyan.github.io/hypertext-markdown/samples/sample-versioned.src.html)**
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-views-dark.png">
     <img src="docs/images/readme-views-light.png" alt="同じ文書（受注管理システム 基本設計書）を、Markdown・HTML（ライトとダーク）・スライド（ライトとダーク）で表示したところ">
   </picture>
 </p>
+
+- **ひとつの本文から、読み物・スライド・PDFへ。** 見出しから目次とスライドを作り、用途に合わせて表示を切り替える。
+- **渡すのは HTML ファイルひとつ。** Markdown・表示用の CSS・JavaScript を内包し、画像も埋め込める。読むためのアプリのインストールやサーバーの用意は不要。
+- **改版の経緯も文書と一緒に。** 確定した版をファイル内に残し、任意の 2 つの版を見比べられる。
+
+[始め方](#始め方) · [読む伝える改版する](#読む伝える改版する) · [文書を組み立てる](#文書を組み立てる) · [デザインを選ぶ](#デザインを選ぶ) · [開発](#開発)
+
+## 始め方
+
+### ブラウザで作る
+
+1. [空のテンプレート](https://tsunyan.github.io/hypertext-markdown/skills/hypertext-markdown/assets/template.html)を開く。
+2. 手元の `.md` ファイルを画面へドロップするか、<kbd>E</kbd> で編集欄を開いて Markdown を書く。画像は編集欄への貼り付け・ドロップで埋め込める。
+3. <kbd>Ctrl</kbd>+<kbd>S</kbd> で HTML をダウンロードする。そのファイルを相手に渡す。
+
+修正するときは、保存した HTML をブラウザで開き、同じ手順で編集・保存する。元のファイルを直接上書きする操作ではないので、ダウンロードした最新版を使う。
+
+書き方を試すなら、[利用ガイド](https://tsunyan.github.io/hypertext-markdown/template-guide.min.html)の各見本で「表示」と「書き方」を切り替えられる。ガイドには説明用の版 1.0・1.1 が入っているため、新しい文書には空のテンプレートから始めるとよい。
+
+### AI エージェントで使う
+
+文書の作成・修正用の [Agent Skill](skills/hypertext-markdown/) を用意している。Node.js がある環境でインストールする。
+
+```bash
+npx skills add tsunyan/hypertext-markdown
+```
+
+エージェントには、使うテンプレートと作りたい文書を伝える。
+
+> hypertext-markdown で、この調査結果を報告書にして。結論、比較、推奨案の順にまとめ、会議でスライドとしても使えるようにして。
+
+スキルには、[作成・修正の手順](skills/hypertext-markdown/SKILL.md)、[書式と雛形](skills/hypertext-markdown/references/authoring.md)、HTML を作るスクリプトが含まれる。
+
+### コマンドで作る
+
+このリポジトリを取得した環境では、Node.js 18 以上で `.md` から HTML を作れる。ビルドスクリプトに追加パッケージは不要。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md -o report.html
+```
+
+手元の画像も自動で埋め込まれる。デザインを指定する場合は `--template samples/template-guide-cyber.src.html` のようにテンプレートを渡す。
+
+既存の文書を直すときは、Markdown を取り出して編集し、元の HTML をテンプレートにして戻す。`--keep-versions` で確定済みの版を引き継ぐ。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs --extract report.html -o report.md
+# report.md を編集する
+node skills/hypertext-markdown/scripts/build.mjs report.md --template report.html --keep-versions -o report.html
+```
+
+### 配布する前に
+
+ブラウザで HTML を開き、本文と図を確認してから <kbd>Ctrl</kbd>+<kbd>S</kbd> で保存すると、**描画済みの本文と図も含む HTML** になる。このファイルは JavaScript が無効でも本文を読める。コマンドで生成した直後の HTML には描画済みの本文がないため、この保存を行ってから渡す。
+
+Markdown の変換や通常の表示はファイル内で完結する。Mermaid の図を描くときは CDN からライブラリを読み込むが、描画後に保存した図はオフラインでも表示できる。外部 URL の画像は自動では埋め込まれないため、ファイルひとつで配る場合は画像も埋め込む。
+
+## 読む・伝える・改版する
+
+### 読む
+
+H2・H3 から目次を作り、読んでいる章と節を表示する。文書内の検索は、閉じた折りたたみや選んでいないタブの中も探せる。ライト・ダーク・OS に合わせる表示を切り替えられ、本文の幅も右端の取っ手で調整できる。
+
+| 操作 | キー |
+|---|---|
+| 文書内を検索 | <kbd>/</kbd> |
+| テーマを切り替え | <kbd>T</kbd> |
+| スライドを表示 | <kbd>S</kbd> |
+| Markdown を編集 | <kbd>E</kbd> |
+| Markdown をダウンロード | <kbd>D</kbd> |
+| HTML として保存 | <kbd>Ctrl</kbd>+<kbd>S</kbd> |
+| 印刷・PDF | <kbd>Ctrl</kbd>+<kbd>P</kbd> |
+| 版を管理 | <kbd>V</kbd> |
+| ショートカットの一覧 | <kbd>?</kbd> |
+
+### スライド・PDFで伝える
+
+H2（設定によっては H3）ごとにスライドを作る。1 枚に収まらない内容は、文字を 80% まで縮め、それでも収まらなければ段落・表の行・コードの行などの切れ目で分割する。手動で区切るときは `<!-- slide -->`、印刷にも区切りを入れるときは `<!-- pagebreak -->` を使う。
+
+印刷は表示モードに合わせて変わる。読み物では表紙・目次・本文を並べ、スライドでは 16:9 の 1 枚を 1 ページにする。`doc-only`・`slide-only` の囲みで、詳しい説明と発表用の要点を出し分けることもできる。
+
+### 版を残して比べる
+
+<kbd>V</kbd> の「版を確定…」で版番号・日付・作成者・内容を入力すると、その時点の Markdown をファイル内に残して HTML を保存する。本文に `:::history` の囲みを置けば、改版履歴の表になる。
 
 <p align="center">
   <picture>
@@ -27,21 +115,73 @@
   </picture>
 </p>
 
-<!-- 画像は python tools/make_readme_images.py で作り直す。画像の文言を変えたら、alt も合わせる -->
+任意の 2 つの版や作業中の文書を、文書の表示・Markdown の両方で比較できる。変更した段落には改訂線、変わった語には取り消し線と下線が付き、<kbd>N</kbd> / <kbd>Shift</kbd>+<kbd>N</kbd> で変更箇所へ移動する。過去の版や比較結果もスライド・印刷に使える。
 
-Markdown を内包した、1 つの HTML ファイルで配れる文書のテンプレート。調査メモや設計書を、目次・スライド・版の管理付きで読めるようにする。
+[版管理の見本](https://tsunyan.github.io/hypertext-markdown/samples/sample-versioned.src.html)には、基本設計書の版 1.0〜1.2 と未確定の変更が入っている。開いて <kbd>V</kbd> を押すと試せる。
 
-- 本体（ブラウザで開く）: [template-guide.src.html](https://tsunyan.github.io/hypertext-markdown/template-guide.src.html)
-- 圧縮版（ブラウザで開く）: [template-guide.min.html](https://tsunyan.github.io/hypertext-markdown/template-guide.min.html)。Node.js と npm がある環境で `python -I tools/minify_html.py` を実行すると、esbuild で CSS・JavaScript だけを圧縮して再生成する（初回はツールを取得する）。埋め込み Markdown と版データは保持する
-- 使い方と全部品の見本はファイルの中に書いてある。ブラウザで開けばそのまま読める（<kbd>?</kbd> でショートカットの一覧、<kbd>E</kbd> で Markdown を表示）
-- 版管理の見本: [samples/sample-versioned.src.html](https://tsunyan.github.io/hypertext-markdown/samples/sample-versioned.src.html)（版 1.0〜1.2 と未確定の変更が入った基本設計書。<kbd>V</kbd> で版の一覧を開いて比較できる）
-  - テンプレートを直したら、`python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html` で作り直す（テンプレートに入っている利用ガイドの版は持ち込まない）
-- デザインの見本: 同じテンプレートに、CSS・ロゴ・favicon だけを重ねて見た目を変えたもの。中身は本体と同じ利用ガイドで、どれもライトとダークに対応している（下の「デザインの見本」を参照）
-- テンプレート自体にも、利用ガイドの見本の版（1.0・1.1）が入っている。中身は説明用で、実際の改版の経緯ではない
-  - 新しい文書を作るときは、<kbd>V</kbd> の「版をすべて削除」で消す。`.md` をドロップしたときは、版を消すかを聞かれる
-- 本文も版も入っていない空のテンプレート: [skills/hypertext-markdown/assets/template.html](https://tsunyan.github.io/hypertext-markdown/skills/hypertext-markdown/assets/template.html)（開くと、`.md` のドロップか <kbd>E</kbd> で書き始めるよう案内する）
+版は差分ではなく全文で残すため、版や埋め込み画像が増えるほどファイルも大きくなる。画像は縮小してから入れると扱いやすい。
 
-## デザインの見本
+## 文書を組み立てる
+
+見出し・表・リストなど、普通の Markdown を基本に書く。説明に合わせて見せ方を変えたいところだけ、`:::名前` から `:::` までの囲みを使う。
+
+```markdown
+# 導入計画
+
+## 進め方
+
+:::steps
+1. **現状を調べる**
+2. **小さく試す**
+3. **全体に展開する**
+:::
+```
+
+### 表現のための部品
+
+| 用途 | 部品・書式 |
+|---|---|
+| 流れを示す | `steps`（手順）、`flow`（工程）、`timeline`（時系列） |
+| 並べる・比べる | `cards`、`columns`、`compare`、`pros-cons`、`tabs` |
+| 要点を強調する | `summary`（要旨）、`lead`、`metrics`（数値）、`progress` |
+| 補足する | `note`、`tip`、`important`、`warning`、`caution`、`details`、`qa`、`quote` |
+| 構造を示す | `figure`・`table`（図表番号）、`spec`（項目と値）、`tree` |
+| データを見せる | `chart`（表からグラフを作る） |
+| 用語を説明する | `glossary`、`*[略語]: 意味` |
+| 履歴・見本を載せる | `history`（改版履歴）、`example`（表示と書き方） |
+| 表示を出し分ける | `doc-only`、`slide-only` |
+| 文中に添える | `:ok[完了]` などのラベル、`:menu[設定 > ネットワーク]`、`[](#ID)` による章・図表の参照 |
+| 独自の囲みを作る | 任意の名前を `c-名前` クラスにし、テンプレートの CSS で装飾 |
+
+Zenn 形式の `:::message`・`:::details タイトル` にも対応する。構文と最小の例は[書式リファレンス](skills/hypertext-markdown/references/authoring.md)、描画結果は[利用ガイド](https://tsunyan.github.io/hypertext-markdown/template-guide.min.html)で確認できる。
+
+### コード・表・グラフ
+
+コードは言語に合わせて色分けする。`diff`・`patch` のコードブロックは、ファイルごとの枠と行番号を持つ差分になり、統合表示・左右表示を切り替えられる。
+
+Markdown の表と CSV・TSV のコードブロックは、並べ替え・絞り込み・Excel 向けのコピーに対応する。`chart` で表を囲めば、縦棒・横棒・積み上げ・折れ線・面・構成比のグラフになり、グラフと元データをタブで切り替えられる。
+
+### 色・書体・画像
+
+Markdown の先頭にフロントマターを書くと、文書名や見た目を指定できる。
+
+```yaml
+---
+title: 導入計画
+palette: teal
+font: gothic
+---
+```
+
+`palette` は 8 種類の配色、`accent` は強調色、`font`・`mono` は本文・コードの書体、`logo` は表紙とスライドのロゴを指定する。書体は閲覧する PC にあるものを使う。
+
+画像は普通の Markdown で書ける。編集欄への貼り付けやビルドスクリプトで埋め込むと、画像ファイルを別に渡す必要がない。ライト・ダークで画像を出し分ける書式にも対応する。
+
+HTML や SVG を本文に直接書くこともできる。表示用のタグ・属性・CSS に対応し、スクリプト・iframe・フォームなどは取り除く。
+
+## デザインを選ぶ
+
+同じ機能と利用ガイドに、CSS・ロゴ・favicon を重ねた見本。どれもライト・ダークに対応する。好みの見本を開いて `.md` をドロップし、版を消して新しい文書として使うか、ビルド時の `--template` に指定する。
 
 <p align="center">
   <picture>
@@ -50,20 +190,14 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
   </picture>
 </p>
 
-| 見本 | 系統 | 見た目 |
-|---|---|---|
-| [template-guide-cyber.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cyber.src.html) | サイバー・テクノロジー系 | 計器盤と設計図。方眼の面、囲みの四隅の照準の印、見出しの下の目盛り、等幅の数字。ライトは群青と紅、ダークはシアンとマゼンタ |
-| [template-guide-cute.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cute.src.html) | 可愛い系 | ファンシー文具とシール帳。水玉の台紙に載せた紙、丸い字、縫い目の点線、花形の章番号、マスキングテープのカード |
-| [template-guide-pop.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-pop.src.html) | ポップ系 | まんがと駄菓子の包み紙。太い線とずらした影、黄色の札の題名、極太の見出し、網点。コードは黒い板に載せる |
-| [template-guide-natural.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-natural.src.html) | ナチュラル系 | 植物標本と手すきの紙。明朝の見出し、欧文の斜体の番号、細い線、葉の形の角、苔と樹皮の色 |
+| デザイン | 特徴 |
+|---|---|
+| [サイバー](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cyber.src.html) | 計器盤と設計図を思わせる方眼・目盛り・等幅の数字 |
+| [キュート](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cute.src.html) | 水玉の台紙、丸い字、縫い目の点線、テープ風のカード |
+| [ポップ](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-pop.src.html) | 太い線とずらした影、黄色の題名、網点 |
+| [ナチュラル](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-natural.src.html) | 明朝の見出し、細い線、葉の形の角、苔と樹皮の色 |
 
-- 使い方は本体と同じ。`md-source` の Markdown を書き換えるか、`.md` をドロップする。フロントマターの `palette`・`accent`・`font`・`logo` も効く
-- 書体は、開いた PC に入っているものを使う（外からは読み込まない）。丸ゴシックや明朝が無い PC では、近い書体に置き換わる
-- 素材は [samples/design/](samples/design/) にある。CSS を直したら `python -I tools/make_design.py` で作り直す。画像は `python tools/make_design_overview.py`
-
-### 配色の見本（cc-1〜cc-7）
-
-色のデザインの見本。配色ごとに、色に合う雰囲気でまとめている。ロゴの印は、どれも Markdown の見出しの記号（`#`）にしている。
+配色を中心に選ぶための見本もある。
 
 <p align="center">
   <picture>
@@ -72,165 +206,23 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
   </picture>
 </p>
 
-| 見本 | 配色 | 見た目 |
-|---|---|---|
-| [template-guide-cc-1.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-1.src.html) | 赤と黄 | 赤いツールバー、黄色の表紙（ダークは赤）、太い字、大きな丸み。コードの背景は焦げ茶 |
-| [template-guide-cc-2.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-2.src.html) | 深緑と生成り | 深緑のツールバー、生成りの背景、薄い影の白いカード、丸いボタン、明朝の数字と添え書き。コードの背景は濃い緑 |
-| [template-guide-cc-3.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-3.src.html) | 青と黄 | 青い帯、黄色の面、極太の黒い字、丸めない角。手順と流れは太い線と番号で描く |
-| [template-guide-cc-4.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-4.src.html) | 濃紺と橙 | 濃紺のツールバー、黒い枠と太さの異なる縦線、等幅の数字。工程の枠の上辺は橙の帯、ボタンは黄色で丸い |
-| [template-guide-cc-5.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-5.src.html) | 赤と黒 | 濃い灰のツールバーと目次、四隅に小さな四角を置いた枠、色相の帯、丸い印を付けた進捗バー |
-| [template-guide-cc-6.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-6.src.html) | 紺と水色 | 細い字と細い線、広い余白、2 桁の番号。ダークは深い紺の背景に白と水色 |
-| [template-guide-cc-7.src.html](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-7.src.html) | 空色と白 | 空色の帯に丸いロゴを重ねた表紙、角の丸い囲み、線でつないだ手順。ダークは青みの紺 |
-
-- 作り方と使い方は、上のデザインの見本と同じ（素材は `samples/design/cc-<番号>.css` など）
-
-## AI エージェントで使う
-
-AI エージェントがこのテンプレートで文書を作るためのスキルを、[skills/hypertext-markdown/](skills/hypertext-markdown/) に置いている。[skills.sh](https://skills.sh) の CLI で入れる（Node.js が必要）。
-
-```bash
-npx skills add tsunyan/hypertext-markdown
-```
-
-エージェントは Markdown を書き、スキルの `scripts/build.mjs` で空のテンプレートに流し込んで HTML にする。
-
-| ファイル | 内容 |
+| 配色 | 見本 |
 |---|---|
-| `SKILL.md` | 作る手順と、既存の HTML を直す手順 |
-| `references/authoring.md` | 標準の Markdown にない書式（フロントマター、`:::` の部品、文中の記法、雛形） |
-| `scripts/build.mjs` | `.md` を HTML にする。手元の画像を base64 で埋め込み、`</script>` を書き換え、`<title>` を文書名にする。`--extract` で HTML から Markdown を取り出し、`--template` と `--keep-versions` で既存の HTML を版を残したまま作り直す |
-| `assets/template.html` | 空のテンプレート（`tools/make_skeleton.py` が作る） |
-
-スキルを入れずに使うときも、Node.js があれば同じことができる。
-
-```bash
-node skills/hypertext-markdown/scripts/build.mjs report.md -o report.html
-```
-
-## できること
-
-- ライト / ダーク / OS に合わせる、のテーマ切り替え（<kbd>T</kbd>）
-- H2・H3 から目次を自動で作り、読んでいる位置に印を付ける。ツールバーには、いま読んでいる章と節（パンくず）を出す
-- Markdown を内包し、そのままダウンロードできる（<kbd>D</kbd>）
-- H2（または H3）ごとのスライド表示（<kbd>S</kbd>）。スライド中の印刷で 16:9 の PDF になる
-- 読み物の印刷では、表紙・目次・本文の順に並び、ヘッダーに文書名と機密区分、フッターにページ番号が入る
-- `.md` のドラッグ＆ドロップ、画面上での編集（<kbd>E</kbd>。画像の貼り付けも可）、HTML としての保存（<kbd>Ctrl</kbd>+<kbd>S</kbd>）
-- 画像の埋め込み（base64、参照形式、ライト用とダーク用の出し分け）
-- 文書の版管理（<kbd>V</kbd>）。確定した版を同じファイルに残し、版の間の変更を改訂線付きで比べる
-- 文書内の検索（<kbd>/</kbd>）。閉じた折りたたみ・選んでいないタブ・ほかのスライドの中も探し、目次に章ごとの件数を出す
-- コードの色分け（19 言語、外部ライブラリなし）、表の並べ替え・絞り込み・Excel 用のコピー、表からのグラフ、用語集
-- 本文の幅を、右端の取っ手のドラッグで変える（見る人ごとにブラウザが覚える）
-- フロントマターで、色の組み合わせ・強調の色・書体・ロゴを文書ごとに指定する
-
-## 表現のための部品
-
-Markdown で書けない見せ方は、`:::名前` 〜 `:::` の囲みで指定する。中身は普通の Markdown なので、ほかのビューアでも内容は読める。
-
-| 分類 | 部品 |
-|---|---|
-| 流れ | `steps`（手順）、`flow`（工程の流れ）、`timeline`（時系列） |
-| 並べる・比べる | `cards`、`columns`（幅の比を指定可）、`compare`（推奨を強調）、`pros-cons`、`tabs` |
-| 強調 | `summary`（要旨）、`lead`（キーメッセージ）、`metrics`（数値）、`progress`（進捗バー） |
-| 補足 | `note` `tip` `important` `warning` `caution`、`details`、`qa`（想定問答）、`quote`（出典付き引用） |
-| 構成 | `figure` / `table`（図表番号）、`spec`（項目と値）、`tree`（ツリー） |
-| 出し分け | `doc-only`（読み物だけ）、`slide-only`（スライドだけ） |
-| 見本 | `example`（中身を描いた「表示」と、元の Markdown の「書き方」をタブで並べる。1 か所に書くので、見本と書き方がずれない） |
-| グラフ | `chart`（中の表から、縦棒・横棒・積み上げ・折れ線・面・構成比を描く。「グラフ」と「データ」のタブ付き） |
-| 用語 | `glossary`（用語集）、`*[略語]: 意味`（表示しない定義）。本文中の用語に、意味を添える |
-| 文中 | `:ok[完了]` `:ng[]` `:warn[]` `:info[]` `:tag[]`（ラベル）、`:menu[設定 > ネットワーク]`（操作経路）、`[](#ID)`（図表番号・章番号への参照） |
-| 自作 | 一覧に無い名前を付けると `c-名前` クラスの囲みになる。CSS を足せば独自デザインになる |
-
-Zenn と同じ `:::message`・`:::details タイトル` も使える。
-
-HTML も直接書ける。文の中のタグはそのまま残り、行の先頭をブロックのタグ（`<div>`・`<details>` など）で始めると、次の空行までが HTML になる。表示用のタグ・属性・CSS だけを許可し、script・iframe・フォーム、イベント属性、危険な URL、画面用のクラスなどは取り除く。
-
-コードブロックの言語を `diff`（または `patch`）にすると、`git diff` の出力を GitHub の差分画面のように表示する。
-
-- ファイルごとの枠（ファイル名、追加／削除／名前変更の区別、増減の行数とバー、折りたたみ）
-- 「統合」と「左右」の切り替え（選んだ方法は保存する。`` ```diff split `` で最初から左右）
-- 変更した行の中で、実際に変わった語の強調
-- 変更前・変更後の行番号（行番号と `+` `-` は表示だけで、コピーすると元の差分のまま）
-- スライドでは、表示中の方の表の行単位で分割する（続きの部分にもファイル名を付ける）
-- 差分の中のコードも色分けする（言語はファイル名の拡張子から決める。`` ```diff lang=python `` で指定も可）
-
-## コード・表・グラフ
-
-- **コードの色分け:** C・C++、C#、Java、JavaScript、TypeScript、Python、シェル、バッチファイル、PowerShell、SQL、HTML、CSS、Markdown、JSON、XML、YAML、TOML、INI（conf・properties）、CSV・TSV（`` ```csv code ``）。外部ライブラリは使わず、言語ごとの規則で字句を分ける。色は行ごとに閉じるので、スライドでも行の単位で分けられる。`example` の「書き方」タブの Markdown も、中のフェンスの言語まで色分けする
-- **CSV・TSV の表:** `` ```csv `` / `` ```tsv `` は表になる（引用符の中の区切り・改行・`""` に対応。数値だけの列は右揃え）。`noheader` で 1 行目も中身に、`title="…"` で表題を付ける
-- **表の操作:** 見出しを押すと並べ替え（昇順 → 降順 → 元の順。数値の列は数値として比べる）。6 行以上の表には絞り込みの欄が付く。「コピー」でタブ区切り（Excel にそのまま貼れる形）にする。横にはみ出さない表は、スクロールしても見出しの行が画面の上に残る
-- **グラフ:** `:::chart 種類 表題 unit=単位 min= max=`。種類は `bar`（省略時）・`barh`・`stacked`・`line`・`area`・`share`（`pie` も構成比の帯で描く）。系列の色は、構文強調の `--tk-c0`〜`--tk-c5`・`--tk-str`・`--tk-com` と共通の 8 色を決まった順で使い、ライト・ダーク表示に追従する。9 系列目以降は描かない。2 系列以上は凡例を付け、マウスを重ねるかキーボードで選ぶと値が出る。表示する幅に合わせて描き直し、スライドでは拡大する
-- **用語集:** `:::glossary` の項目と `*[略語]: 意味` の語に、本文中で点線の下線を付け、マウスを重ねると意味を出す（H2 の章ごとに最初の 1 回だけ）。用語集の項目へは、押すと移動する
-
-## 見た目の指定（フロントマター）
-
-| キー | 内容 |
-|---|---|
-| `palette` | 色の組み合わせ。`indigo`（標準）・`blue`・`teal`・`green`・`wine`・`orange`・`purple`・`gray`（ライト用とダーク用の組） |
-| `accent` | 強調の色を直接指定。`"#0f6e6e"`、またはダーク用も付けて `"#0f6e6e / #6fcfc9"`。`palette` より優先 |
-| `font` / `mono` | 本文の書体（`gothic`・`ud`・`meiryo`・`yugothic`・`noto`・`system`・`mincho`、または書体名の並び）とコードの書体 |
-| `logo` | 表紙の左上とスライドの下に出すロゴ。URL・`data:` URL・参照形式の名前（`[logo]: data:…` を末尾に書く） |
-
-本文の幅は文書には持たせず、見る人ごとに変える（右端の取っ手をドラッグ。<kbd>←</kbd> <kbd>→</kbd> でも変えられ、ダブルクリックで標準の 46rem に戻る）。
-
-## 画像
-
-- `![代替テキスト](URL)`。画像だけの段落は中央に置き、代替テキストがあれば表題にする（番号は `:::figure`）
-- 1 つのファイルにまとめるときは base64 の `data:` URL で埋め込む。本文には `![構成図][arch]` と名前だけを書き、定義 `[arch]: data:image/png;base64,…` は末尾に置く（Markdown 標準の参照形式。リンクも `[文字][名前]` で書ける）
-  - 定義とみなすのは、URL らしいもの（`data:`・`https://` などのスキーム、`./` などのパス、`arch.png` のようなファイル名）だけ。「`[注意]: 本文`」のような文は普通の段落のまま
-- 編集欄（<kbd>E</kbd>）に画像を貼り付けるかドロップすると、上の形で自動的に埋め込む。画像は 1 枚ずつ段落にし、ファイル名を表題と定義の名前にする（クリップボードの画像は表題なし）
-- URL の末尾に `#gh-light-mode-only` / `#gh-dark-mode-only` を付けた 2 枚を並べると、テーマに合わせて片方だけを表示する（GitHub と同じ書き方）。印刷ではライト用を使う
-- SVG は本文に `<svg>` を直接書けば、`var(--accent)` などの色の変数と `currentColor` が効き、テーマに追従する。画像として埋め込んだ SVG には、ページの色の変数は届かない
-- 保存した HTML には、画像が Markdown と描画済みの本文の 2 か所に入り、版を確定するたびに 1 回ずつ増える。base64 は元の約 1.33 倍になるので、画像は縮小してから入れる
-
-## 文書の版管理
-
-確定した版の Markdown を、同じ HTML ファイルの中に全文で残す（案 A：スナップショット方式）。差分は開くたびに計算する。
-
-- **版を確定する:** <kbd>V</kbd> の「版を確定…」で版番号・日付・作成者・内容を入れると、いまの Markdown がその版として残り、HTML を保存する。フロントマターの `version` も書き換わる
-- **比べる:** 任意の 2 つの版（作業中を含む）を比べる。文書として見るときは、変更した段落の左に改訂線を引き、変わった語を取り消し線と下線で示す。リストは項目、表は行の単位で比べる。目次の変更がある章に印が付き、<kbd>N</kbd> / <kbd>Shift</kbd>+<kbd>N</kbd> で変更の間を移動する。Markdown として見るときは、ソースコードの差分と同じ表示になる
-- **過去の版を見る:** 読み取り専用で表示する。比較中・過去の版の表示中もスライドと印刷が使える（比較中の印刷は改訂線付き）
-- **改版履歴:** 本文に `:::history` と書くと、確定した版の一覧が表になる
-- **そのほか:** `.md` や保存済みの `.html` から過去の版を取り込める。版ごとの Markdown のダウンロードと削除、全部の版の削除もできる。版があるファイルに `.md` をドロップすると、新しい文書として版を消すか、同じ文書の続きとして残すかを聞く。表示は URL に残る（`#version=1.0`、`#compare=1.1..1.2`、作業中は `work`、Markdown の比較は `&md`）
-- 章番号・図表番号・`[](#ID)` の参照は、章を足すと振り直されるため比較に含めない
-
-ファイルの中では、確定した版を作業中の Markdown のすぐ後ろに新しい順で置く。
-
-```html
-<script type="text/markdown" id="md-source">（作業中の Markdown）</script>
-<script type="text/markdown" class="md-version"
-        data-version="1.1" data-date="2026-11-01" data-author="山田" data-note="性能要件を追加">（版 1.1 の全文）</script>
-```
-
-版は全文で残すので、ファイルは「本文 × 版の数」だけ大きくなる（本文 50KB × 10 版で 500KB 程度）。
-
-## スライドが 1 枚に収まらないとき
-
-1. 文字を 5% ずつ、80% まで縮める（`CONFIG.slideMinScale` で変更可）
-2. それでも入らなければ、段落・リスト・表・コードの切れ目で次のスライドに送る。続きのスライドの見出しには「（続き）」を付ける
-3. 大きな塊は単位ごとに分ける。表は行（見出しの行は毎回付ける）、リストは項目、コードは行、段落は文、`steps` などの囲みは項目、タブ（`example` を含む）は選んでいるタブの中身の塊。次のスライドに 1〜2 単位だけ残る分け方はしない
-4. 図や画像のように分けられないものは、その図だけを縮める
-5. 手で区切るなら `<!-- slide -->`（スライドだけ）か `<!-- pagebreak -->`（印刷も）
-
-## 作りの要点
-
-- **Markdown が正本。** 表示も、Markdown のダウンロードも、HTML の保存も、同じ Markdown から作る。HTML と Markdown の内容がずれない
-- **外部依存なし。** Markdown の変換はファイル内の自前のパーサーで行う。CDN から読むのは Mermaid（図）だけで、SRI ハッシュ付き。スクリプト末尾の `CONFIG.mermaidSrc` を空にすれば通信しない
-- **保存した HTML は、それだけで読める。** 描画済みの本文と図（SVG）も一緒に保存するので、JavaScript が無効な環境やオフラインでも本文と図が表示される（タブは全部のタブを並べて表示）
-- **見た目の調整は CSS で行う。** テンプレートの `<style>` を変えた見た目は、保存しても引き継がれる。文書ごとの小さな調整は、生 HTML の `style` 属性に表示用の CSS を書く
-- 日本語向けの調整: 記号の直後で閉じる `**「強調」**` が効く、日本語どうしの改行が余計な空白にならない、`.md` が Shift_JIS でも読める、`\` が `¥` に化けない
+| 赤と黄 | [cc-1](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-1.src.html) |
+| 深緑と生成り | [cc-2](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-2.src.html) |
+| 青と黄 | [cc-3](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-3.src.html) |
+| 濃紺と橙 | [cc-4](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-4.src.html) |
+| 赤と黒 | [cc-5](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-5.src.html) |
+| 紺と水色 | [cc-6](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-6.src.html) |
+| 空色と白 | [cc-7](https://tsunyan.github.io/hypertext-markdown/samples/template-guide-cc-7.src.html) |
 
 ## 開発
 
-変更はプルリクエストで main に入れる。CI では次の 4 つを確かめ、すべて通らないとマージできない。
+テンプレートの正本は [template-guide.src.html](template-guide.src.html)。CSS・JavaScript・利用ガイドの Markdown が入っている。圧縮版・見本・スキルの空のテンプレートは、正本から生成する。ファイルの役割と変更手順は [AGENTS.md](AGENTS.md) にまとめている。
 
-| ジョブ | 内容 |
-|---|---|
-| `lint` | ruff（`tools/`・`tests/`）と `tools/check.py`。script 要素の壊れ（途中で閉じる、閉じずに後ろを飲み込む）、埋め込んだ JavaScript の構文、見本とスキルの空のテンプレートが作り直したものと同じこと、テンプレートの作業中の Markdown が見本の版 1.1 と同じこと、スキルの `authoring.md` に利用ガイドの囲みとフロントマターのキーが揃っていることを調べる |
-| `tests` | Chromium でテンプレートと見本を開くテスト（`tests/test_smoke.py`）。エラーが出ないこと、図が描けること、すべてのスライドが 80% 以上で収まること（比較中も）、版の比較に印が付くこと、保存した HTML を開き直せること、JavaScript なしでも本文が読めること、スキルの `build.mjs` で作った HTML が元と同じように描けることを確かめる |
-| `secrets` | gitleaks で、履歴全体から秘密情報を探す |
-| `analyze` | CodeQL（HTML に埋め込んだ JavaScript、Python、ワークフロー） |
+### 手元で確かめる
 
-手元で同じ検査をするとき:
+Python と Node.js・npm がある環境で実行する。
 
 ```bash
 pip install -r requirements-dev.txt
@@ -240,37 +232,18 @@ python -I tools/check.py
 python -m pytest -q
 ```
 
-テンプレートの利用ガイドを直したら、同じ内容を見本の版 1.1 にも入れ、見本を作り直す。どちらかを忘れると `tools/check.py` が知らせる。
+`tools/check.py` は HTML 内の script 要素・JavaScript の構文・生成物との一致・書式リファレンスの網羅を検査する。ブラウザテストは Chromium で、描画・スライドの収まり・版の比較・保存と再表示・スキルによる変換を確かめる。
 
-テンプレートを直したあとは、見本・圧縮版・スキルの空のテンプレート・デザインの見本をこの順で作り直す（空のテンプレートは圧縮版から作る）。
+変更はブランチからプルリクエストで main に入れる。CI の `lint`・`tests` に加え、gitleaks（`secrets`）と CodeQL（`analyze`）で検査する。
 
-```bash
-python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html
-python -I tools/minify_html.py
-python -I tools/make_skeleton.py
-python -I tools/make_design.py
-```
+### ブラウザ対応
 
-AI エージェント向けの開発の約束は [AGENTS.md](AGENTS.md) にある。
+自動テストの対象は Chromium。Firefox・Safari での動作は未検証。印刷のヘッダーとページ番号には `@page` の余白欄を使っており、Chrome・Edge 向けとなる。
 
-## 確認したこと（2026-11-11）
+### 画像・デザインを更新する
 
-Chrome（デスクトップ、ヘッドレス）とアプリ内ブラウザで確認した。
-
-- 表示: ライト / ダーク、1366px 幅とスマホ幅（375px。段組み・比較・時系列は 1 列に、工程の流れは縦並びになり、横のはみ出しなし。グラフは 343px 幅で描き直す）
-- 部品: 全部品の描画、タブの切り替え、図表番号と参照の置き換え
-- コード・表・グラフ: 19 言語の色分け、差分の中の色分けと語単位の強調の重なり、CSV の表（右揃え・表題）、並べ替え（数値・文字・元の順）、絞り込み、タブ区切りのコピー、見出しの行の固定、5 種類のグラフとツールチップ（棒・帯は棒ごと、折れ線は縦の線）、用語の下線とツールチップ
-- 検索: 全角・半角と大文字・小文字を区別しない一致、選んでいないタブの中の一致へ移るとタブが切り替わる、目次の件数、スライド中の検索
-- 見た目の指定: `palette`・`font`・`logo`（表紙とスライドの下）、本文の幅のドラッグ・キー操作・標準に戻す操作と、保存した HTML に幅が残らないこと
-- スライド: 利用ガイド（83 枚）で全スライドが 80% 以上で収まる。40 行の表、70 行のコード、14 項目の手順、30 項目のリスト、長い段落、縦長の画像を入れた文書で、分割と縮小が上の手順どおりに働く
-- 保存した HTML: JavaScript ありでは描画済みの本文と図を再利用し、タブも切り替わる。JavaScript なしでも本文と図が読める
-- 印刷: 読み物（ヘッダー・ページ番号・印刷用目次・折りたたみとタブの展開）、スライド（1 枚 1 ページ、1280×720px）
-- オフライン: Mermaid を読めないとき、図のソースと理由を表示する
-- 版管理（見本で確認）: 版の確定（入力の確認・番号の自動提案・保存時の書き出し）、版どうしと作業中との比較（文書・Markdown）、過去の版の表示、変更の間の移動、目次の印、URL からの表示の復元、保存して開き直したときの版の読み込み、HTML と Markdown からの取り込み、版の削除、比較中のスライド（はみ出しなし）と印刷、ダーク表示
-- 版管理（テンプレートの見本の版で確認）: 改版履歴の自動作成、1.0 → 1.1 の比較（スライド 90 枚、すべて 80% 以上）、版 1.0 の表示、「版をすべて削除」、`.md` のドロップで版を消す場合と残す場合
-
-Firefox と Safari では確かめていない。印刷のヘッダーとページ番号（`@page` の余白欄）は Chrome・Edge のみ対応。
+README の画面画像は `python tools/make_readme_images.py`、デザイン一覧の画像は `python tools/make_design_overview.py` で生成する。デザインの素材は [samples/design/](samples/design/) にある。
 
 ## ライセンス
 
-MIT（[LICENSE](LICENSE)）
+[MIT](LICENSE)
