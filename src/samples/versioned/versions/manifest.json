@@ -1,0 +1,23 @@
+[
+  {
+    "version": "1.2",
+    "date": "2026-11-10",
+    "author": "佐藤",
+    "note": "性能要件と運用設計の見直し",
+    "source": "versions/1.2.md"
+  },
+  {
+    "version": "1.1",
+    "date": "2026-11-01",
+    "author": "山田",
+    "note": "性能要件と障害対策を追加",
+    "source": "versions/1.1.md"
+  },
+  {
+    "version": "1.0",
+    "date": "2026-10-15",
+    "author": "山田",
+    "note": "初版",
+    "source": "versions/1.0.md"
+  }
+]

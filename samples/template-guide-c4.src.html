@@ -8,8 +8,6 @@
 <title>レポート</title>
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADLUlEQVR4nOyXS0hUURjH/9+5d8axmRxnBG0UKQdFwcgnGqiZRIpQ21r5qE0JLZJatIiwRctqI0IghouI1gUVFUhkKkZZUWGTo1ZqvuihjuNjzumowzSm97ERN/5X9577/+73O+ee8803DNsshm3WDsC2A6hmTA2lvV6h8BwGnsHBfKpAX/Pz4sFoz9O2oJcrizlcIIMRfIIsfVW1sYNG7ybNpCW9maSEbgiIMiLa/f9zIcQMxSx8OFDkUfelezI1PUTPuCIuVdfE9ZsCaIJgE+XdFwVwlUC2zYKEnOZSzBT6B3yr94fK81FalgemaH7RIARdqRy2X6cm4poA4Vm3y9FirTfZHAxDEx8xPjG1bjwlNQk1tcdgtep8VSF6uIq66NVYhyyTN+ol55zDP7Yx+YpGvo3j7p2HWF4OQVNExWyZGqOHIgBny3qqZPIz0FEAk5icntJ8Pjw0ip6u99CVzPG4fa56HUBD6TsXkbitF6fIlf0+Pgwjdb18q78KK+K89VGrcEcAQPMnieDRi1lgP7GwsAgjBQJBvH71Sd9ESIYyeyICIGefCwNN/5qCWfl8X83YsiIA8qxnGbmDi/Mwqz+/Z83YVnOunhlZLAwBAgHzADMzAUOPPP+5EQAzIsKWaO0TyNpuZLTb7TArZ7zD0CMrbV8EQM7PECDWaoNZxTuNAVg4Z3gFhCGAc3cCzCotPdXQIzf+PwCmOB7IoS96AVbugqoab5kVT25uJgySD0Bx3I8AtHTsn5W77JRukCxuie49MFJ+QZb+D9Ja0rqqWpoLX6+ppePgC4l2Sy/QFZMCZ1yc5vPEJDcOVxRCVzJHZX1cZxRMNJpD9gFiRCtWVSzYm5ANl2sjhNvtRG39cdhiY6Cde3XpL0SPbdqQjJd3n5eX17QaEh4KYY79wODwWsdVWJSNiiNFsNms0FBQgC5XDdlv6jYk0VppTqCG7klDjpZHWIKfC0qSLalpnjRomjY2IaYAwtF0ruSNh1sWveDklffJMmQUTPjZktXf3Jk3JosYnrQFPKSGvCHBvCR4siA2qhD3i2XFf/T0rjFZ6oVWhi0qsOa188dkB+AvAAAA///CN2JCAAAABklEQVQDAHUFExJ+HsnxAAAAAElFTkSuQmCC">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9InNoaW9uIj48Y2lyY2xlIGN4PSIyMyIgY3k9IjMyIiByPSIyMSIgZmlsbD0iIzZhM2ZjOCIvPjxjaXJjbGUgY3g9IjQxIiBjeT0iMzIiIHI9IjIxIiBmaWxsPSIjYjlhMGYzIi8+PHBhdGggZmlsbD0iIzNiMWY4YyIgZD0iTTMyIDEzLjAzYTIxIDIxIDAgMCAxIDAgMzcuOTQgMjEgMjEgMCAwIDEgMC0zNy45NHoiLz48L3N2Zz4K">
-
-
 <script>
   document.documentElement.classList.remove('no-js');
   try {
@@ -17,6 +15,8 @@
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
     var w = parseInt(localStorage.getItem('hypertext-markdown:measure'), 10);
     if (w >= 480) document.documentElement.style.setProperty('--measure', w + 'px');
+    var sw = parseInt(localStorage.getItem('hypertext-markdown:sidebar-width'), 10);
+    if (sw >= 200 && sw <= 480) document.documentElement.style.setProperty('--side-w', sw + 'px');
   } catch (e) {}
 </script>
 <style>
@@ -28,6 +28,7 @@
   --mono: Consolas, "Cascadia Mono", Menlo, "BIZ UDGothic", "Osaka-Mono", monospace;
   --header-h: 52px;
   --side-w: 272px;
+  --side-size: clamp(200px, var(--side-w), min(480px, calc(100vw - 608px)));
   --measure: 46rem;
   /* 数字用。図面の文字（DIN）に近い書体を先に探し、無ければ本文の書体になる */
   --num: Bahnschrift, "DIN Alternate", "DIN 2014", var(--font);
@@ -181,7 +182,7 @@ kbd {
 @media (prefers-reduced-motion: reduce) { .theme-menu:not([hidden]) { animation: none; } .theme-trigger, .theme-trigger .theme-chevron { transition: none; } }
 
 /* ---------- レイアウト ---------- */
-.layout { display: grid; grid-template-columns: var(--side-w) minmax(0, 1fr); align-items: start; }
+.layout { display: grid; grid-template-columns: var(--side-size) minmax(0, 1fr); align-items: start; }
 .sidebar {
   position: sticky; top: var(--header-h);
   height: calc(100vh - var(--header-h)); height: calc(100dvh - var(--header-h));
@@ -207,6 +208,9 @@ kbd {
 /* 枠で囲まず、題名の大きさと余白で表紙にする。区切りの細い線は、左端だけを強調の色にする（章の見出しと同じ決まり）。
    スライドの表紙では .md の中に複製されるので、本文用の指定より強くしておく */
 .doc-header { margin: 1.2rem 0 4.2rem; }
+.doc-empty { padding: 1.6rem 1.8rem; border: 1px dashed var(--rule); border-radius: 8px; color: var(--ink-2); }
+.doc-empty p { margin: .4em 0; }
+.doc-empty .doc-empty-title { color: var(--ink); font-size: 1.15rem; font-weight: 700; }
 .doc-header .tb-head { display: flex; flex-direction: column; align-items: flex-start; }
 .doc-header .tb-logo { order: -1; align-self: stretch; margin: 0 0 2.2rem; }
 .doc-header .doc-logo { display: block; width: auto; max-width: min(240px, 60%); height: auto; max-height: 40px; }
@@ -486,7 +490,17 @@ body.presenting .search-bar { top: 12px; z-index: 85; }
 .width-handle:hover .width-grip, .width-handle:focus-visible .width-grip, body.resizing .width-grip { background: var(--accent); opacity: 1; }
 .width-label { position: absolute; top: 50%; left: 14px; display: none; padding: 2px 7px; border-radius: 4px; background: var(--ink); color: var(--bg); font-size: 12px; line-height: 1.6; white-space: nowrap; transform: translateY(-50%); font-variant-numeric: tabular-nums; }
 body.resizing .width-label, .width-handle:focus-visible .width-label { display: block; }
-body.resizing { cursor: col-resize; -webkit-user-select: none; user-select: none; }
+body.resizing, body.sidebar-resizing { cursor: col-resize; -webkit-user-select: none; user-select: none; }
+/* 左メニューの右端。スクロールしても境界と取っ手を同じ場所に保つ */
+.sidebar-width-handle { position: fixed; top: var(--header-h); bottom: 0; left: var(--side-size); z-index: 36; width: 16px; margin-left: -8px; cursor: col-resize; touch-action: none; }
+.sidebar-width-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 7px; width: 2px; background: var(--accent); opacity: 0; transition: opacity .15s; }
+.sidebar-width-handle .width-grip { position: absolute; top: 50%; transform: translateY(-50%); }
+.sidebar-width-handle:hover::before, .sidebar-width-handle:focus-visible::before, body.sidebar-resizing .sidebar-width-handle::before { opacity: .3; }
+.sidebar-width-handle:hover .width-grip, .sidebar-width-handle:focus-visible .width-grip, body.sidebar-resizing .sidebar-width-handle .width-grip { background: var(--accent); opacity: 1; }
+.sidebar-width-handle:focus-visible .width-label, body.sidebar-resizing .sidebar-width-handle .width-label { display: block; }
+body.editing .sidebar-width-handle, body.toc-hidden .sidebar-width-handle, body.no-toc .sidebar-width-handle, body.presenting .sidebar-width-handle, .no-js .sidebar-width-handle { display: none; }
+@media (max-width: 900px) { .sidebar-width-handle { display: none; } }
+@media print { .sidebar-width-handle { display: none !important; } }
 @media (max-width: 900px) { .width-handle { display: none; } }
 
 .md table { width: 100%; border-collapse: collapse; font-size: .93em; line-height: 1.6; }
@@ -1251,6 +1265,14 @@ logo: logo
 - **`font`（本文の書体）:** `gothic`（標準）・`ud`（BIZ UD ゴシック）・`meiryo`・`yugothic`・`noto`（Noto Sans JP）・`system`・`mincho`（明朝）から選ぶか、`font: "Noto Sans JP", sans-serif` のように書体名を並べます。見る人のパソコンに入っている書体だけが使われます
 - **`mono`（コードの書体）:** `mono: "Cascadia Code", Consolas` のように書体名を並べます
 - **`logo`（ロゴ）:** 表紙の左上と、スライドの下（表紙のスライドを除く）に出ます。URL・`data:` URL のほか、上のように参照形式の名前を書くと本文の末尾の定義を使うので、長い base64 をフロントマターに書かずに済みます
+
+ロゴや favicon を手元の画像から埋め込む場合は、リポジトリに付属するコマンドも使えます。Node.js 18 以上の環境で、次のように指定します。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md --logo ./logo.svg --logo-dark ./logo-dark.svg --favicon ./favicon.png --favicon ./favicon.svg
+```
+
+画像のパスは実行フォルダ基準です。`--logo` だけなら明暗共通になり、`--logo-dark` を添えるとダーク用を分けられます。`--favicon` は SVG・PNG・ICO を複数指定でき、既存の favicon 一式を置き換えます。画像は HTML に埋め込まれるので別添は不要です。フロントマターに `logo` がある場合は、そちらが優先されます。
 
 | `palette` | ライト | ダーク |
 |---|---|---|
@@ -2542,6 +2564,14 @@ logo: logo
 - **`mono`（コードの書体）:** `mono: "Cascadia Code", Consolas` のように書体名を並べます
 - **`logo`（ロゴ）:** 表紙の左上と、スライドの下（表紙のスライドを除く）に出ます。URL・`data:` URL のほか、上のように参照形式の名前を書くと本文の末尾の定義を使うので、長い base64 をフロントマターに書かずに済みます
 
+ロゴや favicon を手元の画像から埋め込む場合は、リポジトリに付属するコマンドも使えます。Node.js 18 以上の環境で、次のように指定します。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md --logo ./logo.svg --logo-dark ./logo-dark.svg --favicon ./favicon.png --favicon ./favicon.svg
+```
+
+画像のパスは実行フォルダ基準です。`--logo` だけなら明暗共通になり、`--logo-dark` を添えるとダーク用を分けられます。`--favicon` は SVG・PNG・ICO を複数指定でき、既存の favicon 一式を置き換えます。画像は HTML に埋め込まれるので別添は不要です。フロントマターに `logo` がある場合は、そちらが優先されます。
+
 | `palette` | ライト | ダーク |
 |---|---|---|
 | `indigo`（標準） | <span class="swatch" style="--c:#2b4c8c"></span>`#2b4c8c` | <span class="swatch" style="--c:#93b2ec"></span>`#93b2ec` |
@@ -3819,8 +3849,6 @@ h2_pagebreak: true
 | 1.0 | 2026-11-06 | 作成者名 | 初版 |
 </script>
 
-
-
 <header class="topbar" id="ui-topbar">
   <button class="icon-btn" type="button" data-action="toc" title="目次の表示を切り替え（B）" aria-label="目次の表示を切り替え"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h11"/></svg></button>
   <div class="topbar-title"><span id="ui-title"></span><span class="topbar-crumb" id="ui-crumb"></span></div>
@@ -3850,6 +3878,7 @@ h2_pagebreak: true
     <ol class="toc" id="ui-toc"></ol>
     <p class="sidebar-hint"><kbd>?</kbd> でショートカットの一覧</p>
   </nav>
+  <div class="sidebar-width-handle" id="ui-sidebar-width" role="separator" aria-controls="ui-sidebar" aria-orientation="vertical" tabindex="0" aria-label="左メニューの幅（ドラッグか ← → で変える。ダブルクリックか Enter で標準に戻す）" title="ドラッグで左メニューの幅を変える（ダブルクリックで標準に戻す）"><span class="width-grip"><span class="width-label"></span></span></div>
   <aside class="editor" id="ui-editor" aria-label="Markdown の編集">
     <div class="editor-head">
       <strong>Markdown</strong>
@@ -3978,7 +4007,7 @@ const CONFIG = {
   logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDEuNDIgNDgiIHdpZHRoPSIyODIuODQiIGhlaWdodD0iOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0ic2hpb24iPjxjaXJjbGUgY3g9IjE3IiBjeT0iMjQiIHI9IjE3IiBmaWxsPSIjNmEzZmM4Ii8+PGNpcmNsZSBjeD0iMzEiIGN5PSIyNCIgcj0iMTciIGZpbGw9IiNiOWEwZjMiLz48cGF0aCBmaWxsPSIjM2IxZjhjIiBkPSJNMjQgOC41MWExNyAxNyAwIDAgMSAwIDMwLjk4IDE3IDE3IDAgMCAxIDAtMzAuOTh6Ii8+PHBhdGggZmlsbD0iIzE0MWEyNiIgZD0iTTY4LjIgMzIuODJRNjYuNCAzMi44MiA2NC43NyAzMi4xNVE2My4xNSAzMS40OSA2MiAzMC41M0w2My4yNCAyOC44MlE2NC4zMyAyOS42OSA2NS41MiAzMC4yNlE2Ni43MSAzMC44NCA2OC4yOSAzMC44NFE3MC4wMyAzMC44NCA3MC45IDMwLjAxUTcxLjc3IDI5LjE5IDcxLjc3IDI4LjA1UTcxLjc3IDI3LjE1IDcxLjE4IDI2LjU0UTcwLjU5IDI1Ljk0IDY5LjY5IDI1LjUyUTY4Ljc5IDI1LjEgNjcuODYgMjQuNzZRNjYuNjggMjQuMjkgNjUuNTUgMjMuNzRRNjQuNDIgMjMuMTggNjMuNjYgMjIuMjZRNjIuOSAyMS4zNSA2Mi45IDE5LjkyUTYyLjkgMTguNjIgNjMuNTggMTcuNTVRNjQuMjYgMTYuNDggNjUuNTMgMTUuODZRNjYuOCAxNS4yNCA2OC42IDE1LjI0UTcwLjA5IDE1LjI0IDcxLjQxIDE1Ljc5UTcyLjczIDE2LjMzIDczLjY5IDE3LjFMNzIuNDUgMTguNzVRNzEuNjEgMTguMDkgNzAuNjggMTcuNjhRNjkuNzUgMTcuMjYgNjguNiAxNy4yNlE2Ni45MyAxNy4yNiA2Ni4xNCAxOC4wMlE2NS4zNSAxOC43OCA2NS4zNSAxOS44UTY1LjM1IDIwLjY0IDY1Ljg2IDIxLjE4UTY2LjM3IDIxLjcyIDY3LjIyIDIyLjA5UTY4LjA4IDIyLjQ3IDY5LjAxIDIyLjgxUTY5Ljk0IDIzLjE4IDcwLjg1IDIzLjU3UTcxLjc3IDIzLjk1IDcyLjUyIDI0LjUxUTczLjI4IDI1LjA3IDczLjczIDI1Ljg5UTc0LjE4IDI2LjcxIDc0LjE4IDI3LjkyUTc0LjE4IDI5LjI1IDczLjQ5IDMwLjM3UTcyLjc5IDMxLjQ5IDcxLjQ3IDMyLjE1UTcwLjE1IDMyLjgyIDY4LjIgMzIuODJaTTc5LjMzIDMyLjQyVjcuNzRIODEuODdWMTQuNTlMODEuNzggMTguMDlRODIuOTYgMTYuOTIgODQuMyAxNi4wOFE4NS42NSAxNS4yNCA4Ny4zOSAxNS4yNFE5MC4wMiAxNS4yNCA5MS4yNiAxNi45UTkyLjUgMTguNTYgOTIuNSAyMS43OFYzMi40Mkg4OS45NlYyMi4wOVE4OS45NiAxOS42OCA4OS4xOSAxOC41NlE4OC40MSAxNy40NCA4Ni42NCAxNy40NFE4NS4zMSAxNy40NCA4NC4yNCAxOC4xM1E4My4xNyAxOC44MSA4MS44NyAyMC4xNFYzMi40MlpNOTkuMDggMzIuNDJWMTUuNjhIMTAxLjYyVjMyLjQyWk0xMDAuMzggMTIuMDhROTkuNiAxMi4wOCA5OS4xMiAxMS42UTk4LjY0IDExLjEyIDk4LjY0IDEwLjMxUTk4LjY0IDkuNTQgOTkuMTIgOS4wN1E5OS42IDguNjEgMTAwLjM4IDguNjFRMTAxLjEyIDguNjEgMTAxLjYyIDkuMDdRMTAyLjExIDkuNTQgMTAyLjExIDEwLjMxUTEwMi4xMSAxMS4xMiAxMDEuNjIgMTEuNlExMDEuMTIgMTIuMDggMTAwLjM4IDEyLjA4Wk0xMTQuOTIgMzIuODJRMTEyLjg3IDMyLjgyIDExMS4xMiAzMS43OFExMDkuMzcgMzAuNzQgMTA4LjMgMjguNzlRMTA3LjIzIDI2Ljg0IDEwNy4yMyAyNC4wOFExMDcuMjMgMjEuMjYgMTA4LjMgMTkuMjlRMTA5LjM3IDE3LjMyIDExMS4xMiAxNi4yOFExMTIuODcgMTUuMjQgMTE0LjkyIDE1LjI0UTExNi40NyAxNS4yNCAxMTcuODUgMTUuODNRMTE5LjIzIDE2LjQyIDEyMC4zMSAxNy41NVExMjEuNCAxOC42OCAxMjIgMjAuMzNRMTIyLjYgMjEuOTcgMTIyLjYgMjQuMDhRMTIyLjYgMjYuODQgMTIxLjU0IDI4Ljc5UTEyMC40NyAzMC43NCAxMTguNzEgMzEuNzhRMTE2Ljk2IDMyLjgyIDExNC45MiAzMi44MlpNMTE0LjkyIDMwLjcxUTExNi40NCAzMC43MSAxMTcuNTggMjkuODdRMTE4LjczIDI5LjA0IDExOS4zOCAyNy41NVExMjAuMDMgMjYuMDYgMTIwLjAzIDI0LjA4UTEyMC4wMyAyMi4wNiAxMTkuMzggMjAuNTZRMTE4LjczIDE5LjA2IDExNy41OCAxOC4yMlExMTYuNDQgMTcuMzggMTE0LjkyIDE3LjM4UTExMy40MyAxNy4zOCAxMTIuMjcgMTguMjJRMTExLjEgMTkuMDYgMTEwLjQ3IDIwLjU2UTEwOS44MyAyMi4wNiAxMDkuODMgMjQuMDhRMTA5LjgzIDI2LjA2IDExMC40NyAyNy41NVExMTEuMSAyOS4wNCAxMTIuMjcgMjkuODdRMTEzLjQzIDMwLjcxIDExNC45MiAzMC43MVpNMTI4LjI1IDMyLjQyVjE1LjY4SDEzMC4zMkwxMzAuNTcgMTguMTNIMTMwLjY2UTEzMS44NyAxNi45MiAxMzMuMjIgMTYuMDhRMTM0LjU3IDE1LjI0IDEzNi4zMSAxNS4yNFExMzguOTQgMTUuMjQgMTQwLjE4IDE2LjlRMTQxLjQyIDE4LjU2IDE0MS40MiAyMS43OFYzMi40MkgxMzguODhWMjIuMDlRMTM4Ljg4IDE5LjY4IDEzOC4xIDE4LjU2UTEzNy4zMyAxNy40NCAxMzUuNTYgMTcuNDRRMTM0LjIzIDE3LjQ0IDEzMy4xNiAxOC4xM1ExMzIuMDkgMTguODEgMTMwLjc5IDIwLjE0VjMyLjQyWiIvPjwvc3ZnPgo=',      // 表紙の左上とスライドの下に出すロゴ（URL か data: URL）
   logoDark: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDEuNDIgNDgiIHdpZHRoPSIyODIuODQiIGhlaWdodD0iOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0ic2hpb24iPjxjaXJjbGUgY3g9IjE3IiBjeT0iMjQiIHI9IjE3IiBmaWxsPSIjYmRhN2Y3Ii8+PGNpcmNsZSBjeD0iMzEiIGN5PSIyNCIgcj0iMTciIGZpbGw9IiM3YTU1ZDYiLz48cGF0aCBmaWxsPSIjZjNlZWZmIiBkPSJNMjQgOC41MWExNyAxNyAwIDAgMSAwIDMwLjk4IDE3IDE3IDAgMCAxIDAtMzAuOTh6Ii8+PHBhdGggZmlsbD0iI2YxZjRmOSIgZD0iTTY4LjIgMzIuODJRNjYuNCAzMi44MiA2NC43NyAzMi4xNVE2My4xNSAzMS40OSA2MiAzMC41M0w2My4yNCAyOC44MlE2NC4zMyAyOS42OSA2NS41MiAzMC4yNlE2Ni43MSAzMC44NCA2OC4yOSAzMC44NFE3MC4wMyAzMC44NCA3MC45IDMwLjAxUTcxLjc3IDI5LjE5IDcxLjc3IDI4LjA1UTcxLjc3IDI3LjE1IDcxLjE4IDI2LjU0UTcwLjU5IDI1Ljk0IDY5LjY5IDI1LjUyUTY4Ljc5IDI1LjEgNjcuODYgMjQuNzZRNjYuNjggMjQuMjkgNjUuNTUgMjMuNzRRNjQuNDIgMjMuMTggNjMuNjYgMjIuMjZRNjIuOSAyMS4zNSA2Mi45IDE5LjkyUTYyLjkgMTguNjIgNjMuNTggMTcuNTVRNjQuMjYgMTYuNDggNjUuNTMgMTUuODZRNjYuOCAxNS4yNCA2OC42IDE1LjI0UTcwLjA5IDE1LjI0IDcxLjQxIDE1Ljc5UTcyLjczIDE2LjMzIDczLjY5IDE3LjFMNzIuNDUgMTguNzVRNzEuNjEgMTguMDkgNzAuNjggMTcuNjhRNjkuNzUgMTcuMjYgNjguNiAxNy4yNlE2Ni45MyAxNy4yNiA2Ni4xNCAxOC4wMlE2NS4zNSAxOC43OCA2NS4zNSAxOS44UTY1LjM1IDIwLjY0IDY1Ljg2IDIxLjE4UTY2LjM3IDIxLjcyIDY3LjIyIDIyLjA5UTY4LjA4IDIyLjQ3IDY5LjAxIDIyLjgxUTY5Ljk0IDIzLjE4IDcwLjg1IDIzLjU3UTcxLjc3IDIzLjk1IDcyLjUyIDI0LjUxUTczLjI4IDI1LjA3IDczLjczIDI1Ljg5UTc0LjE4IDI2LjcxIDc0LjE4IDI3LjkyUTc0LjE4IDI5LjI1IDczLjQ5IDMwLjM3UTcyLjc5IDMxLjQ5IDcxLjQ3IDMyLjE1UTcwLjE1IDMyLjgyIDY4LjIgMzIuODJaTTc5LjMzIDMyLjQyVjcuNzRIODEuODdWMTQuNTlMODEuNzggMTguMDlRODIuOTYgMTYuOTIgODQuMyAxNi4wOFE4NS42NSAxNS4yNCA4Ny4zOSAxNS4yNFE5MC4wMiAxNS4yNCA5MS4yNiAxNi45UTkyLjUgMTguNTYgOTIuNSAyMS43OFYzMi40Mkg4OS45NlYyMi4wOVE4OS45NiAxOS42OCA4OS4xOSAxOC41NlE4OC40MSAxNy40NCA4Ni42NCAxNy40NFE4NS4zMSAxNy40NCA4NC4yNCAxOC4xM1E4My4xNyAxOC44MSA4MS44NyAyMC4xNFYzMi40MlpNOTkuMDggMzIuNDJWMTUuNjhIMTAxLjYyVjMyLjQyWk0xMDAuMzggMTIuMDhROTkuNiAxMi4wOCA5OS4xMiAxMS42UTk4LjY0IDExLjEyIDk4LjY0IDEwLjMxUTk4LjY0IDkuNTQgOTkuMTIgOS4wN1E5OS42IDguNjEgMTAwLjM4IDguNjFRMTAxLjEyIDguNjEgMTAxLjYyIDkuMDdRMTAyLjExIDkuNTQgMTAyLjExIDEwLjMxUTEwMi4xMSAxMS4xMiAxMDEuNjIgMTEuNlExMDEuMTIgMTIuMDggMTAwLjM4IDEyLjA4Wk0xMTQuOTIgMzIuODJRMTEyLjg3IDMyLjgyIDExMS4xMiAzMS43OFExMDkuMzcgMzAuNzQgMTA4LjMgMjguNzlRMTA3LjIzIDI2Ljg0IDEwNy4yMyAyNC4wOFExMDcuMjMgMjEuMjYgMTA4LjMgMTkuMjlRMTA5LjM3IDE3LjMyIDExMS4xMiAxNi4yOFExMTIuODcgMTUuMjQgMTE0LjkyIDE1LjI0UTExNi40NyAxNS4yNCAxMTcuODUgMTUuODNRMTE5LjIzIDE2LjQyIDEyMC4zMSAxNy41NVExMjEuNCAxOC42OCAxMjIgMjAuMzNRMTIyLjYgMjEuOTcgMTIyLjYgMjQuMDhRMTIyLjYgMjYuODQgMTIxLjU0IDI4Ljc5UTEyMC40NyAzMC43NCAxMTguNzEgMzEuNzhRMTE2Ljk2IDMyLjgyIDExNC45MiAzMi44MlpNMTE0LjkyIDMwLjcxUTExNi40NCAzMC43MSAxMTcuNTggMjkuODdRMTE4LjczIDI5LjA0IDExOS4zOCAyNy41NVExMjAuMDMgMjYuMDYgMTIwLjAzIDI0LjA4UTEyMC4wMyAyMi4wNiAxMTkuMzggMjAuNTZRMTE4LjczIDE5LjA2IDExNy41OCAxOC4yMlExMTYuNDQgMTcuMzggMTE0LjkyIDE3LjM4UTExMy40MyAxNy4zOCAxMTIuMjcgMTguMjJRMTExLjEgMTkuMDYgMTEwLjQ3IDIwLjU2UTEwOS44MyAyMi4wNiAxMDkuODMgMjQuMDhRMTA5LjgzIDI2LjA2IDExMC40NyAyNy41NVExMTEuMSAyOS4wNCAxMTIuMjcgMjkuODdRMTEzLjQzIDMwLjcxIDExNC45MiAzMC43MVpNMTI4LjI1IDMyLjQyVjE1LjY4SDEzMC4zMkwxMzAuNTcgMTguMTNIMTMwLjY2UTEzMS44NyAxNi45MiAxMzMuMjIgMTYuMDhRMTM0LjU3IDE1LjI0IDEzNi4zMSAxNS4yNFExMzguOTQgMTUuMjQgMTQwLjE4IDE2LjlRMTQxLjQyIDE4LjU2IDE0MS40MiAyMS43OFYzMi40MkgxMzguODhWMjIuMDlRMTM4Ljg4IDE5LjY4IDEzOC4xIDE4LjU2UTEzNy4zMyAxNy40NCAxMzUuNTYgMTcuNDRRMTM0LjIzIDE3LjQ0IDEzMy4xNiAxOC4xM1ExMzIuMDkgMTguODEgMTMwLjc5IDIwLjE0VjMyLjQyWiIvPjwvc3ZnPgo=',  // ダーク表示のときのロゴ（空なら logo をそのまま使う）
 };
-const ENGINE = 'hypertext-markdown-8';
+const ENGINE = 'hypertext-markdown-9';
 const KEY_THEME = 'hypertext-markdown:theme';
 const KEY_TOC = 'hypertext-markdown:toc';
 const KEY_DIFF = 'hypertext-markdown:diffview';
@@ -4074,6 +4103,32 @@ const RX = {
   // *[略語]: 意味（PHP Markdown Extra と同じ書き方）。本文には出さず、本文中の略語に意味を添える
   abbrDef: /^ {0,3}\*\[([^\]\n]+)\]:[ \t]*(.*)$/,
 };
+/* 生 HTML は、表示に必要なタグと属性だけをタグ単位で組み直す。断片全体を DOM にすると、
+   空行を挟んだ div などがブラウザに自動で閉じられ、HTML 内 Markdown の区切りが変わるため使わない */
+const RAW_HTML_TOKEN = /<[!]--[\s\S]*?-->|<\/?[A-Za-z][A-Za-z0-9-]*(?:\s+[A-Za-z_:@][\w:.@-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*\s*\/?>/g;
+const RAW_ATTR_TOKEN = /([A-Za-z_:@][\w:.@-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/y;
+const RAW_HTML_TAGS = new Set(('a abbr address article aside b bdi bdo blockquote br caption center cite code col colgroup dd del details dfn div dl dt em figcaption figure footer h1 h2 h3 h4 h5 h6 header hr i img ins kbd li main mark meter nav ol p picture pre progress q rp rt ruby s samp section small span strong sub summary sup table tbody td tfoot th thead time tr u ul var wbr').split(' '));
+const RAW_SVG_TAGS = new Set(('svg g path rect circle ellipse line polyline polygon text tspan defs lineargradient radialgradient stop clippath mask title desc').split(' '));
+const RAW_VOID_TAGS = new Set(('br col hr img wbr').split(' '));
+const RAW_DROP_CONTENT = new Set(('script style iframe object embed textarea template noscript').split(' '));
+const RAW_SAFE_CLASSES = new Set(['swatch', 'vd-ins', 'vd-del']);
+const RAW_DENIED_C_CLASSES = new Set(['c-tabs', 'c-example', 'c-chart']);
+const RAW_GLOBAL_ATTRS = new Set(('class title lang dir role tabindex style').split(' '));
+const RAW_TAG_ATTRS = {
+  a: new Set(['href', 'target', 'rel']),
+  blockquote: new Set(['cite']), q: new Set(['cite']),
+  img: new Set(['src', 'alt', 'width', 'height', 'loading', 'decoding']),
+  ol: new Set(['start', 'reversed', 'type']), li: new Set(['value']),
+  col: new Set(['span']), colgroup: new Set(['span']),
+  td: new Set(['colspan', 'rowspan', 'headers']), th: new Set(['colspan', 'rowspan', 'headers', 'scope', 'abbr']),
+  time: new Set(['datetime']), meter: new Set(['value', 'min', 'max', 'low', 'high', 'optimum']),
+  progress: new Set(['value', 'max']),
+};
+const RAW_SVG_ATTRS = new Set(('xmlns viewbox preserveaspectratio width height x y x1 y1 x2 y2 cx cy r rx ry d points pathlength transform fill fill-opacity fill-rule stroke stroke-opacity stroke-width stroke-linecap stroke-linejoin stroke-dasharray stroke-dashoffset color opacity font-family font-size font-style font-weight text-anchor dominant-baseline dx dy rotate textlength lengthadjust gradientunits gradienttransform spreadmethod offset stop-color stop-opacity clip-path clip-rule mask maskunits maskcontentunits').split(' '));
+const RAW_SVG_NAMES = { lineargradient: 'linearGradient', radialgradient: 'radialGradient', clippath: 'clipPath' };
+const RAW_SVG_ATTR_NAMES = { viewbox: 'viewBox', preserveaspectratio: 'preserveAspectRatio', pathlength: 'pathLength', textlength: 'textLength', lengthadjust: 'lengthAdjust', gradientunits: 'gradientUnits', gradienttransform: 'gradientTransform', spreadmethod: 'spreadMethod', maskunits: 'maskUnits', maskcontentunits: 'maskContentUnits' };
+const RAW_CSS_PROPS = new Set(('align-content align-items align-self background background-color border border-color border-style border-width border-top border-top-color border-top-style border-top-width border-right border-right-color border-right-style border-right-width border-bottom border-bottom-color border-bottom-style border-bottom-width border-left border-left-color border-left-style border-left-width border-radius box-shadow color display flex flex-basis flex-direction flex-flow flex-grow flex-shrink flex-wrap font font-family font-size font-style font-variant font-weight gap grid grid-area grid-auto-columns grid-auto-flow grid-auto-rows grid-column grid-row grid-template grid-template-areas grid-template-columns grid-template-rows height justify-content justify-items justify-self letter-spacing line-height margin margin-top margin-right margin-bottom margin-left max-height max-width min-height min-width opacity overflow overflow-wrap overflow-x overflow-y padding padding-top padding-right padding-bottom padding-left text-align text-decoration text-indent text-overflow text-transform transform transform-origin vertical-align white-space width word-break word-spacing').split(' '));
+const RAW_CSS_VARS = new Set(('--accent --accent-soft --bg --bg-side --bg-sunken --ink --ink-2 --rule --font --mono --frame --frame-inner --tint --c-note --c-tip --c-important --c-warning --c-caution --add-bg --del-bg --mark --chart-on').split(' '));
 /* 参照形式の名前は、大文字と小文字・空白の違いを区別しない */
 const refKey = s => String(s).trim().replace(/\s+/g, ' ').toLowerCase();
 /* フェンス（``` / ~~~）の中かどうかを 1 行ずつ判定する。中（または開始・終了の行）なら true */
@@ -4710,6 +4765,228 @@ function createParser(opts = {}) {
   }
   const slugify = t => t.toLowerCase().trim().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s+/g, '-').slice(0, 80);
 
+  function cleanRawStyle(raw) {
+    // HTML の文字参照を CSS の一部として解釈させない
+    if (raw.includes('&')) return '';
+    const probe = document.createElement('span');
+    probe.style.cssText = raw;
+    const out = [];
+    const decls = [];
+    let start = 0, quote = '', escaped = false, depth = 0;
+    const css = probe.style.cssText;
+    for (let i = 0; i < css.length; i++) {
+      const ch = css[i];
+      if (escaped) { escaped = false; continue; }
+      if (quote) {
+        if (ch === '\\') escaped = true;
+        else if (ch === quote) quote = '';
+      } else if (ch === '"' || ch === "'") quote = ch;
+      else if (ch === '(') depth++;
+      else if (ch === ')' && depth) depth--;
+      else if (ch === ';' && depth === 0) { decls.push(css.slice(start, i)); start = i + 1; }
+    }
+    decls.push(css.slice(start));
+    const parsed = [];
+    for (const decl of decls) {
+      const colon = decl.indexOf(':');
+      if (colon < 1) continue;
+      const prop = decl.slice(0, colon).trim().toLowerCase();
+      const value = decl.slice(colon + 1).trim().replace(/\s*!important\s*$/i, '');
+      const compact = value.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, '');
+      if (!value || value.includes('\\') || /@import|expression\(|behavior:|-moz-binding|javascript:|vbscript:/i.test(compact)
+          || /(?:url|src|image|image-set|cross-fade|element|paint|attr)\s*\(/i.test(value)) continue;
+      parsed.push({ prop, value, vars: [...value.matchAll(/var\(\s*(--[a-z0-9_-]+)/gi)].map(m => m[1].toLowerCase()) });
+    }
+    // 安全な値を持つ独自変数だけを、既定の色変数と同じように参照できるようにする
+    const custom = new Set();
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const d of parsed) {
+        if (!/^--[a-z0-9_-]+$/i.test(d.prop) || custom.has(d.prop)) continue;
+        if (d.vars.every(v => RAW_CSS_VARS.has(v) || custom.has(v))) { custom.add(d.prop); changed = true; }
+      }
+    }
+    for (const { prop, value, vars } of parsed) {
+      if (!RAW_CSS_PROPS.has(prop) && !custom.has(prop)) continue;
+      if (vars.some(v => !RAW_CSS_VARS.has(v) && !custom.has(v))) continue;
+      out.push(prop + ':' + value);
+    }
+    return out.join(';');
+  }
+
+  function decodeRawRefs(raw) {
+    const named = { colon: ':', sol: '/', bsol: '\\', tab: '\t', newline: '\n', lpar: '(', rpar: ')', amp: '&', quot: '"', apos: "'", lt: '<', gt: '>' };
+    return String(raw)
+      .replace(/&#(?:x([0-9a-f]+)|([0-9]+));?/gi, (all, hex, dec) => {
+        const n = parseInt(hex || dec, hex ? 16 : 10);
+        return n > 0 && n <= 0x10ffff && !(n >= 0xd800 && n <= 0xdfff) ? String.fromCodePoint(n) : '\uFFFD';
+      })
+      .replace(/&(colon|sol|bsol|tab|newline|lpar|rpar|amp|quot|apos|lt|gt);?/gi, (all, name) => named[name.toLowerCase()]);
+  }
+
+  function cleanRawUrl(raw, kind) {
+    const value = decodeRawRefs(raw).trim();
+    const compact = value.replace(/[\s\u0000-\u001f\u007f]+/g, '');
+    if (!value || !compact || /^[\\/]{2}/.test(compact)) return null;
+    if (kind === 'svg') return /^#[A-Za-z_][\w:.-]*$/.test(compact) ? compact : null;
+    const m = compact.match(/^([A-Za-z][\w+.-]*):/);
+    if (kind === 'img') {
+      if (/^data:/i.test(compact)) return /^data:image\/(?:png|gif|jpe?g|webp|avif|bmp|svg\+xml)(?:[;,]|$)/i.test(compact) ? value : null;
+      if (m && !/^(?:https?|blob)$/i.test(m[1])) return null;
+      return value;
+    }
+    if (m && !/^(?:https?|mailto|tel)$/i.test(m[1])) return null;
+    return value;
+  }
+
+  function cleanRawSvgValue(raw) {
+    const value = decodeRawRefs(raw).trim();
+    if (!value || value.includes('&') || value.includes('\\') || /[\u0000-\u001f\u007f]/.test(value) || /(?:javascript|vbscript|data|https?):/i.test(value)) return null;
+    const urls = [...value.matchAll(/url\(([^)]*)\)/gi)];
+    if (urls.some(m => !/^\s*['"]?#[A-Za-z_][\w:.-]*['"]?\s*$/.test(m[1]))) return null;
+    return value;
+  }
+
+  function rawTagInfo(token) {
+    const m = token.match(/^<\s*(\/?)\s*([A-Za-z][A-Za-z0-9-]*)/);
+    return m ? { close: !!m[1], tag: m[2].toLowerCase(), head: m[0].length, self: /\/\s*>$/.test(token) } : null;
+  }
+
+  function rawAttributes(token, info) {
+    let text = token.slice(info.head).replace(/\/?\s*>$/, '').trim();
+    if (!text) return [];
+    const out = [], seen = new Set();
+    let pos = 0;
+    while (pos < text.length) {
+      const ws = text.slice(pos).match(/^\s+/);
+      if (ws) pos += ws[0].length;
+      if (pos >= text.length) break;
+      RAW_ATTR_TOKEN.lastIndex = pos;
+      const m = RAW_ATTR_TOKEN.exec(text);
+      if (!m) return [];
+      const name = m[1].toLowerCase();
+      if (!seen.has(name)) {
+        seen.add(name);
+        out.push([name, m[2] ?? m[3] ?? m[4] ?? '']);
+      }
+      pos = RAW_ATTR_TOKEN.lastIndex;
+    }
+    return out;
+  }
+
+  function sanitizeRawTag(token) {
+    const info = rawTagInfo(token);
+    if (!info || (!RAW_HTML_TAGS.has(info.tag) && !RAW_SVG_TAGS.has(info.tag))) return '';
+    const tagName = RAW_SVG_NAMES[info.tag] || info.tag;
+    if (info.close) return RAW_VOID_TAGS.has(info.tag) ? '' : '</' + tagName + '>';
+    const attrs = rawAttributes(token, info);
+    const out = [];
+    let target = '', href = false;
+    for (const [name, raw] of attrs) {
+      if (/^on/i.test(name) || /^data-/i.test(name) || name === 'name' || name === 'is' || name === 'srcdoc'
+          || name === 'action' || name === 'formaction' || name === 'xlink:href') continue;
+      let value = raw, outName = name, preserveRefs = true;
+      if (name === 'id') {
+        value = value.trim();
+        if (!/^[A-Za-z_][\w:.-]*$/.test(value) || /^ui-/i.test(value) || usedIds.has(value)) continue;
+        usedIds.add(value);
+      } else if (name === 'style') {
+        value = cleanRawStyle(value);
+        if (!value) continue;
+        preserveRefs = false;
+      } else if (name === 'class') {
+        if (value.includes('&')) continue;
+        value = value.replace(/[\u0000-\u001f\u007f]+/g, ' ').trim().replace(/\s+/g, ' ');
+        value = value.split(' ').filter(c => RAW_SAFE_CLASSES.has(c)
+          || (/^c-[\p{L}\p{N}_-]+$/u.test(c) && !RAW_DENIED_C_CLASSES.has(c))).join(' ');
+        if (!value) continue;
+      } else if (name === 'dir') {
+        value = value.toLowerCase();
+        if (!/^(?:ltr|rtl|auto)$/.test(value)) continue;
+      } else if (name === 'tabindex') {
+        if (value !== '0' && value !== '-1') continue;
+      } else if (name === 'hidden' || (info.tag === 'details' && name === 'open') || (info.tag === 'ol' && name === 'reversed')) {
+        out.push(' ' + name);
+        continue;
+      } else if (name.startsWith('aria-') || ['title', 'lang', 'role'].includes(name)) {
+        // 文字列としてだけ使う属性
+      } else if (info.tag === 'a' && name === 'href') {
+        value = cleanRawUrl(value, 'href');
+        if (value == null) continue;
+        href = true;
+        preserveRefs = false;
+      } else if (info.tag === 'a' && name === 'target') {
+        value = value.toLowerCase();
+        if (value !== '_blank' && value !== '_self') continue;
+        target = value;
+        continue;
+      } else if (info.tag === 'a' && name === 'rel') {
+        continue;
+      } else if (info.tag === 'img' && name === 'src') {
+        value = cleanRawUrl(value, 'img');
+        if (value == null) continue;
+        preserveRefs = false;
+      } else if ((info.tag === 'blockquote' || info.tag === 'q') && name === 'cite') {
+        value = cleanRawUrl(value, 'href');
+        if (value == null) continue;
+        preserveRefs = false;
+      } else if (info.tag === 'img' && name === 'loading') {
+        value = value.toLowerCase();
+        if (value !== 'lazy' && value !== 'eager') continue;
+      } else if (info.tag === 'img' && name === 'decoding') {
+        value = value.toLowerCase();
+        if (!/^(?:sync|async|auto)$/.test(value)) continue;
+      } else if (RAW_SVG_ATTRS.has(name)) {
+        if (name === 'xmlns') {
+          if (value !== 'http://www.w3.org/2000/svg') continue;
+        } else {
+          value = cleanRawSvgValue(value);
+          if (value == null) continue;
+        }
+        outName = RAW_SVG_ATTR_NAMES[name] || name;
+        preserveRefs = false;
+      } else if (!(RAW_TAG_ATTRS[info.tag] && RAW_TAG_ATTRS[info.tag].has(name)) && !RAW_GLOBAL_ATTRS.has(name)) {
+        continue;
+      }
+      const encoded = preserveRefs
+        ? String(value).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+        : escAttr(value);
+      out.push(' ' + outName + '="' + encoded + '"');
+    }
+    if (info.tag === 'a' && href && target) {
+      out.push(' target="' + target + '"');
+      if (target === '_blank') out.push(' rel="noopener noreferrer"');
+    }
+    const open = '<' + tagName + out.join('') + '>';
+    if (RAW_VOID_TAGS.has(info.tag)) return open;
+    return info.self ? open + '</' + tagName + '>' : open;
+  }
+
+  function sanitizeRawHtml(raw, protect = false) {
+    let out = '', last = 0, blocked = '', depth = 0, m;
+    RAW_HTML_TOKEN.lastIndex = 0;
+    while ((m = RAW_HTML_TOKEN.exec(raw))) {
+      if (!blocked) out += protect ? raw.slice(last, m.index) : raw.slice(last, m.index).replace(/</g, '&lt;');
+      const token = m[0], info = token.startsWith('<!--') ? null : rawTagInfo(token);
+      if (blocked) {
+        if (info && info.tag === blocked) {
+          if (!info.close && !info.self) depth++;
+          else if (info.close && --depth === 0) blocked = '';
+        }
+      } else if (info && !info.close && !info.self && RAW_DROP_CONTENT.has(info.tag)) {
+        blocked = info.tag;
+        depth = 1;
+      } else if (info) {
+        const clean = sanitizeRawTag(token);
+        if (clean) out += protect ? hold(clean) : clean;
+      }
+      last = RAW_HTML_TOKEN.lastIndex;
+    }
+    if (!blocked) out += protect ? raw.slice(last) : raw.slice(last).replace(/</g, '&lt;');
+    return out;
+  }
+
   function splitRow(line) {
     let s = line.trim();
     if (s.startsWith('|')) s = s.slice(1);
@@ -4819,7 +5096,7 @@ function createParser(opts = {}) {
         }
         if (end) { while (i < lines.length) { const l = lines[i++]; block.push(l); if (end(l)) break; } }
         else { while (i < lines.length && !RX.blank.test(lines[i])) block.push(lines[i++]); }
-        out.push(block.join('\n'));
+        out.push(sanitizeRawHtml(block.join('\n')));
         continue;
       }
       if (isListStart(line, false)) { const r = parseList(lines, i); out.push(r.html); i = r.next; continue; }
@@ -5533,8 +5810,8 @@ function createParser(opts = {}) {
     s = s.replace(/\\([!-\/:-@\[-`{-~])/g, (a, ch) => hold(escHtml(ch)));
     // <https://...> 形式の自動リンク
     s = s.replace(/<((?:https?|ftp):\/\/[^\s<>]+|mailto:[^\s<>]+)>/gi, (a, url) => hold(linkHtml(url, escHtml(url.replace(/^mailto:/i, '')))));
-    // HTML のタグとコメントはそのまま通す
-    s = s.replace(/<[!]--[\s\S]*?-->|<\/?[A-Za-z][A-Za-z0-9-]*(?:\s+[A-Za-z_:@][\w:.@-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*\s*\/?>/g, a => hold(a));
+    // HTML は表示用のタグと属性だけを残す。危険な要素は、文中でも中身ごと取り除く
+    s = sanitizeRawHtml(s, true);
     // 脚注の参照
     s = s.replace(/\[\^([^\]\s]+)\]/g, (a, id) => hold(footnoteRef(id)));
     // 文中のラベル :ok[完了] など、画面操作の経路 :menu[設定 > ネットワーク]
@@ -5719,8 +5996,14 @@ function renderDocument(md, opts = {}) {
   const parser = createParser({ numbering: truthy(meta.numbering), breaks: truthy(meta.breaks), reserved: RESERVED, history });
   const content = parser.parse(text);
   const theme = docThemeCss(meta);
+  // 本文が空のテンプレートをそのまま開いたときは、書き始め方を出す
+  const empty = !title && !text.trim()
+    ? '<div class="doc-empty"><p class="doc-empty-title">本文がまだありません</p>'
+      + '<p><code>.md</code> ファイルをこの画面にドロップするか、<kbd>E</kbd> キーで Markdown を書き始めてください。</p>'
+      + '<p><button class="text-btn" type="button" data-action="edit">書き始める</button></p></div>'
+    : '';
   return (theme ? '<style class="doc-theme">' + theme + '</style>' : '')
-    + renderDocHeader(meta, title, docLogo(meta, body))
+    + renderDocHeader(meta, title, docLogo(meta, body)) + empty
     + '<nav class="print-toc" id="ui-print-toc" aria-label="目次"></nav>'
     + '<div class="md' + (truthy(meta.h2_pagebreak) ? ' h2-break' : '') + '" id="ui-content">\n' + content + '\n</div>';
 }
@@ -5735,7 +6018,7 @@ const els = {
   help: $('#ui-help'), toast: $('#ui-toast'), drop: $('#ui-drop'), backdrop: $('#ui-backdrop'),
   pageStyle: $('#ui-page-style'),
   verbar: $('#ui-verbar'), versions: $('#ui-versions'), versionsBody: $('#ui-versions-body'), verFile: $('#ui-ver-file'),
-  main: $('.main'), widthHandle: $('#ui-width'), tip: $('#ui-tip'),
+  main: $('.main'), widthHandle: $('#ui-width'), sidebarWidthHandle: $('#ui-sidebar-width'), tip: $('#ui-tip'),
   search: $('#ui-search'), searchInput: $('#ui-search-input'), searchCount: $('#ui-search-count'),
 };
 const RESERVED = $$('[id]').filter(e => !els.doc.contains(e)).map(e => e.id);
@@ -7420,6 +7703,55 @@ function activateTab(box, k) {
   if (Slides.active) Slides.refit();
 }
 
+/* ----- 左メニューの幅 ----- */
+const KEY_SIDEBAR_WIDTH = 'hypertext-markdown:sidebar-width';
+const SidebarWidth = {
+  min: 200,
+  // 本文に 480px と左右の余白（最大 64px ずつ）を残す
+  max() { return Math.max(this.min, Math.min(480, document.documentElement.clientWidth - 608)); },
+  sync() {
+    const h = els.sidebarWidthHandle, w = els.sidebar.offsetWidth;
+    h.setAttribute('aria-valuemin', String(this.min));
+    h.setAttribute('aria-valuemax', String(this.max()));
+    h.setAttribute('aria-valuenow', String(w));
+    $('.width-label', h).textContent = w + 'px';
+  },
+  set(px, save) {
+    const w = px == null ? null : Math.round(Math.max(this.min, Math.min(this.max(), px)));
+    if (w == null) document.documentElement.style.removeProperty('--side-w');
+    else document.documentElement.style.setProperty('--side-w', w + 'px');
+    if (save) store.set(KEY_SIDEBAR_WIDTH, w == null ? '' : String(w));
+    this.sync();
+    Width.place();
+  },
+  start(e) {
+    if (e.button !== 0 || !e.isPrimary || isNarrow()) return;
+    e.preventDefault();
+    const h = els.sidebarWidthHandle, startX = e.clientX, startW = els.sidebar.offsetWidth;
+    h.focus({ preventScroll: true });
+    document.body.classList.add('sidebar-resizing');
+    const move = ev => { if (ev.pointerId === e.pointerId) this.set(startW + ev.clientX - startX, false); };
+    const up = ev => {
+      if (ev.pointerId !== e.pointerId) return;
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+      h.removeEventListener('lostpointercapture', up);
+      document.body.classList.remove('sidebar-resizing');
+      if (h.hasPointerCapture(e.pointerId)) h.releasePointerCapture(e.pointerId);
+      this.set(els.sidebar.offsetWidth, true);
+      Width.done();
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+    h.addEventListener('lostpointercapture', up);
+    try { h.setPointerCapture(e.pointerId); } catch (err) { /* window のイベントでドラッグを続ける */ }
+  },
+  step(dx) { this.set(els.sidebar.offsetWidth + dx, true); Width.done(); },
+  reset() { this.set(null, true); Width.done(); toast('左メニューの幅を標準に戻しました'); },
+};
+
 /* ----- 本文の幅（右端の取っ手をドラッグ。ダブルクリックで標準に戻す） ----- */
 const KEY_MEASURE = 'hypertext-markdown:measure';
 const Width = {
@@ -7606,6 +7938,12 @@ els.searchInput.addEventListener('keydown', e => {
   } else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); Search.close(); }
 });
 els.widthHandle.addEventListener('pointerdown', e => Width.start(e));
+els.sidebarWidthHandle.addEventListener('pointerdown', e => SidebarWidth.start(e));
+els.sidebarWidthHandle.addEventListener('dblclick', () => SidebarWidth.reset());
+els.sidebarWidthHandle.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); SidebarWidth.step(e.key === 'ArrowRight' ? 16 : -16); }
+  else if (e.key === 'Home' || e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); SidebarWidth.reset(); }
+});
 els.widthHandle.addEventListener('dblclick', () => Width.reset());
 els.widthHandle.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); Width.step(e.key === 'ArrowRight' ? 32 : -32); }
@@ -7847,7 +8185,7 @@ window.addEventListener('afterprint', () => {
 });
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 window.addEventListener('scroll', onScroll, { passive: true });
-const relayout = debounce(() => { if (Slides.active) return; drawCharts(els.doc); fitTables(els.doc); Width.place(); }, 150);
+const relayout = debounce(() => { if (Slides.active) return; drawCharts(els.doc); fitTables(els.doc); Width.place(); SidebarWidth.sync(); }, 150);
 window.addEventListener('resize', () => { if (Slides.active) Slides.layout(); else { onScroll(); relayout(); } });
 // 目次や編集欄の開閉で本文の列の幅が変わったときも、グラフ・表・幅の取っ手を合わせる
 if (window.ResizeObserver) new ResizeObserver(relayout).observe(els.main);
@@ -7860,6 +8198,9 @@ function init() {
   if (store.get(KEY_TOC) === 'hidden') document.body.classList.add('toc-hidden');
   const mw = parseInt(store.get(KEY_MEASURE), 10);
   if (mw >= Width.min) document.documentElement.style.setProperty('--measure', mw + 'px');
+  const sw = parseInt(store.get(KEY_SIDEBAR_WIDTH), 10);
+  if (sw >= SidebarWidth.min && sw <= 480) document.documentElement.style.setProperty('--side-w', sw + 'px');
+  SidebarWidth.sync();
   Theme.sync();
   const md = readSource();
   const drawnNow = !els.doc.firstElementChild;

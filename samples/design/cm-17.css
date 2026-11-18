@@ -1,0 +1,38 @@
+/* デザイン案 17。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#875049, #FFC3B2);
+  --tint: var(--accent);
+  --bg: light-dark(#FFF6E7, #2C2422);
+  --ink: light-dark(#584844, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #584844 82%, #FFF6E7), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #FFC3B2 22%, #FFF6E7), color-mix(in srgb, #2C2422 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #FFC3B2 30%, #FFF6E7), color-mix(in srgb, #2C2422 85%, #FFC3B2));
+  --rule: light-dark(color-mix(in srgb, #875049 24%, #FFF6E7), color-mix(in srgb, #FFC3B2 24%, #2C2422));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #875049 45%, #FFF6E7), color-mix(in srgb, #FFC3B2 45%, #2C2422));
+  --accent-soft: light-dark(color-mix(in srgb, #FFC3B2 35%, #FFF6E7), color-mix(in srgb, #FFC3B2 15%, #2C2422));
+  --cm-secondary: light-dark(#A6DCED, color-mix(in srgb, #A6DCED 28%, #2C2422));
+  --cm-soft: light-dark(#FFC3B2, color-mix(in srgb, #FFC3B2 25%, #2C2422));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #A6DCED 60%, #584844), #A6DCED);
+  --chart-4: light-dark(color-mix(in srgb, #FFC3B2 55%, #584844), #FFC3B2);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 12px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 12px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { background: linear-gradient(90deg, var(--cm-soft) 0 68%, var(--cm-secondary) 68%); }
+#ui-doc .tb-meta > div { background: light-dark(#FFF0AB, #443E28); padding: .4em .8em; border-radius: 8px; }
+#ui-content .card:nth-child(even) { border-top: 4px solid var(--cm-secondary); }
+#ui-content .card:nth-child(odd) { border-top: 4px solid var(--cm-soft); }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

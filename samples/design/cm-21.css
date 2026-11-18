@@ -1,0 +1,38 @@
+/* デザイン案 21。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#B42B3C, #F39BAB);
+  --tint: var(--accent);
+  --bg: light-dark(#FFF8F3, #27232D);
+  --ink: light-dark(#27232D, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #27232D 82%, #FFF8F3), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #C93645 22%, #FFF8F3), color-mix(in srgb, #27232D 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #C93645 30%, #FFF8F3), color-mix(in srgb, #27232D 85%, #F39BAB));
+  --rule: light-dark(color-mix(in srgb, #B42B3C 24%, #FFF8F3), color-mix(in srgb, #F39BAB 24%, #27232D));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #B42B3C 45%, #FFF8F3), color-mix(in srgb, #F39BAB 45%, #27232D));
+  --accent-soft: light-dark(color-mix(in srgb, #C93645 35%, #FFF8F3), color-mix(in srgb, #F39BAB 15%, #27232D));
+  --cm-secondary: light-dark(#F3C8D1, color-mix(in srgb, #F3C8D1 28%, #27232D));
+  --cm-soft: light-dark(#C93645, color-mix(in srgb, #C93645 25%, #27232D));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #F3C8D1 60%, #27232D), #F3C8D1);
+  --chart-4: light-dark(color-mix(in srgb, #C93645 55%, #27232D), #C93645);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 4px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 4px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { border-top: 8px solid var(--accent); border-bottom: 4px dotted var(--cm-secondary); }
+#ui-content h2 { border-bottom: 3px dotted var(--accent); }
+#ui-content .card { background: var(--cm-secondary); }
+.sidebar { background: light-dark(#27232D, #1D1922); --ink: #FFF8F3; --ink-2: #D8C5D0; --accent: #F3C8D1; --rule: #534551; --accent-soft: #48333F; }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

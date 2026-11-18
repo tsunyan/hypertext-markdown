@@ -1,0 +1,37 @@
+/* デザイン案 12。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#4C6A52, #B2CCA9);
+  --tint: var(--accent);
+  --bg: light-dark(#FCFBF5, #1D2821);
+  --ink: light-dark(#334638, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #334638 82%, #FCFBF5), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #E9E7DA 22%, #FCFBF5), color-mix(in srgb, #1D2821 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #E9E7DA 30%, #FCFBF5), color-mix(in srgb, #1D2821 85%, #B2CCA9));
+  --rule: light-dark(color-mix(in srgb, #4C6A52 24%, #FCFBF5), color-mix(in srgb, #B2CCA9 24%, #1D2821));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #4C6A52 45%, #FCFBF5), color-mix(in srgb, #B2CCA9 45%, #1D2821));
+  --accent-soft: light-dark(color-mix(in srgb, #E9E7DA 35%, #FCFBF5), color-mix(in srgb, #B2CCA9 15%, #1D2821));
+  --cm-secondary: light-dark(#CBB78F, color-mix(in srgb, #CBB78F 28%, #1D2821));
+  --cm-soft: light-dark(#E9E7DA, color-mix(in srgb, #E9E7DA 25%, #1D2821));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #CBB78F 60%, #334638), #CBB78F);
+  --chart-4: light-dark(color-mix(in srgb, #E9E7DA 55%, #334638), #E9E7DA);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 2px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 2px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-title, #ui-content h2 { font-family: "Yu Mincho", "Hiragino Mincho ProN", serif; font-weight: 600; }
+#ui-doc .doc-header { border: 1px solid var(--cm-secondary); outline: 1px solid var(--rule); outline-offset: 5px; background: var(--bg-sunken); }
+#ui-content .card { border-top: 3px solid var(--accent); }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

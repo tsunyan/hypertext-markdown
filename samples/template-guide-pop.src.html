@@ -1607,6 +1607,14 @@ logo: logo
 - **`mono`（コードの書体）:** `mono: "Cascadia Code", Consolas` のように書体名を並べます
 - **`logo`（ロゴ）:** 表紙の左上と、スライドの下（表紙のスライドを除く）に出ます。URL・`data:` URL のほか、上のように参照形式の名前を書くと本文の末尾の定義を使うので、長い base64 をフロントマターに書かずに済みます
 
+ロゴや favicon を手元の画像から埋め込む場合は、リポジトリに付属するコマンドも使えます。Node.js 18 以上の環境で、次のように指定します。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md --logo ./logo.svg --logo-dark ./logo-dark.svg --favicon ./favicon.png --favicon ./favicon.svg
+```
+
+画像のパスは実行フォルダ基準です。`--logo` だけなら明暗共通になり、`--logo-dark` を添えるとダーク用を分けられます。`--favicon` は SVG・PNG・ICO を複数指定でき、既存の favicon 一式を置き換えます。画像は HTML に埋め込まれるので別添は不要です。フロントマターに `logo` がある場合は、そちらが優先されます。
+
 | `palette` | ライト | ダーク |
 |---|---|---|
 | `indigo`（標準） | <span class="swatch" style="--c:#2b4c8c"></span>`#2b4c8c` | <span class="swatch" style="--c:#93b2ec"></span>`#93b2ec` |
@@ -2896,6 +2904,14 @@ logo: logo
 - **`font`（本文の書体）:** `gothic`（標準）・`ud`（BIZ UD ゴシック）・`meiryo`・`yugothic`・`noto`（Noto Sans JP）・`system`・`mincho`（明朝）から選ぶか、`font: "Noto Sans JP", sans-serif` のように書体名を並べます。見る人のパソコンに入っている書体だけが使われます
 - **`mono`（コードの書体）:** `mono: "Cascadia Code", Consolas` のように書体名を並べます
 - **`logo`（ロゴ）:** 表紙の左上と、スライドの下（表紙のスライドを除く）に出ます。URL・`data:` URL のほか、上のように参照形式の名前を書くと本文の末尾の定義を使うので、長い base64 をフロントマターに書かずに済みます
+
+ロゴや favicon を手元の画像から埋め込む場合は、リポジトリに付属するコマンドも使えます。Node.js 18 以上の環境で、次のように指定します。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md --logo ./logo.svg --logo-dark ./logo-dark.svg --favicon ./favicon.png --favicon ./favicon.svg
+```
+
+画像のパスは実行フォルダ基準です。`--logo` だけなら明暗共通になり、`--logo-dark` を添えるとダーク用を分けられます。`--favicon` は SVG・PNG・ICO を複数指定でき、既存の favicon 一式を置き換えます。画像は HTML に埋め込まれるので別添は不要です。フロントマターに `logo` がある場合は、そちらが優先されます。
 
 | `palette` | ライト | ダーク |
 |---|---|---|

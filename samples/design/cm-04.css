@@ -1,0 +1,38 @@
+/* デザイン案 04。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#7546A7, #C56BF6);
+  --tint: var(--accent);
+  --bg: light-dark(#F7F1FC, #1E182C);
+  --ink: light-dark(#1E182C, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #1E182C 82%, #F7F1FC), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #C56BF6 22%, #F7F1FC), color-mix(in srgb, #1E182C 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #C56BF6 30%, #F7F1FC), color-mix(in srgb, #1E182C 85%, #C56BF6));
+  --rule: light-dark(color-mix(in srgb, #7546A7 24%, #F7F1FC), color-mix(in srgb, #C56BF6 24%, #1E182C));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #7546A7 45%, #F7F1FC), color-mix(in srgb, #C56BF6 45%, #1E182C));
+  --accent-soft: light-dark(color-mix(in srgb, #C56BF6 35%, #F7F1FC), color-mix(in srgb, #C56BF6 15%, #1E182C));
+  --cm-secondary: light-dark(#FF79C8, color-mix(in srgb, #FF79C8 28%, #1E182C));
+  --cm-soft: light-dark(#C56BF6, color-mix(in srgb, #C56BF6 25%, #1E182C));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #FF79C8 60%, #1E182C), #FF79C8);
+  --chart-4: light-dark(color-mix(in srgb, #C56BF6 55%, #1E182C), #C56BF6);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 4px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 4px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { background: light-dark(#EEE3FA, #261C38); border: 1px solid var(--accent); box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent); }
+#ui-doc .doc-title { letter-spacing: -.03em; }
+#ui-content h2 { border-bottom: 1px solid var(--cm-secondary); }
+.topbar { border-bottom: 2px solid var(--accent); }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

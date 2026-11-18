@@ -1,0 +1,38 @@
+/* デザイン案 02。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#294B6A, #BCE6FD);
+  --tint: var(--accent);
+  --bg: light-dark(#FFFFFF, #15232D);
+  --ink: light-dark(#294B6A, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #294B6A 82%, #FFFFFF), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #E6F3FA 22%, #FFFFFF), color-mix(in srgb, #15232D 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #E6F3FA 30%, #FFFFFF), color-mix(in srgb, #15232D 85%, #BCE6FD));
+  --rule: light-dark(color-mix(in srgb, #294B6A 24%, #FFFFFF), color-mix(in srgb, #BCE6FD 24%, #15232D));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #294B6A 45%, #FFFFFF), color-mix(in srgb, #BCE6FD 45%, #15232D));
+  --accent-soft: light-dark(color-mix(in srgb, #E6F3FA 35%, #FFFFFF), color-mix(in srgb, #BCE6FD 15%, #15232D));
+  --cm-secondary: light-dark(#BCE6FD, color-mix(in srgb, #BCE6FD 28%, #15232D));
+  --cm-soft: light-dark(#E6F3FA, color-mix(in srgb, #E6F3FA 25%, #15232D));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #BCE6FD 60%, #294B6A), #BCE6FD);
+  --chart-4: light-dark(color-mix(in srgb, #E6F3FA 55%, #294B6A), #E6F3FA);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 4px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 4px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { border-top: 2px solid var(--cm-secondary); border-bottom: 1px solid var(--rule); }
+#ui-doc .doc-title { font-weight: 500; letter-spacing: .05em; }
+#ui-doc .tb-meta { background: none; border-top: 1px solid var(--rule); }
+.topbar { background: var(--bg); border-bottom-color: var(--cm-secondary); }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

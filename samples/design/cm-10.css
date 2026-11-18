@@ -1,0 +1,38 @@
+/* デザイン案 10。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#9B3031, #FFE41D);
+  --tint: var(--accent);
+  --bg: light-dark(#FFFBEE, #232529);
+  --ink: light-dark(#2B2F35, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #2B2F35 82%, #FFFBEE), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #FFE41D 22%, #FFFBEE), color-mix(in srgb, #232529 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #FFE41D 30%, #FFFBEE), color-mix(in srgb, #232529 85%, #FFE41D));
+  --rule: light-dark(color-mix(in srgb, #9B3031 24%, #FFFBEE), color-mix(in srgb, #FFE41D 24%, #232529));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #9B3031 45%, #FFFBEE), color-mix(in srgb, #FFE41D 45%, #232529));
+  --accent-soft: light-dark(color-mix(in srgb, #FFE41D 35%, #FFFBEE), color-mix(in srgb, #FFE41D 15%, #232529));
+  --cm-secondary: light-dark(#F04445, color-mix(in srgb, #F04445 28%, #232529));
+  --cm-soft: light-dark(#FFE41D, color-mix(in srgb, #FFE41D 25%, #232529));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #F04445 60%, #2B2F35), #F04445);
+  --chart-4: light-dark(color-mix(in srgb, #FFE41D 55%, #2B2F35), #FFE41D);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 0px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 0px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { background: light-dark(#FFE41D, #393620); border-bottom: 8px solid var(--cm-secondary); }
+#ui-doc .doc-title { font-weight: 900; letter-spacing: -.04em; }
+#ui-content .card { border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--cm-soft); }
+#ui-content h2 { background: var(--cm-soft); color: light-dark(#2B2F35, #F9EDB1); }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

@@ -8,6 +8,10 @@
 //                    自社のロゴや色を入れたテンプレートや、直したい既存の HTML を指定する
 //   --keep-versions  テンプレートに入っている確定した版を残す（既存の HTML を直すとき）
 //   --extract        HTML から作業中の Markdown を取り出す
+//   --logo           既定のロゴ画像。--logo-dark を省くとライト・ダーク共通
+//   --logo-dark      ダーク用のロゴ画像
+//   --favicon        favicon の画像（SVG・PNG・ICO）。複数回指定できる
+//                    画像のパスはコマンドを実行するフォルダからの相対パス、または絶対パス
 //
 // 流し込むときに、次のことをする。
 // - 手元の画像（![説明](./fig.png) や [名前]: ./fig.png）を base64 の data: URL にして、Markdown の末尾に置く
@@ -30,11 +34,13 @@ function usage(message) {
   if (message) console.error('エラー: ' + message);
   console.error('使い方: node build.mjs <入力.md> [-o 出力.html] [--template テンプレート.html] [--keep-versions]');
   console.error('        node build.mjs --extract <入力.html> [-o 出力.md]');
+  console.error('画像の差し替え: --logo ロゴ画像 [--logo-dark ダーク用画像] [--favicon アイコン画像 ...]');
+  console.error('画像のパスは実行フォルダ基準。--favicon は複数回指定できる（SVG・PNG・ICO）');
   process.exit(message ? 2 : 0);
 }
 
 function parseArgs(argv) {
-  const opts = { input: '', output: '', template: DEFAULT_TEMPLATE, keepVersions: false, extract: false };
+  const opts = { input: '', output: '', template: DEFAULT_TEMPLATE, keepVersions: false, extract: false, favicons: [] };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '-h' || a === '--help') usage();
@@ -42,11 +48,18 @@ function parseArgs(argv) {
     else if (a === '--template') opts.template = argv[++i] || usage(a + ' の後ろにテンプレートを書く');
     else if (a === '--keep-versions') opts.keepVersions = true;
     else if (a === '--extract') opts.extract = true;
+    else if (['--logo', '--logo-dark', '--favicon'].includes(a)) {
+      const path = argv[++i];
+      if (!path || path.startsWith('--')) usage(a + ' の後ろに画像ファイルを書く');
+      if (a === '--favicon') opts.favicons.push(path);
+      else opts[a === '--logo' ? 'logo' : 'logoDark'] = path;
+    }
     else if (a.startsWith('-')) usage('知らないオプション: ' + a);
     else if (!opts.input) opts.input = a;
     else usage('入力は 1 つだけ指定する');
   }
   if (!opts.input) usage(opts.extract ? '入力の .html を指定する' : '入力の .md を指定する');
+  if (opts.extract && (opts.logo || opts.logoDark || opts.favicons.length)) usage('--extract と画像の差し替えは同時に指定できない');
   if (!opts.output) {
     opts.output = opts.extract
       ? opts.input.replace(/\.html?$/i, '') + '.md'
@@ -164,6 +177,53 @@ const escHtml = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g
 // テンプレートの escScript() と同じ書き換え。読むときに readScript() が元に戻す
 const escScript = md => md.replace(/<(\/?)(script)/gi, '<\\$1$2');
 
+/* CLI の画像パスは URL として解釈せず、# や % を含むファイル名もそのまま扱う。 */
+function themeImage(path, favicon = false) {
+  const file = resolve(path), ext = extname(file).toLowerCase();
+  const mime = MIME[ext];
+  if (!mime || (favicon && !['.svg', '.png', '.ico'].includes(ext))) usage('画像として扱えない拡張子: ' + path);
+  if (!existsSync(file) || !statSync(file).isFile()) usage('画像が見つからない: ' + path);
+  return { mime, url: `data:${mime};base64,${readFileSync(file).toString('base64')}` };
+}
+
+/* 本文や見本のコードには触れず、実行するエンジンの設定と head のアイコンだけを替える。 */
+function replaceTheme(template, opts) {
+  if (opts.logo || opts.logoDark) {
+    const values = {};
+    if (opts.logo) {
+      values.logo = themeImage(opts.logo).url;
+      values.logoDark = ''; // 古いダーク用ロゴを残さない
+    }
+    if (opts.logoDark) values.logoDark = themeImage(opts.logoDark).url;
+    const scripts = [...template.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+    const engine = scripts.at(-1);
+    if (!engine || !engine[1].includes('mermaidIntegrity')) usage('テンプレートのエンジン設定が見つからない');
+    let code = engine[1];
+    for (const [key, value] of Object.entries(values)) {
+      // 圧縮版では変数名が短縮されるため、変わらない設定のプロパティ名を使う。
+      const pattern = new RegExp(`(\\b${key}\\s*:\\s*)("(?:\\\\.|[^"\\\\])*"|'(?:\\\\.|[^'\\\\])*')`, 'g');
+      let count = 0;
+      code = code.replace(pattern, (_, prefix) => { count++; return prefix + JSON.stringify(value); });
+      if (count !== 1) usage(`テンプレートの ${key} 設定がちょうど 1 つではない`);
+    }
+    template = template.slice(0, engine.index) + '<script>' + code + '</script>' + template.slice(engine.index + engine[0].length);
+  }
+  if (opts.favicons.length) {
+    const links = opts.favicons.map(path => {
+      const { mime, url } = themeImage(path, true);
+      return `<link rel="icon" type="${mime}" href="${url}">`;
+    }).join('\n');
+    const end = template.indexOf('</head>');
+    if (end < 0) usage('テンプレートに head が無い');
+    const head = template.slice(0, end).replace(/<link\b[^>]*>/gi, tag => {
+      const rel = tag.match(/\brel\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+      return rel && (rel[1] || rel[2] || rel[3]).toLowerCase().split(/\s+/).includes('icon') ? '' : tag;
+    });
+    template = head + links + '\n' + template.slice(end);
+  }
+  return template;
+}
+
 /* HTML から作業中の Markdown を取り出す。テンプレートの readScript() と同じく、書き換えた script を元に戻す */
 function extract(opts) {
   const m = readFileSync(opts.input, 'utf8').match(SLOT);
@@ -183,7 +243,7 @@ function main() {
   const md = readFileSync(opts.input, 'utf8').replace(/^﻿/, '').replace(/\r\n?/g, '\n');
   const { text, count } = embedImages(md, dirname(resolve(opts.input)));
 
-  const template = readFileSync(opts.template, 'utf8');
+  const template = replaceTheme(readFileSync(opts.template, 'utf8'), opts);
   if (!SLOT.test(template)) usage('テンプレートに <script type="text/markdown" id="md-source"> が無い: ' + opts.template);
   let html = template.replace(SLOT, (_, open, _old, close) => open + '\n' + escScript(text) + close)
     // 描画済みの本文は、開いたときに Markdown から描き直す

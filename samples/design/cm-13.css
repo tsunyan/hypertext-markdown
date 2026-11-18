@@ -1,0 +1,39 @@
+/* デザイン案 13。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#526C5B, #BFEBD3);
+  --tint: var(--accent);
+  --bg: light-dark(#FFFEFB, #202A26);
+  --ink: light-dark(#46554D, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #46554D 82%, #FFFEFB), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #BFEBD3 22%, #FFFEFB), color-mix(in srgb, #202A26 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #BFEBD3 30%, #FFFEFB), color-mix(in srgb, #202A26 85%, #BFEBD3));
+  --rule: light-dark(color-mix(in srgb, #526C5B 24%, #FFFEFB), color-mix(in srgb, #BFEBD3 24%, #202A26));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #526C5B 45%, #FFFEFB), color-mix(in srgb, #BFEBD3 45%, #202A26));
+  --accent-soft: light-dark(color-mix(in srgb, #BFEBD3 35%, #FFFEFB), color-mix(in srgb, #BFEBD3 15%, #202A26));
+  --cm-secondary: light-dark(#D3C2ED, color-mix(in srgb, #D3C2ED 28%, #202A26));
+  --cm-soft: light-dark(#BFEBD3, color-mix(in srgb, #BFEBD3 25%, #202A26));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #D3C2ED 60%, #46554D), #D3C2ED);
+  --chart-4: light-dark(color-mix(in srgb, #BFEBD3 55%, #46554D), #BFEBD3);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 16px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 16px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { background: linear-gradient(110deg, var(--cm-soft) 0 55%, var(--cm-secondary) 55% 100%); }
+#ui-content .card:nth-child(3n+1) { background: var(--cm-soft); }
+#ui-content .card:nth-child(3n+2) { background: var(--cm-secondary); }
+#ui-content .card:nth-child(3n) { background: light-dark(#F6DFC2, #3A3028); }
+#ui-doc .tb-meta { border-top: 3px solid light-dark(#FFCEC0, #79544A); background: none; }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

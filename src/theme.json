@@ -1,0 +1,8 @@
+{
+  "logo": "assets/logo.svg",
+  "logoDark": "assets/logo-dark.svg",
+  "favicons": [
+    "assets/favicon.png",
+    "assets/favicon.svg"
+  ]
+}

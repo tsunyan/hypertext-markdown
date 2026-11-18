@@ -1,0 +1,39 @@
+/* デザイン案 24。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#B52930, #FF9290);
+  --tint: var(--accent);
+  --bg: light-dark(#FFF4E8, #20232B);
+  --ink: light-dark(#292D36, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #292D36 82%, #FFF4E8), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #CB3035 22%, #FFF4E8), color-mix(in srgb, #20232B 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #CB3035 30%, #FFF4E8), color-mix(in srgb, #20232B 85%, #FF9290));
+  --rule: light-dark(color-mix(in srgb, #B52930 24%, #FFF4E8), color-mix(in srgb, #FF9290 24%, #20232B));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #B52930 45%, #FFF4E8), color-mix(in srgb, #FF9290 45%, #20232B));
+  --accent-soft: light-dark(color-mix(in srgb, #CB3035 35%, #FFF4E8), color-mix(in srgb, #FF9290 15%, #20232B));
+  --cm-secondary: light-dark(#EAB743, color-mix(in srgb, #EAB743 28%, #20232B));
+  --cm-soft: light-dark(#CB3035, color-mix(in srgb, #CB3035 25%, #20232B));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #EAB743 60%, #292D36), #EAB743);
+  --chart-4: light-dark(color-mix(in srgb, #CB3035 55%, #292D36), #CB3035);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 0px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 0px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { border-top: 8px solid var(--accent); border-bottom: 6px solid var(--cm-secondary); background: linear-gradient(120deg, var(--bg) 0 82%, var(--bg-sunken) 82%); }
+#ui-doc .doc-title { font-weight: 900; letter-spacing: -.04em; }
+#ui-content h2 { border-bottom: 4px solid var(--accent); }
+#ui-content .metric { border-top: 5px solid var(--cm-secondary); }
+.sidebar { background: #292D36; --ink: #FFF4E8; --ink-2: #D5C9BE; --accent: #EAB743; --rule: #585A60; --accent-soft: #494031; }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

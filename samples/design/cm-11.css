@@ -1,0 +1,38 @@
+/* デザイン案 11。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#A42755, #F8A8C4);
+  --tint: var(--accent);
+  --bg: light-dark(#FFFCFE, #2A1B25);
+  --ink: light-dark(#552637, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #552637 82%, #FFFCFE), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #F275A1 22%, #FFFCFE), color-mix(in srgb, #2A1B25 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #F275A1 30%, #FFFCFE), color-mix(in srgb, #2A1B25 85%, #F8A8C4));
+  --rule: light-dark(color-mix(in srgb, #A42755 24%, #FFFCFE), color-mix(in srgb, #F8A8C4 24%, #2A1B25));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #A42755 45%, #FFFCFE), color-mix(in srgb, #F8A8C4 45%, #2A1B25));
+  --accent-soft: light-dark(color-mix(in srgb, #F275A1 35%, #FFFCFE), color-mix(in srgb, #F8A8C4 15%, #2A1B25));
+  --cm-secondary: light-dark(#B9EDF9, color-mix(in srgb, #B9EDF9 28%, #2A1B25));
+  --cm-soft: light-dark(#F275A1, color-mix(in srgb, #F275A1 25%, #2A1B25));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #B9EDF9 60%, #552637), #B9EDF9);
+  --chart-4: light-dark(color-mix(in srgb, #F275A1 55%, #552637), #F275A1);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 24px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 24px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { background: var(--bg-sunken); border-radius: 32px; border-bottom: 6px solid var(--cm-secondary); }
+#ui-doc .tb-meta > div { border-radius: 24px; background: var(--cm-secondary); padding: .5em 1em; }
+#ui-content .card { border-radius: 24px; border-color: var(--cm-soft); }
+.toc a.active { border-radius: 24px; }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

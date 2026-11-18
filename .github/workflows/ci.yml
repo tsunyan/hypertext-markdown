@@ -35,7 +35,7 @@ jobs:
         run: pip install "$(grep -E '^ruff==' requirements-dev.txt)"
       - name: Lint Python
         run: ruff check tools tests
-      - name: Check script blocks, JavaScript syntax and the sample
+      - name: Check sources, generated HTML and JavaScript syntax
         run: python -I tools/check.py
 
   tests:
@@ -47,6 +47,10 @@ jobs:
           python-version: "3.13"
           cache: pip
           cache-dependency-path: requirements-dev.txt
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          # 監視コマンドのテストで、固定版の esbuild による圧縮まで通す
+          node-version: lts/*
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -56,7 +60,7 @@ jobs:
         run: |
           python -m playwright install --with-deps chromium
           sudo apt-get install -y --no-install-recommends fonts-noto-cjk
-      - name: Run browser tests
+      - name: Run build and browser tests
         # 図（Mermaid）は CDN から読む。SRI ハッシュが合わなくなったときも、ここで分かる
         run: python -m pytest -q
 

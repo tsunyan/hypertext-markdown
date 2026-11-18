@@ -4,7 +4,7 @@
 
 1. script 要素が途中で終わったり、閉じずに後ろを飲み込んだりしない
 2. 埋め込んだ JavaScript に構文の誤りがない（node --check。node が無ければ失敗する）
-3. 見本（samples/sample-versioned.src.html）が、いまのテンプレートから作り直したものと同じ
+3. 全 HTML が src/ とデザイン・ブランドの素材から作り直したものと同じ（一覧も含む）
 4. テンプレートの作業中の Markdown が、いちばん新しい見本の版と同じ（開いたときに「未確定の変更あり」を出さない）
 5. スキルの空のテンプレートが、いまの圧縮版から作り直したものと同じ
 6. スキルの authoring.md に、利用ガイドで使っている囲みの名前と、フロントマターのキーがすべて出てくる
@@ -27,7 +27,7 @@ SKILL = ROOT / "skills" / "hypertext-markdown"
 SKELETON = SKILL / "assets" / "template.html"
 AUTHORING = SKILL / "references" / "authoring.md"
 BUILD = SKILL / "scripts" / "build.mjs"
-HTML_FILES = [TEMPLATE, SAMPLE, SKELETON]
+HTML_FILES = [TEMPLATE, TEMPLATE_MIN, SAMPLE, SKELETON]
 # 利用ガイドの見本にだけ出てくる、自作のデザインの名前
 CUSTOM_BLOCKS = {"my-box"}
 
@@ -81,15 +81,19 @@ def load_tool(name):
     return mod
 
 
-def check_sample(errors, workdir):
-    out = Path(workdir) / "sample.html"
-    make_sample = load_tool("make_sample")
-    make_sample.main(str(TEMPLATE), str(out))
-    if out.read_bytes() != SAMPLE.read_bytes():
-        errors.append(
-            "samples/sample-versioned.src.html が、いまのテンプレートから作った見本と違う。"
-            "python -I tools/make_sample.py template-guide.src.html samples/sample-versioned.src.html で作り直す"
-        )
+def check_generated(errors):
+    build = load_tool("build")
+    try:
+        generated = build.outputs()
+        stale = build.changed_files(generated)
+        extra = set((ROOT / "samples").rglob("*.html")) - set(generated)
+        if extra:
+            errors.append("生成対象に無い見本の HTML がある: " + "、".join(str(p.relative_to(ROOT)) for p in sorted(extra)))
+    except (OSError, ValueError, subprocess.CalledProcessError) as error:
+        errors.append(f"生成物を確かめられない: {error}")
+        return
+    for path in stale:
+        errors.append(f"{path.relative_to(ROOT)} が素材からの生成結果と違う。python -I tools/build.py で作り直す")
 
 
 def check_designs(template, errors):
@@ -129,7 +133,7 @@ def check_template_versions(text, errors):
         ver = re.search(r'data-version="([^"]*)"', newest_attrs)
         errors.append(
             f"template-guide.src.html: 作業中の Markdown が見本の版 {ver.group(1) if ver else '?'} と違う。"
-            "利用ガイドを直したら、同じ内容を見本の版にも入れる"
+            "src/versions/manifest.json の参照先を確かめ、python -I tools/build.py で作り直す"
         )
 
 
@@ -182,7 +186,7 @@ def main():
             text = path.read_text(encoding="utf-8")
             check_script_blocks(path, text, errors)
             check_js_syntax(path, text, errors, workdir)
-        check_sample(errors, workdir)
+        check_generated(errors)
         template = TEMPLATE.read_text(encoding="utf-8")
         check_template_versions(template, errors)
         check_skeleton(errors)

@@ -8,8 +8,6 @@
 <title>レポート</title>
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADQ0lEQVR4nOxXW0hUURRd584dRSdD8V2YUlipGRYYfkTRT+KDCCIQwgfVTx8FkuJPH1FRVJYEffhhQUUhFKgkqZVRSBRhpflOzfdrfI06jTYzd07n3rgzc+8kFszjx/Uxs8/aZ5+955x99pzNwwlxR8uCAy1CISE0jQ1TABIBt4Dq2UcLpeSjSaspG6wuNMgaIguJGaUZ0NAKArIJHgQFHYdATnfWFdXZA0jKKk1nUj28CCogUwyCJGddCxGg7SAE0fAipJ2waJI5K/h8bzsXIR415YU8nhCSBh9B9M2zvUhzpCLgp9Ug98heJGyLxJPar/jSOQaPgflmO4BYZy59/w4UFhyQ5NTkGBzKL4fNRuEhbOHUTHxcmF0ODQ5EZGgQPAkOPsZ6ALyaoKp8iwoPQkSoDtNzPzE5s2RPSF2AH2Kig9l8ipFJA0zLFonnOFZUmE1YiA5Ts0ZMMRtK/yMANR5dz7HL4oJFN2qRdXAncjJTFPMe1nxG44c+3CrJlpzLGJ1awNnL1egdmvnr+iQpu1QRn3gFTx1LhTthsQrIK6lE2/dJBc92hrrkACFwO7S8BpfOpUPDuS7uEoD6vPqGZ/Gguhk9A9MKXvxVzxq+oaaxA1bBptB19eslm35mKyM+Ngx7Ejer3bnmgHoHrpY34lPbCHbFR6Hy9gk7L3IX776S5Ojwjdi3O8auu3CnXgq4qXkAFVeO2/mErRFobh9VrL/mDgxP/Hm8DI/PK/lx+6MGg2NzCp14K5xtZTgn56oBeBtrHgGRCZXCeUhUOm61TCb/kITexnoALgH0/HDc97mFZVb/FyV50bgi/RfI6Haa51wjxNJrNJklWc9Kt2jnWFvvEoAmYvvhM+x7g0wMsetmWjZjYWkFN++9xcS0w2lrzzgC/LWoa+rGU1aE5ALUPzILs9mKmXkTs3kH/ZxR4m3sTrf2TMCf2Tx/04mq1x2K1xXLST1hPUE9exOmwxegaGBHQFvgM9AWThD4ciYZ4H0YRN9cd33hoA30JLwMaqMFom/pFnTVFleJvZrULnnaMfMh9YUvimvEsUZWTPe97NMlZt7XCtTM2vNfjGLvcaKDWyC15+9Ze/7YpOVze2vPt8ua3wAAAP//bpMIhAAAAAZJREFUAwDfDFHKGV58fgAAAABJRU5ErkJggg==">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Imh5cGVydGV4dC1tYXJrZG93biI+PGcgdHJhbnNmb3JtPSJzY2FsZSgxLjMzMzMpIj48cmVjdCB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHJ4PSIxMC41IiBmaWxsPSIjMmI0YzhjIi8+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjQuOSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNCAyNCkgc2NhbGUoMS4xMikgdHJhbnNsYXRlKC0yNC41IC0yMy43NSkiIGQ9Ik0xMS41IDEzVjM0LjVNMTEuNSAyNi4zYTQuMzMgNC4zMyAwIDAgMSA4LjY2IDBWMzQuNU0yMC4xNiAyNi4zYTQuMzMgNC4zMyAwIDAgMSA4LjY3IDBWMzQuNU0yOC44MyAyNi4zYTQuMzMgNC4zMyAwIDAgMSA4LjY3IDBWMzQuNSIvPjwvZz48L3N2Zz4K">
-
-
 <script>
   document.documentElement.classList.remove('no-js');
   try {
@@ -17,6 +15,8 @@
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
     var w = parseInt(localStorage.getItem('hypertext-markdown:measure'), 10);
     if (w >= 480) document.documentElement.style.setProperty('--measure', w + 'px');
+    var sw = parseInt(localStorage.getItem('hypertext-markdown:sidebar-width'), 10);
+    if (sw >= 200 && sw <= 480) document.documentElement.style.setProperty('--side-w', sw + 'px');
   } catch (e) {}
 </script>
 <style>
@@ -28,6 +28,7 @@
   --mono: Consolas, "Cascadia Mono", Menlo, "BIZ UDGothic", "Osaka-Mono", monospace;
   --header-h: 52px;
   --side-w: 272px;
+  --side-size: clamp(200px, var(--side-w), min(480px, calc(100vw - 608px)));
   --measure: 46rem;
   /* 数字用。図面の文字（DIN）に近い書体を先に探し、無ければ本文の書体になる */
   --num: Bahnschrift, "DIN Alternate", "DIN 2014", var(--font);
@@ -181,7 +182,7 @@ kbd {
 @media (prefers-reduced-motion: reduce) { .theme-menu:not([hidden]) { animation: none; } .theme-trigger, .theme-trigger .theme-chevron { transition: none; } }
 
 /* ---------- レイアウト ---------- */
-.layout { display: grid; grid-template-columns: var(--side-w) minmax(0, 1fr); align-items: start; }
+.layout { display: grid; grid-template-columns: var(--side-size) minmax(0, 1fr); align-items: start; }
 .sidebar {
   position: sticky; top: var(--header-h);
   height: calc(100vh - var(--header-h)); height: calc(100dvh - var(--header-h));
@@ -207,6 +208,9 @@ kbd {
 /* 枠で囲まず、題名の大きさと余白で表紙にする。区切りの細い線は、左端だけを強調の色にする（章の見出しと同じ決まり）。
    スライドの表紙では .md の中に複製されるので、本文用の指定より強くしておく */
 .doc-header { margin: 1.2rem 0 4.2rem; }
+.doc-empty { padding: 1.6rem 1.8rem; border: 1px dashed var(--rule); border-radius: 8px; color: var(--ink-2); }
+.doc-empty p { margin: .4em 0; }
+.doc-empty .doc-empty-title { color: var(--ink); font-size: 1.15rem; font-weight: 700; }
 .doc-header .tb-head { display: flex; flex-direction: column; align-items: flex-start; }
 .doc-header .tb-logo { order: -1; align-self: stretch; margin: 0 0 2.2rem; }
 .doc-header .doc-logo { display: block; width: auto; max-width: min(240px, 60%); height: auto; max-height: 40px; }
@@ -486,7 +490,17 @@ body.presenting .search-bar { top: 12px; z-index: 85; }
 .width-handle:hover .width-grip, .width-handle:focus-visible .width-grip, body.resizing .width-grip { background: var(--accent); opacity: 1; }
 .width-label { position: absolute; top: 50%; left: 14px; display: none; padding: 2px 7px; border-radius: 4px; background: var(--ink); color: var(--bg); font-size: 12px; line-height: 1.6; white-space: nowrap; transform: translateY(-50%); font-variant-numeric: tabular-nums; }
 body.resizing .width-label, .width-handle:focus-visible .width-label { display: block; }
-body.resizing { cursor: col-resize; -webkit-user-select: none; user-select: none; }
+body.resizing, body.sidebar-resizing { cursor: col-resize; -webkit-user-select: none; user-select: none; }
+/* 左メニューの右端。スクロールしても境界と取っ手を同じ場所に保つ */
+.sidebar-width-handle { position: fixed; top: var(--header-h); bottom: 0; left: var(--side-size); z-index: 36; width: 16px; margin-left: -8px; cursor: col-resize; touch-action: none; }
+.sidebar-width-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 7px; width: 2px; background: var(--accent); opacity: 0; transition: opacity .15s; }
+.sidebar-width-handle .width-grip { position: absolute; top: 50%; transform: translateY(-50%); }
+.sidebar-width-handle:hover::before, .sidebar-width-handle:focus-visible::before, body.sidebar-resizing .sidebar-width-handle::before { opacity: .3; }
+.sidebar-width-handle:hover .width-grip, .sidebar-width-handle:focus-visible .width-grip, body.sidebar-resizing .sidebar-width-handle .width-grip { background: var(--accent); opacity: 1; }
+.sidebar-width-handle:focus-visible .width-label, body.sidebar-resizing .sidebar-width-handle .width-label { display: block; }
+body.editing .sidebar-width-handle, body.toc-hidden .sidebar-width-handle, body.no-toc .sidebar-width-handle, body.presenting .sidebar-width-handle, .no-js .sidebar-width-handle { display: none; }
+@media (max-width: 900px) { .sidebar-width-handle { display: none; } }
+@media print { .sidebar-width-handle { display: none !important; } }
 @media (max-width: 900px) { .width-handle { display: none; } }
 
 .md table { width: 100%; border-collapse: collapse; font-size: .93em; line-height: 1.6; }
@@ -1251,6 +1265,14 @@ logo: logo
 - **`font`（本文の書体）:** `gothic`（標準）・`ud`（BIZ UD ゴシック）・`meiryo`・`yugothic`・`noto`（Noto Sans JP）・`system`・`mincho`（明朝）から選ぶか、`font: "Noto Sans JP", sans-serif` のように書体名を並べます。見る人のパソコンに入っている書体だけが使われます
 - **`mono`（コードの書体）:** `mono: "Cascadia Code", Consolas` のように書体名を並べます
 - **`logo`（ロゴ）:** 表紙の左上と、スライドの下（表紙のスライドを除く）に出ます。URL・`data:` URL のほか、上のように参照形式の名前を書くと本文の末尾の定義を使うので、長い base64 をフロントマターに書かずに済みます
+
+ロゴや favicon を手元の画像から埋め込む場合は、リポジトリに付属するコマンドも使えます。Node.js 18 以上の環境で、次のように指定します。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md --logo ./logo.svg --logo-dark ./logo-dark.svg --favicon ./favicon.png --favicon ./favicon.svg
+```
+
+画像のパスは実行フォルダ基準です。`--logo` だけなら明暗共通になり、`--logo-dark` を添えるとダーク用を分けられます。`--favicon` は SVG・PNG・ICO を複数指定でき、既存の favicon 一式を置き換えます。画像は HTML に埋め込まれるので別添は不要です。フロントマターに `logo` がある場合は、そちらが優先されます。
 
 | `palette` | ライト | ダーク |
 |---|---|---|
@@ -2542,6 +2564,14 @@ logo: logo
 - **`mono`（コードの書体）:** `mono: "Cascadia Code", Consolas` のように書体名を並べます
 - **`logo`（ロゴ）:** 表紙の左上と、スライドの下（表紙のスライドを除く）に出ます。URL・`data:` URL のほか、上のように参照形式の名前を書くと本文の末尾の定義を使うので、長い base64 をフロントマターに書かずに済みます
 
+ロゴや favicon を手元の画像から埋め込む場合は、リポジトリに付属するコマンドも使えます。Node.js 18 以上の環境で、次のように指定します。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md --logo ./logo.svg --logo-dark ./logo-dark.svg --favicon ./favicon.png --favicon ./favicon.svg
+```
+
+画像のパスは実行フォルダ基準です。`--logo` だけなら明暗共通になり、`--logo-dark` を添えるとダーク用を分けられます。`--favicon` は SVG・PNG・ICO を複数指定でき、既存の favicon 一式を置き換えます。画像は HTML に埋め込まれるので別添は不要です。フロントマターに `logo` がある場合は、そちらが優先されます。
+
 | `palette` | ライト | ダーク |
 |---|---|---|
 | `indigo`（標準） | <span class="swatch" style="--c:#2b4c8c"></span>`#2b4c8c` | <span class="swatch" style="--c:#93b2ec"></span>`#93b2ec` |
@@ -3819,8 +3849,6 @@ h2_pagebreak: true
 | 1.0 | 2026-11-06 | 作成者名 | 初版 |
 </script>
 
-
-
 <header class="topbar" id="ui-topbar">
   <button class="icon-btn" type="button" data-action="toc" title="目次の表示を切り替え（B）" aria-label="目次の表示を切り替え"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h11"/></svg></button>
   <div class="topbar-title"><span id="ui-title"></span><span class="topbar-crumb" id="ui-crumb"></span></div>
@@ -3850,6 +3878,7 @@ h2_pagebreak: true
     <ol class="toc" id="ui-toc"></ol>
     <p class="sidebar-hint"><kbd>?</kbd> でショートカットの一覧</p>
   </nav>
+  <div class="sidebar-width-handle" id="ui-sidebar-width" role="separator" aria-controls="ui-sidebar" aria-orientation="vertical" tabindex="0" aria-label="左メニューの幅（ドラッグか ← → で変える。ダブルクリックか Enter で標準に戻す）" title="ドラッグで左メニューの幅を変える（ダブルクリックで標準に戻す）"><span class="width-grip"><span class="width-label"></span></span></div>
   <aside class="editor" id="ui-editor" aria-label="Markdown の編集">
     <div class="editor-head">
       <strong>Markdown</strong>
@@ -3978,7 +4007,7 @@ const CONFIG = {
   logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNzIuMDggNDgiIHdpZHRoPSI1NDQuMTciIGhlaWdodD0iOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iaHlwZXJ0ZXh0LW1hcmtkb3duIj48cmVjdCB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHJ4PSIxMSIgZmlsbD0iIzJiNGM4YyIvPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI0LjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTExLjUgMTNWMzQuNU0xMS41IDI2LjNhNC4zMyA0LjMzIDAgMCAxIDguNjYgMFYzNC41TTIwLjE2IDI2LjNhNC4zMyA0LjMzIDAgMCAxIDguNjcgMFYzNC41TTI4LjgzIDI2LjNhNC4zMyA0LjMzIDAgMCAxIDguNjcgMFYzNC41Ii8+PHBhdGggZmlsbD0iIzE4MjEzNCIgZD0iTTYxIDI5LjdWMTIuOTRINjQuMDlWMTcuMTZMNjMuOTQgMTkuMzdRNjQuNjMgMTguNyA2NS41NCAxOC4xN1E2Ni40NCAxNy42NSA2Ny42NCAxNy42NVE2OS41NSAxNy42NSA3MC40MSAxOC45UTcxLjI3IDIwLjE1IDcxLjI3IDIyLjM3VjI5LjdINjguMThWMjIuNzVRNjguMTggMjEuMzkgNjcuNzkgMjAuODRRNjcuNDEgMjAuMjkgNjYuNTIgMjAuMjlRNjUuODEgMjAuMjkgNjUuMjcgMjAuNjNRNjQuNzQgMjAuOTcgNjQuMDkgMjEuNjJWMjkuN1pNNzUuNTcgMzQuNDFRNzUuMDUgMzQuNDEgNzQuNjcgMzQuMzRRNzQuMjkgMzQuMjggNzMuOTYgMzQuMTdMNzQuNTIgMzEuODJRNzQuNjkgMzEuODYgNzQuOTEgMzEuOTJRNzUuMTMgMzEuOTcgNzUuMzQgMzEuOTdRNzYuMjUgMzEuOTcgNzYuNzcgMzEuNDdRNzcuMyAzMC45NiA3Ny41NSAzMC4xOEw3Ny43NiAyOS40N0w3My4xOCAxNy45NEg3Ni4yOUw3OC4xNiAyMy40UTc4LjQzIDI0LjIgNzguNjYgMjUuMDRRNzguODkgMjUuODggNzkuMTQgMjYuNzJINzkuMjVRNzkuNDQgMjUuODggNzkuNjYgMjUuMDVRNzkuODggMjQuMjIgODAuMDkgMjMuNEw4MS43MSAxNy45NEg4NC42N0w4MC40OSAzMC4wNlE3OS45OCAzMS40NCA3OS4zMyAzMi40MlE3OC42OCAzMy40IDc3Ljc5IDMzLjlRNzYuOSAzNC40MSA3NS41NyAzNC40MVpNODYuNyAzNC4yMlYxNy45NEg4OS4yMkw4OS40NSAxOS4xNkg4OS41MlE5MC4yNSAxOC41MyA5MS4xNSAxOC4wOVE5Mi4wNCAxNy42NSA5Mi45OCAxNy42NVE5NC40MyAxNy42NSA5NS40NiAxOC4zOVE5Ni40OSAxOS4xNCA5Ny4wNSAyMC40N1E5Ny42IDIxLjgxIDk3LjYgMjMuNjNROTcuNiAyNS42NSA5Ni44OSAyNy4wOFE5Ni4xNyAyOC41IDk1LjAzIDI5LjI1UTkzLjg5IDMwIDkyLjYxIDMwUTkxLjg1IDMwIDkxLjEgMjkuNjZROTAuMzYgMjkuMzIgODkuNjkgMjguNzFMODkuNzkgMzAuNjNWMzQuMjJaTTkxLjkzIDI3LjQ1UTkyLjYzIDI3LjQ1IDkzLjE5IDI3LjA1UTkzLjc2IDI2LjY0IDk0LjEgMjUuOFE5NC40MyAyNC45NiA5NC40MyAyMy42N1E5NC40MyAyMi41NiA5NC4xOCAyMS43N1E5My45MyAyMC45OSA5My40MiAyMC41OVE5Mi45MiAyMC4xOSA5Mi4xIDIwLjE5UTkxLjUxIDIwLjE5IDkwLjk2IDIwLjQ4UTkwLjQgMjAuNzggODkuNzkgMjEuMzlWMjYuNTdROTAuMzYgMjcuMDggOTAuOSAyNy4yN1E5MS40NSAyNy40NSA5MS45MyAyNy40NVpNMTA1LjQ2IDMwUTEwMy44MiAzMCAxMDIuNSAyOS4yNlExMDEuMTcgMjguNTMgMTAwLjM5IDI3LjE0UTk5LjYgMjUuNzUgOTkuNiAyMy44MlE5OS42IDIyLjM5IDEwMC4wNSAyMS4yNlExMDAuNSAyMC4xMyAxMDEuMjkgMTkuMzJRMTAyLjA4IDE4LjUxIDEwMy4wNSAxOC4wOFExMDQuMDMgMTcuNjUgMTA1LjA4IDE3LjY1UTEwNi43IDE3LjY1IDEwNy43OSAxOC4zN1ExMDguODggMTkuMSAxMDkuNDQgMjAuMzdRMTA5Ljk5IDIxLjY0IDEwOS45OSAyMy4yOFExMDkuOTkgMjMuNyAxMDkuOTUgMjQuMDhRMTA5LjkxIDI0LjQ3IDEwOS44NSAyNC43SDEwMi42UTEwMi43MyAyNS42NSAxMDMuMTcgMjYuM1ExMDMuNjEgMjYuOTUgMTA0LjMgMjcuMjhRMTA1IDI3LjYgMTA1Ljg4IDI3LjZRMTA2LjU5IDI3LjYgMTA3LjIyIDI3LjRRMTA3Ljg1IDI3LjIgMTA4LjUgMjYuOEwxMDkuNTUgMjguNjlRMTA4LjY5IDI5LjI4IDEwNy42MiAyOS42NFExMDYuNTUgMzAgMTA1LjQ2IDMwWk0xMDIuNTQgMjIuNjJIMTA3LjM1UTEwNy4zNSAyMS40NSAxMDYuODEgMjAuNzRRMTA2LjI4IDIwLjA0IDEwNS4xMiAyMC4wNFExMDQuNTEgMjAuMDQgMTAzLjk3IDIwLjMyUTEwMy40MiAyMC42MSAxMDMuMDQgMjEuMTlRMTAyLjY2IDIxLjc2IDEwMi41NCAyMi42MlpNMTEyLjY0IDI5LjdWMTcuOTRIMTE1LjE2TDExNS4zOSAyMC4wMkgxMTUuNDVRMTE2LjEgMTguODcgMTE2Ljk5IDE4LjI2UTExNy44NyAxNy42NSAxMTguNzkgMTcuNjVRMTE5LjMgMTcuNjUgMTE5LjYgMTcuNzJRMTE5LjkgMTcuNzkgMTIwLjE2IDE3LjlMMTE5LjY1IDIwLjU3UTExOS4zMiAyMC40OCAxMTkuMDUgMjAuNDNRMTE4Ljc5IDIwLjM4IDExOC4zOSAyMC4zOFExMTcuNzIgMjAuMzggMTE2Ljk4IDIwLjlRMTE2LjIzIDIxLjQzIDExNS43MyAyMi42OVYyOS43Wk0xMjYuMjMgMzBRMTI0Ljg0IDMwIDEyMy45OCAyOS40NFExMjMuMTIgMjguODggMTIyLjc0IDI3LjlRMTIyLjM2IDI2LjkxIDEyMi4zNiAyNS42MVYyMC4zOEgxMjAuN1YxOC4wOUwxMjIuNTMgMTcuOTRMMTIyLjg5IDE0Ljc3SDEyNS40M1YxNy45NEgxMjguMzVWMjAuMzhIMTI1LjQzVjI1LjU5UTEyNS40MyAyNi41OSAxMjUuODUgMjcuMDhRMTI2LjI3IDI3LjU2IDEyNy4wNSAyNy41NlExMjcuMzQgMjcuNTYgMTI3LjY1IDI3LjQ4UTEyNy45NyAyNy4zOSAxMjguMiAyNy4zMUwxMjguNzIgMjkuNTVRMTI4LjI0IDI5LjcgMTI3LjYyIDI5Ljg1UTEyNyAzMCAxMjYuMjMgMzBaTTEzNS40NyAzMFExMzMuODMgMzAgMTMyLjUgMjkuMjZRMTMxLjE4IDI4LjUzIDEzMC4zOSAyNy4xNFExMjkuNjEgMjUuNzUgMTI5LjYxIDIzLjgyUTEyOS42MSAyMi4zOSAxMzAuMDYgMjEuMjZRMTMwLjUxIDIwLjEzIDEzMS4zIDE5LjMyUTEzMi4wOCAxOC41MSAxMzMuMDYgMTguMDhRMTM0LjA0IDE3LjY1IDEzNS4wOSAxNy42NVExMzYuNyAxNy42NSAxMzcuOCAxOC4zN1ExMzguODkgMTkuMSAxMzkuNDUgMjAuMzdRMTQwIDIxLjY0IDE0MCAyMy4yOFExNDAgMjMuNyAxMzkuOTYgMjQuMDhRMTM5LjkyIDI0LjQ3IDEzOS44NSAyNC43SDEzMi42MVExMzIuNzQgMjUuNjUgMTMzLjE4IDI2LjNRMTMzLjYyIDI2Ljk1IDEzNC4zMSAyNy4yOFExMzUgMjcuNiAxMzUuODkgMjcuNlExMzYuNiAyNy42IDEzNy4yMyAyNy40UTEzNy44NiAyNy4yIDEzOC41MSAyNi44TDEzOS41NiAyOC42OVExMzguNyAyOS4yOCAxMzcuNjMgMjkuNjRRMTM2LjU2IDMwIDEzNS40NyAzMFpNMTMyLjU1IDIyLjYySDEzNy4zNlExMzcuMzYgMjEuNDUgMTM2LjgyIDIwLjc0UTEzNi4yOCAyMC4wNCAxMzUuMTMgMjAuMDRRMTM0LjUyIDIwLjA0IDEzMy45NyAyMC4zMlExMzMuNDMgMjAuNjEgMTMzLjA1IDIxLjE5UTEzMi42NyAyMS43NiAxMzIuNTUgMjIuNjJaTTE0MC44OCAyOS43IDE0NC41NiAyMy41OSAxNDEuMTIgMTcuOTRIMTQ0LjQzTDE0NS42MSAyMC4wMlExNDUuODYgMjAuNTIgMTQ2LjEyIDIxLjAzUTE0Ni4zOSAyMS41MyAxNDYuNjYgMjIuMDJIMTQ2Ljc0UTE0Ni45NSAyMS41MyAxNDcuMTcgMjEuMDNRMTQ3LjM5IDIwLjUyIDE0Ny42MiAyMC4wMkwxNDguNTkgMTcuOTRIMTUxLjc4TDE0OC4zNCAyMy45M0wxNTIuMDEgMjkuN0gxNDguN0wxNDcuMzkgMjcuNTRRMTQ3LjEyIDI3LjAxIDE0Ni44NCAyNi41UTE0Ni41NSAyNS45OCAxNDYuMjYgMjUuNUgxNDYuMTZRMTQ1LjkgMjUuOTggMTQ1LjY2IDI2LjVRMTQ1LjQyIDI3LjAxIDE0NS4xNyAyNy41NEwxNDQuMSAyOS43Wk0xNTcuNjYgMzBRMTU2LjI4IDMwIDE1NS40MiAyOS40NFExNTQuNTUgMjguODggMTU0LjE4IDI3LjlRMTUzLjggMjYuOTEgMTUzLjggMjUuNjFWMjAuMzhIMTUyLjE0VjE4LjA5TDE1My45NyAxNy45NEwxNTQuMzIgMTQuNzdIMTU2Ljg2VjE3Ljk0SDE1OS43OFYyMC4zOEgxNTYuODZWMjUuNTlRMTU2Ljg2IDI2LjU5IDE1Ny4yOCAyNy4wOFExNTcuNyAyNy41NiAxNTguNDggMjcuNTZRMTU4Ljc4IDI3LjU2IDE1OS4wOSAyNy40OFExNTkuNDEgMjcuMzkgMTU5LjY0IDI3LjMxTDE2MC4xNiAyOS41NVExNTkuNjggMjkuNyAxNTkuMDYgMjkuODVRMTU4LjQ0IDMwIDE1Ny42NiAzMFoiLz48cGF0aCBmaWxsPSIjMTgyMTM0IiBkPSJNMTYyLjExIDI0LjUxVjIzLjE3SDE2Ny40MlYyNC41MVpNMTcwLjQyIDI5LjdWMTguMzZIMTcxLjgzTDE3MiAyMC4wNEgxNzIuMDZRMTcyLjc5IDE5LjIyIDE3My43IDE4LjY0UTE3NC42IDE4LjA3IDE3NS42MSAxOC4wN1ExNzYuOTMgMTguMDcgMTc3LjY2IDE4LjY2UTE3OC4zOCAxOS4yNCAxNzguNzIgMjAuMjdRMTc5LjY0IDE5LjI5IDE4MC41NSAxOC42OFExODEuNDcgMTguMDcgMTgyLjUgMTguMDdRMTg0LjIyIDE4LjA3IDE4NS4wNyAxOS4xOVExODUuOTIgMjAuMzEgMTg1LjkyIDIyLjVWMjkuN0gxODQuMjRWMjIuNzFRMTg0LjI0IDIxLjA3IDE4My42OSAyMC4zMVExODMuMTUgMTkuNTYgMTgyLjAxIDE5LjU2UTE4MS4zMiAxOS41NiAxODAuNiAyMC4wMlExNzkuODcgMjAuNDggMTc5LjAzIDIxLjM5VjI5LjdIMTc3LjMzVjIyLjcxUTE3Ny4zMyAyMS4wNyAxNzYuOCAyMC4zMVExNzYuMjYgMTkuNTYgMTc1LjEzIDE5LjU2UTE3NC40NSAxOS41NiAxNzMuNyAyMC4wMlExNzIuOTQgMjAuNDggMTcyLjE0IDIxLjM5VjI5LjdaTTE5Mi40MyAyOS45N1ExOTEuNTEgMjkuOTcgMTkwLjc2IDI5LjYxUTE5MC4wMSAyOS4yNCAxODkuNTcgMjguNTNRMTg5LjEzIDI3LjgxIDE4OS4xMyAyNi43OFExODkuMTMgMjQuOTEgMTkwLjgyIDIzLjkzUTE5Mi41MSAyMi45NCAxOTYuMTcgMjIuNTRRMTk2LjE5IDIxLjc2IDE5NS45OSAyMS4wN1ExOTUuNzkgMjAuMzggMTk1LjI2IDE5Ljk0UTE5NC43NCAxOS41IDE5My43NSAxOS41UTE5Mi43MiAxOS41IDE5MS44NCAxOS44OVExOTAuOTYgMjAuMjkgMTkwLjMxIDIwLjc2TDE4OS42NCAxOS41NFExOTAuMTIgMTkuMjIgMTkwLjc5IDE4Ljg5UTE5MS40NiAxOC41NSAxOTIuMjggMTguMzFRMTkzLjEgMTguMDcgMTk0LjAzIDE4LjA3UTE5NS4zOSAxOC4wNyAxOTYuMjQgMTguNjZRMTk3LjA5IDE5LjI0IDE5Ny40OCAyMC4yN1ExOTcuODcgMjEuMyAxOTcuODcgMjIuNjdWMjkuN0gxOTYuNDhMMTk2LjMxIDI4LjMySDE5Ni4yNVExOTUuNDMgMjkuMDEgMTk0LjQ3IDI5LjQ5UTE5My41IDI5Ljk3IDE5Mi40MyAyOS45N1pNMTkyLjg5IDI4LjU5UTE5My43NSAyOC41OSAxOTQuNTMgMjguMThRMTk1LjMxIDI3Ljc3IDE5Ni4xNyAyNy4wMVYyMy43UTE5NC4xNyAyMy45MyAxOTIuOTkgMjQuMzNRMTkxLjggMjQuNzIgMTkxLjMgMjUuMzFRMTkwLjc5IDI1LjkgMTkwLjc5IDI2LjY4UTE5MC43OSAyNy43MSAxOTEuNCAyOC4xNVExOTIuMDEgMjguNTkgMTkyLjg5IDI4LjU5Wk0yMDEuNjcgMjkuN1YxOC4zNkgyMDMuMDhMMjAzLjI0IDIwLjQ0SDIwMy4zMVEyMDMuOSAxOS4zNyAyMDQuNzMgMTguNzJRMjA1LjU1IDE4LjA3IDIwNi41MiAxOC4wN1EyMDYuOSAxOC4wNyAyMDcuMTcgMTguMTJRMjA3LjQ0IDE4LjE3IDIwNy43MiAxOC4zMkwyMDcuMzggMTkuODFRMjA3LjA5IDE5LjcxIDIwNi44NyAxOS42NlEyMDYuNjUgMTkuNjIgMjA2LjI5IDE5LjYyUTIwNS41OCAxOS42MiAyMDQuNzggMjAuMjNRMjAzLjk4IDIwLjg0IDIwMy4zOSAyMi4zMVYyOS43Wk0yMDkuNzMgMjkuN1YxMi45OUgyMTEuNDRWMjQuNTRIMjExLjVMMjE2LjUgMTguMzZIMjE4LjQxTDIxNC42NSAyMi45MkwyMTguOTMgMjkuN0gyMTcuMDZMMjEzLjY0IDI0LjA3TDIxMS40NCAyNi42OFYyOS43Wk0yMjQuNjIgMjkuOTdRMjIzLjE5IDI5Ljk3IDIyMi4xNCAyOS4yOFEyMjEuMDkgMjguNTkgMjIwLjUyIDI3LjI3UTIxOS45NCAyNS45NCAyMTkuOTQgMjQuMDVRMjE5Ljk0IDIyLjIgMjIwLjYzIDIwLjg3UTIyMS4zMyAxOS41NCAyMjIuNDUgMTguOFEyMjMuNTcgMTguMDcgMjI0LjkgMTguMDdRMjI1Ljg4IDE4LjA3IDIyNi42MiAxOC40MlEyMjcuMzUgMTguNzggMjI4LjEzIDE5LjQxTDIyOC4wNSAxNy40MlYxMi45OUgyMjkuNzVWMjkuN0gyMjguMzRMMjI4LjE5IDI4LjM0SDIyOC4xM1EyMjcuNDYgMjkuMDEgMjI2LjU3IDI5LjQ5UTIyNS42NyAyOS45NyAyMjQuNjIgMjkuOTdaTTIyNC45OCAyOC41M1EyMjUuOCAyOC41MyAyMjYuNTQgMjguMTJRMjI3LjI5IDI3LjcxIDIyOC4wNSAyNi45MVYyMC43OFEyMjcuMjkgMjAuMDggMjI2LjU5IDE5LjhRMjI1Ljg4IDE5LjUyIDIyNS4xNSAxOS41MlEyMjQuMiAxOS41MiAyMjMuNDIgMjAuMDlRMjIyLjYzIDIwLjY3IDIyMi4xNyAyMS42OVEyMjEuNyAyMi43MSAyMjEuNyAyNC4wM1EyMjEuNyAyNS40MiAyMjIuMDkgMjYuNDNRMjIyLjQ4IDI3LjQzIDIyMy4yMiAyNy45OFEyMjMuOTUgMjguNTMgMjI0Ljk4IDI4LjUzWk0yMzguMTUgMjkuOTdRMjM2Ljc2IDI5Ljk3IDIzNS41NyAyOS4yN1EyMzQuMzkgMjguNTcgMjMzLjY2IDI3LjI0UTIzMi45NCAyNS45MiAyMzIuOTQgMjQuMDVRMjMyLjk0IDIyLjE0IDIzMy42NiAyMC44MVEyMzQuMzkgMTkuNDcgMjM1LjU3IDE4Ljc3UTIzNi43NiAxOC4wNyAyMzguMTUgMTguMDdRMjM5LjIgMTguMDcgMjQwLjEzIDE4LjQ3UTI0MS4wNyAxOC44NyAyNDEuOCAxOS42M1EyNDIuNTQgMjAuNCAyNDIuOTUgMjEuNTFRMjQzLjM1IDIyLjYyIDI0My4zNSAyNC4wNVEyNDMuMzUgMjUuOTIgMjQyLjYzIDI3LjI0UTI0MS45MSAyOC41NyAyNDAuNzIgMjkuMjdRMjM5LjUzIDI5Ljk3IDIzOC4xNSAyOS45N1pNMjM4LjE1IDI4LjU1UTIzOS4xOCAyOC41NSAyMzkuOTUgMjcuOThRMjQwLjczIDI3LjQxIDI0MS4xNyAyNi40UTI0MS42MSAyNS40IDI0MS42MSAyNC4wNVEyNDEuNjEgMjIuNjkgMjQxLjE3IDIxLjY3UTI0MC43MyAyMC42NSAyMzkuOTUgMjAuMDhRMjM5LjE4IDE5LjUyIDIzOC4xNSAxOS41MlEyMzcuMTQgMTkuNTIgMjM2LjM1IDIwLjA4UTIzNS41NiAyMC42NSAyMzUuMTMgMjEuNjdRMjM0LjcgMjIuNjkgMjM0LjcgMjQuMDVRMjM0LjcgMjUuNCAyMzUuMTMgMjYuNFEyMzUuNTYgMjcuNDEgMjM2LjM1IDI3Ljk4UTIzNy4xNCAyOC41NSAyMzguMTUgMjguNTVaTTI0OC4yMyAyOS43IDI0NS4wMSAxOC4zNkgyNDYuNzZMMjQ4LjU0IDI1LjFRMjQ4LjczIDI1LjkyIDI0OC45IDI2LjY4UTI0OS4wNyAyNy40MyAyNDkuMjEgMjguMjNIMjQ5LjMyUTI0OS41MyAyNy40MyAyNDkuNzEgMjYuNjdRMjQ5Ljg5IDI1LjkgMjUwLjEgMjUuMUwyNTEuOTQgMTguMzZIMjUzLjY3TDI1NS41MSAyNS4xUTI1NS43MiAyNS45MiAyNTUuOTEgMjYuNjhRMjU2LjEgMjcuNDMgMjU2LjMxIDI4LjIzSDI1Ni40UTI1Ni41OCAyNy40MyAyNTYuNzYgMjYuNjhRMjU2Ljk0IDI1LjkyIDI1Ny4xMyAyNS4xTDI1OC44NSAxOC4zNkgyNjAuNTFMMjU3LjQgMjkuN0gyNTUuM0wyNTMuNTggMjMuMzhRMjUzLjM3IDIyLjU2IDI1My4xOCAyMS43NlEyNTIuOTkgMjAuOTcgMjUyLjc4IDIwLjFIMjUyLjY4UTI1Mi40OSAyMC45NyAyNTIuMzEgMjEuNzdRMjUyLjEzIDIyLjU4IDI1MS44OCAyMy40TDI1MC4yIDI5LjdaTTI2My4xNiAyOS43VjE4LjM2SDI2NC41NkwyNjQuNzMgMjAuMDJIMjY0LjhRMjY1LjYxIDE5LjIgMjY2LjUzIDE4LjYzUTI2Ny40NCAxOC4wNyAyNjguNjIgMTguMDdRMjcwLjQgMTguMDcgMjcxLjI0IDE5LjE5UTI3Mi4wOCAyMC4zMSAyNzIuMDggMjIuNVYyOS43SDI3MC4zNlYyMi43MVEyNzAuMzYgMjEuMDcgMjY5Ljg0IDIwLjMxUTI2OS4zMSAxOS41NiAyNjguMTEgMTkuNTZRMjY3LjIxIDE5LjU2IDI2Ni40OSAyMC4wMlEyNjUuNzYgMjAuNDggMjY0Ljg4IDIxLjM5VjI5LjdaIi8+PC9zdmc+Cg==',      // 表紙の左上とスライドの下に出すロゴ（URL か data: URL）
   logoDark: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNzIuMDggNDgiIHdpZHRoPSI1NDQuMTciIGhlaWdodD0iOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iaHlwZXJ0ZXh0LW1hcmtkb3duIj48cmVjdCB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHJ4PSIxMSIgZmlsbD0iIzkzYjJlYyIvPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzEwMTgyYSIgc3Ryb2tlLXdpZHRoPSI0LjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTExLjUgMTNWMzQuNU0xMS41IDI2LjNhNC4zMyA0LjMzIDAgMCAxIDguNjYgMFYzNC41TTIwLjE2IDI2LjNhNC4zMyA0LjMzIDAgMCAxIDguNjcgMFYzNC41TTI4LjgzIDI2LjNhNC4zMyA0LjMzIDAgMCAxIDguNjcgMFYzNC41Ii8+PHBhdGggZmlsbD0iI2YxZjRmOSIgZD0iTTYxIDI5LjdWMTIuOTRINjQuMDlWMTcuMTZMNjMuOTQgMTkuMzdRNjQuNjMgMTguNyA2NS41NCAxOC4xN1E2Ni40NCAxNy42NSA2Ny42NCAxNy42NVE2OS41NSAxNy42NSA3MC40MSAxOC45UTcxLjI3IDIwLjE1IDcxLjI3IDIyLjM3VjI5LjdINjguMThWMjIuNzVRNjguMTggMjEuMzkgNjcuNzkgMjAuODRRNjcuNDEgMjAuMjkgNjYuNTIgMjAuMjlRNjUuODEgMjAuMjkgNjUuMjcgMjAuNjNRNjQuNzQgMjAuOTcgNjQuMDkgMjEuNjJWMjkuN1pNNzUuNTcgMzQuNDFRNzUuMDUgMzQuNDEgNzQuNjcgMzQuMzRRNzQuMjkgMzQuMjggNzMuOTYgMzQuMTdMNzQuNTIgMzEuODJRNzQuNjkgMzEuODYgNzQuOTEgMzEuOTJRNzUuMTMgMzEuOTcgNzUuMzQgMzEuOTdRNzYuMjUgMzEuOTcgNzYuNzcgMzEuNDdRNzcuMyAzMC45NiA3Ny41NSAzMC4xOEw3Ny43NiAyOS40N0w3My4xOCAxNy45NEg3Ni4yOUw3OC4xNiAyMy40UTc4LjQzIDI0LjIgNzguNjYgMjUuMDRRNzguODkgMjUuODggNzkuMTQgMjYuNzJINzkuMjVRNzkuNDQgMjUuODggNzkuNjYgMjUuMDVRNzkuODggMjQuMjIgODAuMDkgMjMuNEw4MS43MSAxNy45NEg4NC42N0w4MC40OSAzMC4wNlE3OS45OCAzMS40NCA3OS4zMyAzMi40MlE3OC42OCAzMy40IDc3Ljc5IDMzLjlRNzYuOSAzNC40MSA3NS41NyAzNC40MVpNODYuNyAzNC4yMlYxNy45NEg4OS4yMkw4OS40NSAxOS4xNkg4OS41MlE5MC4yNSAxOC41MyA5MS4xNSAxOC4wOVE5Mi4wNCAxNy42NSA5Mi45OCAxNy42NVE5NC40MyAxNy42NSA5NS40NiAxOC4zOVE5Ni40OSAxOS4xNCA5Ny4wNSAyMC40N1E5Ny42IDIxLjgxIDk3LjYgMjMuNjNROTcuNiAyNS42NSA5Ni44OSAyNy4wOFE5Ni4xNyAyOC41IDk1LjAzIDI5LjI1UTkzLjg5IDMwIDkyLjYxIDMwUTkxLjg1IDMwIDkxLjEgMjkuNjZROTAuMzYgMjkuMzIgODkuNjkgMjguNzFMODkuNzkgMzAuNjNWMzQuMjJaTTkxLjkzIDI3LjQ1UTkyLjYzIDI3LjQ1IDkzLjE5IDI3LjA1UTkzLjc2IDI2LjY0IDk0LjEgMjUuOFE5NC40MyAyNC45NiA5NC40MyAyMy42N1E5NC40MyAyMi41NiA5NC4xOCAyMS43N1E5My45MyAyMC45OSA5My40MiAyMC41OVE5Mi45MiAyMC4xOSA5Mi4xIDIwLjE5UTkxLjUxIDIwLjE5IDkwLjk2IDIwLjQ4UTkwLjQgMjAuNzggODkuNzkgMjEuMzlWMjYuNTdROTAuMzYgMjcuMDggOTAuOSAyNy4yN1E5MS40NSAyNy40NSA5MS45MyAyNy40NVpNMTA1LjQ2IDMwUTEwMy44MiAzMCAxMDIuNSAyOS4yNlExMDEuMTcgMjguNTMgMTAwLjM5IDI3LjE0UTk5LjYgMjUuNzUgOTkuNiAyMy44MlE5OS42IDIyLjM5IDEwMC4wNSAyMS4yNlExMDAuNSAyMC4xMyAxMDEuMjkgMTkuMzJRMTAyLjA4IDE4LjUxIDEwMy4wNSAxOC4wOFExMDQuMDMgMTcuNjUgMTA1LjA4IDE3LjY1UTEwNi43IDE3LjY1IDEwNy43OSAxOC4zN1ExMDguODggMTkuMSAxMDkuNDQgMjAuMzdRMTA5Ljk5IDIxLjY0IDEwOS45OSAyMy4yOFExMDkuOTkgMjMuNyAxMDkuOTUgMjQuMDhRMTA5LjkxIDI0LjQ3IDEwOS44NSAyNC43SDEwMi42UTEwMi43MyAyNS42NSAxMDMuMTcgMjYuM1ExMDMuNjEgMjYuOTUgMTA0LjMgMjcuMjhRMTA1IDI3LjYgMTA1Ljg4IDI3LjZRMTA2LjU5IDI3LjYgMTA3LjIyIDI3LjRRMTA3Ljg1IDI3LjIgMTA4LjUgMjYuOEwxMDkuNTUgMjguNjlRMTA4LjY5IDI5LjI4IDEwNy42MiAyOS42NFExMDYuNTUgMzAgMTA1LjQ2IDMwWk0xMDIuNTQgMjIuNjJIMTA3LjM1UTEwNy4zNSAyMS40NSAxMDYuODEgMjAuNzRRMTA2LjI4IDIwLjA0IDEwNS4xMiAyMC4wNFExMDQuNTEgMjAuMDQgMTAzLjk3IDIwLjMyUTEwMy40MiAyMC42MSAxMDMuMDQgMjEuMTlRMTAyLjY2IDIxLjc2IDEwMi41NCAyMi42MlpNMTEyLjY0IDI5LjdWMTcuOTRIMTE1LjE2TDExNS4zOSAyMC4wMkgxMTUuNDVRMTE2LjEgMTguODcgMTE2Ljk5IDE4LjI2UTExNy44NyAxNy42NSAxMTguNzkgMTcuNjVRMTE5LjMgMTcuNjUgMTE5LjYgMTcuNzJRMTE5LjkgMTcuNzkgMTIwLjE2IDE3LjlMMTE5LjY1IDIwLjU3UTExOS4zMiAyMC40OCAxMTkuMDUgMjAuNDNRMTE4Ljc5IDIwLjM4IDExOC4zOSAyMC4zOFExMTcuNzIgMjAuMzggMTE2Ljk4IDIwLjlRMTE2LjIzIDIxLjQzIDExNS43MyAyMi42OVYyOS43Wk0xMjYuMjMgMzBRMTI0Ljg0IDMwIDEyMy45OCAyOS40NFExMjMuMTIgMjguODggMTIyLjc0IDI3LjlRMTIyLjM2IDI2LjkxIDEyMi4zNiAyNS42MVYyMC4zOEgxMjAuN1YxOC4wOUwxMjIuNTMgMTcuOTRMMTIyLjg5IDE0Ljc3SDEyNS40M1YxNy45NEgxMjguMzVWMjAuMzhIMTI1LjQzVjI1LjU5UTEyNS40MyAyNi41OSAxMjUuODUgMjcuMDhRMTI2LjI3IDI3LjU2IDEyNy4wNSAyNy41NlExMjcuMzQgMjcuNTYgMTI3LjY1IDI3LjQ4UTEyNy45NyAyNy4zOSAxMjguMiAyNy4zMUwxMjguNzIgMjkuNTVRMTI4LjI0IDI5LjcgMTI3LjYyIDI5Ljg1UTEyNyAzMCAxMjYuMjMgMzBaTTEzNS40NyAzMFExMzMuODMgMzAgMTMyLjUgMjkuMjZRMTMxLjE4IDI4LjUzIDEzMC4zOSAyNy4xNFExMjkuNjEgMjUuNzUgMTI5LjYxIDIzLjgyUTEyOS42MSAyMi4zOSAxMzAuMDYgMjEuMjZRMTMwLjUxIDIwLjEzIDEzMS4zIDE5LjMyUTEzMi4wOCAxOC41MSAxMzMuMDYgMTguMDhRMTM0LjA0IDE3LjY1IDEzNS4wOSAxNy42NVExMzYuNyAxNy42NSAxMzcuOCAxOC4zN1ExMzguODkgMTkuMSAxMzkuNDUgMjAuMzdRMTQwIDIxLjY0IDE0MCAyMy4yOFExNDAgMjMuNyAxMzkuOTYgMjQuMDhRMTM5LjkyIDI0LjQ3IDEzOS44NSAyNC43SDEzMi42MVExMzIuNzQgMjUuNjUgMTMzLjE4IDI2LjNRMTMzLjYyIDI2Ljk1IDEzNC4zMSAyNy4yOFExMzUgMjcuNiAxMzUuODkgMjcuNlExMzYuNiAyNy42IDEzNy4yMyAyNy40UTEzNy44NiAyNy4yIDEzOC41MSAyNi44TDEzOS41NiAyOC42OVExMzguNyAyOS4yOCAxMzcuNjMgMjkuNjRRMTM2LjU2IDMwIDEzNS40NyAzMFpNMTMyLjU1IDIyLjYySDEzNy4zNlExMzcuMzYgMjEuNDUgMTM2LjgyIDIwLjc0UTEzNi4yOCAyMC4wNCAxMzUuMTMgMjAuMDRRMTM0LjUyIDIwLjA0IDEzMy45NyAyMC4zMlExMzMuNDMgMjAuNjEgMTMzLjA1IDIxLjE5UTEzMi42NyAyMS43NiAxMzIuNTUgMjIuNjJaTTE0MC44OCAyOS43IDE0NC41NiAyMy41OSAxNDEuMTIgMTcuOTRIMTQ0LjQzTDE0NS42MSAyMC4wMlExNDUuODYgMjAuNTIgMTQ2LjEyIDIxLjAzUTE0Ni4zOSAyMS41MyAxNDYuNjYgMjIuMDJIMTQ2Ljc0UTE0Ni45NSAyMS41MyAxNDcuMTcgMjEuMDNRMTQ3LjM5IDIwLjUyIDE0Ny42MiAyMC4wMkwxNDguNTkgMTcuOTRIMTUxLjc4TDE0OC4zNCAyMy45M0wxNTIuMDEgMjkuN0gxNDguN0wxNDcuMzkgMjcuNTRRMTQ3LjEyIDI3LjAxIDE0Ni44NCAyNi41UTE0Ni41NSAyNS45OCAxNDYuMjYgMjUuNUgxNDYuMTZRMTQ1LjkgMjUuOTggMTQ1LjY2IDI2LjVRMTQ1LjQyIDI3LjAxIDE0NS4xNyAyNy41NEwxNDQuMSAyOS43Wk0xNTcuNjYgMzBRMTU2LjI4IDMwIDE1NS40MiAyOS40NFExNTQuNTUgMjguODggMTU0LjE4IDI3LjlRMTUzLjggMjYuOTEgMTUzLjggMjUuNjFWMjAuMzhIMTUyLjE0VjE4LjA5TDE1My45NyAxNy45NEwxNTQuMzIgMTQuNzdIMTU2Ljg2VjE3Ljk0SDE1OS43OFYyMC4zOEgxNTYuODZWMjUuNTlRMTU2Ljg2IDI2LjU5IDE1Ny4yOCAyNy4wOFExNTcuNyAyNy41NiAxNTguNDggMjcuNTZRMTU4Ljc4IDI3LjU2IDE1OS4wOSAyNy40OFExNTkuNDEgMjcuMzkgMTU5LjY0IDI3LjMxTDE2MC4xNiAyOS41NVExNTkuNjggMjkuNyAxNTkuMDYgMjkuODVRMTU4LjQ0IDMwIDE1Ny42NiAzMFoiLz48cGF0aCBmaWxsPSIjZjFmNGY5IiBkPSJNMTYyLjExIDI0LjUxVjIzLjE3SDE2Ny40MlYyNC41MVpNMTcwLjQyIDI5LjdWMTguMzZIMTcxLjgzTDE3MiAyMC4wNEgxNzIuMDZRMTcyLjc5IDE5LjIyIDE3My43IDE4LjY0UTE3NC42IDE4LjA3IDE3NS42MSAxOC4wN1ExNzYuOTMgMTguMDcgMTc3LjY2IDE4LjY2UTE3OC4zOCAxOS4yNCAxNzguNzIgMjAuMjdRMTc5LjY0IDE5LjI5IDE4MC41NSAxOC42OFExODEuNDcgMTguMDcgMTgyLjUgMTguMDdRMTg0LjIyIDE4LjA3IDE4NS4wNyAxOS4xOVExODUuOTIgMjAuMzEgMTg1LjkyIDIyLjVWMjkuN0gxODQuMjRWMjIuNzFRMTg0LjI0IDIxLjA3IDE4My42OSAyMC4zMVExODMuMTUgMTkuNTYgMTgyLjAxIDE5LjU2UTE4MS4zMiAxOS41NiAxODAuNiAyMC4wMlExNzkuODcgMjAuNDggMTc5LjAzIDIxLjM5VjI5LjdIMTc3LjMzVjIyLjcxUTE3Ny4zMyAyMS4wNyAxNzYuOCAyMC4zMVExNzYuMjYgMTkuNTYgMTc1LjEzIDE5LjU2UTE3NC40NSAxOS41NiAxNzMuNyAyMC4wMlExNzIuOTQgMjAuNDggMTcyLjE0IDIxLjM5VjI5LjdaTTE5Mi40MyAyOS45N1ExOTEuNTEgMjkuOTcgMTkwLjc2IDI5LjYxUTE5MC4wMSAyOS4yNCAxODkuNTcgMjguNTNRMTg5LjEzIDI3LjgxIDE4OS4xMyAyNi43OFExODkuMTMgMjQuOTEgMTkwLjgyIDIzLjkzUTE5Mi41MSAyMi45NCAxOTYuMTcgMjIuNTRRMTk2LjE5IDIxLjc2IDE5NS45OSAyMS4wN1ExOTUuNzkgMjAuMzggMTk1LjI2IDE5Ljk0UTE5NC43NCAxOS41IDE5My43NSAxOS41UTE5Mi43MiAxOS41IDE5MS44NCAxOS44OVExOTAuOTYgMjAuMjkgMTkwLjMxIDIwLjc2TDE4OS42NCAxOS41NFExOTAuMTIgMTkuMjIgMTkwLjc5IDE4Ljg5UTE5MS40NiAxOC41NSAxOTIuMjggMTguMzFRMTkzLjEgMTguMDcgMTk0LjAzIDE4LjA3UTE5NS4zOSAxOC4wNyAxOTYuMjQgMTguNjZRMTk3LjA5IDE5LjI0IDE5Ny40OCAyMC4yN1ExOTcuODcgMjEuMyAxOTcuODcgMjIuNjdWMjkuN0gxOTYuNDhMMTk2LjMxIDI4LjMySDE5Ni4yNVExOTUuNDMgMjkuMDEgMTk0LjQ3IDI5LjQ5UTE5My41IDI5Ljk3IDE5Mi40MyAyOS45N1pNMTkyLjg5IDI4LjU5UTE5My43NSAyOC41OSAxOTQuNTMgMjguMThRMTk1LjMxIDI3Ljc3IDE5Ni4xNyAyNy4wMVYyMy43UTE5NC4xNyAyMy45MyAxOTIuOTkgMjQuMzNRMTkxLjggMjQuNzIgMTkxLjMgMjUuMzFRMTkwLjc5IDI1LjkgMTkwLjc5IDI2LjY4UTE5MC43OSAyNy43MSAxOTEuNCAyOC4xNVExOTIuMDEgMjguNTkgMTkyLjg5IDI4LjU5Wk0yMDEuNjcgMjkuN1YxOC4zNkgyMDMuMDhMMjAzLjI0IDIwLjQ0SDIwMy4zMVEyMDMuOSAxOS4zNyAyMDQuNzMgMTguNzJRMjA1LjU1IDE4LjA3IDIwNi41MiAxOC4wN1EyMDYuOSAxOC4wNyAyMDcuMTcgMTguMTJRMjA3LjQ0IDE4LjE3IDIwNy43MiAxOC4zMkwyMDcuMzggMTkuODFRMjA3LjA5IDE5LjcxIDIwNi44NyAxOS42NlEyMDYuNjUgMTkuNjIgMjA2LjI5IDE5LjYyUTIwNS41OCAxOS42MiAyMDQuNzggMjAuMjNRMjAzLjk4IDIwLjg0IDIwMy4zOSAyMi4zMVYyOS43Wk0yMDkuNzMgMjkuN1YxMi45OUgyMTEuNDRWMjQuNTRIMjExLjVMMjE2LjUgMTguMzZIMjE4LjQxTDIxNC42NSAyMi45MkwyMTguOTMgMjkuN0gyMTcuMDZMMjEzLjY0IDI0LjA3TDIxMS40NCAyNi42OFYyOS43Wk0yMjQuNjIgMjkuOTdRMjIzLjE5IDI5Ljk3IDIyMi4xNCAyOS4yOFEyMjEuMDkgMjguNTkgMjIwLjUyIDI3LjI3UTIxOS45NCAyNS45NCAyMTkuOTQgMjQuMDVRMjE5Ljk0IDIyLjIgMjIwLjYzIDIwLjg3UTIyMS4zMyAxOS41NCAyMjIuNDUgMTguOFEyMjMuNTcgMTguMDcgMjI0LjkgMTguMDdRMjI1Ljg4IDE4LjA3IDIyNi42MiAxOC40MlEyMjcuMzUgMTguNzggMjI4LjEzIDE5LjQxTDIyOC4wNSAxNy40MlYxMi45OUgyMjkuNzVWMjkuN0gyMjguMzRMMjI4LjE5IDI4LjM0SDIyOC4xM1EyMjcuNDYgMjkuMDEgMjI2LjU3IDI5LjQ5UTIyNS42NyAyOS45NyAyMjQuNjIgMjkuOTdaTTIyNC45OCAyOC41M1EyMjUuOCAyOC41MyAyMjYuNTQgMjguMTJRMjI3LjI5IDI3LjcxIDIyOC4wNSAyNi45MVYyMC43OFEyMjcuMjkgMjAuMDggMjI2LjU5IDE5LjhRMjI1Ljg4IDE5LjUyIDIyNS4xNSAxOS41MlEyMjQuMiAxOS41MiAyMjMuNDIgMjAuMDlRMjIyLjYzIDIwLjY3IDIyMi4xNyAyMS42OVEyMjEuNyAyMi43MSAyMjEuNyAyNC4wM1EyMjEuNyAyNS40MiAyMjIuMDkgMjYuNDNRMjIyLjQ4IDI3LjQzIDIyMy4yMiAyNy45OFEyMjMuOTUgMjguNTMgMjI0Ljk4IDI4LjUzWk0yMzguMTUgMjkuOTdRMjM2Ljc2IDI5Ljk3IDIzNS41NyAyOS4yN1EyMzQuMzkgMjguNTcgMjMzLjY2IDI3LjI0UTIzMi45NCAyNS45MiAyMzIuOTQgMjQuMDVRMjMyLjk0IDIyLjE0IDIzMy42NiAyMC44MVEyMzQuMzkgMTkuNDcgMjM1LjU3IDE4Ljc3UTIzNi43NiAxOC4wNyAyMzguMTUgMTguMDdRMjM5LjIgMTguMDcgMjQwLjEzIDE4LjQ3UTI0MS4wNyAxOC44NyAyNDEuOCAxOS42M1EyNDIuNTQgMjAuNCAyNDIuOTUgMjEuNTFRMjQzLjM1IDIyLjYyIDI0My4zNSAyNC4wNVEyNDMuMzUgMjUuOTIgMjQyLjYzIDI3LjI0UTI0MS45MSAyOC41NyAyNDAuNzIgMjkuMjdRMjM5LjUzIDI5Ljk3IDIzOC4xNSAyOS45N1pNMjM4LjE1IDI4LjU1UTIzOS4xOCAyOC41NSAyMzkuOTUgMjcuOThRMjQwLjczIDI3LjQxIDI0MS4xNyAyNi40UTI0MS42MSAyNS40IDI0MS42MSAyNC4wNVEyNDEuNjEgMjIuNjkgMjQxLjE3IDIxLjY3UTI0MC43MyAyMC42NSAyMzkuOTUgMjAuMDhRMjM5LjE4IDE5LjUyIDIzOC4xNSAxOS41MlEyMzcuMTQgMTkuNTIgMjM2LjM1IDIwLjA4UTIzNS41NiAyMC42NSAyMzUuMTMgMjEuNjdRMjM0LjcgMjIuNjkgMjM0LjcgMjQuMDVRMjM0LjcgMjUuNCAyMzUuMTMgMjYuNFEyMzUuNTYgMjcuNDEgMjM2LjM1IDI3Ljk4UTIzNy4xNCAyOC41NSAyMzguMTUgMjguNTVaTTI0OC4yMyAyOS43IDI0NS4wMSAxOC4zNkgyNDYuNzZMMjQ4LjU0IDI1LjFRMjQ4LjczIDI1LjkyIDI0OC45IDI2LjY4UTI0OS4wNyAyNy40MyAyNDkuMjEgMjguMjNIMjQ5LjMyUTI0OS41MyAyNy40MyAyNDkuNzEgMjYuNjdRMjQ5Ljg5IDI1LjkgMjUwLjEgMjUuMUwyNTEuOTQgMTguMzZIMjUzLjY3TDI1NS41MSAyNS4xUTI1NS43MiAyNS45MiAyNTUuOTEgMjYuNjhRMjU2LjEgMjcuNDMgMjU2LjMxIDI4LjIzSDI1Ni40UTI1Ni41OCAyNy40MyAyNTYuNzYgMjYuNjhRMjU2Ljk0IDI1LjkyIDI1Ny4xMyAyNS4xTDI1OC44NSAxOC4zNkgyNjAuNTFMMjU3LjQgMjkuN0gyNTUuM0wyNTMuNTggMjMuMzhRMjUzLjM3IDIyLjU2IDI1My4xOCAyMS43NlEyNTIuOTkgMjAuOTcgMjUyLjc4IDIwLjFIMjUyLjY4UTI1Mi40OSAyMC45NyAyNTIuMzEgMjEuNzdRMjUyLjEzIDIyLjU4IDI1MS44OCAyMy40TDI1MC4yIDI5LjdaTTI2My4xNiAyOS43VjE4LjM2SDI2NC41NkwyNjQuNzMgMjAuMDJIMjY0LjhRMjY1LjYxIDE5LjIgMjY2LjUzIDE4LjYzUTI2Ny40NCAxOC4wNyAyNjguNjIgMTguMDdRMjcwLjQgMTguMDcgMjcxLjI0IDE5LjE5UTI3Mi4wOCAyMC4zMSAyNzIuMDggMjIuNVYyOS43SDI3MC4zNlYyMi43MVEyNzAuMzYgMjEuMDcgMjY5Ljg0IDIwLjMxUTI2OS4zMSAxOS41NiAyNjguMTEgMTkuNTZRMjY3LjIxIDE5LjU2IDI2Ni40OSAyMC4wMlEyNjUuNzYgMjAuNDggMjY0Ljg4IDIxLjM5VjI5LjdaIi8+PC9zdmc+Cg==',  // ダーク表示のときのロゴ（空なら logo をそのまま使う）
 };
-const ENGINE = 'hypertext-markdown-8';
+const ENGINE = 'hypertext-markdown-9';
 const KEY_THEME = 'hypertext-markdown:theme';
 const KEY_TOC = 'hypertext-markdown:toc';
 const KEY_DIFF = 'hypertext-markdown:diffview';
@@ -4074,6 +4103,32 @@ const RX = {
   // *[略語]: 意味（PHP Markdown Extra と同じ書き方）。本文には出さず、本文中の略語に意味を添える
   abbrDef: /^ {0,3}\*\[([^\]\n]+)\]:[ \t]*(.*)$/,
 };
+/* 生 HTML は、表示に必要なタグと属性だけをタグ単位で組み直す。断片全体を DOM にすると、
+   空行を挟んだ div などがブラウザに自動で閉じられ、HTML 内 Markdown の区切りが変わるため使わない */
+const RAW_HTML_TOKEN = /<[!]--[\s\S]*?-->|<\/?[A-Za-z][A-Za-z0-9-]*(?:\s+[A-Za-z_:@][\w:.@-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*\s*\/?>/g;
+const RAW_ATTR_TOKEN = /([A-Za-z_:@][\w:.@-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/y;
+const RAW_HTML_TAGS = new Set(('a abbr address article aside b bdi bdo blockquote br caption center cite code col colgroup dd del details dfn div dl dt em figcaption figure footer h1 h2 h3 h4 h5 h6 header hr i img ins kbd li main mark meter nav ol p picture pre progress q rp rt ruby s samp section small span strong sub summary sup table tbody td tfoot th thead time tr u ul var wbr').split(' '));
+const RAW_SVG_TAGS = new Set(('svg g path rect circle ellipse line polyline polygon text tspan defs lineargradient radialgradient stop clippath mask title desc').split(' '));
+const RAW_VOID_TAGS = new Set(('br col hr img wbr').split(' '));
+const RAW_DROP_CONTENT = new Set(('script style iframe object embed textarea template noscript').split(' '));
+const RAW_SAFE_CLASSES = new Set(['swatch', 'vd-ins', 'vd-del']);
+const RAW_DENIED_C_CLASSES = new Set(['c-tabs', 'c-example', 'c-chart']);
+const RAW_GLOBAL_ATTRS = new Set(('class title lang dir role tabindex style').split(' '));
+const RAW_TAG_ATTRS = {
+  a: new Set(['href', 'target', 'rel']),
+  blockquote: new Set(['cite']), q: new Set(['cite']),
+  img: new Set(['src', 'alt', 'width', 'height', 'loading', 'decoding']),
+  ol: new Set(['start', 'reversed', 'type']), li: new Set(['value']),
+  col: new Set(['span']), colgroup: new Set(['span']),
+  td: new Set(['colspan', 'rowspan', 'headers']), th: new Set(['colspan', 'rowspan', 'headers', 'scope', 'abbr']),
+  time: new Set(['datetime']), meter: new Set(['value', 'min', 'max', 'low', 'high', 'optimum']),
+  progress: new Set(['value', 'max']),
+};
+const RAW_SVG_ATTRS = new Set(('xmlns viewbox preserveaspectratio width height x y x1 y1 x2 y2 cx cy r rx ry d points pathlength transform fill fill-opacity fill-rule stroke stroke-opacity stroke-width stroke-linecap stroke-linejoin stroke-dasharray stroke-dashoffset color opacity font-family font-size font-style font-weight text-anchor dominant-baseline dx dy rotate textlength lengthadjust gradientunits gradienttransform spreadmethod offset stop-color stop-opacity clip-path clip-rule mask maskunits maskcontentunits').split(' '));
+const RAW_SVG_NAMES = { lineargradient: 'linearGradient', radialgradient: 'radialGradient', clippath: 'clipPath' };
+const RAW_SVG_ATTR_NAMES = { viewbox: 'viewBox', preserveaspectratio: 'preserveAspectRatio', pathlength: 'pathLength', textlength: 'textLength', lengthadjust: 'lengthAdjust', gradientunits: 'gradientUnits', gradienttransform: 'gradientTransform', spreadmethod: 'spreadMethod', maskunits: 'maskUnits', maskcontentunits: 'maskContentUnits' };
+const RAW_CSS_PROPS = new Set(('align-content align-items align-self background background-color border border-color border-style border-width border-top border-top-color border-top-style border-top-width border-right border-right-color border-right-style border-right-width border-bottom border-bottom-color border-bottom-style border-bottom-width border-left border-left-color border-left-style border-left-width border-radius box-shadow color display flex flex-basis flex-direction flex-flow flex-grow flex-shrink flex-wrap font font-family font-size font-style font-variant font-weight gap grid grid-area grid-auto-columns grid-auto-flow grid-auto-rows grid-column grid-row grid-template grid-template-areas grid-template-columns grid-template-rows height justify-content justify-items justify-self letter-spacing line-height margin margin-top margin-right margin-bottom margin-left max-height max-width min-height min-width opacity overflow overflow-wrap overflow-x overflow-y padding padding-top padding-right padding-bottom padding-left text-align text-decoration text-indent text-overflow text-transform transform transform-origin vertical-align white-space width word-break word-spacing').split(' '));
+const RAW_CSS_VARS = new Set(('--accent --accent-soft --bg --bg-side --bg-sunken --ink --ink-2 --rule --font --mono --frame --frame-inner --tint --c-note --c-tip --c-important --c-warning --c-caution --add-bg --del-bg --mark --chart-on').split(' '));
 /* 参照形式の名前は、大文字と小文字・空白の違いを区別しない */
 const refKey = s => String(s).trim().replace(/\s+/g, ' ').toLowerCase();
 /* フェンス（``` / ~~~）の中かどうかを 1 行ずつ判定する。中（または開始・終了の行）なら true */
@@ -4710,6 +4765,228 @@ function createParser(opts = {}) {
   }
   const slugify = t => t.toLowerCase().trim().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s+/g, '-').slice(0, 80);
 
+  function cleanRawStyle(raw) {
+    // HTML の文字参照を CSS の一部として解釈させない
+    if (raw.includes('&')) return '';
+    const probe = document.createElement('span');
+    probe.style.cssText = raw;
+    const out = [];
+    const decls = [];
+    let start = 0, quote = '', escaped = false, depth = 0;
+    const css = probe.style.cssText;
+    for (let i = 0; i < css.length; i++) {
+      const ch = css[i];
+      if (escaped) { escaped = false; continue; }
+      if (quote) {
+        if (ch === '\\') escaped = true;
+        else if (ch === quote) quote = '';
+      } else if (ch === '"' || ch === "'") quote = ch;
+      else if (ch === '(') depth++;
+      else if (ch === ')' && depth) depth--;
+      else if (ch === ';' && depth === 0) { decls.push(css.slice(start, i)); start = i + 1; }
+    }
+    decls.push(css.slice(start));
+    const parsed = [];
+    for (const decl of decls) {
+      const colon = decl.indexOf(':');
+      if (colon < 1) continue;
+      const prop = decl.slice(0, colon).trim().toLowerCase();
+      const value = decl.slice(colon + 1).trim().replace(/\s*!important\s*$/i, '');
+      const compact = value.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, '');
+      if (!value || value.includes('\\') || /@import|expression\(|behavior:|-moz-binding|javascript:|vbscript:/i.test(compact)
+          || /(?:url|src|image|image-set|cross-fade|element|paint|attr)\s*\(/i.test(value)) continue;
+      parsed.push({ prop, value, vars: [...value.matchAll(/var\(\s*(--[a-z0-9_-]+)/gi)].map(m => m[1].toLowerCase()) });
+    }
+    // 安全な値を持つ独自変数だけを、既定の色変数と同じように参照できるようにする
+    const custom = new Set();
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const d of parsed) {
+        if (!/^--[a-z0-9_-]+$/i.test(d.prop) || custom.has(d.prop)) continue;
+        if (d.vars.every(v => RAW_CSS_VARS.has(v) || custom.has(v))) { custom.add(d.prop); changed = true; }
+      }
+    }
+    for (const { prop, value, vars } of parsed) {
+      if (!RAW_CSS_PROPS.has(prop) && !custom.has(prop)) continue;
+      if (vars.some(v => !RAW_CSS_VARS.has(v) && !custom.has(v))) continue;
+      out.push(prop + ':' + value);
+    }
+    return out.join(';');
+  }
+
+  function decodeRawRefs(raw) {
+    const named = { colon: ':', sol: '/', bsol: '\\', tab: '\t', newline: '\n', lpar: '(', rpar: ')', amp: '&', quot: '"', apos: "'", lt: '<', gt: '>' };
+    return String(raw)
+      .replace(/&#(?:x([0-9a-f]+)|([0-9]+));?/gi, (all, hex, dec) => {
+        const n = parseInt(hex || dec, hex ? 16 : 10);
+        return n > 0 && n <= 0x10ffff && !(n >= 0xd800 && n <= 0xdfff) ? String.fromCodePoint(n) : '\uFFFD';
+      })
+      .replace(/&(colon|sol|bsol|tab|newline|lpar|rpar|amp|quot|apos|lt|gt);?/gi, (all, name) => named[name.toLowerCase()]);
+  }
+
+  function cleanRawUrl(raw, kind) {
+    const value = decodeRawRefs(raw).trim();
+    const compact = value.replace(/[\s\u0000-\u001f\u007f]+/g, '');
+    if (!value || !compact || /^[\\/]{2}/.test(compact)) return null;
+    if (kind === 'svg') return /^#[A-Za-z_][\w:.-]*$/.test(compact) ? compact : null;
+    const m = compact.match(/^([A-Za-z][\w+.-]*):/);
+    if (kind === 'img') {
+      if (/^data:/i.test(compact)) return /^data:image\/(?:png|gif|jpe?g|webp|avif|bmp|svg\+xml)(?:[;,]|$)/i.test(compact) ? value : null;
+      if (m && !/^(?:https?|blob)$/i.test(m[1])) return null;
+      return value;
+    }
+    if (m && !/^(?:https?|mailto|tel)$/i.test(m[1])) return null;
+    return value;
+  }
+
+  function cleanRawSvgValue(raw) {
+    const value = decodeRawRefs(raw).trim();
+    if (!value || value.includes('&') || value.includes('\\') || /[\u0000-\u001f\u007f]/.test(value) || /(?:javascript|vbscript|data|https?):/i.test(value)) return null;
+    const urls = [...value.matchAll(/url\(([^)]*)\)/gi)];
+    if (urls.some(m => !/^\s*['"]?#[A-Za-z_][\w:.-]*['"]?\s*$/.test(m[1]))) return null;
+    return value;
+  }
+
+  function rawTagInfo(token) {
+    const m = token.match(/^<\s*(\/?)\s*([A-Za-z][A-Za-z0-9-]*)/);
+    return m ? { close: !!m[1], tag: m[2].toLowerCase(), head: m[0].length, self: /\/\s*>$/.test(token) } : null;
+  }
+
+  function rawAttributes(token, info) {
+    let text = token.slice(info.head).replace(/\/?\s*>$/, '').trim();
+    if (!text) return [];
+    const out = [], seen = new Set();
+    let pos = 0;
+    while (pos < text.length) {
+      const ws = text.slice(pos).match(/^\s+/);
+      if (ws) pos += ws[0].length;
+      if (pos >= text.length) break;
+      RAW_ATTR_TOKEN.lastIndex = pos;
+      const m = RAW_ATTR_TOKEN.exec(text);
+      if (!m) return [];
+      const name = m[1].toLowerCase();
+      if (!seen.has(name)) {
+        seen.add(name);
+        out.push([name, m[2] ?? m[3] ?? m[4] ?? '']);
+      }
+      pos = RAW_ATTR_TOKEN.lastIndex;
+    }
+    return out;
+  }
+
+  function sanitizeRawTag(token) {
+    const info = rawTagInfo(token);
+    if (!info || (!RAW_HTML_TAGS.has(info.tag) && !RAW_SVG_TAGS.has(info.tag))) return '';
+    const tagName = RAW_SVG_NAMES[info.tag] || info.tag;
+    if (info.close) return RAW_VOID_TAGS.has(info.tag) ? '' : '</' + tagName + '>';
+    const attrs = rawAttributes(token, info);
+    const out = [];
+    let target = '', href = false;
+    for (const [name, raw] of attrs) {
+      if (/^on/i.test(name) || /^data-/i.test(name) || name === 'name' || name === 'is' || name === 'srcdoc'
+          || name === 'action' || name === 'formaction' || name === 'xlink:href') continue;
+      let value = raw, outName = name, preserveRefs = true;
+      if (name === 'id') {
+        value = value.trim();
+        if (!/^[A-Za-z_][\w:.-]*$/.test(value) || /^ui-/i.test(value) || usedIds.has(value)) continue;
+        usedIds.add(value);
+      } else if (name === 'style') {
+        value = cleanRawStyle(value);
+        if (!value) continue;
+        preserveRefs = false;
+      } else if (name === 'class') {
+        if (value.includes('&')) continue;
+        value = value.replace(/[\u0000-\u001f\u007f]+/g, ' ').trim().replace(/\s+/g, ' ');
+        value = value.split(' ').filter(c => RAW_SAFE_CLASSES.has(c)
+          || (/^c-[\p{L}\p{N}_-]+$/u.test(c) && !RAW_DENIED_C_CLASSES.has(c))).join(' ');
+        if (!value) continue;
+      } else if (name === 'dir') {
+        value = value.toLowerCase();
+        if (!/^(?:ltr|rtl|auto)$/.test(value)) continue;
+      } else if (name === 'tabindex') {
+        if (value !== '0' && value !== '-1') continue;
+      } else if (name === 'hidden' || (info.tag === 'details' && name === 'open') || (info.tag === 'ol' && name === 'reversed')) {
+        out.push(' ' + name);
+        continue;
+      } else if (name.startsWith('aria-') || ['title', 'lang', 'role'].includes(name)) {
+        // 文字列としてだけ使う属性
+      } else if (info.tag === 'a' && name === 'href') {
+        value = cleanRawUrl(value, 'href');
+        if (value == null) continue;
+        href = true;
+        preserveRefs = false;
+      } else if (info.tag === 'a' && name === 'target') {
+        value = value.toLowerCase();
+        if (value !== '_blank' && value !== '_self') continue;
+        target = value;
+        continue;
+      } else if (info.tag === 'a' && name === 'rel') {
+        continue;
+      } else if (info.tag === 'img' && name === 'src') {
+        value = cleanRawUrl(value, 'img');
+        if (value == null) continue;
+        preserveRefs = false;
+      } else if ((info.tag === 'blockquote' || info.tag === 'q') && name === 'cite') {
+        value = cleanRawUrl(value, 'href');
+        if (value == null) continue;
+        preserveRefs = false;
+      } else if (info.tag === 'img' && name === 'loading') {
+        value = value.toLowerCase();
+        if (value !== 'lazy' && value !== 'eager') continue;
+      } else if (info.tag === 'img' && name === 'decoding') {
+        value = value.toLowerCase();
+        if (!/^(?:sync|async|auto)$/.test(value)) continue;
+      } else if (RAW_SVG_ATTRS.has(name)) {
+        if (name === 'xmlns') {
+          if (value !== 'http://www.w3.org/2000/svg') continue;
+        } else {
+          value = cleanRawSvgValue(value);
+          if (value == null) continue;
+        }
+        outName = RAW_SVG_ATTR_NAMES[name] || name;
+        preserveRefs = false;
+      } else if (!(RAW_TAG_ATTRS[info.tag] && RAW_TAG_ATTRS[info.tag].has(name)) && !RAW_GLOBAL_ATTRS.has(name)) {
+        continue;
+      }
+      const encoded = preserveRefs
+        ? String(value).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+        : escAttr(value);
+      out.push(' ' + outName + '="' + encoded + '"');
+    }
+    if (info.tag === 'a' && href && target) {
+      out.push(' target="' + target + '"');
+      if (target === '_blank') out.push(' rel="noopener noreferrer"');
+    }
+    const open = '<' + tagName + out.join('') + '>';
+    if (RAW_VOID_TAGS.has(info.tag)) return open;
+    return info.self ? open + '</' + tagName + '>' : open;
+  }
+
+  function sanitizeRawHtml(raw, protect = false) {
+    let out = '', last = 0, blocked = '', depth = 0, m;
+    RAW_HTML_TOKEN.lastIndex = 0;
+    while ((m = RAW_HTML_TOKEN.exec(raw))) {
+      if (!blocked) out += protect ? raw.slice(last, m.index) : raw.slice(last, m.index).replace(/</g, '&lt;');
+      const token = m[0], info = token.startsWith('<!--') ? null : rawTagInfo(token);
+      if (blocked) {
+        if (info && info.tag === blocked) {
+          if (!info.close && !info.self) depth++;
+          else if (info.close && --depth === 0) blocked = '';
+        }
+      } else if (info && !info.close && !info.self && RAW_DROP_CONTENT.has(info.tag)) {
+        blocked = info.tag;
+        depth = 1;
+      } else if (info) {
+        const clean = sanitizeRawTag(token);
+        if (clean) out += protect ? hold(clean) : clean;
+      }
+      last = RAW_HTML_TOKEN.lastIndex;
+    }
+    if (!blocked) out += protect ? raw.slice(last) : raw.slice(last).replace(/</g, '&lt;');
+    return out;
+  }
+
   function splitRow(line) {
     let s = line.trim();
     if (s.startsWith('|')) s = s.slice(1);
@@ -4819,7 +5096,7 @@ function createParser(opts = {}) {
         }
         if (end) { while (i < lines.length) { const l = lines[i++]; block.push(l); if (end(l)) break; } }
         else { while (i < lines.length && !RX.blank.test(lines[i])) block.push(lines[i++]); }
-        out.push(block.join('\n'));
+        out.push(sanitizeRawHtml(block.join('\n')));
         continue;
       }
       if (isListStart(line, false)) { const r = parseList(lines, i); out.push(r.html); i = r.next; continue; }
@@ -5533,8 +5810,8 @@ function createParser(opts = {}) {
     s = s.replace(/\\([!-\/:-@\[-`{-~])/g, (a, ch) => hold(escHtml(ch)));
     // <https://...> 形式の自動リンク
     s = s.replace(/<((?:https?|ftp):\/\/[^\s<>]+|mailto:[^\s<>]+)>/gi, (a, url) => hold(linkHtml(url, escHtml(url.replace(/^mailto:/i, '')))));
-    // HTML のタグとコメントはそのまま通す
-    s = s.replace(/<[!]--[\s\S]*?-->|<\/?[A-Za-z][A-Za-z0-9-]*(?:\s+[A-Za-z_:@][\w:.@-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*\s*\/?>/g, a => hold(a));
+    // HTML は表示用のタグと属性だけを残す。危険な要素は、文中でも中身ごと取り除く
+    s = sanitizeRawHtml(s, true);
     // 脚注の参照
     s = s.replace(/\[\^([^\]\s]+)\]/g, (a, id) => hold(footnoteRef(id)));
     // 文中のラベル :ok[完了] など、画面操作の経路 :menu[設定 > ネットワーク]
@@ -5719,8 +5996,14 @@ function renderDocument(md, opts = {}) {
   const parser = createParser({ numbering: truthy(meta.numbering), breaks: truthy(meta.breaks), reserved: RESERVED, history });
   const content = parser.parse(text);
   const theme = docThemeCss(meta);
+  // 本文が空のテンプレートをそのまま開いたときは、書き始め方を出す
+  const empty = !title && !text.trim()
+    ? '<div class="doc-empty"><p class="doc-empty-title">本文がまだありません</p>'
+      + '<p><code>.md</code> ファイルをこの画面にドロップするか、<kbd>E</kbd> キーで Markdown を書き始めてください。</p>'
+      + '<p><button class="text-btn" type="button" data-action="edit">書き始める</button></p></div>'
+    : '';
   return (theme ? '<style class="doc-theme">' + theme + '</style>' : '')
-    + renderDocHeader(meta, title, docLogo(meta, body))
+    + renderDocHeader(meta, title, docLogo(meta, body)) + empty
     + '<nav class="print-toc" id="ui-print-toc" aria-label="目次"></nav>'
     + '<div class="md' + (truthy(meta.h2_pagebreak) ? ' h2-break' : '') + '" id="ui-content">\n' + content + '\n</div>';
 }
@@ -5735,7 +6018,7 @@ const els = {
   help: $('#ui-help'), toast: $('#ui-toast'), drop: $('#ui-drop'), backdrop: $('#ui-backdrop'),
   pageStyle: $('#ui-page-style'),
   verbar: $('#ui-verbar'), versions: $('#ui-versions'), versionsBody: $('#ui-versions-body'), verFile: $('#ui-ver-file'),
-  main: $('.main'), widthHandle: $('#ui-width'), tip: $('#ui-tip'),
+  main: $('.main'), widthHandle: $('#ui-width'), sidebarWidthHandle: $('#ui-sidebar-width'), tip: $('#ui-tip'),
   search: $('#ui-search'), searchInput: $('#ui-search-input'), searchCount: $('#ui-search-count'),
 };
 const RESERVED = $$('[id]').filter(e => !els.doc.contains(e)).map(e => e.id);
@@ -7420,6 +7703,55 @@ function activateTab(box, k) {
   if (Slides.active) Slides.refit();
 }
 
+/* ----- 左メニューの幅 ----- */
+const KEY_SIDEBAR_WIDTH = 'hypertext-markdown:sidebar-width';
+const SidebarWidth = {
+  min: 200,
+  // 本文に 480px と左右の余白（最大 64px ずつ）を残す
+  max() { return Math.max(this.min, Math.min(480, document.documentElement.clientWidth - 608)); },
+  sync() {
+    const h = els.sidebarWidthHandle, w = els.sidebar.offsetWidth;
+    h.setAttribute('aria-valuemin', String(this.min));
+    h.setAttribute('aria-valuemax', String(this.max()));
+    h.setAttribute('aria-valuenow', String(w));
+    $('.width-label', h).textContent = w + 'px';
+  },
+  set(px, save) {
+    const w = px == null ? null : Math.round(Math.max(this.min, Math.min(this.max(), px)));
+    if (w == null) document.documentElement.style.removeProperty('--side-w');
+    else document.documentElement.style.setProperty('--side-w', w + 'px');
+    if (save) store.set(KEY_SIDEBAR_WIDTH, w == null ? '' : String(w));
+    this.sync();
+    Width.place();
+  },
+  start(e) {
+    if (e.button !== 0 || !e.isPrimary || isNarrow()) return;
+    e.preventDefault();
+    const h = els.sidebarWidthHandle, startX = e.clientX, startW = els.sidebar.offsetWidth;
+    h.focus({ preventScroll: true });
+    document.body.classList.add('sidebar-resizing');
+    const move = ev => { if (ev.pointerId === e.pointerId) this.set(startW + ev.clientX - startX, false); };
+    const up = ev => {
+      if (ev.pointerId !== e.pointerId) return;
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+      h.removeEventListener('lostpointercapture', up);
+      document.body.classList.remove('sidebar-resizing');
+      if (h.hasPointerCapture(e.pointerId)) h.releasePointerCapture(e.pointerId);
+      this.set(els.sidebar.offsetWidth, true);
+      Width.done();
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+    h.addEventListener('lostpointercapture', up);
+    try { h.setPointerCapture(e.pointerId); } catch (err) { /* window のイベントでドラッグを続ける */ }
+  },
+  step(dx) { this.set(els.sidebar.offsetWidth + dx, true); Width.done(); },
+  reset() { this.set(null, true); Width.done(); toast('左メニューの幅を標準に戻しました'); },
+};
+
 /* ----- 本文の幅（右端の取っ手をドラッグ。ダブルクリックで標準に戻す） ----- */
 const KEY_MEASURE = 'hypertext-markdown:measure';
 const Width = {
@@ -7606,6 +7938,12 @@ els.searchInput.addEventListener('keydown', e => {
   } else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); Search.close(); }
 });
 els.widthHandle.addEventListener('pointerdown', e => Width.start(e));
+els.sidebarWidthHandle.addEventListener('pointerdown', e => SidebarWidth.start(e));
+els.sidebarWidthHandle.addEventListener('dblclick', () => SidebarWidth.reset());
+els.sidebarWidthHandle.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); SidebarWidth.step(e.key === 'ArrowRight' ? 16 : -16); }
+  else if (e.key === 'Home' || e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); SidebarWidth.reset(); }
+});
 els.widthHandle.addEventListener('dblclick', () => Width.reset());
 els.widthHandle.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); Width.step(e.key === 'ArrowRight' ? 32 : -32); }
@@ -7847,7 +8185,7 @@ window.addEventListener('afterprint', () => {
 });
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 window.addEventListener('scroll', onScroll, { passive: true });
-const relayout = debounce(() => { if (Slides.active) return; drawCharts(els.doc); fitTables(els.doc); Width.place(); }, 150);
+const relayout = debounce(() => { if (Slides.active) return; drawCharts(els.doc); fitTables(els.doc); Width.place(); SidebarWidth.sync(); }, 150);
 window.addEventListener('resize', () => { if (Slides.active) Slides.layout(); else { onScroll(); relayout(); } });
 // 目次や編集欄の開閉で本文の列の幅が変わったときも、グラフ・表・幅の取っ手を合わせる
 if (window.ResizeObserver) new ResizeObserver(relayout).observe(els.main);
@@ -7860,6 +8198,9 @@ function init() {
   if (store.get(KEY_TOC) === 'hidden') document.body.classList.add('toc-hidden');
   const mw = parseInt(store.get(KEY_MEASURE), 10);
   if (mw >= Width.min) document.documentElement.style.setProperty('--measure', mw + 'px');
+  const sw = parseInt(store.get(KEY_SIDEBAR_WIDTH), 10);
+  if (sw >= SidebarWidth.min && sw <= 480) document.documentElement.style.setProperty('--side-w', sw + 'px');
+  SidebarWidth.sync();
   Theme.sync();
   const md = readSource();
   const drawnNow = !els.doc.firstElementChild;
