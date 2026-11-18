@@ -1,0 +1,37 @@
+/* デザイン案 01。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#8A634E, #F7D48B);
+  --tint: var(--accent);
+  --bg: light-dark(#FFF4E4, #241D19);
+  --ink: light-dark(#49372F, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #49372F 82%, #FFF4E4), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #F7D48B 22%, #FFF4E4), color-mix(in srgb, #241D19 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #F7D48B 30%, #FFF4E4), color-mix(in srgb, #241D19 85%, #F7D48B));
+  --rule: light-dark(color-mix(in srgb, #8A634E 24%, #FFF4E4), color-mix(in srgb, #F7D48B 24%, #241D19));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #8A634E 45%, #FFF4E4), color-mix(in srgb, #F7D48B 45%, #241D19));
+  --accent-soft: light-dark(color-mix(in srgb, #F7D48B 35%, #FFF4E4), color-mix(in srgb, #F7D48B 15%, #241D19));
+  --cm-secondary: light-dark(#DFA9AA, color-mix(in srgb, #DFA9AA 28%, #241D19));
+  --cm-soft: light-dark(#F7D48B, color-mix(in srgb, #F7D48B 25%, #241D19));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #DFA9AA 60%, #49372F), #DFA9AA);
+  --chart-4: light-dark(color-mix(in srgb, #F7D48B 55%, #49372F), #F7D48B);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 18px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 18px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { background: var(--bg-sunken); box-shadow: 7px 7px 0 var(--cm-soft); }
+#ui-content .card { box-shadow: 3px 4px 0 var(--cm-secondary); }
+#ui-content h2 { border-bottom: 2px dashed var(--frame-inner); }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

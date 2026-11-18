@@ -3,6 +3,7 @@
 使い方: python -m pytest -q（事前に pip install -r requirements-dev.txt と python -m playwright install chromium）
 図（Mermaid）は CDN から読むので、ネットワークにつながっている必要がある。
 """
+import base64
 import json
 import re
 import shutil
@@ -23,6 +24,10 @@ MIN_SCALE = 80  # CONFIG.slideMinScale
 DESIGNS = [
     ROOT / "samples" / f"template-guide-{key}.src.html"
     for key in json.loads((ROOT / "samples" / "design" / "designs.json").read_text(encoding="utf-8"))
+]
+DESIGNS += [
+    ROOT / "samples" / f"template-guide-{key}.src.html"
+    for key in json.loads((ROOT / "samples" / "brand" / "brands.json").read_text(encoding="utf-8"))
 ]
 
 MERMAID_SETTLED = """() => [...document.querySelectorAll('.mermaid-block')]
@@ -316,6 +321,39 @@ def test_raw_html_is_sanitized(opened, tmp_path):
     assert not o.errors and not again.errors, "\n".join(o.errors + again.errors)
 
 
+def test_import_html_extracts_only_markdown_without_loading_page(opened, tmp_path):
+    payload = '''<!doctype html><html><body>
+<img src="https://example.invalid/import-tracker.png" onerror="window.__importXss=1">
+<script>window.__importXss=2</script>
+<!-- <script type="text/markdown" class="md-version" data-version="fake"># 偽の版</script> -->
+<SCRIPT TYPE="text/markdown" CLASS="md-version" data-version="9.0" data-note="A > B &amp; C">
+# 取り込んだ版
+
+## 本文
+文字参照は &lt;script&gt; のまま。
+<img src="bad:" onerror="window.__importXss=3">
+</SCRIPT></body></html>'''
+    source = tmp_path / "import.html"
+    source.write_text(payload, encoding="utf-8")
+    o = opened()
+    page = o.goto(SKELETON)
+    requests = []
+    page.on("request", lambda request: requests.append(request.url))
+    page.keyboard.press("V")
+    page.set_input_files("#ui-ver-file", source)
+    page.wait_for_selector('#ui-versions-body [data-action="ver-view"][data-i="0"]')
+    assert page.locator(".ver-table").inner_text().count("9.0") == 1
+    assert "A > B & C" in page.locator(".ver-table").inner_text()
+    assert "fake" not in page.locator(".ver-table").inner_text()
+    page.click('[data-action="ver-view"][data-i="0"]')
+    page.wait_for_selector("#ui-content h2")
+    assert "文字参照は <script> のまま。" in page.locator("#ui-content").inner_text()
+    assert page.evaluate("window.__importXss || 0") == 0
+    assert page.locator('#ui-content [onerror], #ui-content script').count() == 0
+    assert not any("example.invalid" in url for url in requests)
+    assert not o.errors, "\n".join(o.errors)
+
+
 def test_skill_empty_template(opened):
     o = opened()
     page = o.goto(SKELETON)
@@ -345,3 +383,69 @@ def test_skill_build_round_trip(opened, tmp_path):
     assert doc_facts(page) == expected
     assert page.title() == "hypertext-markdown 利用ガイド"
     assert not again.errors, "\n".join(again.errors)
+
+
+@pytest.mark.parametrize("template", [SKELETON, TEMPLATE])
+def test_skill_theme_images_survive_save(opened, tmp_path, template):
+    node = shutil.which("node")
+    if not node:
+        pytest.skip("node が無い")
+    md, built = tmp_path / "report.md", tmp_path / "report.html"
+    md.write_text("# ロゴ確認\n\n## 本文\n確認用の文書。\n", encoding="utf-8")
+    assets = ROOT / "samples/design"
+    subprocess.run([
+        node, str(BUILD), str(md), "--template", str(template), "-o", str(built),
+        "--logo", str(assets / "cyber-logo.svg"), "--logo-dark", str(assets / "cyber-logo-dark.svg"),
+        "--favicon", str(assets / "cyber-favicon.svg"),
+    ], check=True)
+    o = opened()
+    page = o.goto(built)
+    page.wait_for_selector(".doc-logo.img-light", state="attached")
+    logos = page.locator(".doc-logo").evaluate_all("xs => xs.map(x => x.src)")
+    assert logos == [
+        "data:image/svg+xml;base64," + base64.b64encode((assets / name).read_bytes()).decode()
+        for name in ("cyber-logo.svg", "cyber-logo-dark.svg")
+    ]
+    assert page.locator('head link[rel="icon"]').count() == 1
+    icon = page.locator('head link[rel="icon"]').get_attribute("href")
+    assert icon.startswith("data:image/svg+xml;base64,")
+    page.wait_for_function("() => [...document.querySelectorAll('.doc-logo')].every(x => x.complete && x.naturalWidth > 0)")
+    for theme in ("light", "dark"):
+        page.evaluate("t => document.documentElement.dataset.theme = t", theme)
+        assert page.locator(f".doc-logo.img-{theme}").is_visible()
+        other = "dark" if theme == "light" else "light"
+        assert not page.locator(f".doc-logo.img-{other}").is_visible()
+    with page.expect_download() as dl:
+        page.keyboard.press("Control+s")
+    saved = tmp_path / "saved.html"
+    dl.value.save_as(saved)
+    for enabled in (True, False):
+        again = opened(java_script_enabled=enabled)
+        again.goto(saved)
+        assert again.page.locator(".doc-logo").evaluate_all("xs => xs.map(x => x.src)") == logos
+        assert again.page.locator('head link[rel="icon"]').get_attribute("href") == icon
+        assert not again.errors
+    # 保存済みの HTML に対してもロゴを再指定できる。
+    subprocess.run([node, str(BUILD), str(md), "--template", str(saved), "-o", str(built),
+                    "--logo", str(assets / "cute-logo.svg")], check=True)
+    page = o.goto(built)
+    page.wait_for_selector(".doc-logo")
+    assert page.locator(".doc-logo").count() == 1
+    assert page.locator(".doc-logo").get_attribute("src") not in logos
+    light_logo = page.locator(".doc-logo").get_attribute("src")
+    subprocess.run([node, str(BUILD), str(md), "--template", str(built), "-o", str(built),
+                    "--logo-dark", str(assets / "cute-logo-dark.svg")], check=True)
+    page = o.goto(built)
+    page.wait_for_selector(".doc-logo.img-light", state="attached")
+    assert page.locator(".doc-logo.img-light").get_attribute("src") == light_logo
+    assert page.locator(".doc-logo.img-dark").get_attribute("src") == (
+        "data:image/svg+xml;base64," + base64.b64encode((assets / "cute-logo-dark.svg").read_bytes()).decode()
+    )
+    md.write_text(f"---\nlogo: {logos[0]}\n---\n# 本文の設定を優先\n", encoding="utf-8")
+    subprocess.run([node, str(BUILD), str(md), "--template", str(built), "-o", str(built),
+                    "--logo", str(assets / "cute-logo.svg")], check=True)
+    page = o.goto(built)
+    page.wait_for_selector(".doc-logo")
+    assert page.locator(".doc-logo").count() == 1
+    assert page.locator(".doc-logo").get_attribute("src") == logos[0]
+    assert not o.errors

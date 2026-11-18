@@ -8,8 +8,6 @@
 <title>レポート</title>
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEOElEQVR4nMxXf0wcRRT+Zu4OrgFOIj9s0RBtaCFGS02wYsVIY5vUhoNWTGgUTVPUctAi/MlfJjVVNFELcpyaaDSQFE1qyo/aGpvYPy6RyLVKQ2qBpJRaK5TWwh1ngevt+GZTrlz3jtvNQdIv2c3OzLfvezP73ptZMwzC+nZJtsVsygcTGRBIVzsZrkOwycDt4MDsl72Xjdhjulj1O1OT55VKIldQ6zlGiEQTBDLpFhDfzyTwDhw+NhXL9JIOJL1T+hAPiHoG7iDmAzACgWnB4FTMosXf3D0Bow4kOcq2mrg4ShQb4oLwBhVW7nd1nYo0aorUaXPYD9Aqd9C1CnGDJdIsX0soyL027xnyxHTAVmuvB+PN9JU5lgnSFk2mJHHT+um5/uG+sLHFjaTa0m0c7CR1Lpv4YlCEKgrDDn9r109aB/aWpqRYcZE8TccKgjJk0scDOfjshFe2QzNNtuK9eMVNnGNtxhpsznkcReueQKLZouEwsIzkoOXg3TYhZb89DwofpG9lgkFkpaZhb9F2bMnLx1PZOaoTCyg8VIc//9HWJaoWQRHEhpkvus6b1R6F1xsVz8nMQsO2clRsegEWkzkix8wjm1S1TKijx2r5plyFUhhA2cbNcFYeQIo1jixlwk53h5ly/hlyYY2ed+RMD+3ag33FJXromL7ljzpGsZCVVLMzn1O5zINO2PMLdYtf/veaei0FjuBGihi+Gjqw4ZHH0PZ6nab/g+NH0P6rtsr2jw4jNvhqTnmpy4FPdzuwypIQasuNr6HThaYT3+H6jFfD/9p9MrZRhlQzdEDmdMGj68PEq9ub0fnbaTi22CkbXg7jey4Nwz0yGNMu2bGaKRjGYxEbd+yOKt5UXhXGvRWYV1dGD6Q2rYAyHqv0Z6dlhsSrvvkYR8+4UfX8do24RE17C85dGYU+KONcgemPpSiy0mU/mImgooSJf1JRreG+TwH5w1k3dIOjj/vbjg3QLnUlGictyaaKv/HVR6p45bMvasRv+n14pe0gPqSANIAxX2vPBbn2lAg4Ho0ll12K9w70qeKtr+4PGz9DAVfU1ICfz5+FEZBZNU3ULFA4nCaBfZGIf92cxODVS1Tzi1Vxhd78fWwEv1wYUFPt6tQNGMWdzahFPofOA7aask5qVdxLlgfg9GSbuvlMeKcwdmNC/STxgJb8W5+ze498DtWBea40WhRWRoLWcG8FJn3T6rUcIPG5AG6/u9AO5d9sa88oE3gLKwym4M1Z549jC+2wDXvOM3Qu8elcqg+sGCsAWsxGn6u7bXGf5sQw1z902lKQSz8S7KXlOhmrQSdE7Yyr+/C9Y/fnj4lEwDN0kReu7eAKl3X4yWj/g1FlCfTKkQAP7PrP2Ru12uoySqemQsFZNYXwVjL6MJYW/pusnmKK+Nzr6umLZdvQrCTunKDXRfo9B1dGZHk1Yu9/AAAA///eYoYtAAAABklEQVQDAOyNm4C8K83MAAAAAElFTkSuQmCC">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IuiRieaciOS/oeiolyI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzIgMzIpIHNjYWxlKDEuMykgdHJhbnNsYXRlKC0yNCAtMjQpIj48cGF0aCBmaWxsPSIjMGU2YjRmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yNCAwYTI0IDI0IDAgMSAwIDAgNDggMjQgMjQgMCAwIDAgMC00OHoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTMgMzVBMTkuNSAxOS41IDAgMCAxIDM1IDEzIDE5LjUgMTkuNSAwIDAgMSAxMyAzNXoiLz48cGF0aCBkPSJNMTMgMzUgMjUuNSAyMi41IiBzdHJva2U9IiMwZTZiNGYiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PC9zdmc+Cg==">
-
-
 <script>
   document.documentElement.classList.remove('no-js');
   try {
@@ -17,6 +15,8 @@
     if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
     var w = parseInt(localStorage.getItem('hypertext-markdown:measure'), 10);
     if (w >= 480) document.documentElement.style.setProperty('--measure', w + 'px');
+    var sw = parseInt(localStorage.getItem('hypertext-markdown:sidebar-width'), 10);
+    if (sw >= 200 && sw <= 480) document.documentElement.style.setProperty('--side-w', sw + 'px');
   } catch (e) {}
 </script>
 <style>
@@ -28,6 +28,7 @@
   --mono: Consolas, "Cascadia Mono", Menlo, "BIZ UDGothic", "Osaka-Mono", monospace;
   --header-h: 52px;
   --side-w: 272px;
+  --side-size: clamp(200px, var(--side-w), min(480px, calc(100vw - 608px)));
   --measure: 46rem;
   /* 数字用。図面の文字（DIN）に近い書体を先に探し、無ければ本文の書体になる */
   --num: Bahnschrift, "DIN Alternate", "DIN 2014", var(--font);
@@ -181,7 +182,7 @@ kbd {
 @media (prefers-reduced-motion: reduce) { .theme-menu:not([hidden]) { animation: none; } .theme-trigger, .theme-trigger .theme-chevron { transition: none; } }
 
 /* ---------- レイアウト ---------- */
-.layout { display: grid; grid-template-columns: var(--side-w) minmax(0, 1fr); align-items: start; }
+.layout { display: grid; grid-template-columns: var(--side-size) minmax(0, 1fr); align-items: start; }
 .sidebar {
   position: sticky; top: var(--header-h);
   height: calc(100vh - var(--header-h)); height: calc(100dvh - var(--header-h));
@@ -207,6 +208,9 @@ kbd {
 /* 枠で囲まず、題名の大きさと余白で表紙にする。区切りの細い線は、左端だけを強調の色にする（章の見出しと同じ決まり）。
    スライドの表紙では .md の中に複製されるので、本文用の指定より強くしておく */
 .doc-header { margin: 1.2rem 0 4.2rem; }
+.doc-empty { padding: 1.6rem 1.8rem; border: 1px dashed var(--rule); border-radius: 8px; color: var(--ink-2); }
+.doc-empty p { margin: .4em 0; }
+.doc-empty .doc-empty-title { color: var(--ink); font-size: 1.15rem; font-weight: 700; }
 .doc-header .tb-head { display: flex; flex-direction: column; align-items: flex-start; }
 .doc-header .tb-logo { order: -1; align-self: stretch; margin: 0 0 2.2rem; }
 .doc-header .doc-logo { display: block; width: auto; max-width: min(240px, 60%); height: auto; max-height: 40px; }
@@ -486,7 +490,17 @@ body.presenting .search-bar { top: 12px; z-index: 85; }
 .width-handle:hover .width-grip, .width-handle:focus-visible .width-grip, body.resizing .width-grip { background: var(--accent); opacity: 1; }
 .width-label { position: absolute; top: 50%; left: 14px; display: none; padding: 2px 7px; border-radius: 4px; background: var(--ink); color: var(--bg); font-size: 12px; line-height: 1.6; white-space: nowrap; transform: translateY(-50%); font-variant-numeric: tabular-nums; }
 body.resizing .width-label, .width-handle:focus-visible .width-label { display: block; }
-body.resizing { cursor: col-resize; -webkit-user-select: none; user-select: none; }
+body.resizing, body.sidebar-resizing { cursor: col-resize; -webkit-user-select: none; user-select: none; }
+/* 左メニューの右端。スクロールしても境界と取っ手を同じ場所に保つ */
+.sidebar-width-handle { position: fixed; top: var(--header-h); bottom: 0; left: var(--side-size); z-index: 36; width: 16px; margin-left: -8px; cursor: col-resize; touch-action: none; }
+.sidebar-width-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 7px; width: 2px; background: var(--accent); opacity: 0; transition: opacity .15s; }
+.sidebar-width-handle .width-grip { position: absolute; top: 50%; transform: translateY(-50%); }
+.sidebar-width-handle:hover::before, .sidebar-width-handle:focus-visible::before, body.sidebar-resizing .sidebar-width-handle::before { opacity: .3; }
+.sidebar-width-handle:hover .width-grip, .sidebar-width-handle:focus-visible .width-grip, body.sidebar-resizing .sidebar-width-handle .width-grip { background: var(--accent); opacity: 1; }
+.sidebar-width-handle:focus-visible .width-label, body.sidebar-resizing .sidebar-width-handle .width-label { display: block; }
+body.editing .sidebar-width-handle, body.toc-hidden .sidebar-width-handle, body.no-toc .sidebar-width-handle, body.presenting .sidebar-width-handle, .no-js .sidebar-width-handle { display: none; }
+@media (max-width: 900px) { .sidebar-width-handle { display: none; } }
+@media print { .sidebar-width-handle { display: none !important; } }
 @media (max-width: 900px) { .width-handle { display: none; } }
 
 .md table { width: 100%; border-collapse: collapse; font-size: .93em; line-height: 1.6; }
@@ -1251,6 +1265,14 @@ logo: logo
 - **`font`（本文の書体）:** `gothic`（標準）・`ud`（BIZ UD ゴシック）・`meiryo`・`yugothic`・`noto`（Noto Sans JP）・`system`・`mincho`（明朝）から選ぶか、`font: "Noto Sans JP", sans-serif` のように書体名を並べます。見る人のパソコンに入っている書体だけが使われます
 - **`mono`（コードの書体）:** `mono: "Cascadia Code", Consolas` のように書体名を並べます
 - **`logo`（ロゴ）:** 表紙の左上と、スライドの下（表紙のスライドを除く）に出ます。URL・`data:` URL のほか、上のように参照形式の名前を書くと本文の末尾の定義を使うので、長い base64 をフロントマターに書かずに済みます
+
+ロゴや favicon を手元の画像から埋め込む場合は、リポジトリに付属するコマンドも使えます。Node.js 18 以上の環境で、次のように指定します。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md --logo ./logo.svg --logo-dark ./logo-dark.svg --favicon ./favicon.png --favicon ./favicon.svg
+```
+
+画像のパスは実行フォルダ基準です。`--logo` だけなら明暗共通になり、`--logo-dark` を添えるとダーク用を分けられます。`--favicon` は SVG・PNG・ICO を複数指定でき、既存の favicon 一式を置き換えます。画像は HTML に埋め込まれるので別添は不要です。フロントマターに `logo` がある場合は、そちらが優先されます。
 
 | `palette` | ライト | ダーク |
 |---|---|---|
@@ -2542,6 +2564,14 @@ logo: logo
 - **`mono`（コードの書体）:** `mono: "Cascadia Code", Consolas` のように書体名を並べます
 - **`logo`（ロゴ）:** 表紙の左上と、スライドの下（表紙のスライドを除く）に出ます。URL・`data:` URL のほか、上のように参照形式の名前を書くと本文の末尾の定義を使うので、長い base64 をフロントマターに書かずに済みます
 
+ロゴや favicon を手元の画像から埋め込む場合は、リポジトリに付属するコマンドも使えます。Node.js 18 以上の環境で、次のように指定します。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md --logo ./logo.svg --logo-dark ./logo-dark.svg --favicon ./favicon.png --favicon ./favicon.svg
+```
+
+画像のパスは実行フォルダ基準です。`--logo` だけなら明暗共通になり、`--logo-dark` を添えるとダーク用を分けられます。`--favicon` は SVG・PNG・ICO を複数指定でき、既存の favicon 一式を置き換えます。画像は HTML に埋め込まれるので別添は不要です。フロントマターに `logo` がある場合は、そちらが優先されます。
+
 | `palette` | ライト | ダーク |
 |---|---|---|
 | `indigo`（標準） | <span class="swatch" style="--c:#2b4c8c"></span>`#2b4c8c` | <span class="swatch" style="--c:#93b2ec"></span>`#93b2ec` |
@@ -3819,8 +3849,6 @@ h2_pagebreak: true
 | 1.0 | 2026-11-06 | 作成者名 | 初版 |
 </script>
 
-
-
 <header class="topbar" id="ui-topbar">
   <button class="icon-btn" type="button" data-action="toc" title="目次の表示を切り替え（B）" aria-label="目次の表示を切り替え"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h11"/></svg></button>
   <div class="topbar-title"><span id="ui-title"></span><span class="topbar-crumb" id="ui-crumb"></span></div>
@@ -3850,6 +3878,7 @@ h2_pagebreak: true
     <ol class="toc" id="ui-toc"></ol>
     <p class="sidebar-hint"><kbd>?</kbd> でショートカットの一覧</p>
   </nav>
+  <div class="sidebar-width-handle" id="ui-sidebar-width" role="separator" aria-controls="ui-sidebar" aria-orientation="vertical" tabindex="0" aria-label="左メニューの幅（ドラッグか ← → で変える。ダブルクリックか Enter で標準に戻す）" title="ドラッグで左メニューの幅を変える（ダブルクリックで標準に戻す）"><span class="width-grip"><span class="width-label"></span></span></div>
   <aside class="editor" id="ui-editor" aria-label="Markdown の編集">
     <div class="editor-head">
       <strong>Markdown</strong>
@@ -3957,6 +3986,13 @@ h2_pagebreak: true
 <div class="toast" id="ui-toast" role="status" aria-live="polite"></div>
 
 <script>
+/*! @license DOMPurify 3.4.18 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.4.18/LICENSE */
+(function(e,t){typeof exports==`object`&&typeof module<`u`?module.exports=t():typeof define==`function`&&define.amd?define([],t):(e=typeof globalThis<`u`?globalThis:e||self,e.DOMPurify=t())})(this,function(){"use strict";function e(e,t){this.v=e,this.k=t}function t(e,t){(t==null||t>e.length)&&(t=e.length);for(var n=0,r=Array(t);n<t;n++)r[n]=e[n];return r}function n(e){if(Array.isArray(e))return e}function r(e,t){var n=e==null?null:typeof Symbol<`u`&&e[Symbol.iterator]||e[`@@iterator`];if(n!=null){var r,i,a,o,s=[],c=!0,l=!1;try{if(a=(n=n.call(e)).next,t===0){if(Object(n)!==n)return;c=!1}else for(;!(c=(r=a.call(n)).done)&&(s.push(r.value),s.length!==t);c=!0);}catch(e){l=!0,i=e}finally{try{if(!c&&n.return!=null&&(o=n.return(),Object(o)!==o))return}finally{if(l)throw i}}return s}}function i(){throw TypeError(`Invalid attempt to destructure non-iterable instance.
+In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`)}
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
+function a(e,t){return n(e)||r(e,t)||o(e,t)||i()}function o(e,n){if(e){if(typeof e==`string`)return t(e,n);var r={}.toString.call(e).slice(8,-1);return r===`Object`&&e.constructor&&(r=e.constructor.name),r===`Map`||r===`Set`?Array.from(e):r===`Arguments`||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?t(e,n):void 0}}function s(t){var n,r;function i(n,r){try{var o=t[n](r),s=o.value,c=s instanceof e;Promise.resolve(c?s.v:s).then(function(e){if(c){var r=n===`return`&&s.k?n:`next`;if(!s.k||e.done)return i(r,e);e=t[r](e).value}a(!!o.done,e)},function(e){i(`throw`,e)})}catch(e){a(2,e)}}function a(e,t){e===2?n.reject(t):n.resolve({value:t,done:e}),(n=n.next)?i(n.key,n.arg):r=null}this._invoke=function(e,t){return new Promise(function(a,o){var s={key:e,arg:t,resolve:a,reject:o,next:null};r?r=r.next=s:(n=r=s,i(e,t))})},typeof t.return!=`function`&&(this.return=void 0)}s.prototype[typeof Symbol==`function`&&Symbol.asyncIterator||`@@asyncIterator`]=function(){return this},s.prototype.next=function(e){return this._invoke(`next`,e)},s.prototype.throw=function(e){return this._invoke(`throw`,e)},s.prototype.return=function(e){return this._invoke(`return`,e)};let c=Object.entries,l=Object.keys,u=Object.setPrototypeOf,d=Object.isFrozen,f=Object.getPrototypeOf,p=Object.getOwnPropertyDescriptor,m=Object.freeze,h=Object.seal,g=Object.create,ee=typeof Reflect<`u`&&Reflect,te=ee.apply,ne=ee.construct;m||(m=function(e){return e}),h||(h=function(e){return e}),te||(te=function(e,t){var n=[...arguments].slice(2);return e.apply(t,n)}),ne||(ne=function(e){return new e(...[...arguments].slice(1))});let _=D(Array.prototype.forEach),re=D(Array.prototype.lastIndexOf),ie=D(Array.prototype.pop),ae=D(Array.prototype.push),oe=D(Array.prototype.slice),se=D(Array.prototype.splice),v=Array.isArray,ce=O(Set),le=D(Set.prototype.add),ue=D(Set.prototype.has),y=D(String.prototype.toLowerCase),de=D(String.prototype.toString),fe=D(String.prototype.match),pe=D(String.prototype.replace),me=D(String.prototype.indexOf),he=D(String.prototype.trim),b=D(Number.prototype.toString),x=D(Boolean.prototype.toString),ge=typeof BigInt>`u`?null:D(BigInt.prototype.toString),_e=typeof Symbol>`u`?null:D(Symbol.prototype.toString),S=D(Object.prototype.hasOwnProperty),C=D(Object.prototype.toString),w=RegExp.prototype.test,T=function(e,t){return e instanceof RegExp&&(e.lastIndex=0),te(w,e,[t])},E=O(TypeError);function D(e){return function(t){var n=[...arguments].slice(1);return te(e,t,n)}}function O(e){return function(){return ne(e,[...arguments])}}function k(e,t){let n=arguments.length>2&&arguments[2]!==void 0?arguments[2]:y;if(u&&u(e,null),!v(t))return e;let r=t.length;for(;r--;){let i=t[r];if(typeof i==`string`){let e=n(i);e!==i&&(d(t)||(t[r]=e),i=e)}e[i]=!0}return e}function A(e){for(let t=0;t<e.length;t++)S(e,t)||(e[t]=null);return e}function ve(e){let t=g(null);for(let r of c(e)){var n=a(r,2);let i=n[0],o=n[1];S(e,i)&&(t[i]=v(o)?A(o):o&&typeof o==`object`&&o.constructor===Object?ve(o):o)}return t}function ye(e){let t=g(null),n=l(e),r=n.length;for(;r--;)t[n[r]]=e[n[r]];return t}function be(e){switch(typeof e){case`string`:return e;case`number`:return b(e);case`boolean`:return x(e);case`bigint`:return ge?ge(e):`0`;case`symbol`:return _e?_e(e):`Symbol()`;case`undefined`:return C(e);case`function`:case`object`:{if(e===null)return C(e);let t=e,n=j(t,`toString`);if(typeof n==`function`){let e=n(t);return typeof e==`string`?e:C(e)}return C(e)}default:return C(e)}}function j(e,t){for(;e!==null;){let n=p(e,t);if(n){if(n.get)return D(n.get);if(typeof n.value==`function`)return D(n.value)}e=f(e)}function n(){return null}return n}function xe(e,t){for(;e!==null;){let n=p(e,t);if(n)return n.get?D(n.get):null;e=f(e)}return null}function Se(e){if(!e)return!1;try{return T(e,``),!0}catch(e){return!1}}let Ce=m(/* @__PURE__ */ `a.abbr.acronym.address.area.article.aside.audio.b.bdi.bdo.big.blink.blockquote.body.br.button.canvas.caption.center.cite.code.col.colgroup.content.data.datalist.dd.decorator.del.details.dfn.dialog.dir.div.dl.dt.element.em.fieldset.figcaption.figure.font.footer.form.h1.h2.h3.h4.h5.h6.head.header.hgroup.hr.html.i.img.input.ins.kbd.label.legend.li.main.map.mark.marquee.menu.menuitem.meter.nav.nobr.ol.optgroup.option.output.p.picture.pre.progress.q.rp.rt.ruby.s.samp.search.section.select.shadow.slot.small.source.spacer.span.strike.strong.style.sub.summary.sup.table.tbody.td.template.textarea.tfoot.th.thead.time.tr.track.tt.u.ul.var.video.wbr`.split(`.`)),we=m(/* @__PURE__ */ `svg.a.altglyph.altglyphdef.altglyphitem.animatecolor.animatemotion.animatetransform.circle.clippath.defs.desc.ellipse.filter.font.g.glyph.glyphref.hkern.image.line.lineargradient.marker.mask.metadata.mpath.path.pattern.polygon.polyline.radialgradient.rect.stop.style.switch.symbol.text.textpath.title.tref.tspan.view.vkern`.split(`.`)),Te=m([`feBlend`,`feColorMatrix`,`feComponentTransfer`,`feComposite`,`feConvolveMatrix`,`feDiffuseLighting`,`feDisplacementMap`,`feDistantLight`,`feDropShadow`,`feFlood`,`feFuncA`,`feFuncB`,`feFuncG`,`feFuncR`,`feGaussianBlur`,`feImage`,`feMerge`,`feMergeNode`,`feMorphology`,`feOffset`,`fePointLight`,`feSpecularLighting`,`feSpotLight`,`feTile`,`feTurbulence`]),Ee=m([`animate`,`color-profile`,`cursor`,`discard`,`font-face`,`font-face-format`,`font-face-name`,`font-face-src`,`font-face-uri`,`foreignobject`,`hatch`,`hatchpath`,`mesh`,`meshgradient`,`meshpatch`,`meshrow`,`missing-glyph`,`script`,`set`,`solidcolor`,`unknown`,`use`]),De=m(/* @__PURE__ */ `math.menclose.merror.mfenced.mfrac.mglyph.mi.mlabeledtr.mmultiscripts.mn.mo.mover.mpadded.mphantom.mroot.mrow.ms.mspace.msqrt.mstyle.msub.msup.msubsup.mtable.mtd.mtext.mtr.munder.munderover.mprescripts`.split(`.`)),Oe=m([`maction`,`maligngroup`,`malignmark`,`mlongdiv`,`mscarries`,`mscarry`,`msgroup`,`mstack`,`msline`,`msrow`,`semantics`,`annotation`,`annotation-xml`,`mprescripts`,`none`]),ke=m([`#text`]),Ae=m(/* @__PURE__ */ `accept.action.align.alt.autocapitalize.autocomplete.autopictureinpicture.autoplay.background.bgcolor.border.capture.cellpadding.cellspacing.checked.cite.class.clear.color.cols.colspan.command.commandfor.controls.controlslist.coords.crossorigin.datetime.decoding.default.dir.disabled.disablepictureinpicture.disableremoteplayback.download.draggable.enctype.enterkeyhint.exportparts.face.for.headers.height.hidden.high.href.hreflang.id.inert.inputmode.integrity.ismap.kind.label.lang.list.loading.loop.low.max.maxlength.media.method.min.minlength.multiple.muted.name.nonce.noshade.novalidate.nowrap.open.optimum.part.pattern.placeholder.playsinline.popover.popovertarget.popovertargetaction.poster.preload.pubdate.radiogroup.readonly.rel.required.rev.reversed.role.rows.rowspan.spellcheck.scope.selected.shape.size.sizes.slot.span.srclang.start.src.srcset.step.style.summary.tabindex.title.translate.type.usemap.valign.value.width.wrap.xmlns`.split(`.`)),je=m(/* @__PURE__ */ `accent-height.accumulate.additive.alignment-baseline.amplitude.ascent.attributename.attributetype.azimuth.basefrequency.baseline-shift.begin.bias.by.class.clip.clippathunits.clip-path.clip-rule.color.color-interpolation.color-interpolation-filters.color-profile.color-rendering.cx.cy.d.dx.dy.diffuseconstant.direction.display.divisor.dominant-baseline.dur.edgemode.elevation.end.exponent.fill.fill-opacity.fill-rule.filter.filterunits.flood-color.flood-opacity.font-family.font-size.font-size-adjust.font-stretch.font-style.font-variant.font-weight.fx.fy.g1.g2.glyph-name.glyphref.gradientunits.gradienttransform.height.href.id.image-rendering.in.in2.intercept.k.k1.k2.k3.k4.kerning.keypoints.keysplines.keytimes.lang.lengthadjust.letter-spacing.kernelmatrix.kernelunitlength.lighting-color.local.marker-end.marker-mid.marker-start.markerheight.markerunits.markerwidth.maskcontentunits.maskunits.max.mask.mask-type.media.method.mode.min.name.numoctaves.offset.operator.opacity.order.orient.orientation.origin.overflow.paint-order.path.pathlength.patterncontentunits.patterntransform.patternunits.pointer-events.points.preservealpha.preserveaspectratio.primitiveunits.r.rx.ry.radius.refx.refy.repeatcount.repeatdur.restart.result.rotate.scale.seed.shape-rendering.slope.specularconstant.specularexponent.spreadmethod.startoffset.stddeviation.stitchtiles.stop-color.stop-opacity.stroke-dasharray.stroke-dashoffset.stroke-linecap.stroke-linejoin.stroke-miterlimit.stroke-opacity.stroke.stroke-width.style.surfacescale.systemlanguage.tabindex.tablevalues.targetx.targety.transform.transform-origin.text-anchor.text-decoration.text-orientation.text-rendering.textlength.type.u1.u2.unicode.values.vector-effect.viewbox.visibility.version.vert-adv-y.vert-origin-x.vert-origin-y.width.word-spacing.wrap.writing-mode.xchannelselector.ychannelselector.x.x1.x2.xmlns.y.y1.y2.z.zoomandpan`.split(`.`)),Me=m(/* @__PURE__ */ `accent.accentunder.align.bevelled.close.columnalign.columnlines.columnspacing.columnspan.denomalign.depth.dir.display.displaystyle.encoding.fence.frame.height.href.id.largeop.length.linethickness.lquote.lspace.mathbackground.mathcolor.mathsize.mathvariant.maxsize.minsize.movablelimits.notation.numalign.open.rowalign.rowlines.rowspacing.rowspan.rspace.rquote.scriptlevel.scriptminsize.scriptsizemultiplier.selection.separator.separators.stretchy.subscriptshift.supscriptshift.symmetric.voffset.width.xmlns`.split(`.`)),Ne=m([`xlink:href`,`xml:id`,`xlink:title`,`xml:space`,`xmlns:xlink`]),Pe=h(/{{[\w\W]*|^[\w\W]*}}/g),Fe=h(/<%[\w\W]*|^[\w\W]*%>/g),Ie=h(/\${[\w\W]*/g),Le=h(/{{|}}|\${|<%|%>|&lt;%|%&gt;/),Re=h(/^data-[\-\w.\u00B7-\uFFFF]+$/),ze=h(/^aria-[\-\w]+$/),Be=h(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|matrix):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i),Ve=h(/^(?:\w+script|data):/i),He=h(/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g),Ue=h(/^html$/i),We=h(/^[a-z][.\w]*(-[.\w]+)+$/i),Ge=h(/<[/\w!]/g),Ke=h(/<[/\w]/g),qe=h(/<\/no(script|embed|frames)/i),Je=h(/\/>/i),Ye=h(/((--!?|])>)|<\/(style|script|title|xmp|textarea|noscript|iframe|noembed|noframes)/i),Xe=h(/^[\r\n\t ]+/),M={element:1,text:3,processingInstruction:7,comment:8,document:9,documentFragment:11},Ze=m(k({},[`style`,`script`,`xmp`,`iframe`,`noembed`,`noframes`,`plaintext`,`noscript`])),Qe=function(){return typeof window>`u`?null:window},$e=function(e,t){if(typeof e!=`object`||typeof e.createPolicy!=`function`)return null;let n=null,r=`data-tt-policy-suffix`;t&&t.hasAttribute(r)&&(n=t.getAttribute(r));let i=`dompurify`+(n?`#`+n:``);try{return e.createPolicy(i,{createHTML(e){return e},createScriptURL(e){return e}})}catch(e){return console.warn(`TrustedTypes policy `+i+` could not be created.`),null}},et=function(){return{afterSanitizeAttributes:[],afterSanitizeElements:[],afterSanitizeShadowDOM:[],beforeSanitizeAttributes:[],beforeSanitizeElements:[],beforeSanitizeShadowDOM:[],uponSanitizeAttribute:[],uponSanitizeElement:[],uponSanitizeShadowNode:[]}},N=function(e,t,n,r){return S(e,t)&&v(e[t])?k(r.base?ye(r.base):{},e[t],r.transform):n},tt=function(e,t,n){let r=S(e,t)?e[t]:void 0;return r&&typeof r==`object`?ve(r):n};function nt(){let e=arguments.length>0&&arguments[0]!==void 0?arguments[0]:Qe(),t=e=>nt(e);if(t.version=`3.4.18`,t.removed=[],!e||!e.document||e.document.nodeType!==M.document||!e.Element)return t.isSupported=!1,t;let n=e.document,r=n,i=r.currentScript,a=e.HTMLTemplateElement,o=e.Node,s=e.Element,l=e.NodeFilter,u=e.DOMParser,d=e.trustedTypes,f=s.prototype,p=j(f,`cloneNode`),ee=j(f,`remove`),te=j(f,`removeAttributeNode`),ne=j(f,`nextSibling`),b=j(f,`childNodes`),x=j(f,`parentNode`),ge=j(f,`shadowRoot`),_e=j(f,`attributes`),C=o&&o.prototype?j(o.prototype,`nodeType`):null,w=o&&o.prototype?j(o.prototype,`nodeName`):null,D=o&&o.prototype?j(o.prototype,`ownerDocument`):null,O=function(e){return C?C(e):e.nodeType},A=function(e){return w?w(e):e.nodeName},rt=xe(f,`namespaceURI`),it=function(e){return rt?rt(e):e.namespaceURI};if(typeof a==`function`){let e=n.createElement(`template`);e.content&&e.content.ownerDocument&&(n=e.content.ownerDocument)}let P,F=``,at,ot=!1,st=0,ct=function(){if(st>0)throw E(`A configured TRUSTED_TYPES_POLICY callback (createHTML or createScriptURL) must not call DOMPurify.sanitize, as that causes infinite recursion. Do not pass a policy whose callbacks wrap DOMPurify as TRUSTED_TYPES_POLICY; see the "DOMPurify and Trusted Types" section of the README.`)},lt=function(e){ct(),st++;try{return P.createHTML(e)}finally{st--}},ut=function(e){return P&&Vt?lt(e):e},dt=function(e){ct(),st++;try{return P.createScriptURL(e)}finally{st--}},ft=function(){return ot||(at=$e(d,i),ot=!0),at},pt=n,mt=pt.implementation,ht=pt.createNodeIterator,gt=pt.createDocumentFragment,_t=pt.getElementsByTagName,vt=r.importNode,I=et();t.isSupported=typeof c==`function`&&typeof x==`function`&&mt&&mt.createHTMLDocument!==void 0;let yt=Pe,bt=Fe,xt=Ie,St=Re,Ct=ze,wt=Ve,Tt=He,Et=We,Dt=Be,L=null,Ot=k({},[...Ce,...we,...Te,...De,...ke]),R=null,kt=k({},[...Ae,...je,...Me,...Ne]),z=null,At=null,jt=null,B=Object.seal(g(null,{tagCheck:{writable:!0,configurable:!1,enumerable:!0,value:null},attributeCheck:{writable:!0,configurable:!1,enumerable:!0,value:null}})),Mt=!0,Nt=!0,Pt=!1,Ft=!0,V=!1,H=!0,U=!1,It=!1,Lt=null,Rt=null,zt=!1,W=!1,Bt=!1,Vt=!1,Ht=!0,Ut=!1,Wt=`user-content-`,Gt=!0,Kt=!1,G=null,K=!1,q=null,qt=k({},/* @__PURE__ */ `annotation-xml.audio.colgroup.desc.foreignobject.head.iframe.math.mi.mn.mo.ms.mtext.noembed.noframes.noscript.plaintext.script.selectedcontent.style.svg.template.thead.title.video.xmp`.split(`.`)),Jt=null,Yt=k({},[`audio`,`video`,`img`,`source`,`image`,`track`]),Xt=null,Zt=k({},[`alt`,`class`,`for`,`id`,`label`,`name`,`pattern`,`placeholder`,`role`,`summary`,`title`,`value`,`style`,`xmlns`]),Qt=`http://www.w3.org/1998/Math/MathML`,$t=`http://www.w3.org/2000/svg`,J=`http://www.w3.org/1999/xhtml`,Y=J,en=!1,tn=null,nn=k({},[Qt,$t,J],de),rn=m(k({},[`mi`,`mo`,`mn`,`ms`,`mtext`])),an=null,on=m(k({},[`annotation-xml`])),sn=null,cn=m(g(null)),ln=k({},[`title`,`style`,`font`,`a`,`script`]),un=null,dn=[`application/xhtml+xml`,`text/html`],X=null,fn=null,pn=n.createElement(`form`),mn=function(e){return e instanceof RegExp||e instanceof Function},hn=function(){let e=arguments.length>0&&arguments[0]!==void 0?arguments[0]:{};e&&typeof e==`object`||(e={}),e=ve(e),un=dn.indexOf(e.PARSER_MEDIA_TYPE)===-1?`text/html`:e.PARSER_MEDIA_TYPE,X=un===`application/xhtml+xml`?de:y,L=N(e,`ALLOWED_TAGS`,Ot,{transform:X}),R=N(e,`ALLOWED_ATTR`,kt,{transform:X}),tn=N(e,`ALLOWED_NAMESPACES`,nn,{transform:de}),Xt=N(e,`ADD_URI_SAFE_ATTR`,Zt,{transform:X,base:Zt}),Jt=N(e,`ADD_DATA_URI_TAGS`,Yt,{transform:X,base:Yt}),q=N(e,`FORBID_CONTENTS`,qt,{transform:X}),At=N(e,`FORBID_TAGS`,g(null),{transform:X}),jt=N(e,`FORBID_ATTR`,g(null),{transform:X}),K=S(e,`USE_PROFILES`)?e.USE_PROFILES&&typeof e.USE_PROFILES==`object`?ve(e.USE_PROFILES):e.USE_PROFILES:!1,Mt=e.ALLOW_ARIA_ATTR!==!1,Nt=e.ALLOW_DATA_ATTR!==!1,Pt=e.ALLOW_UNKNOWN_PROTOCOLS||!1,Ft=e.ALLOW_SELF_CLOSE_IN_ATTR!==!1,V=e.SAFE_FOR_TEMPLATES||!1,H=e.SAFE_FOR_XML!==!1,U=e.WHOLE_DOCUMENT||!1,W=e.RETURN_DOM||!1,Bt=e.RETURN_DOM_FRAGMENT||!1,Vt=e.RETURN_TRUSTED_TYPE||!1,zt=e.FORCE_BODY||!1,Ht=e.SANITIZE_DOM!==!1,Ut=e.SANITIZE_NAMED_PROPS||!1,Gt=e.KEEP_CONTENT!==!1,Kt=e.IN_PLACE||!1,Dt=Se(e.ALLOWED_URI_REGEXP)?e.ALLOWED_URI_REGEXP:Be,Y=typeof e.NAMESPACE==`string`?e.NAMESPACE:J,an=tt(e,`MATHML_TEXT_INTEGRATION_POINTS`,rn),sn=tt(e,`HTML_INTEGRATION_POINTS`,on);let t=tt(e,`CUSTOM_ELEMENT_HANDLING`,cn);if(z=g(null),S(t,`tagNameCheck`)&&mn(t.tagNameCheck)&&(z.tagNameCheck=t.tagNameCheck),S(t,`attributeNameCheck`)&&mn(t.attributeNameCheck)&&(z.attributeNameCheck=t.attributeNameCheck),S(t,`allowCustomizedBuiltInElements`)&&typeof t.allowCustomizedBuiltInElements==`boolean`&&(z.allowCustomizedBuiltInElements=t.allowCustomizedBuiltInElements),h(z),V&&(Nt=!1),Bt&&(W=!0),K&&((S(e,`ALLOWED_TAGS`)||S(e,`ALLOWED_ATTR`))&&typeof console<`u`&&typeof console.warn==`function`&&console.warn(`DOMPurify: USE_PROFILES overrides ALLOWED_TAGS and ALLOWED_ATTR. Do not use these options together.`),L=k({},ke),R=g(null),K.html===!0&&(k(L,Ce),k(R,Ae)),K.svg===!0&&(k(L,we),k(R,je),k(R,Ne)),K.svgFilters===!0&&(k(L,Te),k(R,je),k(R,Ne)),K.mathMl===!0&&(k(L,De),k(R,Me),k(R,Ne))),B.tagCheck=null,B.attributeCheck=null,S(e,`ADD_TAGS`)&&(typeof e.ADD_TAGS==`function`?B.tagCheck=e.ADD_TAGS:v(e.ADD_TAGS)&&(L===Ot&&(L=ye(L)),k(L,e.ADD_TAGS,X))),S(e,`ADD_ATTR`)&&(typeof e.ADD_ATTR==`function`?B.attributeCheck=e.ADD_ATTR:v(e.ADD_ATTR)&&(R===kt&&(R=ye(R)),k(R,e.ADD_ATTR,X))),S(e,`ADD_FORBID_CONTENTS`)&&v(e.ADD_FORBID_CONTENTS)&&(q===qt&&(q=ye(q)),k(q,e.ADD_FORBID_CONTENTS,X)),Gt&&(L[`#text`]=!0),U&&k(L,[`html`,`head`,`body`]),L.table&&(L.tbody=!0,delete At.tbody),e.TRUSTED_TYPES_POLICY){if(typeof e.TRUSTED_TYPES_POLICY.createHTML!=`function`)throw E(`TRUSTED_TYPES_POLICY configuration option must provide a "createHTML" hook.`);if(typeof e.TRUSTED_TYPES_POLICY.createScriptURL!=`function`)throw E(`TRUSTED_TYPES_POLICY configuration option must provide a "createScriptURL" hook.`);let t=P;P=e.TRUSTED_TYPES_POLICY;try{F=lt(``)}catch(e){throw P=t,e}}else e.TRUSTED_TYPES_POLICY===null?(P=void 0,F=``):(P===void 0&&(P=ft()),P&&typeof F==`string`&&(F=lt(``)));fn=m(e)},gn=k({},[...we,...Te,...Ee]),_n=k({},[...De,...Oe]),vn=function(e,t,n){return t===J?e===`svg`:t===Qt?e===`svg`&&(n===`annotation-xml`||an[n]):!!gn[e]},yn=function(e,t,n){return t===J?e===`math`:t===$t?e===`math`&&sn[n]:!!_n[e]},bn=function(e,t,n){return t===$t&&!sn[n]||t===Qt&&!an[n]?!1:!_n[e]&&(ln[e]||!gn[e])},xn=function(e){let t=it(e),n=y(A(e)),r=x(e),i=Y,a=`template`;return r&&O(r)===M.element&&(i=it(r),a=y(A(r))),tn[t]?t===$t?vn(n,i,a):t===Qt?yn(n,i,a):t===J?bn(n,i,a):un===`application/xhtml+xml`:!1},Z=function(e){ae(t.removed,{element:e});try{x(e).removeChild(e)}catch(t){if(ee(e),!x(e))throw E(`a node selected for removal could not be detached from its tree and cannot be safely returned; refusing to sanitize in place`)}},Sn=function(e,t,n){try{te(e,t)}catch(t){try{e.removeAttribute(n)}catch(e){}}},Cn=function(e){Dn(e);let t=b(e);t&&_(oe(t),e=>{try{ee(e)}catch(e){}}),O(e)===M.element&&Tn(e,!1)},wn=function(e,n,r){if(!r)try{r=n.getAttributeNode(e)}catch(e){r=null}if(ae(t.removed,{attribute:r||null,from:n}),r)Sn(n,r,e);else try{n.removeAttribute(e)}catch(e){}if(e===`is`){if(W||Bt)try{Z(n)}catch(e){}else try{n.setAttribute(e,``)}catch(e){}}},Tn=function(e,t){let n=_e(e);if(n)for(let r=n.length-1;r>=0;--r){let i=n[r],a=i&&i.name;typeof a==`string`&&!(t&&R[X(a)])&&Sn(e,i,a)}},En=function(e,t){let n=arguments.length>2&&arguments[2]!==void 0&&arguments[2],r=[e];for(;r.length>0;){let e=r.pop();if(t(e)===!1)continue;if(n&&O(e)===M.element){let t=ge(e);Un(t)&&r.push(t)}let i=b(e);if(i)for(let e=i.length-1;e>=0;--e)r.push(i[e])}},Dn=function(e){En(e,e=>{O(e)===M.element&&Tn(e,!0)})},On=function(e){let t=[];return En(e,e=>{t.push(e)},!0),t},kn=function(e,t){let n=ce();_(On(e),e=>{O(e)===M.element&&le(n,e)}),_(t,e=>{O(e)===M.element&&!ue(n,e)&&Tn(e,!0)})},An=function(e,n){let r=!1;return _(t.removed,t=>{t.element&&(r=r||t.element===e,Dn(t.element))}),kn(e,n),r},jn=function(e,t){let n=G,r=null,i=()=>(r||(r=ce(),_(t,e=>{le(r,e)})),r);for(let t=0;;t++){let r=On(e),a=[e],o=!1;if(_(r,e=>{O(e)===M.documentFragment?ae(a,e):!o&&!ue(n,e)&&(o=ue(i(),e))}),!o)return;if(t>=8)throw E(`the tree kept changing during in-place sanitization; refusing to return it`);_(a,(t,n)=>{Mn(t,n>0,e,i())})}},Mn=function(e,t,n,r){let i=Ln(e),a;for(;a=i.nextNode();)ue(r,a)&&!ue(G,a)&&(t&&Q(I.uponSanitizeShadowNode,a,null),rr(a,n))},Nn=function(e){G&&le(G,e)},Pn=function(e,t){return H?e===`patchsrc`||e===`for`&&t!==`label`&&t!==`output`:!1},Fn=function(e){H&&En(e,e=>{let t=O(e);if(t===M.processingInstruction||t===M.comment&&T(Ke,e.data)){try{ee(e)}catch(e){}return!1}if(t===M.element){let t=e,n=X(A(e));try{t.hasAttribute&&t.hasAttribute(`patchsrc`)&&t.removeAttribute(`patchsrc`),t.hasAttribute&&t.hasAttribute(`for`)&&Pn(`for`,n)&&t.removeAttribute(`for`)}catch(e){}}return!0})},In=function(e){let t=null,r=null;if(zt)e=`<remove></remove>`+e;else{let t=fe(e,Xe);r=t&&t[0]}un===`application/xhtml+xml`&&Y===J&&(e=`<html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>`+e+`</body></html>`);let i=P?lt(e):e;if(Y===J)try{t=new u().parseFromString(i,un)}catch(e){}if(!t||!t.documentElement){t=mt.createDocument(Y,`template`,null);try{t.documentElement.innerHTML=en?F:i}catch(e){}}let a=t.body||t.documentElement;return e&&r&&a.insertBefore(n.createTextNode(r),a.childNodes[0]||null),Y===J?_t.call(t,U?`html`:`body`)[0]:U?t.documentElement:a},Ln=function(e){let t=arguments.length>1&&arguments[1]!==void 0&&arguments[1],n=D?D(e):e.ownerDocument;return ht.call(n||e,e,(t?0:l.SHOW_ELEMENT)|l.SHOW_COMMENT|l.SHOW_TEXT|l.SHOW_PROCESSING_INSTRUCTION|l.SHOW_CDATA_SECTION,null)},Rn=function(e){return e=pe(e,yt,` `),e=pe(e,bt,` `),e=pe(e,xt,` `),e},zn=function(e){var t;Bn(e);let n=(t=e.querySelectorAll)==null?void 0:t.call(e,`template`);n&&_(n,e=>{Un(e.content)&&zn(e.content)})},Bn=function(e){e.normalize();let t=Ln(e,!0),n=t.nextNode();for(;n;)n.data=Rn(n.data),n=t.nextNode()},Vn=function(e){let t=w?w(e):null;return typeof t!=`string`||X(t)!==`form`?!1:typeof e.nodeName!=`string`||typeof e.textContent!=`string`||typeof e.removeChild!=`function`||e.attributes!==_e(e)||typeof e.removeAttribute!=`function`||typeof e.removeAttributeNode!=`function`||typeof e.getAttributeNode!=`function`||typeof e.setAttribute!=`function`||typeof e.namespaceURI!=`string`||typeof e.insertBefore!=`function`||typeof e.hasChildNodes!=`function`||e.nodeType!==C(e)||e.childNodes!==b(e)},Hn=function(e){if(!C||typeof e!=`object`||!e)return null;try{let t=C(e);return typeof t==`number`?t:null}catch(e){return null}},Un=function(e){return Hn(e)===M.documentFragment},Wn=function(e){return Hn(e)!==null};function Q(e,n,r){e.length!==0&&_(e,e=>{e.call(t,n,r,fn)})}let Gn=function(e,t,n){return!!(H&&n===M.element&&e.hasChildNodes()&&!Wn(e.firstElementChild)&&T(Ge,e.textContent)&&T(Ge,e.innerHTML)||H&&Ze[t]&&n===M.element&&it(e)===J&&(Wn(e.firstElementChild)||typeof e.textContent==`string`&&T(Ge,e.textContent))||n===M.processingInstruction||H&&n===M.comment&&T(Ke,e.data))},Kn=function(e,t){return e instanceof RegExp?T(e,t):e instanceof Function&&!!e(t,...[...arguments].slice(2))},qn=function(e,t,n){if(!At[t]&&Qn(t)&&Kn(z.tagNameCheck,t))return!1;if(Gt&&!q[t]&&!q[y(t)]){let t=x(e),r=b(e);if(r&&t){let i=r.length;for(let a=i-1;a>=0;--a){let i=e===n?p(r[a],!0):r[a];t.insertBefore(i,ne(e))}}}return Z(e),!0},Jn=function(e,t,n,r){return e.length===0?t:t===n||t===r?ye(t):t},$=function(e,t){return e===t||x(e)!==null?!1:(Kt&&Dn(e),!0)},Yn=function(e,n){if(Nn(e),Q(I.beforeSanitizeElements,e,null),$(e,n))return!0;if(Vn(e))return Z(e),!0;let r=X(A(e)),i=O(e);if(L=Jn(I.uponSanitizeElement,L,Ot,Lt),Q(I.uponSanitizeElement,e,{tagName:r,allowedTags:L}),$(e,n))return!0;if(Gn(e,r,i))return Z(e),!0;if(At[r]||!(B.tagCheck instanceof Function&&B.tagCheck(r))&&!L[r]){let t=qn(e,r,n);return t===!1&&(Q(I.afterSanitizeElements,e,null),$(e,n))?!0:t}if(i===M.element&&!xn(e)||(r===`noscript`||r===`noembed`||r===`noframes`)&&T(qe,e.innerHTML))return Z(e),!0;if(V&&i===M.text){let n=e.textContent,r=Rn(n);n!==r&&(ae(t.removed,{element:e.cloneNode()}),e.textContent=r)}return Q(I.afterSanitizeElements,e,null),$(e,n)},Xn=function(e,t,r){if(jt[t]||Pn(t,e)||Ht&&(t===`id`||t===`name`)&&(r in n||r in pn))return!1;let i=R[t]||B.attributeCheck instanceof Function&&B.attributeCheck(t,e);if(Nt&&T(St,t)||Mt&&T(Ct,t))return!0;if(!i)return Qn(e)&&Kn(z.tagNameCheck,e)&&Kn(z.attributeNameCheck,t,e)||t===`is`&&z.allowCustomizedBuiltInElements&&Kn(z.tagNameCheck,r);if(Xt[t])return!0;let a=pe(r,Tt,``);return T(Dt,a)||(t===`src`||t===`xlink:href`||t===`href`)&&e!==`script`&&me(r,`data:`)===0&&Jt[e]||Pt&&!T(wt,a)?!0:!r},Zn=k({},[`annotation-xml`,`color-profile`,`font-face`,`font-face-format`,`font-face-name`,`font-face-src`,`font-face-uri`,`missing-glyph`]),Qn=function(e){return!Zn[y(e)]&&T(Et,e)},$n=function(e,t,n,r){if(P&&typeof d==`object`&&typeof d.getAttributeType==`function`&&!n)switch(d.getAttributeType(e,t)){case`TrustedHTML`:return lt(r);case`TrustedScriptURL`:return dt(r)}return r},er=function(e,t,n,r){try{return n?e.setAttributeNS(n,t,r):e.setAttribute(t,r),!Vn(e)||(Z(e),!1)}catch(n){return wn(t,e),!1}},tr=function(e,t){return H&&T(Ye,t)?!0:y(e)===`attributename`&&me(t,`href`)!==-1},nr=function(e,n){if(Q(I.beforeSanitizeAttributes,e,null),$(e,n))return;let r=e.attributes;if(!r||Vn(e))return;R=Jn(I.uponSanitizeAttribute,R,kt,Rt);let i={attrName:``,attrValue:``,keepAttr:!0,allowedAttributes:R,forceKeepAttr:void 0},a=r.length,o=X(A(e));for(;a--;){let n=r[a],s=n.name,c=n.namespaceURI,l=n.value,u=X(s),d=l,f=s===`value`?d:he(d),p=!1;i.attrName=u,i.attrValue=f,i.keepAttr=!0,i.forceKeepAttr=void 0,Q(I.uponSanitizeAttribute,e,i),f=i.attrValue,Ut&&(u===`id`||u===`name`)&&me(f,Wt)!==0&&(wn(s,e,n),f=Wt+f,p=!0),tr(s,f)?wn(s,e,n):i.forceKeepAttr||(i.keepAttr?!Ft&&T(Je,f)?wn(s,e,n):(V&&(f=Rn(f)),Xn(o,u,f)?(f=$n(o,u,c,f),f!==d&&er(e,s,c,f)&&p&&ie(t.removed)):wn(s,e,n)):wn(s,e,n))}Q(I.afterSanitizeAttributes,e,null),$(e,n)},rr=function(e,t){Yn(e,t),nr(e,t),Un(e.content)&&ir(e.content)},ir=function(e){let t=null,n=Ln(e);for(Q(I.beforeSanitizeShadowDOM,e,null);t=n.nextNode();)if(Q(I.uponSanitizeShadowNode,t,null),rr(t,e),O(t)===M.element){let e=ge(t);Un(e)&&(ar(e),ir(e))}V&&Bn(e),Q(I.afterSanitizeShadowDOM,e,null)},ar=function(e){let t=[{node:e,shadow:null}];for(;t.length>0;){let e=t.pop();if(e.shadow){ir(e.shadow);continue}let n=e.node,r=O(n)===M.element,i=b(n);if(i)for(let e=i.length-1;e>=0;--e)t.push({node:i[e],shadow:null});if(r){let e=w?w(n):null;if(typeof e==`string`&&X(e)===`template`){let e=n.content;Un(e)&&t.push({node:e,shadow:null})}}if(r){let e=ge(n);Un(e)&&t.push({node:null,shadow:e},{node:e,shadow:null})}}};return t.sanitize=function(e){let n=arguments.length>1&&arguments[1]!==void 0?arguments[1]:{},i=null,a=null,o=null,s=null;if(en=!e,en&&(e=`<!-->`),typeof e!=`string`&&!Wn(e)&&(e=be(e),typeof e!=`string`))throw E(`dirty is not a string, aborting`);if(!t.isSupported)return e;It?(L=Lt,R=Rt):hn(n),t.removed=[];let c=Kt&&typeof e!=`string`&&Wn(e),l=[],u=G;if(c){Fn(e);let t=A(e);if(typeof t==`string`){let n=X(t);if(!L[n]||At[n])throw Cn(e),E(`root node is forbidden and cannot be sanitized in-place`)}if(Vn(e))throw Cn(e),E(`root node is clobbered and cannot be sanitized in-place`);l=On(e),G=ce()}else if(Wn(e))i=In(`<!---->`),a=i.ownerDocument.importNode(e,!0),a.nodeType===M.element&&a.nodeName===`BODY`||a.nodeName===`HTML`?i=a:i.appendChild(a),ar(i);else{if(!W&&!V&&!U&&e.indexOf(`<`)===-1)return ut(e);if(i=In(e),!i)return W?null:Vt?F:``}i&&zt&&Z(i.firstChild);let d=c?e:i;try{c&&ar(e);let t=Ln(d);for(;o=t.nextNode();)rr(o,d);c&&jn(e,l)}catch(t){throw c&&(Cn(e),An(e,l)),t}finally{G=u}if(c){if(An(e,l))throw E(`a node selected for removal could not be safely returned; refusing to sanitize in place`);return V&&zn(e),e}if(W){if(V&&zn(i),Bt)for(s=gt.call(i.ownerDocument);i.firstChild;)s.appendChild(i.firstChild);else s=i;return(R.shadowroot||R.shadowrootmode)&&(s=vt.call(r,s,!0)),s}let f=()=>U?i.outerHTML:i.innerHTML,p=f();return V&&T(Le,p)&&(Bn(i),p=f()),U&&L[`!doctype`]&&i.ownerDocument&&i.ownerDocument.doctype&&i.ownerDocument.doctype.name&&T(Ue,i.ownerDocument.doctype.name)&&(p=`<!DOCTYPE `+i.ownerDocument.doctype.name+`>
+`+p),ut(p)},t.setConfig=function(){let e=arguments.length>0&&arguments[0]!==void 0?arguments[0]:{};hn(e),It=!0,Lt=L,Rt=R},t.clearConfig=function(){fn=null,It=!1,Lt=null,Rt=null,P=at,F=``},t.isValidAttribute=function(e,t,n){fn||hn({});let r=X(e),i=X(t);return typeof n==`string`&&(tr(t,n)||!Ft&&T(Je,n))?!1:Xn(r,i,n)},t.addHook=function(e,t){typeof t==`function`&&S(I,e)&&ae(I[e],t)},t.removeHook=function(e,t){if(S(I,e)){if(t!==void 0){let n=re(I[e],t);return n===-1?void 0:se(I[e],n,1)[0]}return ie(I[e])}},t.removeHooks=function(e){S(I,e)&&(I[e]=[])},t.removeAllHooks=function(){I=et()},t}return nt()});
+//# sourceMappingURL=purify.min.js.map
 (() => {
 'use strict';
 
@@ -3978,7 +4014,7 @@ const CONFIG = {
   logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjguMzIgNDgiIHdpZHRoPSIzMzYuNjUiIGhlaWdodD0iOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0i6JGJ5pyI5L+h6KiXIj48cGF0aCBmaWxsPSIjMGU2YjRmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yNCAwYTI0IDI0IDAgMSAwIDAgNDggMjQgMjQgMCAwIDAgMC00OHpNMTMgMzVBMTkuNSAxOS41IDAgMCAxIDM1IDEzIDE5LjUgMTkuNSAwIDAgMSAxMyAzNXoiLz48cGF0aCBkPSJNMTMgMzUgMjUuNSAyMi41IiBzdHJva2U9IiMwZTZiNGYiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBmaWxsPSIjMTMyMTFjIiBkPSJNNjIuMTcgMjguNDlIODEuNEw4Mi45IDI2LjY2UTgyLjkgMjYuNjYgODMuMzggMjcuMDFRODMuODUgMjcuMzYgODQuNDkgMjcuODZRODUuMTIgMjguMzYgODUuNjUgMjguODFRODUuNTUgMjkuMjEgODQuOTcgMjkuMjFINjIuNFpNNjIuNDggMTkuNjZIODEuNEw4Mi44IDE3Ljg2UTgyLjggMTcuODYgODMuMjQgMTguMlE4My42NyAxOC41NCA4NC4yOSAxOS4wNFE4NC45IDE5LjU0IDg1LjM4IDE5Ljk2UTg1LjI4IDIwLjM2IDg0LjcgMjAuMzZINjIuNjdaTTcwLjQgMjguNDlINzMuODVWMjguODlRNzIuMTIgMzEuMjQgNjkuMTEgMzIuODNRNjYuMSAzNC40MSA2Mi4xMiAzNS4yNkw2MiAzNC45MVE2NC44MyAzMy44MSA2NyAzMi4xNFE2OS4xNyAzMC40NiA3MC40IDI4LjQ5Wk03NS4zIDI4LjQ5UTc2LjEgMjkuMjYgNzcuMjkgMjkuOTFRNzguNDcgMzAuNTYgNzkuODggMzEuMDlRODEuMjggMzEuNjEgODIuNzggMzEuOThRODQuMjggMzIuMzQgODUuNjUgMzIuNTFMODUuNjIgMzIuNzlRODQuODUgMzIuOTkgODQuMjggMzMuNjVRODMuNyAzNC4zMSA4My40NyAzNS4zNFE4MS42MiAzNC43MSA4MC4wNCAzMy43NVE3OC40NSAzMi43OSA3Ny4xOSAzMS41MVE3NS45MiAzMC4yNCA3NS4wMyAyOC42OVpNNzIuNDIgMjUuNjEgNzYuMjUgMjUuOTRRNzYuMjIgMjYuMTkgNzYuMDMgMjYuMzhRNzUuODMgMjYuNTYgNzUuMzMgMjYuNjRWMzUuMTFRNzUuMzMgMzUuMjEgNzQuOTYgMzUuMzhRNzQuNiAzNS41NCA3NC4wNSAzNS42N1E3My41IDM1LjgxIDcyLjkyIDM1LjgxSDcyLjQyWk02Mi4yIDE0Ljg2SDY4LjU1VjEyLjIxTDcyLjI1IDEyLjU0UTcyLjIyIDEyLjc5IDcyLjA0IDEyLjk2UTcxLjg1IDEzLjE0IDcxLjM4IDEzLjIxVjE0Ljg2SDc2LjJWMTIuMjFMNzkuOTUgMTIuNTRRNzkuOTIgMTIuNzkgNzkuNzQgMTIuOTZRNzkuNTUgMTMuMTQgNzkuMDUgMTMuMjFWMTQuODZIODEuNTVMODMuMDMgMTMuMDFRODMuMDMgMTMuMDEgODMuNDYgMTMuMzZRODMuOSAxMy43MSA4NC41MSAxNC4yMlE4NS4xMiAxNC43NCA4NS41OCAxNS4xOVE4NS40NyAxNS41OSA4NC45IDE1LjU5SDc5LjA1VjE2Ljg5UTc5LjA1IDE3LjA2IDc4LjM4IDE3LjI2UTc3LjcgMTcuNDYgNzYuNjcgMTcuNDlINzYuMlYxNS41OUg3MS4zOFYxNy4wMVE3MS4zOCAxNy4xOSA3MC42NyAxNy40UTY5Ljk3IDE3LjYxIDY5LjAzIDE3LjYxSDY4LjU1VjE1LjU5SDYyLjM4Wk03My40NyAyMi42NEg3OS4zNVYyMy4zNkg3My40N1pNNjcuNDcgMjUuNDZIODAuNTNMODEuOTIgMjMuNzFRODEuOTIgMjMuNzEgODIuMzggMjQuMDVRODIuODMgMjQuMzkgODMuNDQgMjQuODZRODQuMDUgMjUuMzQgODQuNTUgMjUuNzlRODQuNDUgMjYuMTYgODMuODggMjYuMTZINjcuNDdaTTY2LjQyIDE3LjIxIDcwLjA1IDE3LjUxUTcwLjAzIDE3Ljc2IDY5Ljg1IDE3LjkyUTY5LjY3IDE4LjA5IDY5LjIgMTguMTZWMjYuNzlRNjkuMiAyNi45MSA2OC44NCAyNy4xNFE2OC40NyAyNy4zNiA2Ny45NCAyNy41MlE2Ny40IDI3LjY5IDY2Ljg1IDI3LjY5SDY2LjQyWk03Ny44OCAxNy4xOSA4MS4zMyAxNy40NlE4MS4yOCAxNy42OSA4MS4xNCAxNy44MlE4MSAxNy45NiA4MC41OCAxOC4wNFYyMy41OVE4MC41OCAyMy43MSA4MC4yMSAyMy45NVE3OS44NSAyNC4xOSA3OS4zMSAyNC4zOFE3OC43OCAyNC41NiA3OC4yMiAyNC41Nkg3Ny44OFpNNzIuMTcgMTcuMDEgNzUuNzggMTcuMzFRNzUuNzIgMTcuNTYgNzUuNTYgMTcuNzNRNzUuNCAxNy44OSA3NC45MiAxNy45NlYyNC4xNFE3NC45MiAyNC4yNiA3NC41NyAyNC40NFE3NC4yMiAyNC42MSA3My42OSAyNC43NVE3My4xNSAyNC44OSA3Mi42IDI0Ljg5SDcyLjE3Wk0xMDUuNzUgMTQuNDRIMTA1LjVMMTA2Ljg4IDEyLjg2TDEwOS44IDE1LjE0UTEwOS43IDE1LjI5IDEwOS40NCAxNS40NFExMDkuMTggMTUuNTkgMTA4Ljc4IDE1LjY0VjMyLjA5UTEwOC43OCAzMy4xMSAxMDguNTEgMzMuODZRMTA4LjI1IDM0LjYxIDEwNy4zOCAzNS4wNlExMDYuNSAzNS41MSAxMDQuNjggMzUuNjlRMTA0LjYgMzQuOTQgMTA0LjQ1IDM0LjM5UTEwNC4zIDMzLjg0IDEwMy45NSAzMy41MVExMDMuNiAzMy4xNiAxMDMuMDQgMzIuOVExMDIuNDggMzIuNjQgMTAxLjM4IDMyLjQ2VjMyLjExUTEwMS4zOCAzMi4xMSAxMDEuODYgMzIuMTVRMTAyLjM1IDMyLjE5IDEwMy4wMyAzMi4yM1ExMDMuNyAzMi4yNiAxMDQuMyAzMi4yOVExMDQuOSAzMi4zMSAxMDUuMTUgMzIuMzFRMTA1LjUgMzIuMzEgMTA1LjYyIDMyLjE2UTEwNS43NSAzMi4wMSAxMDUuNzUgMzEuNzRaTTk0LjcgMTQuNDRWMTQuMjFWMTMuMjRMOTguMTUgMTQuNDRIOTcuN1YyMi4yNlE5Ny43IDIzLjc0IDk3LjU4IDI1LjIyUTk3LjQ1IDI2LjcxIDk3LjA0IDI4LjE3UTk2LjYyIDI5LjY0IDk1LjgxIDMwLjk5UTk1IDMyLjM0IDkzLjY0IDMzLjU0UTkyLjI4IDM0Ljc0IDkwLjIgMzUuNzFMODkuOTggMzUuNDlROTEuNTUgMzQuMTEgOTIuNDkgMzIuNTlROTMuNDMgMzEuMDYgOTMuOSAyOS40UTk0LjM4IDI3Ljc0IDk0LjU0IDI1Ljk1UTk0LjcgMjQuMTYgOTQuNyAyMi4yOVpNOTYuMDUgMTQuNDRIMTA3LjJWMTUuMTZIOTYuMDVaTTk2LjA1IDIwLjAxSDEwNy4yVjIwLjc0SDk2LjA1Wk05NS45OCAyNS43NkgxMDcuMThWMjYuNDlIOTUuOThaTTEyNC43OCAxNy43NEgxMzYuNjJMMTM4LjE4IDE1LjY0UTEzOC4xOCAxNS42NCAxMzguNDYgMTUuODhRMTM4Ljc1IDE2LjExIDEzOS4xOSAxNi40OVExMzkuNjIgMTYuODYgMTQwLjEgMTcuMjdRMTQwLjU4IDE3LjY5IDE0MC45NSAxOC4wNlExNDAuODUgMTguNDYgMTQwLjI4IDE4LjQ2SDEyNC45OFpNMTI2LjggMTQuMjlIMTM0LjYyTDEzNi4xIDEyLjI5UTEzNi4xIDEyLjI5IDEzNi4zOCAxMi41UTEzNi42NSAxMi43MSAxMzcuMDcgMTMuMDdRMTM3LjUgMTMuNDQgMTM3Ljk2IDEzLjg0UTEzOC40MyAxNC4yNCAxMzguNzggMTQuNjFRMTM4LjcgMTUuMDEgMTM4LjEgMTUuMDFIMTI3Wk0xMjYuMzMgMjEuMDlIMTM1LjRMMTM2LjgzIDE5LjE0UTEzNi44MyAxOS4xNCAxMzcuMDkgMTkuMzZRMTM3LjM1IDE5LjU5IDEzNy43NiAxOS45MlExMzguMTggMjAuMjYgMTM4LjYyIDIwLjY1UTEzOS4wOCAyMS4wNCAxMzkuNDUgMjEuMzlRMTM5LjM1IDIxLjc5IDEzOC43NSAyMS43OUgxMjYuNTNaTTEyNi4zMyAyNC40NEgxMzUuNEwxMzYuODMgMjIuNDlRMTM2LjgzIDIyLjQ5IDEzNy4wOSAyMi43MVExMzcuMzUgMjIuOTQgMTM3Ljc2IDIzLjI3UTEzOC4xOCAyMy42MSAxMzguNjIgMjQuMDFRMTM5LjA4IDI0LjQxIDEzOS40NSAyNC43NFExMzkuMzUgMjUuMTQgMTM4Ljc1IDI1LjE0SDEyNi41M1pNMTI3Ljg1IDMyLjkxSDEzNy40M1YzMy42NEgxMjcuODVaTTEyNi40IDI3Ljc0VjI2LjU0TDEyOS40MyAyNy43NEgxMzcuNVYyOC40NEgxMjkuMjhWMzQuNjFRMTI5LjI4IDM0Ljc0IDEyOC45MSAzNC45NVExMjguNTUgMzUuMTYgMTI3Ljk5IDM1LjM0UTEyNy40MyAzNS41MSAxMjYuOCAzNS41MUgxMjYuNFpNMTM1LjgzIDI3Ljc0SDEzNS41OEwxMzYuOTMgMjYuMjZMMTM5Ljc1IDI4LjM5UTEzOS42NSAyOC41NCAxMzkuNCAyOC42OVExMzkuMTUgMjguODQgMTM4Ljc4IDI4LjkxVjM0LjU0UTEzOC43OCAzNC42NCAxMzguMzYgMzQuODNRMTM3Ljk1IDM1LjAxIDEzNy4zOSAzNS4xN1ExMzYuODMgMzUuMzQgMTM2LjMzIDM1LjM0SDEzNS44M1pNMTIwLjEgMjAuMzYgMTIxLjIzIDE4Ljg2IDEyMy44IDE5LjgxUTEyMy42OCAyMC4xNiAxMjMuMDUgMjAuMjlWMzQuNzlRMTIzLjAzIDM0Ljg5IDEyMi42NiAzNS4wOVExMjIuMyAzNS4yOSAxMjEuNzYgMzUuNDZRMTIxLjIzIDM1LjY0IDEyMC42NSAzNS42NEgxMjAuMVpNMTIxLjkgMTIuMTkgMTI2IDEzLjQ0UTEyNS45MyAxMy42NiAxMjUuNjggMTMuOFExMjUuNDMgMTMuOTQgMTI0Ljk4IDEzLjk0UTEyNC4wMyAxNi40NCAxMjIuODQgMTguNjVRMTIxLjY1IDIwLjg2IDEyMC4yNCAyMi42OVExMTguODMgMjQuNTEgMTE3LjE4IDI1LjkxTDExNi44OCAyNS43MVExMTcuODUgMjQuMDYgMTE4LjggMjEuODVRMTE5Ljc1IDE5LjY0IDEyMC41NiAxNy4xNVExMjEuMzggMTQuNjYgMTIxLjkgMTIuMTlaTTE2My4yOCAxMi40NCAxNjYuMyAxNC43MVExNjUuOTMgMTUuMTEgMTY0LjggMTQuODFRMTYzLjYgMTUuMzQgMTYxLjk1IDE1Ljg1UTE2MC4zIDE2LjM2IDE1OC40NCAxNi43N1ExNTYuNTggMTcuMTkgMTU0LjcyIDE3LjQ0TDE1NC42MiAxNy4xMVExNTYuMiAxNi41NCAxNTcuODYgMTUuNzJRMTU5LjUzIDE0LjkxIDE2MC45NSAxNC4wNVExNjIuMzggMTMuMTkgMTYzLjI4IDEyLjQ0Wk0xNDUuODMgMTQuMDZIMTUwLjY1TDE1MS45NyAxMi4zNlExNTEuOTcgMTIuMzYgMTUyLjM5IDEyLjY5UTE1Mi44IDEzLjAxIDE1My4zNiAxMy40N1ExNTMuOTMgMTMuOTQgMTU0LjM4IDE0LjM2UTE1NC4yOCAxNC43NiAxNTMuNyAxNC43NkgxNDYuMDNaTTE0NS43NSAyMC40NkgxNTAuOEwxNTIuMDggMTguNzlRMTUyLjA4IDE4Ljc5IDE1Mi40OCAxOS4xMVExNTIuODggMTkuNDQgMTUzLjQ0IDE5LjlRMTU0IDIwLjM2IDE1NC40MyAyMC43OVExNTQuMzMgMjEuMTYgMTUzLjc1IDIxLjE2SDE0NS45NVpNMTQ1Ljc1IDIzLjcxSDE1MC43OEwxNTIuMDUgMjIuMDRRMTUyLjA1IDIyLjA0IDE1Mi40NSAyMi4zNVExNTIuODUgMjIuNjYgMTUzLjQxIDIzLjE0UTE1My45NyAyMy42MSAxNTQuNDMgMjQuMDFRMTU0LjMzIDI0LjQxIDE1My43NSAyNC40MUgxNDUuOTVaTTE0NC42NSAxNy4yMUgxNTEuNzVMMTUzLjEgMTUuNTFRMTUzLjEgMTUuNTEgMTUzLjUxIDE1Ljg0UTE1My45MyAxNi4xNiAxNTQuNDkgMTYuNjRRMTU1LjA1IDE3LjExIDE1NS41IDE3LjU0UTE1NS40MyAxNy45NCAxNTQuODUgMTcuOTRIMTQ0Ljg1Wk0xNDUuODUgMjYuODZWMjUuNzZMMTQ4LjYgMjYuODZIMTUyLjc1VjI3LjU2SDE0OC40N1YzNC44MVExNDguNDcgMzQuOTEgMTQ4LjE1IDM1LjExUTE0Ny44MyAzNS4zMSAxNDcuMyAzNS40OFExNDYuNzggMzUuNjQgMTQ2LjIyIDM1LjY0SDE0NS44NVpNMTUxLjEyIDI2Ljg2SDE1MC44OEwxNTIuMTUgMjUuNDZMMTU0Ljg1IDI3LjUxUTE1NC43MiAyNy42NiAxNTQuNDUgMjcuOFExNTQuMTggMjcuOTQgMTUzLjggMjguMDFWMzQuNDRRMTUzLjggMzQuNTQgMTUzLjQ0IDM0LjczUTE1My4wOCAzNC45MSAxNTIuNTYgMzUuMDZRMTUyLjA1IDM1LjIxIDE1MS41OCAzNS4yMUgxNTEuMTJaTTE0Ny4zNSAzMi44OUgxNTIuODVWMzMuNTlIMTQ3LjM1Wk0xNTQuMDMgMjQuNTEgMTY0LjA1IDIyLjYxIDE2NS4xOCAyMC4yNlExNjUuMTggMjAuMjYgMTY1LjQ5IDIwLjQ1UTE2NS44IDIwLjY0IDE2Ni4zIDIwLjkxUTE2Ni44IDIxLjE5IDE2Ny4zNCAyMS41UTE2Ny44OCAyMS44MSAxNjguMzMgMjIuMDlRMTY4LjMzIDIyLjU0IDE2Ny43MyAyMi42MUwxNTQuMzUgMjUuMTZaTTE1OC4xMiAxNS43MUgxNjEuMDNRMTYxLjAzIDE1Ljk2IDE2MS4wMyAxNi4yNFExNjEuMDMgMTYuNTEgMTYxLjAzIDE2LjcxVjMxLjU5UTE2MS4wMyAzMS45NiAxNjEuMiAzMi4xMVExNjEuMzggMzIuMjYgMTYxLjkgMzIuMjZIMTYzLjZRMTY0LjA4IDMyLjI2IDE2NC40NiAzMi4yNlExNjQuODUgMzIuMjYgMTY1LjA1IDMyLjI0UTE2NS4yNSAzMi4yMSAxNjUuNCAzMi4xNVExNjUuNTUgMzIuMDkgMTY1LjY1IDMxLjkxUTE2NS45IDMxLjU2IDE2Ni4xOSAzMC41N1ExNjYuNDggMjkuNTkgMTY2LjggMjguNDZIMTY3LjA4TDE2Ny4xOCAzMi4wNlExNjcuNzUgMzIuMzQgMTY3Ljk1IDMyLjY0UTE2OC4xNSAzMi45NCAxNjguMTUgMzMuMzRRMTY4LjE1IDMzLjk0IDE2Ny43NCAzNC4zNFExNjcuMzMgMzQuNzQgMTY2LjI2IDM0LjkyUTE2NS4yIDM1LjExIDE2My4zIDM1LjExSDE2MS4xOFExNTkuOTcgMzUuMTEgMTU5LjMxIDM0Ljg4UTE1OC42NSAzNC42NCAxNTguMzkgMzQuMDVRMTU4LjEyIDMzLjQ2IDE1OC4xMiAzMi40NFoiLz48L3N2Zz4K',      // 表紙の左上とスライドの下に出すロゴ（URL か data: URL）
   logoDark: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjguMzIgNDgiIHdpZHRoPSIzMzYuNjUiIGhlaWdodD0iOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0i6JGJ5pyI5L+h6KiXIj48cGF0aCBmaWxsPSIjNmZkM2FlIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yNCAwYTI0IDI0IDAgMSAwIDAgNDggMjQgMjQgMCAwIDAgMC00OHpNMTMgMzVBMTkuNSAxOS41IDAgMCAxIDM1IDEzIDE5LjUgMTkuNSAwIDAgMSAxMyAzNXoiLz48cGF0aCBkPSJNMTMgMzUgMjUuNSAyMi41IiBzdHJva2U9IiM2ZmQzYWUiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBmaWxsPSIjZWVmNWYxIiBkPSJNNjIuMTcgMjguNDlIODEuNEw4Mi45IDI2LjY2UTgyLjkgMjYuNjYgODMuMzggMjcuMDFRODMuODUgMjcuMzYgODQuNDkgMjcuODZRODUuMTIgMjguMzYgODUuNjUgMjguODFRODUuNTUgMjkuMjEgODQuOTcgMjkuMjFINjIuNFpNNjIuNDggMTkuNjZIODEuNEw4Mi44IDE3Ljg2UTgyLjggMTcuODYgODMuMjQgMTguMlE4My42NyAxOC41NCA4NC4yOSAxOS4wNFE4NC45IDE5LjU0IDg1LjM4IDE5Ljk2UTg1LjI4IDIwLjM2IDg0LjcgMjAuMzZINjIuNjdaTTcwLjQgMjguNDlINzMuODVWMjguODlRNzIuMTIgMzEuMjQgNjkuMTEgMzIuODNRNjYuMSAzNC40MSA2Mi4xMiAzNS4yNkw2MiAzNC45MVE2NC44MyAzMy44MSA2NyAzMi4xNFE2OS4xNyAzMC40NiA3MC40IDI4LjQ5Wk03NS4zIDI4LjQ5UTc2LjEgMjkuMjYgNzcuMjkgMjkuOTFRNzguNDcgMzAuNTYgNzkuODggMzEuMDlRODEuMjggMzEuNjEgODIuNzggMzEuOThRODQuMjggMzIuMzQgODUuNjUgMzIuNTFMODUuNjIgMzIuNzlRODQuODUgMzIuOTkgODQuMjggMzMuNjVRODMuNyAzNC4zMSA4My40NyAzNS4zNFE4MS42MiAzNC43MSA4MC4wNCAzMy43NVE3OC40NSAzMi43OSA3Ny4xOSAzMS41MVE3NS45MiAzMC4yNCA3NS4wMyAyOC42OVpNNzIuNDIgMjUuNjEgNzYuMjUgMjUuOTRRNzYuMjIgMjYuMTkgNzYuMDMgMjYuMzhRNzUuODMgMjYuNTYgNzUuMzMgMjYuNjRWMzUuMTFRNzUuMzMgMzUuMjEgNzQuOTYgMzUuMzhRNzQuNiAzNS41NCA3NC4wNSAzNS42N1E3My41IDM1LjgxIDcyLjkyIDM1LjgxSDcyLjQyWk02Mi4yIDE0Ljg2SDY4LjU1VjEyLjIxTDcyLjI1IDEyLjU0UTcyLjIyIDEyLjc5IDcyLjA0IDEyLjk2UTcxLjg1IDEzLjE0IDcxLjM4IDEzLjIxVjE0Ljg2SDc2LjJWMTIuMjFMNzkuOTUgMTIuNTRRNzkuOTIgMTIuNzkgNzkuNzQgMTIuOTZRNzkuNTUgMTMuMTQgNzkuMDUgMTMuMjFWMTQuODZIODEuNTVMODMuMDMgMTMuMDFRODMuMDMgMTMuMDEgODMuNDYgMTMuMzZRODMuOSAxMy43MSA4NC41MSAxNC4yMlE4NS4xMiAxNC43NCA4NS41OCAxNS4xOVE4NS40NyAxNS41OSA4NC45IDE1LjU5SDc5LjA1VjE2Ljg5UTc5LjA1IDE3LjA2IDc4LjM4IDE3LjI2UTc3LjcgMTcuNDYgNzYuNjcgMTcuNDlINzYuMlYxNS41OUg3MS4zOFYxNy4wMVE3MS4zOCAxNy4xOSA3MC42NyAxNy40UTY5Ljk3IDE3LjYxIDY5LjAzIDE3LjYxSDY4LjU1VjE1LjU5SDYyLjM4Wk03My40NyAyMi42NEg3OS4zNVYyMy4zNkg3My40N1pNNjcuNDcgMjUuNDZIODAuNTNMODEuOTIgMjMuNzFRODEuOTIgMjMuNzEgODIuMzggMjQuMDVRODIuODMgMjQuMzkgODMuNDQgMjQuODZRODQuMDUgMjUuMzQgODQuNTUgMjUuNzlRODQuNDUgMjYuMTYgODMuODggMjYuMTZINjcuNDdaTTY2LjQyIDE3LjIxIDcwLjA1IDE3LjUxUTcwLjAzIDE3Ljc2IDY5Ljg1IDE3LjkyUTY5LjY3IDE4LjA5IDY5LjIgMTguMTZWMjYuNzlRNjkuMiAyNi45MSA2OC44NCAyNy4xNFE2OC40NyAyNy4zNiA2Ny45NCAyNy41MlE2Ny40IDI3LjY5IDY2Ljg1IDI3LjY5SDY2LjQyWk03Ny44OCAxNy4xOSA4MS4zMyAxNy40NlE4MS4yOCAxNy42OSA4MS4xNCAxNy44MlE4MSAxNy45NiA4MC41OCAxOC4wNFYyMy41OVE4MC41OCAyMy43MSA4MC4yMSAyMy45NVE3OS44NSAyNC4xOSA3OS4zMSAyNC4zOFE3OC43OCAyNC41NiA3OC4yMiAyNC41Nkg3Ny44OFpNNzIuMTcgMTcuMDEgNzUuNzggMTcuMzFRNzUuNzIgMTcuNTYgNzUuNTYgMTcuNzNRNzUuNCAxNy44OSA3NC45MiAxNy45NlYyNC4xNFE3NC45MiAyNC4yNiA3NC41NyAyNC40NFE3NC4yMiAyNC42MSA3My42OSAyNC43NVE3My4xNSAyNC44OSA3Mi42IDI0Ljg5SDcyLjE3Wk0xMDUuNzUgMTQuNDRIMTA1LjVMMTA2Ljg4IDEyLjg2TDEwOS44IDE1LjE0UTEwOS43IDE1LjI5IDEwOS40NCAxNS40NFExMDkuMTggMTUuNTkgMTA4Ljc4IDE1LjY0VjMyLjA5UTEwOC43OCAzMy4xMSAxMDguNTEgMzMuODZRMTA4LjI1IDM0LjYxIDEwNy4zOCAzNS4wNlExMDYuNSAzNS41MSAxMDQuNjggMzUuNjlRMTA0LjYgMzQuOTQgMTA0LjQ1IDM0LjM5UTEwNC4zIDMzLjg0IDEwMy45NSAzMy41MVExMDMuNiAzMy4xNiAxMDMuMDQgMzIuOVExMDIuNDggMzIuNjQgMTAxLjM4IDMyLjQ2VjMyLjExUTEwMS4zOCAzMi4xMSAxMDEuODYgMzIuMTVRMTAyLjM1IDMyLjE5IDEwMy4wMyAzMi4yM1ExMDMuNyAzMi4yNiAxMDQuMyAzMi4yOVExMDQuOSAzMi4zMSAxMDUuMTUgMzIuMzFRMTA1LjUgMzIuMzEgMTA1LjYyIDMyLjE2UTEwNS43NSAzMi4wMSAxMDUuNzUgMzEuNzRaTTk0LjcgMTQuNDRWMTQuMjFWMTMuMjRMOTguMTUgMTQuNDRIOTcuN1YyMi4yNlE5Ny43IDIzLjc0IDk3LjU4IDI1LjIyUTk3LjQ1IDI2LjcxIDk3LjA0IDI4LjE3UTk2LjYyIDI5LjY0IDk1LjgxIDMwLjk5UTk1IDMyLjM0IDkzLjY0IDMzLjU0UTkyLjI4IDM0Ljc0IDkwLjIgMzUuNzFMODkuOTggMzUuNDlROTEuNTUgMzQuMTEgOTIuNDkgMzIuNTlROTMuNDMgMzEuMDYgOTMuOSAyOS40UTk0LjM4IDI3Ljc0IDk0LjU0IDI1Ljk1UTk0LjcgMjQuMTYgOTQuNyAyMi4yOVpNOTYuMDUgMTQuNDRIMTA3LjJWMTUuMTZIOTYuMDVaTTk2LjA1IDIwLjAxSDEwNy4yVjIwLjc0SDk2LjA1Wk05NS45OCAyNS43NkgxMDcuMThWMjYuNDlIOTUuOThaTTEyNC43OCAxNy43NEgxMzYuNjJMMTM4LjE4IDE1LjY0UTEzOC4xOCAxNS42NCAxMzguNDYgMTUuODhRMTM4Ljc1IDE2LjExIDEzOS4xOSAxNi40OVExMzkuNjIgMTYuODYgMTQwLjEgMTcuMjdRMTQwLjU4IDE3LjY5IDE0MC45NSAxOC4wNlExNDAuODUgMTguNDYgMTQwLjI4IDE4LjQ2SDEyNC45OFpNMTI2LjggMTQuMjlIMTM0LjYyTDEzNi4xIDEyLjI5UTEzNi4xIDEyLjI5IDEzNi4zOCAxMi41UTEzNi42NSAxMi43MSAxMzcuMDcgMTMuMDdRMTM3LjUgMTMuNDQgMTM3Ljk2IDEzLjg0UTEzOC40MyAxNC4yNCAxMzguNzggMTQuNjFRMTM4LjcgMTUuMDEgMTM4LjEgMTUuMDFIMTI3Wk0xMjYuMzMgMjEuMDlIMTM1LjRMMTM2LjgzIDE5LjE0UTEzNi44MyAxOS4xNCAxMzcuMDkgMTkuMzZRMTM3LjM1IDE5LjU5IDEzNy43NiAxOS45MlExMzguMTggMjAuMjYgMTM4LjYyIDIwLjY1UTEzOS4wOCAyMS4wNCAxMzkuNDUgMjEuMzlRMTM5LjM1IDIxLjc5IDEzOC43NSAyMS43OUgxMjYuNTNaTTEyNi4zMyAyNC40NEgxMzUuNEwxMzYuODMgMjIuNDlRMTM2LjgzIDIyLjQ5IDEzNy4wOSAyMi43MVExMzcuMzUgMjIuOTQgMTM3Ljc2IDIzLjI3UTEzOC4xOCAyMy42MSAxMzguNjIgMjQuMDFRMTM5LjA4IDI0LjQxIDEzOS40NSAyNC43NFExMzkuMzUgMjUuMTQgMTM4Ljc1IDI1LjE0SDEyNi41M1pNMTI3Ljg1IDMyLjkxSDEzNy40M1YzMy42NEgxMjcuODVaTTEyNi40IDI3Ljc0VjI2LjU0TDEyOS40MyAyNy43NEgxMzcuNVYyOC40NEgxMjkuMjhWMzQuNjFRMTI5LjI4IDM0Ljc0IDEyOC45MSAzNC45NVExMjguNTUgMzUuMTYgMTI3Ljk5IDM1LjM0UTEyNy40MyAzNS41MSAxMjYuOCAzNS41MUgxMjYuNFpNMTM1LjgzIDI3Ljc0SDEzNS41OEwxMzYuOTMgMjYuMjZMMTM5Ljc1IDI4LjM5UTEzOS42NSAyOC41NCAxMzkuNCAyOC42OVExMzkuMTUgMjguODQgMTM4Ljc4IDI4LjkxVjM0LjU0UTEzOC43OCAzNC42NCAxMzguMzYgMzQuODNRMTM3Ljk1IDM1LjAxIDEzNy4zOSAzNS4xN1ExMzYuODMgMzUuMzQgMTM2LjMzIDM1LjM0SDEzNS44M1pNMTIwLjEgMjAuMzYgMTIxLjIzIDE4Ljg2IDEyMy44IDE5LjgxUTEyMy42OCAyMC4xNiAxMjMuMDUgMjAuMjlWMzQuNzlRMTIzLjAzIDM0Ljg5IDEyMi42NiAzNS4wOVExMjIuMyAzNS4yOSAxMjEuNzYgMzUuNDZRMTIxLjIzIDM1LjY0IDEyMC42NSAzNS42NEgxMjAuMVpNMTIxLjkgMTIuMTkgMTI2IDEzLjQ0UTEyNS45MyAxMy42NiAxMjUuNjggMTMuOFExMjUuNDMgMTMuOTQgMTI0Ljk4IDEzLjk0UTEyNC4wMyAxNi40NCAxMjIuODQgMTguNjVRMTIxLjY1IDIwLjg2IDEyMC4yNCAyMi42OVExMTguODMgMjQuNTEgMTE3LjE4IDI1LjkxTDExNi44OCAyNS43MVExMTcuODUgMjQuMDYgMTE4LjggMjEuODVRMTE5Ljc1IDE5LjY0IDEyMC41NiAxNy4xNVExMjEuMzggMTQuNjYgMTIxLjkgMTIuMTlaTTE2My4yOCAxMi40NCAxNjYuMyAxNC43MVExNjUuOTMgMTUuMTEgMTY0LjggMTQuODFRMTYzLjYgMTUuMzQgMTYxLjk1IDE1Ljg1UTE2MC4zIDE2LjM2IDE1OC40NCAxNi43N1ExNTYuNTggMTcuMTkgMTU0LjcyIDE3LjQ0TDE1NC42MiAxNy4xMVExNTYuMiAxNi41NCAxNTcuODYgMTUuNzJRMTU5LjUzIDE0LjkxIDE2MC45NSAxNC4wNVExNjIuMzggMTMuMTkgMTYzLjI4IDEyLjQ0Wk0xNDUuODMgMTQuMDZIMTUwLjY1TDE1MS45NyAxMi4zNlExNTEuOTcgMTIuMzYgMTUyLjM5IDEyLjY5UTE1Mi44IDEzLjAxIDE1My4zNiAxMy40N1ExNTMuOTMgMTMuOTQgMTU0LjM4IDE0LjM2UTE1NC4yOCAxNC43NiAxNTMuNyAxNC43NkgxNDYuMDNaTTE0NS43NSAyMC40NkgxNTAuOEwxNTIuMDggMTguNzlRMTUyLjA4IDE4Ljc5IDE1Mi40OCAxOS4xMVExNTIuODggMTkuNDQgMTUzLjQ0IDE5LjlRMTU0IDIwLjM2IDE1NC40MyAyMC43OVExNTQuMzMgMjEuMTYgMTUzLjc1IDIxLjE2SDE0NS45NVpNMTQ1Ljc1IDIzLjcxSDE1MC43OEwxNTIuMDUgMjIuMDRRMTUyLjA1IDIyLjA0IDE1Mi40NSAyMi4zNVExNTIuODUgMjIuNjYgMTUzLjQxIDIzLjE0UTE1My45NyAyMy42MSAxNTQuNDMgMjQuMDFRMTU0LjMzIDI0LjQxIDE1My43NSAyNC40MUgxNDUuOTVaTTE0NC42NSAxNy4yMUgxNTEuNzVMMTUzLjEgMTUuNTFRMTUzLjEgMTUuNTEgMTUzLjUxIDE1Ljg0UTE1My45MyAxNi4xNiAxNTQuNDkgMTYuNjRRMTU1LjA1IDE3LjExIDE1NS41IDE3LjU0UTE1NS40MyAxNy45NCAxNTQuODUgMTcuOTRIMTQ0Ljg1Wk0xNDUuODUgMjYuODZWMjUuNzZMMTQ4LjYgMjYuODZIMTUyLjc1VjI3LjU2SDE0OC40N1YzNC44MVExNDguNDcgMzQuOTEgMTQ4LjE1IDM1LjExUTE0Ny44MyAzNS4zMSAxNDcuMyAzNS40OFExNDYuNzggMzUuNjQgMTQ2LjIyIDM1LjY0SDE0NS44NVpNMTUxLjEyIDI2Ljg2SDE1MC44OEwxNTIuMTUgMjUuNDZMMTU0Ljg1IDI3LjUxUTE1NC43MiAyNy42NiAxNTQuNDUgMjcuOFExNTQuMTggMjcuOTQgMTUzLjggMjguMDFWMzQuNDRRMTUzLjggMzQuNTQgMTUzLjQ0IDM0LjczUTE1My4wOCAzNC45MSAxNTIuNTYgMzUuMDZRMTUyLjA1IDM1LjIxIDE1MS41OCAzNS4yMUgxNTEuMTJaTTE0Ny4zNSAzMi44OUgxNTIuODVWMzMuNTlIMTQ3LjM1Wk0xNTQuMDMgMjQuNTEgMTY0LjA1IDIyLjYxIDE2NS4xOCAyMC4yNlExNjUuMTggMjAuMjYgMTY1LjQ5IDIwLjQ1UTE2NS44IDIwLjY0IDE2Ni4zIDIwLjkxUTE2Ni44IDIxLjE5IDE2Ny4zNCAyMS41UTE2Ny44OCAyMS44MSAxNjguMzMgMjIuMDlRMTY4LjMzIDIyLjU0IDE2Ny43MyAyMi42MUwxNTQuMzUgMjUuMTZaTTE1OC4xMiAxNS43MUgxNjEuMDNRMTYxLjAzIDE1Ljk2IDE2MS4wMyAxNi4yNFExNjEuMDMgMTYuNTEgMTYxLjAzIDE2LjcxVjMxLjU5UTE2MS4wMyAzMS45NiAxNjEuMiAzMi4xMVExNjEuMzggMzIuMjYgMTYxLjkgMzIuMjZIMTYzLjZRMTY0LjA4IDMyLjI2IDE2NC40NiAzMi4yNlExNjQuODUgMzIuMjYgMTY1LjA1IDMyLjI0UTE2NS4yNSAzMi4yMSAxNjUuNCAzMi4xNVExNjUuNTUgMzIuMDkgMTY1LjY1IDMxLjkxUTE2NS45IDMxLjU2IDE2Ni4xOSAzMC41N1ExNjYuNDggMjkuNTkgMTY2LjggMjguNDZIMTY3LjA4TDE2Ny4xOCAzMi4wNlExNjcuNzUgMzIuMzQgMTY3Ljk1IDMyLjY0UTE2OC4xNSAzMi45NCAxNjguMTUgMzMuMzRRMTY4LjE1IDMzLjk0IDE2Ny43NCAzNC4zNFExNjcuMzMgMzQuNzQgMTY2LjI2IDM0LjkyUTE2NS4yIDM1LjExIDE2My4zIDM1LjExSDE2MS4xOFExNTkuOTcgMzUuMTEgMTU5LjMxIDM0Ljg4UTE1OC42NSAzNC42NCAxNTguMzkgMzQuMDVRMTU4LjEyIDMzLjQ2IDE1OC4xMiAzMi40NFoiLz48L3N2Zz4K',  // ダーク表示のときのロゴ（空なら logo をそのまま使う）
 };
-const ENGINE = 'hypertext-markdown-8';
+const ENGINE = 'hypertext-markdown-10';
 const KEY_THEME = 'hypertext-markdown:theme';
 const KEY_TOC = 'hypertext-markdown:toc';
 const KEY_DIFF = 'hypertext-markdown:diffview';
@@ -3992,6 +4028,8 @@ const store = {
 };
 const escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const escAttr = s => escHtml(s).replace(/"/g, '&quot;');
+/* 独自パーサーの処理に加え、DOM に渡す直前にも HTML を検査する。 */
+const safeRenderedHtml = html => DOMPurify.sanitize(html, { FORCE_BODY: true, ADD_ATTR: ['target'] });
 const escText = s => String(s).replace(/&(?!#?[A-Za-z0-9]+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 /* タグを除いて文字にする。<scr<b>ipt> のように、除いたあとにタグが残る形があるので、変わらなくなるまで繰り返す */
 const stripTags = s => {
@@ -4074,6 +4112,32 @@ const RX = {
   // *[略語]: 意味（PHP Markdown Extra と同じ書き方）。本文には出さず、本文中の略語に意味を添える
   abbrDef: /^ {0,3}\*\[([^\]\n]+)\]:[ \t]*(.*)$/,
 };
+/* 生 HTML は、表示に必要なタグと属性だけをタグ単位で組み直す。断片全体を DOM にすると、
+   空行を挟んだ div などがブラウザに自動で閉じられ、HTML 内 Markdown の区切りが変わるため使わない */
+const RAW_HTML_TOKEN = /<[!]--[\s\S]*?-->|<\/?[A-Za-z][A-Za-z0-9-]*(?:\s+[A-Za-z_:@][\w:.@-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*\s*\/?>/g;
+const RAW_ATTR_TOKEN = /([A-Za-z_:@][\w:.@-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/y;
+const RAW_HTML_TAGS = new Set(('a abbr address article aside b bdi bdo blockquote br caption center cite code col colgroup dd del details dfn div dl dt em figcaption figure footer h1 h2 h3 h4 h5 h6 header hr i img ins kbd li main mark meter nav ol p picture pre progress q rp rt ruby s samp section small span strong sub summary sup table tbody td tfoot th thead time tr u ul var wbr').split(' '));
+const RAW_SVG_TAGS = new Set(('svg g path rect circle ellipse line polyline polygon text tspan defs lineargradient radialgradient stop clippath mask title desc').split(' '));
+const RAW_VOID_TAGS = new Set(('br col hr img wbr').split(' '));
+const RAW_DROP_CONTENT = new Set(('script style iframe object embed textarea template noscript').split(' '));
+const RAW_SAFE_CLASSES = new Set(['swatch', 'vd-ins', 'vd-del']);
+const RAW_DENIED_C_CLASSES = new Set(['c-tabs', 'c-example', 'c-chart']);
+const RAW_GLOBAL_ATTRS = new Set(('class title lang dir role tabindex style').split(' '));
+const RAW_TAG_ATTRS = {
+  a: new Set(['href', 'target', 'rel']),
+  blockquote: new Set(['cite']), q: new Set(['cite']),
+  img: new Set(['src', 'alt', 'width', 'height', 'loading', 'decoding']),
+  ol: new Set(['start', 'reversed', 'type']), li: new Set(['value']),
+  col: new Set(['span']), colgroup: new Set(['span']),
+  td: new Set(['colspan', 'rowspan', 'headers']), th: new Set(['colspan', 'rowspan', 'headers', 'scope', 'abbr']),
+  time: new Set(['datetime']), meter: new Set(['value', 'min', 'max', 'low', 'high', 'optimum']),
+  progress: new Set(['value', 'max']),
+};
+const RAW_SVG_ATTRS = new Set(('xmlns viewbox preserveaspectratio width height x y x1 y1 x2 y2 cx cy r rx ry d points pathlength transform fill fill-opacity fill-rule stroke stroke-opacity stroke-width stroke-linecap stroke-linejoin stroke-dasharray stroke-dashoffset color opacity font-family font-size font-style font-weight text-anchor dominant-baseline dx dy rotate textlength lengthadjust gradientunits gradienttransform spreadmethod offset stop-color stop-opacity clip-path clip-rule mask maskunits maskcontentunits').split(' '));
+const RAW_SVG_NAMES = { lineargradient: 'linearGradient', radialgradient: 'radialGradient', clippath: 'clipPath' };
+const RAW_SVG_ATTR_NAMES = { viewbox: 'viewBox', preserveaspectratio: 'preserveAspectRatio', pathlength: 'pathLength', textlength: 'textLength', lengthadjust: 'lengthAdjust', gradientunits: 'gradientUnits', gradienttransform: 'gradientTransform', spreadmethod: 'spreadMethod', maskunits: 'maskUnits', maskcontentunits: 'maskContentUnits' };
+const RAW_CSS_PROPS = new Set(('align-content align-items align-self background background-color border border-color border-style border-width border-top border-top-color border-top-style border-top-width border-right border-right-color border-right-style border-right-width border-bottom border-bottom-color border-bottom-style border-bottom-width border-left border-left-color border-left-style border-left-width border-radius box-shadow color display flex flex-basis flex-direction flex-flow flex-grow flex-shrink flex-wrap font font-family font-size font-style font-variant font-weight gap grid grid-area grid-auto-columns grid-auto-flow grid-auto-rows grid-column grid-row grid-template grid-template-areas grid-template-columns grid-template-rows height justify-content justify-items justify-self letter-spacing line-height margin margin-top margin-right margin-bottom margin-left max-height max-width min-height min-width opacity overflow overflow-wrap overflow-x overflow-y padding padding-top padding-right padding-bottom padding-left text-align text-decoration text-indent text-overflow text-transform transform transform-origin vertical-align white-space width word-break word-spacing').split(' '));
+const RAW_CSS_VARS = new Set(('--accent --accent-soft --bg --bg-side --bg-sunken --ink --ink-2 --rule --font --mono --frame --frame-inner --tint --c-note --c-tip --c-important --c-warning --c-caution --add-bg --del-bg --mark --chart-on').split(' '));
 /* 参照形式の名前は、大文字と小文字・空白の違いを区別しない */
 const refKey = s => String(s).trim().replace(/\s+/g, ' ').toLowerCase();
 /* フェンス（``` / ~~~）の中かどうかを 1 行ずつ判定する。中（または開始・終了の行）なら true */
@@ -4710,6 +4774,228 @@ function createParser(opts = {}) {
   }
   const slugify = t => t.toLowerCase().trim().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s+/g, '-').slice(0, 80);
 
+  function cleanRawStyle(raw) {
+    // HTML の文字参照を CSS の一部として解釈させない
+    if (raw.includes('&')) return '';
+    const probe = document.createElement('span');
+    probe.style.cssText = raw;
+    const out = [];
+    const decls = [];
+    let start = 0, quote = '', escaped = false, depth = 0;
+    const css = probe.style.cssText;
+    for (let i = 0; i < css.length; i++) {
+      const ch = css[i];
+      if (escaped) { escaped = false; continue; }
+      if (quote) {
+        if (ch === '\\') escaped = true;
+        else if (ch === quote) quote = '';
+      } else if (ch === '"' || ch === "'") quote = ch;
+      else if (ch === '(') depth++;
+      else if (ch === ')' && depth) depth--;
+      else if (ch === ';' && depth === 0) { decls.push(css.slice(start, i)); start = i + 1; }
+    }
+    decls.push(css.slice(start));
+    const parsed = [];
+    for (const decl of decls) {
+      const colon = decl.indexOf(':');
+      if (colon < 1) continue;
+      const prop = decl.slice(0, colon).trim().toLowerCase();
+      const value = decl.slice(colon + 1).trim().replace(/\s*!important\s*$/i, '');
+      const compact = value.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, '');
+      if (!value || value.includes('\\') || /@import|expression\(|behavior:|-moz-binding|javascript:|vbscript:/i.test(compact)
+          || /(?:url|src|image|image-set|cross-fade|element|paint|attr)\s*\(/i.test(value)) continue;
+      parsed.push({ prop, value, vars: [...value.matchAll(/var\(\s*(--[a-z0-9_-]+)/gi)].map(m => m[1].toLowerCase()) });
+    }
+    // 安全な値を持つ独自変数だけを、既定の色変数と同じように参照できるようにする
+    const custom = new Set();
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const d of parsed) {
+        if (!/^--[a-z0-9_-]+$/i.test(d.prop) || custom.has(d.prop)) continue;
+        if (d.vars.every(v => RAW_CSS_VARS.has(v) || custom.has(v))) { custom.add(d.prop); changed = true; }
+      }
+    }
+    for (const { prop, value, vars } of parsed) {
+      if (!RAW_CSS_PROPS.has(prop) && !custom.has(prop)) continue;
+      if (vars.some(v => !RAW_CSS_VARS.has(v) && !custom.has(v))) continue;
+      out.push(prop + ':' + value);
+    }
+    return out.join(';');
+  }
+
+  function decodeRawRefs(raw) {
+    const named = { colon: ':', sol: '/', bsol: '\\', tab: '\t', newline: '\n', lpar: '(', rpar: ')', amp: '&', quot: '"', apos: "'", lt: '<', gt: '>' };
+    return String(raw)
+      .replace(/&#(?:x([0-9a-f]+)|([0-9]+));?/gi, (all, hex, dec) => {
+        const n = parseInt(hex || dec, hex ? 16 : 10);
+        return n > 0 && n <= 0x10ffff && !(n >= 0xd800 && n <= 0xdfff) ? String.fromCodePoint(n) : '\uFFFD';
+      })
+      .replace(/&(colon|sol|bsol|tab|newline|lpar|rpar|amp|quot|apos|lt|gt);?/gi, (all, name) => named[name.toLowerCase()]);
+  }
+
+  function cleanRawUrl(raw, kind) {
+    const value = decodeRawRefs(raw).trim();
+    const compact = value.replace(/[\s\u0000-\u001f\u007f]+/g, '');
+    if (!value || !compact || /^[\\/]{2}/.test(compact)) return null;
+    if (kind === 'svg') return /^#[A-Za-z_][\w:.-]*$/.test(compact) ? compact : null;
+    const m = compact.match(/^([A-Za-z][\w+.-]*):/);
+    if (kind === 'img') {
+      if (/^data:/i.test(compact)) return /^data:image\/(?:png|gif|jpe?g|webp|avif|bmp|svg\+xml)(?:[;,]|$)/i.test(compact) ? value : null;
+      if (m && !/^(?:https?|blob)$/i.test(m[1])) return null;
+      return value;
+    }
+    if (m && !/^(?:https?|mailto|tel)$/i.test(m[1])) return null;
+    return value;
+  }
+
+  function cleanRawSvgValue(raw) {
+    const value = decodeRawRefs(raw).trim();
+    if (!value || value.includes('&') || value.includes('\\') || /[\u0000-\u001f\u007f]/.test(value) || /(?:javascript|vbscript|data|https?):/i.test(value)) return null;
+    const urls = [...value.matchAll(/url\(([^)]*)\)/gi)];
+    if (urls.some(m => !/^\s*['"]?#[A-Za-z_][\w:.-]*['"]?\s*$/.test(m[1]))) return null;
+    return value;
+  }
+
+  function rawTagInfo(token) {
+    const m = token.match(/^<\s*(\/?)\s*([A-Za-z][A-Za-z0-9-]*)/);
+    return m ? { close: !!m[1], tag: m[2].toLowerCase(), head: m[0].length, self: /\/\s*>$/.test(token) } : null;
+  }
+
+  function rawAttributes(token, info) {
+    let text = token.slice(info.head).replace(/\/?\s*>$/, '').trim();
+    if (!text) return [];
+    const out = [], seen = new Set();
+    let pos = 0;
+    while (pos < text.length) {
+      const ws = text.slice(pos).match(/^\s+/);
+      if (ws) pos += ws[0].length;
+      if (pos >= text.length) break;
+      RAW_ATTR_TOKEN.lastIndex = pos;
+      const m = RAW_ATTR_TOKEN.exec(text);
+      if (!m) return [];
+      const name = m[1].toLowerCase();
+      if (!seen.has(name)) {
+        seen.add(name);
+        out.push([name, m[2] ?? m[3] ?? m[4] ?? '']);
+      }
+      pos = RAW_ATTR_TOKEN.lastIndex;
+    }
+    return out;
+  }
+
+  function sanitizeRawTag(token) {
+    const info = rawTagInfo(token);
+    if (!info || (!RAW_HTML_TAGS.has(info.tag) && !RAW_SVG_TAGS.has(info.tag))) return '';
+    const tagName = RAW_SVG_NAMES[info.tag] || info.tag;
+    if (info.close) return RAW_VOID_TAGS.has(info.tag) ? '' : '</' + tagName + '>';
+    const attrs = rawAttributes(token, info);
+    const out = [];
+    let target = '', href = false;
+    for (const [name, raw] of attrs) {
+      if (/^on/i.test(name) || /^data-/i.test(name) || name === 'name' || name === 'is' || name === 'srcdoc'
+          || name === 'action' || name === 'formaction' || name === 'xlink:href') continue;
+      let value = raw, outName = name, preserveRefs = true;
+      if (name === 'id') {
+        value = value.trim();
+        if (!/^[A-Za-z_][\w:.-]*$/.test(value) || /^ui-/i.test(value) || usedIds.has(value)) continue;
+        usedIds.add(value);
+      } else if (name === 'style') {
+        value = cleanRawStyle(value);
+        if (!value) continue;
+        preserveRefs = false;
+      } else if (name === 'class') {
+        if (value.includes('&')) continue;
+        value = value.replace(/[\u0000-\u001f\u007f]+/g, ' ').trim().replace(/\s+/g, ' ');
+        value = value.split(' ').filter(c => RAW_SAFE_CLASSES.has(c)
+          || (/^c-[\p{L}\p{N}_-]+$/u.test(c) && !RAW_DENIED_C_CLASSES.has(c))).join(' ');
+        if (!value) continue;
+      } else if (name === 'dir') {
+        value = value.toLowerCase();
+        if (!/^(?:ltr|rtl|auto)$/.test(value)) continue;
+      } else if (name === 'tabindex') {
+        if (value !== '0' && value !== '-1') continue;
+      } else if (name === 'hidden' || (info.tag === 'details' && name === 'open') || (info.tag === 'ol' && name === 'reversed')) {
+        out.push(' ' + name);
+        continue;
+      } else if (name.startsWith('aria-') || ['title', 'lang', 'role'].includes(name)) {
+        // 文字列としてだけ使う属性
+      } else if (info.tag === 'a' && name === 'href') {
+        value = cleanRawUrl(value, 'href');
+        if (value == null) continue;
+        href = true;
+        preserveRefs = false;
+      } else if (info.tag === 'a' && name === 'target') {
+        value = value.toLowerCase();
+        if (value !== '_blank' && value !== '_self') continue;
+        target = value;
+        continue;
+      } else if (info.tag === 'a' && name === 'rel') {
+        continue;
+      } else if (info.tag === 'img' && name === 'src') {
+        value = cleanRawUrl(value, 'img');
+        if (value == null) continue;
+        preserveRefs = false;
+      } else if ((info.tag === 'blockquote' || info.tag === 'q') && name === 'cite') {
+        value = cleanRawUrl(value, 'href');
+        if (value == null) continue;
+        preserveRefs = false;
+      } else if (info.tag === 'img' && name === 'loading') {
+        value = value.toLowerCase();
+        if (value !== 'lazy' && value !== 'eager') continue;
+      } else if (info.tag === 'img' && name === 'decoding') {
+        value = value.toLowerCase();
+        if (!/^(?:sync|async|auto)$/.test(value)) continue;
+      } else if (RAW_SVG_ATTRS.has(name)) {
+        if (name === 'xmlns') {
+          if (value !== 'http://www.w3.org/2000/svg') continue;
+        } else {
+          value = cleanRawSvgValue(value);
+          if (value == null) continue;
+        }
+        outName = RAW_SVG_ATTR_NAMES[name] || name;
+        preserveRefs = false;
+      } else if (!(RAW_TAG_ATTRS[info.tag] && RAW_TAG_ATTRS[info.tag].has(name)) && !RAW_GLOBAL_ATTRS.has(name)) {
+        continue;
+      }
+      const encoded = preserveRefs
+        ? String(value).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+        : escAttr(value);
+      out.push(' ' + outName + '="' + encoded + '"');
+    }
+    if (info.tag === 'a' && href && target) {
+      out.push(' target="' + target + '"');
+      if (target === '_blank') out.push(' rel="noopener noreferrer"');
+    }
+    const open = '<' + tagName + out.join('') + '>';
+    if (RAW_VOID_TAGS.has(info.tag)) return open;
+    return info.self ? open + '</' + tagName + '>' : open;
+  }
+
+  function sanitizeRawHtml(raw, protect = false) {
+    let out = '', last = 0, blocked = '', depth = 0, m;
+    RAW_HTML_TOKEN.lastIndex = 0;
+    while ((m = RAW_HTML_TOKEN.exec(raw))) {
+      if (!blocked) out += protect ? raw.slice(last, m.index) : raw.slice(last, m.index).replace(/</g, '&lt;');
+      const token = m[0], info = token.startsWith('<!--') ? null : rawTagInfo(token);
+      if (blocked) {
+        if (info && info.tag === blocked) {
+          if (!info.close && !info.self) depth++;
+          else if (info.close && --depth === 0) blocked = '';
+        }
+      } else if (info && !info.close && !info.self && RAW_DROP_CONTENT.has(info.tag)) {
+        blocked = info.tag;
+        depth = 1;
+      } else if (info) {
+        const clean = sanitizeRawTag(token);
+        if (clean) out += protect ? hold(clean) : clean;
+      }
+      last = RAW_HTML_TOKEN.lastIndex;
+    }
+    if (!blocked) out += protect ? raw.slice(last) : raw.slice(last).replace(/</g, '&lt;');
+    return out;
+  }
+
   function splitRow(line) {
     let s = line.trim();
     if (s.startsWith('|')) s = s.slice(1);
@@ -4819,7 +5105,7 @@ function createParser(opts = {}) {
         }
         if (end) { while (i < lines.length) { const l = lines[i++]; block.push(l); if (end(l)) break; } }
         else { while (i < lines.length && !RX.blank.test(lines[i])) block.push(lines[i++]); }
-        out.push(block.join('\n'));
+        out.push(sanitizeRawHtml(block.join('\n')));
         continue;
       }
       if (isListStart(line, false)) { const r = parseList(lines, i); out.push(r.html); i = r.next; continue; }
@@ -4950,7 +5236,7 @@ function createParser(opts = {}) {
   }
 
   /* ----- 囲み（::: 名前）の部品 ----- */
-  function frag(html) { const t = document.createElement('template'); t.innerHTML = html; return t.content; }
+  function frag(html) { const t = document.createElement('template'); t.innerHTML = safeRenderedHtml(html); return t.content; }
   function htmlOf(nodes) { const d = document.createElement('div'); d.append(...nodes); return d.innerHTML; }
   const firstList = f => Array.from(f.children).find(e => e.tagName === 'UL' || e.tagName === 'OL');
   function headInner(h) { const c = h.cloneNode(true); $$('.anchor', c).forEach(x => x.remove()); return c.innerHTML.trim(); }
@@ -5533,8 +5819,8 @@ function createParser(opts = {}) {
     s = s.replace(/\\([!-\/:-@\[-`{-~])/g, (a, ch) => hold(escHtml(ch)));
     // <https://...> 形式の自動リンク
     s = s.replace(/<((?:https?|ftp):\/\/[^\s<>]+|mailto:[^\s<>]+)>/gi, (a, url) => hold(linkHtml(url, escHtml(url.replace(/^mailto:/i, '')))));
-    // HTML のタグとコメントはそのまま通す
-    s = s.replace(/<[!]--[\s\S]*?-->|<\/?[A-Za-z][A-Za-z0-9-]*(?:\s+[A-Za-z_:@][\w:.@-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*\s*\/?>/g, a => hold(a));
+    // HTML は表示用のタグと属性だけを残す。危険な要素は、文中でも中身ごと取り除く
+    s = sanitizeRawHtml(s, true);
     // 脚注の参照
     s = s.replace(/\[\^([^\]\s]+)\]/g, (a, id) => hold(footnoteRef(id)));
     // 文中のラベル :ok[完了] など、画面操作の経路 :menu[設定 > ネットワーク]
@@ -5719,8 +6005,14 @@ function renderDocument(md, opts = {}) {
   const parser = createParser({ numbering: truthy(meta.numbering), breaks: truthy(meta.breaks), reserved: RESERVED, history });
   const content = parser.parse(text);
   const theme = docThemeCss(meta);
+  // 本文が空のテンプレートをそのまま開いたときは、書き始め方を出す
+  const empty = !title && !text.trim()
+    ? '<div class="doc-empty"><p class="doc-empty-title">本文がまだありません</p>'
+      + '<p><code>.md</code> ファイルをこの画面にドロップするか、<kbd>E</kbd> キーで Markdown を書き始めてください。</p>'
+      + '<p><button class="text-btn" type="button" data-action="edit">書き始める</button></p></div>'
+    : '';
   return (theme ? '<style class="doc-theme">' + theme + '</style>' : '')
-    + renderDocHeader(meta, title, docLogo(meta, body))
+    + renderDocHeader(meta, title, docLogo(meta, body)) + empty
     + '<nav class="print-toc" id="ui-print-toc" aria-label="目次"></nav>'
     + '<div class="md' + (truthy(meta.h2_pagebreak) ? ' h2-break' : '') + '" id="ui-content">\n' + content + '\n</div>';
 }
@@ -5735,7 +6027,7 @@ const els = {
   help: $('#ui-help'), toast: $('#ui-toast'), drop: $('#ui-drop'), backdrop: $('#ui-backdrop'),
   pageStyle: $('#ui-page-style'),
   verbar: $('#ui-verbar'), versions: $('#ui-versions'), versionsBody: $('#ui-versions-body'), verFile: $('#ui-ver-file'),
-  main: $('.main'), widthHandle: $('#ui-width'), tip: $('#ui-tip'),
+  main: $('.main'), widthHandle: $('#ui-width'), sidebarWidthHandle: $('#ui-sidebar-width'), tip: $('#ui-tip'),
   search: $('#ui-search'), searchInput: $('#ui-search-input'), searchCount: $('#ui-search-count'),
 };
 const RESERVED = $$('[id]').filter(e => !els.doc.contains(e)).map(e => e.id);
@@ -5786,7 +6078,7 @@ function showView(useBaked = false) {
   if (v.mode === 'version') {
     const md = verMd(v.i);
     state.meta = parseFrontMatter(md).meta;
-    els.doc.innerHTML = renderDocument(md, { history: verHistory(v.i) });
+    els.doc.innerHTML = safeRenderedHtml(renderDocument(md, { history: verHistory(v.i) }));
     delete els.doc.dataset.mdHash;
   } else if (v.mode === 'compare') {
     renderCompare();
@@ -5795,7 +6087,7 @@ function showView(useBaked = false) {
     state.meta = parseFrontMatter(state.md).meta;
     const key = hash(ENGINE + '\n' + versionsKey() + '\n' + state.md);
     if (!(useBaked && els.doc.dataset.mdHash === key && $('#ui-content', els.doc))) {
-      els.doc.innerHTML = renderDocument(state.md);
+      els.doc.innerHTML = safeRenderedHtml(renderDocument(state.md));
       els.doc.dataset.mdHash = key;
     }
   }
@@ -6192,7 +6484,7 @@ function diffInside(a, b) {
 }
 /* 2 つの版の本文（renderDocument の HTML）を段落・表などのブロック単位で比べ、比較後の版に印を付けて返す */
 function blockDiff(baseHtml, targetHtml, inline) {
-  const parts = html => { const box = document.createElement('div'); box.innerHTML = html; return { box, header: box.querySelector('.doc-header'), content: box.querySelector('#ui-content') }; };
+  const parts = html => { const box = document.createElement('div'); box.innerHTML = safeRenderedHtml(html); return { box, header: box.querySelector('.doc-header'), content: box.querySelector('#ui-content') }; };
   const A = parts(baseHtml), B = parts(targetHtml);
   const stats = { added: 0, removed: 0, changed: 0, header: false, sections: [] };
   if (A.header && B.header && blockSig(A.header) !== blockSig(B.header)) {
@@ -6292,8 +6584,8 @@ function renderCompare() {
     text.split('\n').forEach(l => { if (/^\+(?!\+\+ )/.test(l)) add++; else if (/^-(?!-- )/.test(l)) del++; });
     state.diffStats = { lines: true, add, del };
     const theme = docThemeCss(state.meta);
-    els.doc.innerHTML = (theme ? '<style class="doc-theme">' + theme + '</style>' : '')
-      + '<div class="md" id="ui-content">' + (text ? createParser({}).ghDiff(text, '', false) : '<p>Markdown に違いはありません。</p>') + '</div>';
+    els.doc.innerHTML = safeRenderedHtml((theme ? '<style class="doc-theme">' + theme + '</style>' : '')
+      + '<div class="md" id="ui-content">' + (text ? createParser({}).ghDiff(text, '', false) : '<p>Markdown に違いはありません。</p>') + '</div>');
     return;
   }
   const r = blockDiff(renderDocument(aMd, { history: verHistory(v.a) }), renderDocument(bMd, { history: verHistory(v.b) }), true);
@@ -6408,12 +6700,26 @@ async function readFileText(file) {
   const buf = await file.arrayBuffer();
   try { return new TextDecoder('utf-8', { fatal: true }).decode(buf); } catch (e) { return new TextDecoder('shift_jis').decode(buf); }
 }
+/* HTML 全体を DOM にせず、Markdown の script だけをデータとして取り出す。
+   コメント・実行用スクリプトの中にある、見かけのタグは取り込まない。 */
+function markdownScripts(html) {
+  const result = [];
+  const blocks = /<[!]--[\s\S]*?-->|<[s]cript(?=[\s/>])((?:[^<>"']|"[^"]*"|'[^']*')*)>([\s\S]*?)<\/[s]cript\s*>/gi;
+  for (const match of html.matchAll(blocks)) {
+    if (match[1] == null) continue;
+    const attrs = DOMPurify.sanitize('<div ' + match[1] + '></div>', { RETURN_DOM: true, ADD_ATTR: ['type'] }).querySelector('div');
+    if (!attrs || (attrs.getAttribute('type') || '').toLowerCase() !== 'text/markdown') continue;
+    attrs.textContent = match[2];
+    result.push(attrs);
+  }
+  return result;
+}
 async function importFile(file) {
   const text = (await readFileText(file)).replace(/\r\n?/g, '\n');
   if (/\.html?$/i.test(file.name) || /^\s*<!doctype html|<html[\s>]/i.test(text.slice(0, 500))) {
     // 保存した HTML なら、その中の版を全部取り込む。版が無ければ本文を 1 つの版として取り込む
-    const d = new DOMParser().parseFromString(text, 'text/html');
-    const vs = Array.from(d.querySelectorAll('script.md-version')).map(el => ({ version: el.dataset.version || '', date: el.dataset.date || '', author: el.dataset.author || '', note: el.dataset.note || '', md: readScript(el) }));
+    const scripts = markdownScripts(text);
+    const vs = scripts.filter(el => el.classList.contains('md-version')).map(el => ({ version: el.dataset.version || '', date: el.dataset.date || '', author: el.dataset.author || '', note: el.dataset.note || '', md: readScript(el) }));
     const fresh = vs.filter(v => !state.versions.some(x => x.version === v.version && x.md === v.md));
     if (fresh.length) {
       state.versions.push(...fresh);
@@ -6424,7 +6730,7 @@ async function importFile(file) {
       toast(fresh.length + ' 件の版を取り込みました。Ctrl+S で保存してください');
       return;
     }
-    const src = d.getElementById('md-source');
+    const src = scripts.find(el => el.id === 'md-source');
     if (!src) { toast('この HTML には取り込める Markdown がありません'); return; }
     return openVersionForm('import', readScript(src), file);
   }
@@ -7063,7 +7369,7 @@ function exportHtml() {
   }
   // 描画済みの本文も入れておく（JavaScript が動かない環境でも読めるように）
   const docEl = doc.getElementById('ui-doc');
-  docEl.innerHTML = renderDocument(state.md);
+  docEl.innerHTML = safeRenderedHtml(renderDocument(state.md));
   docEl.setAttribute('data-md-hash', hash(ENGINE + '\n' + versionsKey() + '\n' + state.md));
   const drawn = new Map(state.mermaidBlocks.filter(b => b.dataset.state === 'done').map(b => [b.dataset.src, b.innerHTML]));
   docEl.querySelectorAll('.mermaid-block').forEach(b => {
@@ -7420,6 +7726,55 @@ function activateTab(box, k) {
   if (Slides.active) Slides.refit();
 }
 
+/* ----- 左メニューの幅 ----- */
+const KEY_SIDEBAR_WIDTH = 'hypertext-markdown:sidebar-width';
+const SidebarWidth = {
+  min: 200,
+  // 本文に 480px と左右の余白（最大 64px ずつ）を残す
+  max() { return Math.max(this.min, Math.min(480, document.documentElement.clientWidth - 608)); },
+  sync() {
+    const h = els.sidebarWidthHandle, w = els.sidebar.offsetWidth;
+    h.setAttribute('aria-valuemin', String(this.min));
+    h.setAttribute('aria-valuemax', String(this.max()));
+    h.setAttribute('aria-valuenow', String(w));
+    $('.width-label', h).textContent = w + 'px';
+  },
+  set(px, save) {
+    const w = px == null ? null : Math.round(Math.max(this.min, Math.min(this.max(), px)));
+    if (w == null) document.documentElement.style.removeProperty('--side-w');
+    else document.documentElement.style.setProperty('--side-w', w + 'px');
+    if (save) store.set(KEY_SIDEBAR_WIDTH, w == null ? '' : String(w));
+    this.sync();
+    Width.place();
+  },
+  start(e) {
+    if (e.button !== 0 || !e.isPrimary || isNarrow()) return;
+    e.preventDefault();
+    const h = els.sidebarWidthHandle, startX = e.clientX, startW = els.sidebar.offsetWidth;
+    h.focus({ preventScroll: true });
+    document.body.classList.add('sidebar-resizing');
+    const move = ev => { if (ev.pointerId === e.pointerId) this.set(startW + ev.clientX - startX, false); };
+    const up = ev => {
+      if (ev.pointerId !== e.pointerId) return;
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+      h.removeEventListener('lostpointercapture', up);
+      document.body.classList.remove('sidebar-resizing');
+      if (h.hasPointerCapture(e.pointerId)) h.releasePointerCapture(e.pointerId);
+      this.set(els.sidebar.offsetWidth, true);
+      Width.done();
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+    h.addEventListener('lostpointercapture', up);
+    try { h.setPointerCapture(e.pointerId); } catch (err) { /* window のイベントでドラッグを続ける */ }
+  },
+  step(dx) { this.set(els.sidebar.offsetWidth + dx, true); Width.done(); },
+  reset() { this.set(null, true); Width.done(); toast('左メニューの幅を標準に戻しました'); },
+};
+
 /* ----- 本文の幅（右端の取っ手をドラッグ。ダブルクリックで標準に戻す） ----- */
 const KEY_MEASURE = 'hypertext-markdown:measure';
 const Width = {
@@ -7606,6 +7961,12 @@ els.searchInput.addEventListener('keydown', e => {
   } else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); Search.close(); }
 });
 els.widthHandle.addEventListener('pointerdown', e => Width.start(e));
+els.sidebarWidthHandle.addEventListener('pointerdown', e => SidebarWidth.start(e));
+els.sidebarWidthHandle.addEventListener('dblclick', () => SidebarWidth.reset());
+els.sidebarWidthHandle.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); SidebarWidth.step(e.key === 'ArrowRight' ? 16 : -16); }
+  else if (e.key === 'Home' || e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); SidebarWidth.reset(); }
+});
 els.widthHandle.addEventListener('dblclick', () => Width.reset());
 els.widthHandle.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); Width.step(e.key === 'ArrowRight' ? 32 : -32); }
@@ -7847,7 +8208,7 @@ window.addEventListener('afterprint', () => {
 });
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 window.addEventListener('scroll', onScroll, { passive: true });
-const relayout = debounce(() => { if (Slides.active) return; drawCharts(els.doc); fitTables(els.doc); Width.place(); }, 150);
+const relayout = debounce(() => { if (Slides.active) return; drawCharts(els.doc); fitTables(els.doc); Width.place(); SidebarWidth.sync(); }, 150);
 window.addEventListener('resize', () => { if (Slides.active) Slides.layout(); else { onScroll(); relayout(); } });
 // 目次や編集欄の開閉で本文の列の幅が変わったときも、グラフ・表・幅の取っ手を合わせる
 if (window.ResizeObserver) new ResizeObserver(relayout).observe(els.main);
@@ -7860,6 +8221,9 @@ function init() {
   if (store.get(KEY_TOC) === 'hidden') document.body.classList.add('toc-hidden');
   const mw = parseInt(store.get(KEY_MEASURE), 10);
   if (mw >= Width.min) document.documentElement.style.setProperty('--measure', mw + 'px');
+  const sw = parseInt(store.get(KEY_SIDEBAR_WIDTH), 10);
+  if (sw >= SidebarWidth.min && sw <= 480) document.documentElement.style.setProperty('--side-w', sw + 'px');
+  SidebarWidth.sync();
   Theme.sync();
   const md = readSource();
   const drawnNow = !els.doc.firstElementChild;

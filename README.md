@@ -56,6 +56,8 @@ npx skills add tsunyan/hypertext-markdown
 
 スキルには、[作成・修正の手順](skills/hypertext-markdown/SKILL.md)、[書式と雛形](skills/hypertext-markdown/references/authoring.md)、HTML を作るスクリプトが含まれる。
 
+AI は手順と必要な書式を参照して Markdown を書く。テンプレートの HTML はスクリプトが読み込むため、AI のコンテキストに入れる必要はない。既存の HTML の修正も、Markdown を取り出して行える。
+
 ### コマンドで作る
 
 このリポジトリを取得した環境では、Node.js 18 以上で `.md` から HTML を作れる。ビルドスクリプトに追加パッケージは不要。
@@ -65,6 +67,14 @@ node skills/hypertext-markdown/scripts/build.mjs report.md -o report.html
 ```
 
 手元の画像も自動で埋め込まれる。デザインを指定する場合は `--template samples/template-guide-cyber.src.html` のようにテンプレートを渡す。
+
+ロゴと favicon もファイルで指定できる。画像のパスは実行フォルダ基準で、HTML に埋め込まれる。
+
+```bash
+node skills/hypertext-markdown/scripts/build.mjs report.md --logo ./logo.svg --logo-dark ./logo-dark.svg --favicon ./favicon.png --favicon ./favicon.svg
+```
+
+`--logo` だけなら明暗共通のロゴになる。`--favicon` は SVG・PNG・ICO を複数指定でき、既存の favicon 一式を置き換える。文書のフロントマターに `logo` がある場合は、そちらが優先する。
 
 既存の文書を直すときは、Markdown を取り出して編集し、元の HTML をテンプレートにして戻す。`--keep-versions` で確定済みの版を引き継ぐ。
 
@@ -218,7 +228,14 @@ HTML や SVG を本文に直接書くこともできる。表示用のタグ・�
 
 ## 開発
 
-テンプレートの正本は [template-guide.src.html](template-guide.src.html)。CSS・JavaScript・利用ガイドの Markdown が入っている。圧縮版・見本・スキルの空のテンプレートは、正本から生成する。ファイルの役割と変更手順は [AGENTS.md](AGENTS.md) にまとめている。
+正本は [src/](src/) の HTML の外枠・CSS・JavaScript・Markdown。 favicon とロゴも画像ファイルで管理する。組み立てた `template-guide.src.html` と圧縮版・見本・スキルの空のテンプレートを生成し、配布時は従来どおり HTML 1 枚にまとめる。
+
+```bash
+python -I tools/build.py          # まとめて生成
+python -I tools/build.py --watch  # 保存時に自動生成（Ctrl+C で終了）
+```
+
+生成した `template-guide.src.html` をブラウザで開き、生成完了後に再読み込みする。生成物は直接編集せず、素材を直す。`samples/` 以下の HTML は一覧も含めて生成物で、各見本は共通テンプレートに [デザイン](samples/design/designs.json)・[ブランド](samples/brand/brands.json) の CSS・画像・配色を重ねて作る。ファイルの役割、監視の対象、詳しい変更手順は [AGENTS.md](AGENTS.md) にまとめている。
 
 ### 手元で確かめる
 
@@ -232,7 +249,7 @@ python -I tools/check.py
 python -m pytest -q
 ```
 
-`tools/check.py` は HTML 内の script 要素・JavaScript の構文・生成物との一致・書式リファレンスの網羅を検査する。ブラウザテストは Chromium で、描画・スライドの収まり・版の比較・保存と再表示・スキルによる変換を確かめる。
+`tools/build.py --check` は、書き込まずに全 HTML と素材からの生成結果を比較する。`tools/check.py` は同じ比較に加えて、HTML 内の script 要素・JavaScript の構文・書式リファレンスの網羅を検査する。ブラウザテストは Chromium で、描画・スライドの収まり・版の比較・保存と再表示・スキルによる変換を確かめる。
 
 変更はブランチからプルリクエストで main に入れる。CI の `lint`・`tests` に加え、gitleaks（`secrets`）と CodeQL（`analyze`）で検査する。
 
@@ -242,8 +259,10 @@ python -m pytest -q
 
 ### 画像・デザインを更新する
 
-README の画面画像は `python tools/make_readme_images.py`、デザイン一覧の画像は `python tools/make_design_overview.py` で生成する。デザインの素材は [samples/design/](samples/design/) にある。
+`python -I tools/build.py --images` で HTML と README の画面画像・デザイン一覧の画像をまとめて生成する。`--watch --images` で画像も自動生成できる。デザインの素材は [samples/design/](samples/design/) にある。
 
 ## ライセンス
 
 [MIT](LICENSE)
+
+同梱する [DOMPurify 3.4.18](https://github.com/cure53/DOMPurify/tree/3.4.18) のライセンスは [DOMPurify-LICENSE](src/vendor/DOMPurify-LICENSE) を参照する。

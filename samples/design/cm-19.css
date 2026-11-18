@@ -1,0 +1,37 @@
+/* デザイン案 19。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#286779, #66C8D0);
+  --tint: var(--accent);
+  --bg: light-dark(#FBFEFC, #172A30);
+  --ink: light-dark(#264C56, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #264C56 82%, #FBFEFC), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #66C8D0 22%, #FBFEFC), color-mix(in srgb, #172A30 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #66C8D0 30%, #FBFEFC), color-mix(in srgb, #172A30 85%, #66C8D0));
+  --rule: light-dark(color-mix(in srgb, #286779 24%, #FBFEFC), color-mix(in srgb, #66C8D0 24%, #172A30));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #286779 45%, #FBFEFC), color-mix(in srgb, #66C8D0 45%, #172A30));
+  --accent-soft: light-dark(color-mix(in srgb, #66C8D0 35%, #FBFEFC), color-mix(in srgb, #66C8D0 15%, #172A30));
+  --cm-secondary: light-dark(#F8C5C1, color-mix(in srgb, #F8C5C1 28%, #172A30));
+  --cm-soft: light-dark(#66C8D0, color-mix(in srgb, #66C8D0 25%, #172A30));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #F8C5C1 60%, #264C56), #F8C5C1);
+  --chart-4: light-dark(color-mix(in srgb, #66C8D0 55%, #264C56), #66C8D0);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 18px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 18px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { border-top: 5px solid var(--cm-soft); border-bottom: 5px solid var(--cm-secondary); border-radius: 0 30px 0 30px; background: var(--bg-sunken); }
+#ui-content h2 { border-bottom: 3px double var(--accent); }
+#ui-content .card { border-radius: 0 18px 0 18px; }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

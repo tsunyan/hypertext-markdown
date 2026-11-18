@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="generator" content="hypertext-markdown 1.0">
+<title>レポート</title>
+{{FAVICONS}}
+<script>
+{{BOOTSTRAP}}</script>
+<style>
+{{STYLES}}</style>
+<style id="ui-page-style"></style>
+</head>
+<body>
+<!--
+  ================================================================
+  ここから下の script 要素（type="text/markdown"）の中に Markdown を書く。
+
+  - 本文に </script> と書くときだけ、<\/script> と書く（ここで本文が終わってしまうため）
+  - 画面で編集して Ctrl+S で保存すると、この中身は現在の Markdown に置き換わる
+  ================================================================
+-->
+<script type="text/markdown" id="md-source">
+{{GUIDE}}</script>
+{{VERSIONS}}
+
+<header class="topbar" id="ui-topbar">
+  <button class="icon-btn" type="button" data-action="toc" title="目次の表示を切り替え（B）" aria-label="目次の表示を切り替え"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h11"/></svg></button>
+  <div class="topbar-title"><span id="ui-title"></span><span class="topbar-crumb" id="ui-crumb"></span></div>
+  <button class="icon-btn" type="button" data-action="search" title="文書内を検索（/）" aria-label="文書内を検索"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></button>
+  <div class="theme-picker">
+    <button class="theme-trigger" type="button" data-mode="auto" aria-label="テーマ" aria-haspopup="menu" aria-expanded="false" aria-controls="ui-theme-menu" title="テーマ（T で切り替え）"><svg class="theme-icon theme-icon-light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M5 19l1.4-1.4M17.6 6.4 19 5"/></svg><svg class="theme-icon theme-icon-dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13.5A8.5 8.5 0 0 1 10.5 3a8.5 8.5 0 1 0 10 10.5Z"/></svg><svg class="theme-icon theme-icon-auto" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><svg class="theme-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 10 4 4 4-4"/></svg></button>
+    <div class="theme-menu" id="ui-theme-menu" role="menu" aria-label="テーマ" hidden>
+      <button class="theme-option" type="button" role="menuitemradio" aria-checked="false" data-theme-mode="light" tabindex="-1"><svg class="theme-option-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M5 19l1.4-1.4M17.6 6.4 19 5"/></svg><span class="theme-option-name">ライト</span><svg class="theme-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></button>
+      <button class="theme-option" type="button" role="menuitemradio" aria-checked="false" data-theme-mode="dark" tabindex="-1"><svg class="theme-option-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13.5A8.5 8.5 0 0 1 10.5 3a8.5 8.5 0 1 0 10 10.5Z"/></svg><span class="theme-option-name">ダーク</span><svg class="theme-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></button>
+      <button class="theme-option" type="button" role="menuitemradio" aria-checked="true" data-theme-mode="auto" tabindex="-1"><svg class="theme-option-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span class="theme-option-name">システム設定</span><svg class="theme-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></button>
+    </div>
+  </div>
+  <button class="icon-btn" type="button" data-action="slides" title="スライドで表示（S）" aria-label="スライドで表示"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12.5" rx="1.5"/><path d="M12 16.5V20M8.5 20h7"/><path class="fill" d="M10.3 7.6v5.6l4.6-2.8z"/></svg></button>
+  <button class="icon-btn" type="button" data-action="versions" title="版の管理（V）" aria-label="版の管理"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v3.8h3.8"/><path d="M12 8v4.2l2.8 1.8"/></svg></button>
+  <span class="topbar-sep hide-sm"></span>
+  <button class="icon-btn hide-sm" type="button" data-action="edit" title="Markdown を編集（E）" aria-label="Markdown を編集"><svg viewBox="0 0 24 24"><path d="M4.5 19.5h4l10-10-4-4-10 10z"/><path d="M13 7l4 4"/></svg></button>
+  <button class="icon-btn" type="button" data-action="md" title="Markdown をダウンロード（D）" aria-label="Markdown をダウンロード"><svg viewBox="0 0 24 24"><path d="M12 4v10M7.5 9.5 12 14l4.5-4.5M5 19h14"/></svg></button>
+  <button class="icon-btn hide-sm" type="button" data-action="html" title="HTML として保存（Ctrl+S）" aria-label="HTML として保存"><svg viewBox="0 0 24 24"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5M10.5 12.5 8.5 14.5l2 2M13.5 12.5l2 2-2 2"/></svg></button>
+  <button class="icon-btn hide-sm" type="button" data-action="print" title="印刷・PDF（Ctrl+P）" aria-label="印刷・PDF"><svg viewBox="0 0 24 24"><path d="M7 8.5V3.5h10v5"/><rect x="3.5" y="8.5" width="17" height="8" rx="1.5"/><path d="M7 13.5h10V21H7z"/></svg></button>
+  <button class="icon-btn" type="button" data-action="help" title="ショートカットの一覧（?）" aria-label="ショートカットの一覧"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.4M12 16.8v.2"/></svg></button>
+  <div class="read-progress" id="ui-progress"></div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="ui-sidebar" aria-label="目次">
+    <p class="toc-label">目次</p>
+    <ol class="toc" id="ui-toc"></ol>
+    <p class="sidebar-hint"><kbd>?</kbd> でショートカットの一覧</p>
+  </nav>
+  <div class="sidebar-width-handle" id="ui-sidebar-width" role="separator" aria-controls="ui-sidebar" aria-orientation="vertical" tabindex="0" aria-label="左メニューの幅（ドラッグか ← → で変える。ダブルクリックか Enter で標準に戻す）" title="ドラッグで左メニューの幅を変える（ダブルクリックで標準に戻す）"><span class="width-grip"><span class="width-label"></span></span></div>
+  <aside class="editor" id="ui-editor" aria-label="Markdown の編集">
+    <div class="editor-head">
+      <strong>Markdown</strong>
+      <span class="editor-status" id="ui-editor-status"></span>
+      <button class="icon-btn" type="button" data-action="editor-close" title="編集を閉じる（E）" aria-label="編集を閉じる"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <textarea id="ui-textarea" spellcheck="false" aria-label="Markdown の本文"></textarea>
+  </aside>
+  <main class="main">
+    <noscript><p class="noscript-msg">このページは JavaScript で Markdown を表示しています。JavaScript を有効にしてください。Markdown をそのまま読む場合は、このファイルをテキストエディタで開いてください。</p></noscript>
+    <div class="ver-banner" id="ui-verbar" role="status" hidden></div>
+    <article class="doc" id="ui-doc"></article>
+    <div class="width-handle" id="ui-width" role="separator" aria-orientation="vertical" tabindex="0" aria-label="本文の幅（ドラッグか ← → で変える。ダブルクリックか Enter で標準に戻す）" title="ドラッグで本文の幅を変える（ダブルクリックで標準に戻す）"><span class="width-grip"><span class="width-label"></span></span></div>
+    <footer class="doc-footer">
+      <span>この文書は Markdown から作られています。</span>
+      <button class="text-btn" type="button" data-action="md">元の Markdown をダウンロード</button>
+      <button class="text-btn" type="button" data-action="help">ショートカットの一覧</button>
+    </footer>
+  </main>
+</div>
+<div class="backdrop" id="ui-backdrop" hidden></div>
+
+<div class="slide-viewport" id="ui-slides" hidden>
+  <div class="slide-stage" id="ui-stage"></div>
+  <div class="slide-controls">
+    <button class="icon-btn" type="button" data-action="slide-prev" title="前へ（←）" aria-label="前のスライド"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button class="icon-btn" type="button" data-action="slide-next" title="次へ（→）" aria-label="次のスライド"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button class="icon-btn" type="button" data-action="fullscreen" title="全画面（F）" aria-label="全画面"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    <button class="icon-btn" type="button" data-action="slide-exit" title="スライドを終了（Esc）" aria-label="スライドを終了"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+</div>
+<div id="ui-print-slides" aria-hidden="true"></div>
+<div id="ui-measure" aria-hidden="true"></div>
+
+<div class="help" id="ui-help" role="dialog" aria-modal="true" aria-labelledby="ui-help-title" hidden>
+  <div class="help-card">
+    <div class="help-head">
+      <h2 id="ui-help-title">ショートカットキー</h2>
+      <button class="icon-btn" type="button" data-action="help-close" aria-label="閉じる"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="help-cols">
+      <section>
+        <h3>読む</h3>
+        <dl>
+          <div><dt><kbd>J</kbd> / <kbd>K</kbd></dt><dd>次 / 前の見出しへ</dd></div>
+          <div><dt><kbd>/</kbd></dt><dd>文書内を検索（<kbd>Enter</kbd> で次へ、<kbd>Shift</kbd>+<kbd>Enter</kbd> で前へ）</dd></div>
+          <div><dt><kbd>B</kbd></dt><dd>目次の表示を切り替え</dd></div>
+          <div><dt><kbd>T</kbd></dt><dd>テーマ（OS に合わせる → ライト → ダーク）</dd></div>
+          <div><dt><kbd>F</kbd></dt><dd>全画面表示</dd></div>
+          <div><dt>本文の右端</dt><dd>ドラッグで本文の幅を変える（ダブルクリックで標準に戻す）</dd></div>
+        </dl>
+      </section>
+      <section>
+        <h3>スライド</h3>
+        <dl>
+          <div><dt><kbd>S</kbd></dt><dd>いまの位置から開始（<kbd>Shift</kbd>+<kbd>S</kbd> で最初から）</dd></div>
+          <div><dt><kbd>→</kbd> <kbd>Space</kbd></dt><dd>次へ</dd></div>
+          <div><dt><kbd>←</kbd></dt><dd>前へ</dd></div>
+          <div><dt>数字 <kbd>Enter</kbd></dt><dd>そのページへ</dd></div>
+          <div><dt><kbd>Home</kbd> <kbd>End</kbd></dt><dd>最初 / 最後のページへ</dd></div>
+          <div><dt><kbd>Esc</kbd></dt><dd>終了</dd></div>
+        </dl>
+      </section>
+      <section>
+        <h3>書く・保存する</h3>
+        <dl>
+          <div><dt><kbd>E</kbd></dt><dd>Markdown を編集（入力がすぐ反映される）</dd></div>
+          <div><dt><kbd>D</kbd></dt><dd>Markdown をダウンロード</dd></div>
+          <div><dt><kbd>Ctrl</kbd>+<kbd>S</kbd></dt><dd>HTML として保存</dd></div>
+          <div><dt><kbd>Ctrl</kbd>+<kbd>P</kbd></dt><dd>印刷・PDF（スライド中は 16:9 で 1 枚ずつ）</dd></div>
+          <div><dt>ドロップ</dt><dd>.md ファイルを読み込む</dd></div>
+        </dl>
+      </section>
+      <section>
+        <h3>版</h3>
+        <dl>
+          <div><dt><kbd>V</kbd></dt><dd>版の管理（確定・比較・過去の版）</dd></div>
+          <div><dt><kbd>N</kbd></dt><dd>比較中: 次の変更へ（<kbd>Shift</kbd>+<kbd>N</kbd> で前へ）</dd></div>
+          <div><dt><kbd>Esc</kbd></dt><dd>比較・過去の版の表示を終える</dd></div>
+        </dl>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="help" id="ui-versions" role="dialog" aria-modal="true" aria-labelledby="ui-versions-title" hidden>
+  <div class="help-card ver-card">
+    <div class="help-head">
+      <h2 id="ui-versions-title">版の管理</h2>
+      <button class="icon-btn" type="button" data-action="versions-close" aria-label="閉じる"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div id="ui-versions-body"></div>
+  </div>
+  <input type="file" id="ui-ver-file" accept=".md,.markdown,.txt,.html,.htm" hidden>
+</div>
+<div class="search-bar" id="ui-search" role="search" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>
+  <input type="search" id="ui-search-input" placeholder="文書内を検索" aria-label="文書内を検索" autocomplete="off" spellcheck="false">
+  <span class="search-count" id="ui-search-count" aria-live="polite"></span>
+  <button class="icon-btn" type="button" data-action="search-prev" title="前へ（Shift+Enter）" aria-label="前の一致へ"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
+  <button class="icon-btn" type="button" data-action="search-next" title="次へ（Enter）" aria-label="次の一致へ"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+  <button class="icon-btn" type="button" data-action="search-close" title="閉じる（Esc）" aria-label="検索を閉じる"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</div>
+<div class="tip" id="ui-tip" role="tooltip" hidden></div>
+<div class="drop-overlay" id="ui-drop" hidden><div>Markdown ファイルをドロップして読み込む</div></div>
+<div class="toast" id="ui-toast" role="status" aria-live="polite"></div>
+
+<script>
+{{ENGINE}}</script>
+</body>
+</html>

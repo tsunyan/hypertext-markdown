@@ -1,0 +1,38 @@
+/* デザイン案 22。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#766283, #F5C6DA);
+  --tint: var(--accent);
+  --bg: light-dark(#FFFCFD, #28212D);
+  --ink: light-dark(#57485F, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #57485F 82%, #FFFCFD), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #F5C6DA 22%, #FFFCFD), color-mix(in srgb, #28212D 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #F5C6DA 30%, #FFFCFD), color-mix(in srgb, #28212D 85%, #F5C6DA));
+  --rule: light-dark(color-mix(in srgb, #766283 24%, #FFFCFD), color-mix(in srgb, #F5C6DA 24%, #28212D));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #766283 45%, #FFFCFD), color-mix(in srgb, #F5C6DA 45%, #28212D));
+  --accent-soft: light-dark(color-mix(in srgb, #F5C6DA 35%, #FFFCFD), color-mix(in srgb, #F5C6DA 15%, #28212D));
+  --cm-secondary: light-dark(#D38BAC, color-mix(in srgb, #D38BAC 28%, #28212D));
+  --cm-soft: light-dark(#F5C6DA, color-mix(in srgb, #F5C6DA 25%, #28212D));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #D38BAC 60%, #57485F), #D38BAC);
+  --chart-4: light-dark(color-mix(in srgb, #F5C6DA 55%, #57485F), #F5C6DA);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 8px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 8px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-title { font-family: "Yu Mincho", "Hiragino Mincho ProN", serif; font-weight: 500; letter-spacing: .04em; }
+#ui-doc .doc-header { border-top: 2px solid var(--cm-soft); border-bottom: 1px solid var(--cm-secondary); }
+#ui-doc .tb-meta { background: none; border-top: 1px solid var(--rule); }
+#ui-content .card { border-color: var(--cm-soft); box-shadow: 0 5px 15px color-mix(in srgb, var(--accent) 6%, transparent); }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

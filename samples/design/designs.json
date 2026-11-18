@@ -2,63 +2,294 @@
   "cyber": {
     "name": "サイバー",
     "kind": "サイバー・テクノロジー系",
-    "note": "計器盤と設計図。角を落とした枠、等幅の数字、ネオンの線"
+    "note": "計器盤と設計図。角を落とした枠、等幅の数字、ネオンの線",
+    "css": "cyber.css",
+    "logo": "cyber-logo.svg",
+    "logoDark": "cyber-logo-dark.svg",
+    "favicons": [
+      "cyber-favicon.svg"
+    ]
   },
   "cute": {
     "name": "キュート",
     "kind": "可愛い系",
-    "note": "ファンシー文具。丸い字、縫い目の点線、シールとリボン"
+    "note": "ファンシー文具。丸い字、縫い目の点線、シールとリボン",
+    "css": "cute.css",
+    "logo": "cute-logo.svg",
+    "logoDark": "cute-logo-dark.svg",
+    "favicons": [
+      "cute-favicon.svg"
+    ]
   },
   "pop": {
     "name": "ポップ",
     "kind": "ポップ系",
-    "note": "まんがと駄菓子の包み紙。太い線、ずらした影、網点"
+    "note": "まんがと駄菓子の包み紙。太い線、ずらした影、網点",
+    "css": "pop.css",
+    "logo": "pop-logo.svg",
+    "logoDark": "pop-logo-dark.svg",
+    "favicons": [
+      "pop-favicon.svg"
+    ]
   },
   "natural": {
     "name": "ナチュラル",
     "kind": "ナチュラル系",
-    "note": "植物標本と手すきの紙。明朝の見出し、葉の印、苔と樹皮の色"
+    "note": "植物標本と手すきの紙。明朝の見出し、葉の印、苔と樹皮の色",
+    "css": "natural.css",
+    "logo": "natural-logo.svg",
+    "logoDark": "natural-logo-dark.svg",
+    "favicons": [
+      "natural-favicon.svg"
+    ]
   },
   "cc-1": {
     "name": "CC-1",
     "kind": "赤と黄",
     "note": "赤いツールバー、黄色の表紙（ダークは赤）、太い字、大きな丸み。コードの背景は焦げ茶",
-    "group": "cc"
+    "group": "cc",
+    "css": "cc-1.css",
+    "logo": "cc-1-logo.svg",
+    "logoDark": "cc-1-logo-dark.svg",
+    "favicons": [
+      "cc-1-favicon.svg"
+    ]
   },
   "cc-2": {
     "name": "CC-2",
     "kind": "深緑と生成り",
     "note": "深緑のツールバー、生成りの背景、薄い影の白いカード、丸いボタン、明朝の数字と添え書き。コードの背景は濃い緑",
-    "group": "cc"
+    "group": "cc",
+    "css": "cc-2.css",
+    "logo": "cc-2-logo.svg",
+    "logoDark": "cc-2-logo-dark.svg",
+    "favicons": [
+      "cc-2-favicon.svg"
+    ]
   },
   "cc-3": {
     "name": "CC-3",
     "kind": "青と黄",
     "note": "青い帯、黄色の面、極太の黒い字、丸めない角。手順と流れは太い線と番号で描く",
-    "group": "cc"
+    "group": "cc",
+    "css": "cc-3.css",
+    "logo": "cc-3-logo.svg",
+    "logoDark": "cc-3-logo-dark.svg",
+    "favicons": [
+      "cc-3-favicon.svg"
+    ]
   },
   "cc-4": {
     "name": "CC-4",
     "kind": "濃紺と橙",
     "note": "濃紺のツールバー、黒い枠と太さの異なる縦線、等幅の数字。工程の枠の上辺は橙の帯、ボタンは黄色で丸い",
-    "group": "cc"
+    "group": "cc",
+    "css": "cc-4.css",
+    "logo": "cc-4-logo.svg",
+    "logoDark": "cc-4-logo-dark.svg",
+    "favicons": [
+      "cc-4-favicon.svg"
+    ]
   },
   "cc-5": {
     "name": "CC-5",
     "kind": "赤と黒",
     "note": "濃い灰のツールバーと目次、四隅に小さな四角を置いた枠、色相の帯、丸い印を付けた進捗バー",
-    "group": "cc"
+    "group": "cc",
+    "css": "cc-5.css",
+    "logo": "cc-5-logo.svg",
+    "logoDark": "cc-5-logo-dark.svg",
+    "favicons": [
+      "cc-5-favicon.svg"
+    ]
   },
   "cc-6": {
     "name": "CC-6",
     "kind": "紺と水色",
     "note": "細い字と細い線、広い余白、2 桁の番号。ダークは深い紺の背景に白と水色",
-    "group": "cc"
+    "group": "cc",
+    "css": "cc-6.css",
+    "logo": "cc-6-logo.svg",
+    "logoDark": "cc-6-logo-dark.svg",
+    "favicons": [
+      "cc-6-favicon.svg"
+    ]
   },
   "cc-7": {
     "name": "CC-7",
     "kind": "空色と白",
     "note": "空色の帯に丸いロゴを重ねた表紙、角の丸い囲み、線でつないだ手順。ダークは青みの紺",
-    "group": "cc"
+    "group": "cc",
+    "css": "cc-7.css",
+    "logo": "cc-7-logo.svg",
+    "logoDark": "cc-7-logo-dark.svg",
+    "favicons": [
+      "cc-7-favicon.svg"
+    ]
+  },
+  "cm-01": {
+    "name": "CM-01",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-01.css",
+    "logo": "cm-01-logo.svg",
+    "logoDark": "cm-01-logo-dark.svg",
+    "favicons": [
+      "cm-01-favicon.svg"
+    ]
+  },
+  "cm-02": {
+    "name": "CM-02",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-02.css",
+    "logo": "cm-02-logo.svg",
+    "logoDark": "cm-02-logo-dark.svg",
+    "favicons": [
+      "cm-02-favicon.svg"
+    ]
+  },
+  "cm-03": {
+    "name": "CM-03",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-03.css",
+    "logo": "cm-03-logo.svg",
+    "logoDark": "cm-03-logo-dark.svg",
+    "favicons": [
+      "cm-03-favicon.svg"
+    ]
+  },
+  "cm-04": {
+    "name": "CM-04",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-04.css",
+    "logo": "cm-04-logo.svg",
+    "logoDark": "cm-04-logo-dark.svg",
+    "favicons": [
+      "cm-04-favicon.svg"
+    ]
+  },
+  "cm-06": {
+    "name": "CM-06",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-06.css",
+    "logo": "cm-06-logo.svg",
+    "logoDark": "cm-06-logo-dark.svg",
+    "favicons": [
+      "cm-06-favicon.svg"
+    ]
+  },
+  "cm-10": {
+    "name": "CM-10",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-10.css",
+    "logo": "cm-10-logo.svg",
+    "logoDark": "cm-10-logo-dark.svg",
+    "favicons": [
+      "cm-10-favicon.svg"
+    ]
+  },
+  "cm-11": {
+    "name": "CM-11",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-11.css",
+    "logo": "cm-11-logo.svg",
+    "logoDark": "cm-11-logo-dark.svg",
+    "favicons": [
+      "cm-11-favicon.svg"
+    ]
+  },
+  "cm-12": {
+    "name": "CM-12",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-12.css",
+    "logo": "cm-12-logo.svg",
+    "logoDark": "cm-12-logo-dark.svg",
+    "favicons": [
+      "cm-12-favicon.svg"
+    ]
+  },
+  "cm-13": {
+    "name": "CM-13",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-13.css",
+    "logo": "cm-13-logo.svg",
+    "logoDark": "cm-13-logo-dark.svg",
+    "favicons": [
+      "cm-13-favicon.svg"
+    ]
+  },
+  "cm-17": {
+    "name": "CM-17",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-17.css",
+    "logo": "cm-17-logo.svg",
+    "logoDark": "cm-17-logo-dark.svg",
+    "favicons": [
+      "cm-17-favicon.svg"
+    ]
+  },
+  "cm-19": {
+    "name": "CM-19",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-19.css",
+    "logo": "cm-19-logo.svg",
+    "logoDark": "cm-19-logo-dark.svg",
+    "favicons": [
+      "cm-19-favicon.svg"
+    ]
+  },
+  "cm-21": {
+    "name": "CM-21",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-21.css",
+    "logo": "cm-21-logo.svg",
+    "logoDark": "cm-21-logo-dark.svg",
+    "favicons": [
+      "cm-21-favicon.svg"
+    ]
+  },
+  "cm-22": {
+    "name": "CM-22",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-22.css",
+    "logo": "cm-22-logo.svg",
+    "logoDark": "cm-22-logo-dark.svg",
+    "favicons": [
+      "cm-22-favicon.svg"
+    ]
+  },
+  "cm-23": {
+    "name": "CM-23",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-23.css",
+    "logo": "cm-23-logo.svg",
+    "logoDark": "cm-23-logo-dark.svg",
+    "favicons": [
+      "cm-23-favicon.svg"
+    ]
+  },
+  "cm-24": {
+    "name": "CM-24",
+    "kind": "デザイン案",
+    "group": "cm",
+    "css": "cm-24.css",
+    "logo": "cm-24-logo.svg",
+    "logoDark": "cm-24-logo-dark.svg",
+    "favicons": [
+      "cm-24-favicon.svg"
+    ]
   }
 }

@@ -1,0 +1,37 @@
+/* デザイン案 03。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#A72F50, #EFA6BA);
+  --tint: var(--accent);
+  --bg: light-dark(#FFF3F0, #2C1C23);
+  --ink: light-dark(#583640, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #583640 82%, #FFF3F0), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #E787A1 22%, #FFF3F0), color-mix(in srgb, #2C1C23 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #E787A1 30%, #FFF3F0), color-mix(in srgb, #2C1C23 85%, #EFA6BA));
+  --rule: light-dark(color-mix(in srgb, #A72F50 24%, #FFF3F0), color-mix(in srgb, #EFA6BA 24%, #2C1C23));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #A72F50 45%, #FFF3F0), color-mix(in srgb, #EFA6BA 45%, #2C1C23));
+  --accent-soft: light-dark(color-mix(in srgb, #E787A1 35%, #FFF3F0), color-mix(in srgb, #EFA6BA 15%, #2C1C23));
+  --cm-secondary: light-dark(#B2CFAF, color-mix(in srgb, #B2CFAF 28%, #2C1C23));
+  --cm-soft: light-dark(#E787A1, color-mix(in srgb, #E787A1 25%, #2C1C23));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #B2CFAF 60%, #583640), #B2CFAF);
+  --chart-4: light-dark(color-mix(in srgb, #E787A1 55%, #583640), #E787A1);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 12px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 12px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { border-left: 6px solid var(--cm-soft); background: linear-gradient(90deg, var(--bg-sunken), var(--bg)); }
+#ui-content h2 { border-bottom: 2px solid var(--cm-secondary); }
+#ui-content .card { border-top: 3px solid var(--cm-soft); }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

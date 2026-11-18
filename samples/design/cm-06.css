@@ -1,0 +1,38 @@
+/* デザイン案 06。色・罫線・面で構成する。 */
+:root:root {
+  --accent: light-dark(#BE2735, #FF8790);
+  --tint: var(--accent);
+  --bg: light-dark(#FFFFFF, #242124);
+  --ink: light-dark(#303033, #F3EDF0);
+  --ink-2: light-dark(color-mix(in srgb, #303033 82%, #FFFFFF), #C4BAC5);
+  --bg-side: light-dark(color-mix(in srgb, #FFF0CF 22%, #FFFFFF), color-mix(in srgb, #242124 88%, #000));
+  --bg-sunken: light-dark(color-mix(in srgb, #FFF0CF 30%, #FFFFFF), color-mix(in srgb, #242124 85%, #FF8790));
+  --rule: light-dark(color-mix(in srgb, #BE2735 24%, #FFFFFF), color-mix(in srgb, #FF8790 24%, #242124));
+  --frame: var(--ink);
+  --frame-inner: light-dark(color-mix(in srgb, #BE2735 45%, #FFFFFF), color-mix(in srgb, #FF8790 45%, #242124));
+  --accent-soft: light-dark(color-mix(in srgb, #FFF0CF 35%, #FFFFFF), color-mix(in srgb, #FF8790 15%, #242124));
+  --cm-secondary: light-dark(#E73E49, color-mix(in srgb, #E73E49 28%, #242124));
+  --cm-soft: light-dark(#FFF0CF, color-mix(in srgb, #FFF0CF 25%, #242124));
+  --mark: var(--cm-soft);
+  --chart-1: var(--accent);
+  --chart-3: light-dark(color-mix(in srgb, #E73E49 60%, #303033), #E73E49);
+  --chart-4: light-dark(color-mix(in srgb, #FFF0CF 55%, #303033), #FFF0CF);
+}
+.topbar { border-bottom-color: var(--frame-inner); }
+.read-progress { background: var(--accent); }
+#ui-doc .doc-header { padding: clamp(16px, 3vw, 36px); border-radius: 0px; }
+#ui-content :is(.card, .panel, .codeblock, .table-scroll, .c-summary, details) { border-radius: 0px; }
+#ui-content h2 { color: var(--accent); }
+#ui-content thead th { background: var(--bg-sunken); }
+#ui-content .metric-value { color: var(--accent); }
+#ui-content .c-lead { border-left-color: var(--cm-secondary); }
+.slide { background: linear-gradient(var(--accent), var(--accent)) top / 100% 5px no-repeat, var(--bg); }
+#ui-doc .doc-header { border-top: 8px solid var(--cm-secondary); border-bottom: 2px solid var(--ink); }
+#ui-doc .doc-title { font-weight: 900; }
+#ui-content h2 { border-bottom: 3px solid var(--accent); }
+#ui-content .table-scroll { border-color: var(--ink); }
+
+@media print {
+  .sidebar { display: none; }
+  #ui-doc .doc-header, #ui-content .card { box-shadow: none; }
+}

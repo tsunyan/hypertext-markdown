@@ -2,41 +2,103 @@
   "c1": {
     "name": "KITASORA",
     "kind": "IT・クラウド",
-    "accent": "#1d4fd7 / #93b4ff"
+    "accent": "#1d4fd7 / #93b4ff",
+    "logo": "c1-logo.svg",
+    "logoDark": "c1-logo-dark.svg",
+    "favicons": [
+      "c1-favicon.png",
+      "c1-favicon.svg"
+    ]
   },
   "c2": {
     "name": "葉月信託",
     "kind": "金融",
-    "accent": "#0e6b4f / #6fd3ae"
+    "accent": "#0e6b4f / #6fd3ae",
+    "logo": "c2-logo.svg",
+    "logoDark": "c2-logo-dark.svg",
+    "favicons": [
+      "c2-favicon.png",
+      "c2-favicon.svg"
+    ]
   },
   "c3": {
     "name": "アカガネ精機",
     "kind": "製造",
-    "accent": "#c2410c / #ff9d73"
+    "accent": "#c2410c / #ff9d73",
+    "logo": "c3-logo.svg",
+    "logoDark": "c3-logo-dark.svg",
+    "favicons": [
+      "c3-favicon.png",
+      "c3-favicon.svg"
+    ]
   },
   "c4": {
     "name": "shion",
     "kind": "コンサルティング",
-    "accent": "#6a3fc8 / #bda7f7"
+    "accent": "#6a3fc8 / #bda7f7",
+    "logo": "c4-logo.svg",
+    "logoDark": "c4-logo-dark.svg",
+    "favicons": [
+      "c4-favicon.png",
+      "c4-favicon.svg"
+    ]
   },
   "c5": {
     "name": "ISHIZUE",
     "kind": "建築・設計",
-    "accent": "#2a2e37 / #c5cad3"
+    "accent": "#2a2e37 / #c5cad3",
+    "logo": "c5-logo.svg",
+    "logoDark": "c5-logo-dark.svg",
+    "favicons": [
+      "c5-favicon.png",
+      "c5-favicon.svg"
+    ]
   },
   "h1": {
     "name": "hypertext-markdown",
     "kind": "山かっこと #",
-    "accent": ""
+    "accent": "",
+    "group": "other",
+    "logo": "h1-logo.svg",
+    "logoDark": "h1-logo-dark.svg",
+    "favicons": [
+      "h1-favicon.png",
+      "h1-favicon.svg"
+    ]
   },
   "h2": {
     "name": "hypertext-markdown",
     "kind": "h と m をつないだ字",
-    "accent": ""
+    "accent": "",
+    "group": "other",
+    "logo": "h2-logo.svg",
+    "logoDark": "h2-logo-dark.svg",
+    "favicons": [
+      "h2-favicon.png",
+      "h2-favicon.svg"
+    ]
   },
   "h3": {
     "name": "hypertext-markdown",
     "kind": "見出しの下線",
-    "accent": ""
+    "accent": "",
+    "group": "other",
+    "logo": "h3-logo.svg",
+    "logoDark": "h3-logo-dark.svg",
+    "favicons": [
+      "h3-favicon.png",
+      "h3-favicon.svg"
+    ]
+  },
+  "f1": {
+    "name": "hypertext-markdown",
+    "kind": "favicon の見本",
+    "group": "other",
+    "logo": "h1-logo.svg",
+    "logoDark": "h1-logo-dark.svg",
+    "favicons": [
+      "f1-favicon.png",
+      "f1-favicon.svg"
+    ]
   }
 }
