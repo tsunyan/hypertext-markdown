@@ -40,6 +40,7 @@ Markdown を内包した、1 つの HTML ファイルで配れる文書のテン
 | `src/shell.html` | 正本 | HTML の外枠と素材の差し込み口 |
 | `src/styles.css` | 正本 | 画面・スライド・印刷の CSS |
 | `src/bootstrap.js`・`src/engine.js` | 正本 | 初期表示の設定と、パーサー・描画・保存などの JavaScript |
+| `src/vendor/` | 配布元の写し | DOMPurify 3.4.18 とライセンス。HTML に埋め込み、実行時には取得しない |
 | `src/guide.md` | 正本 | 利用ガイドの Markdown。作業中の本文と最新の見本の版で共用する |
 | `src/versions/` | 正本 | 過去版の Markdown と、版の一覧 `manifest.json` |
 | `src/assets/`・`src/theme.json` | 正本 | 既定の favicon・ロゴと参照先。生成時に data URL にして埋め込む |

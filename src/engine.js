@@ -19,7 +19,7 @@ const CONFIG = {
   logo: '',      // 表紙の左上とスライドの下に出すロゴ（URL か data: URL）
   logoDark: '',  // ダーク表示のときのロゴ（空なら logo をそのまま使う）
 };
-const ENGINE = 'hypertext-markdown-9';
+const ENGINE = 'hypertext-markdown-10';
 const KEY_THEME = 'hypertext-markdown:theme';
 const KEY_TOC = 'hypertext-markdown:toc';
 const KEY_DIFF = 'hypertext-markdown:diffview';
@@ -33,6 +33,8 @@ const store = {
 };
 const escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const escAttr = s => escHtml(s).replace(/"/g, '&quot;');
+/* 独自パーサーの処理に加え、DOM に渡す直前にも HTML を検査する。 */
+const safeRenderedHtml = html => DOMPurify.sanitize(html, { FORCE_BODY: true, ADD_ATTR: ['target'] });
 const escText = s => String(s).replace(/&(?!#?[A-Za-z0-9]+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 /* タグを除いて文字にする。<scr<b>ipt> のように、除いたあとにタグが残る形があるので、変わらなくなるまで繰り返す */
 const stripTags = s => {
@@ -1239,7 +1241,7 @@ function createParser(opts = {}) {
   }
 
   /* ----- 囲み（::: 名前）の部品 ----- */
-  function frag(html) { const t = document.createElement('template'); t.innerHTML = html; return t.content; }
+  function frag(html) { const t = document.createElement('template'); t.innerHTML = safeRenderedHtml(html); return t.content; }
   function htmlOf(nodes) { const d = document.createElement('div'); d.append(...nodes); return d.innerHTML; }
   const firstList = f => Array.from(f.children).find(e => e.tagName === 'UL' || e.tagName === 'OL');
   function headInner(h) { const c = h.cloneNode(true); $$('.anchor', c).forEach(x => x.remove()); return c.innerHTML.trim(); }
@@ -2081,7 +2083,7 @@ function showView(useBaked = false) {
   if (v.mode === 'version') {
     const md = verMd(v.i);
     state.meta = parseFrontMatter(md).meta;
-    els.doc.innerHTML = renderDocument(md, { history: verHistory(v.i) });
+    els.doc.innerHTML = safeRenderedHtml(renderDocument(md, { history: verHistory(v.i) }));
     delete els.doc.dataset.mdHash;
   } else if (v.mode === 'compare') {
     renderCompare();
@@ -2090,7 +2092,7 @@ function showView(useBaked = false) {
     state.meta = parseFrontMatter(state.md).meta;
     const key = hash(ENGINE + '\n' + versionsKey() + '\n' + state.md);
     if (!(useBaked && els.doc.dataset.mdHash === key && $('#ui-content', els.doc))) {
-      els.doc.innerHTML = renderDocument(state.md);
+      els.doc.innerHTML = safeRenderedHtml(renderDocument(state.md));
       els.doc.dataset.mdHash = key;
     }
   }
@@ -2487,7 +2489,7 @@ function diffInside(a, b) {
 }
 /* 2 つの版の本文（renderDocument の HTML）を段落・表などのブロック単位で比べ、比較後の版に印を付けて返す */
 function blockDiff(baseHtml, targetHtml, inline) {
-  const parts = html => { const box = document.createElement('div'); box.innerHTML = html; return { box, header: box.querySelector('.doc-header'), content: box.querySelector('#ui-content') }; };
+  const parts = html => { const box = document.createElement('div'); box.innerHTML = safeRenderedHtml(html); return { box, header: box.querySelector('.doc-header'), content: box.querySelector('#ui-content') }; };
   const A = parts(baseHtml), B = parts(targetHtml);
   const stats = { added: 0, removed: 0, changed: 0, header: false, sections: [] };
   if (A.header && B.header && blockSig(A.header) !== blockSig(B.header)) {
@@ -2587,8 +2589,8 @@ function renderCompare() {
     text.split('\n').forEach(l => { if (/^\+(?!\+\+ )/.test(l)) add++; else if (/^-(?!-- )/.test(l)) del++; });
     state.diffStats = { lines: true, add, del };
     const theme = docThemeCss(state.meta);
-    els.doc.innerHTML = (theme ? '<style class="doc-theme">' + theme + '</style>' : '')
-      + '<div class="md" id="ui-content">' + (text ? createParser({}).ghDiff(text, '', false) : '<p>Markdown に違いはありません。</p>') + '</div>';
+    els.doc.innerHTML = safeRenderedHtml((theme ? '<style class="doc-theme">' + theme + '</style>' : '')
+      + '<div class="md" id="ui-content">' + (text ? createParser({}).ghDiff(text, '', false) : '<p>Markdown に違いはありません。</p>') + '</div>');
     return;
   }
   const r = blockDiff(renderDocument(aMd, { history: verHistory(v.a) }), renderDocument(bMd, { history: verHistory(v.b) }), true);
@@ -2703,12 +2705,26 @@ async function readFileText(file) {
   const buf = await file.arrayBuffer();
   try { return new TextDecoder('utf-8', { fatal: true }).decode(buf); } catch (e) { return new TextDecoder('shift_jis').decode(buf); }
 }
+/* HTML 全体を DOM にせず、Markdown の script だけをデータとして取り出す。
+   コメント・実行用スクリプトの中にある、見かけのタグは取り込まない。 */
+function markdownScripts(html) {
+  const result = [];
+  const blocks = /<[!]--[\s\S]*?-->|<[s]cript(?=[\s/>])((?:[^<>"']|"[^"]*"|'[^']*')*)>([\s\S]*?)<\/[s]cript\s*>/gi;
+  for (const match of html.matchAll(blocks)) {
+    if (match[1] == null) continue;
+    const attrs = DOMPurify.sanitize('<div ' + match[1] + '></div>', { RETURN_DOM: true, ADD_ATTR: ['type'] }).querySelector('div');
+    if (!attrs || (attrs.getAttribute('type') || '').toLowerCase() !== 'text/markdown') continue;
+    attrs.textContent = match[2];
+    result.push(attrs);
+  }
+  return result;
+}
 async function importFile(file) {
   const text = (await readFileText(file)).replace(/\r\n?/g, '\n');
   if (/\.html?$/i.test(file.name) || /^\s*<!doctype html|<html[\s>]/i.test(text.slice(0, 500))) {
     // 保存した HTML なら、その中の版を全部取り込む。版が無ければ本文を 1 つの版として取り込む
-    const d = new DOMParser().parseFromString(text, 'text/html');
-    const vs = Array.from(d.querySelectorAll('script.md-version')).map(el => ({ version: el.dataset.version || '', date: el.dataset.date || '', author: el.dataset.author || '', note: el.dataset.note || '', md: readScript(el) }));
+    const scripts = markdownScripts(text);
+    const vs = scripts.filter(el => el.classList.contains('md-version')).map(el => ({ version: el.dataset.version || '', date: el.dataset.date || '', author: el.dataset.author || '', note: el.dataset.note || '', md: readScript(el) }));
     const fresh = vs.filter(v => !state.versions.some(x => x.version === v.version && x.md === v.md));
     if (fresh.length) {
       state.versions.push(...fresh);
@@ -2719,7 +2735,7 @@ async function importFile(file) {
       toast(fresh.length + ' 件の版を取り込みました。Ctrl+S で保存してください');
       return;
     }
-    const src = d.getElementById('md-source');
+    const src = scripts.find(el => el.id === 'md-source');
     if (!src) { toast('この HTML には取り込める Markdown がありません'); return; }
     return openVersionForm('import', readScript(src), file);
   }
@@ -3358,7 +3374,7 @@ function exportHtml() {
   }
   // 描画済みの本文も入れておく（JavaScript が動かない環境でも読めるように）
   const docEl = doc.getElementById('ui-doc');
-  docEl.innerHTML = renderDocument(state.md);
+  docEl.innerHTML = safeRenderedHtml(renderDocument(state.md));
   docEl.setAttribute('data-md-hash', hash(ENGINE + '\n' + versionsKey() + '\n' + state.md));
   const drawn = new Map(state.mermaidBlocks.filter(b => b.dataset.state === 'done').map(b => [b.dataset.src, b.innerHTML]));
   docEl.querySelectorAll('.mermaid-block').forEach(b => {

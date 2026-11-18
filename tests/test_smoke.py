@@ -321,6 +321,39 @@ def test_raw_html_is_sanitized(opened, tmp_path):
     assert not o.errors and not again.errors, "\n".join(o.errors + again.errors)
 
 
+def test_import_html_extracts_only_markdown_without_loading_page(opened, tmp_path):
+    payload = '''<!doctype html><html><body>
+<img src="https://example.invalid/import-tracker.png" onerror="window.__importXss=1">
+<script>window.__importXss=2</script>
+<!-- <script type="text/markdown" class="md-version" data-version="fake"># 偽の版</script> -->
+<SCRIPT TYPE="text/markdown" CLASS="md-version" data-version="9.0" data-note="A > B &amp; C">
+# 取り込んだ版
+
+## 本文
+文字参照は &lt;script&gt; のまま。
+<img src="bad:" onerror="window.__importXss=3">
+</SCRIPT></body></html>'''
+    source = tmp_path / "import.html"
+    source.write_text(payload, encoding="utf-8")
+    o = opened()
+    page = o.goto(SKELETON)
+    requests = []
+    page.on("request", lambda request: requests.append(request.url))
+    page.keyboard.press("V")
+    page.set_input_files("#ui-ver-file", source)
+    page.wait_for_selector('#ui-versions-body [data-action="ver-view"][data-i="0"]')
+    assert page.locator(".ver-table").inner_text().count("9.0") == 1
+    assert "A > B & C" in page.locator(".ver-table").inner_text()
+    assert "fake" not in page.locator(".ver-table").inner_text()
+    page.click('[data-action="ver-view"][data-i="0"]')
+    page.wait_for_selector("#ui-content h2")
+    assert "文字参照は <script> のまま。" in page.locator("#ui-content").inner_text()
+    assert page.evaluate("window.__importXss || 0") == 0
+    assert page.locator('#ui-content [onerror], #ui-content script').count() == 0
+    assert not any("example.invalid" in url for url in requests)
+    assert not o.errors, "\n".join(o.errors)
+
+
 def test_skill_empty_template(opened):
     o = opened()
     page = o.goto(SKELETON)

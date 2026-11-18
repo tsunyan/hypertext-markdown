@@ -30,7 +30,7 @@ def minify_html(html, npm):
         loader = "js" if tag == "script" else "css"
         result = subprocess.run(
             [npm, "exec", "--yes", f"--package={ESBUILD}", "--", "esbuild",
-             f"--loader={loader}", "--minify", "--legal-comments=none"],
+             f"--loader={loader}", "--minify", "--legal-comments=inline"],
             input=body.encode("utf-8"), stdout=subprocess.PIPE, check=True,
         )
         compressed = result.stdout.decode("utf-8").rstrip("\n")

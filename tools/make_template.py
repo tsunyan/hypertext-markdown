@@ -125,16 +125,17 @@ def assemble(source=ROOT / "src"):
         raise ValueError("shell.html には " + "・".join(sorted(TOKENS)) + " の差し込み口を各 1 つ置く")
     css = read(source / "styles.css")
     bootstrap, engine = (read(source / name) for name in ("bootstrap.js", "engine.js"))
+    purifier = read(source / "vendor" / "purify.min.js")
     theme = json.loads(read(source / "theme.json"))
     if re.search(r"</style", css, re.IGNORECASE):
         raise ValueError("styles.css に style 要素を閉じる文字列がある")
-    for name, js in (("bootstrap.js", bootstrap), ("engine.js", engine)):
+    for name, js in (("bootstrap.js", bootstrap), ("engine.js", engine), ("purify.min.js", purifier)):
         if re.search(r"</script", js, re.IGNORECASE):
             raise ValueError(f"{name} に script 要素を閉じる文字列がある")
         for segment in re.findall(r"<!--(.*?)(?:-->|\Z)", js, re.DOTALL):
             if re.search(r"<script", segment, re.IGNORECASE):
                 raise ValueError(f"{name} に script 要素の終わりを読み飛ばす文字列がある")
-    engine = theme_config(engine, source, theme)
+    engine = purifier + "\n" + theme_config(engine, source, theme)
     guide = escape_markdown(read(source / "guide.md"))
     blocks = []
     for entry in versions(source):

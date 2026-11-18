@@ -264,3 +264,5 @@ python -m pytest -q
 ## ライセンス
 
 [MIT](LICENSE)
+
+同梱する [DOMPurify 3.4.18](https://github.com/cure53/DOMPurify/tree/3.4.18) のライセンスは [DOMPurify-LICENSE](src/vendor/DOMPurify-LICENSE) を参照する。
