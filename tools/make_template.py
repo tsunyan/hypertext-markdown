@@ -73,7 +73,7 @@ def theme_config(engine, directory, theme):
 def apply_theme(template, directory, theme, key):
     """共通の HTML に CSS・画像・配色を重ねる。本文とエンジンの処理は共用する。"""
     # 本文に CONFIG の例が書かれていても、実行するスクリプト以外は変更しない。
-    scripts = list(re.finditer(r"(<script>)(.*?)(</script>)", template, re.DOTALL))
+    scripts = list(re.finditer(r"(<script>)(.*?)(</script>)", template, re.DOTALL | re.IGNORECASE))
     if not scripts:
         raise ValueError("テンプレートにエンジンが無い")
     engine = scripts[-1]

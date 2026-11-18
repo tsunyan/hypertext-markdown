@@ -195,7 +195,7 @@ function replaceTheme(template, opts) {
       values.logoDark = ''; // 古いダーク用ロゴを残さない
     }
     if (opts.logoDark) values.logoDark = themeImage(opts.logoDark).url;
-    const scripts = [...template.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+    const scripts = [...template.matchAll(/<script>([\s\S]*?)<\/script>/gi)];
     const engine = scripts.at(-1);
     if (!engine || !engine[1].includes('mermaidIntegrity')) usage('テンプレートのエンジン設定が見つからない');
     let code = engine[1];

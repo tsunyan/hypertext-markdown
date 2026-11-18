@@ -65,6 +65,21 @@ def test_theme_assets_and_rebuild(cli, tmp_path, template):
     assert re.findall(versions, updated) == re.findall(versions, original)
 
 
+@pytest.mark.parametrize("opening,closing", [("<SCRIPT>", "</SCRIPT>"), ("<ScRiPt>", "</sCrIpT>")])
+def test_theme_matches_script_tag_case(cli, tmp_path, opening, closing):
+    text = (ROOT / "template-guide.src.html").read_text(encoding="utf-8")
+    text = re.sub(r"<script>(.*?)</script>", lambda m: opening + m[1] + closing,
+                  text, flags=re.DOTALL | re.IGNORECASE)
+    source = tmp_path / "template.html"
+    source.write_text(text, encoding="utf-8")
+    output = tmp_path / "out.html"
+    result = cli("input.md", "--template", source, "-o", output, "--logo", "logo #%.svg")
+    assert result.returncode == 0, result.stderr
+    generated = output.read_text(encoding="utf-8")
+    assert base64.b64encode((tmp_path / "logo #%.svg").read_bytes()).decode() in generated
+    assert 'logo: "本文の例"' in generated
+
+
 @pytest.mark.parametrize("options", [
     ["--logo", "missing.svg"], ["--logo-dark", "missing.svg"],
     ["--favicon", "input.md"], ["--logo"], ["--favicon", "--logo", "dark.svg"],

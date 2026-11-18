@@ -109,13 +109,26 @@ def test_theme_reuses_content_and_engine(folder, key):
     assert [m[0] for m in template.MD_BLOCK.finditer(themed)] == [m[0] for m in template.MD_BLOCK.finditer(base)]
     # 設定値を除き、実行される JavaScript はすべて共通にする。
     def scripts(text):
-        code = re.findall(r"<script>(.*?)</script>", text, re.DOTALL)
+        code = re.findall(r"<script>(.*?)</script>", text, re.DOTALL | re.IGNORECASE)
         return [re.sub(r"(?m)^  (logo|logoDark|accent):.*", "CONFIG ASSET", c) for c in code]
     assert scripts(themed) == scripts(base)
     for name in catalog[key]["favicons"]:
         assert template.data_url(directory, name) in themed
     assert template.data_url(directory, catalog[key]["logo"]) in themed
     assert template.data_url(directory, catalog[key]["logoDark"]) in themed
+
+
+@pytest.mark.parametrize("opening,closing", [("<SCRIPT>", "</SCRIPT>"), ("<ScRiPt>", "</sCrIpT>")])
+def test_theme_matches_script_tag_case(opening, closing):
+    base = template.assemble()
+    expected = template.apply_theme(base, ROOT / "src", {"accent": "red"}, "test")
+    # 属性のない実行用タグだけを変え、Markdown を格納するタグはそのままにする。
+    import re
+    pattern = r"(<script>)(.*?)(</script>)"
+    def change_tags(text):
+        return re.sub(pattern, lambda m: opening + m[2] + closing, text, flags=re.DOTALL | re.IGNORECASE)
+    result = template.apply_theme(change_tags(base), ROOT / "src", {"accent": "red"}, "test")
+    assert result == change_tags(expected)
 
 
 def test_default_assets_are_external_sources():
