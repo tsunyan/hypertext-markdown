@@ -2,4 +2,4 @@
 # pip install -r requirements-dev.txt のあと、python -m playwright install chromium
 playwright==1.65.2
 pytest==9.2.0
-ruff==0.17.5
+ruff==0.17.6
