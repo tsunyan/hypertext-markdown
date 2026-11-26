@@ -6220,7 +6220,7 @@ function headingText(el) {
 /* ----- スクロール位置（目次の印・読了バー） ----- */
 const PAD = 16;
 const headerH = () => els.topbar.offsetHeight || 52;
-let scrollQueued = false;
+let scrollQueued = false, tocAutoTop = null; // tocAutoTop: 目次を自動追従で動かした位置
 function onScroll() {
   if (scrollQueued) return;
   scrollQueued = true;
@@ -6248,7 +6248,10 @@ function setCurrent(cur) {
   if (!a) return;
   a.classList.add('active');
   const sb = els.sidebar, r = a.getBoundingClientRect(), b = sb.getBoundingClientRect();
-  if (b.height && (r.top < b.top + 48 || r.bottom > b.bottom - 48)) sb.scrollTop += r.top - b.top - b.height / 3;
+  if (b.height && (r.top < b.top + 48 || r.bottom > b.bottom - 48)) {
+    sb.scrollTop += r.top - b.top - b.height / 3;
+    tocAutoTop = sb.scrollTop; // この位置へのスクロールは自動追従なので、スクロールバーを見せない
+  }
 }
 /* ツールバーのパンくず（いま読んでいる章 › 節） */
 function updateCrumb(cur) {
@@ -8268,16 +8271,20 @@ window.addEventListener('afterprint', () => {
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 window.addEventListener('scroll', onScroll, { passive: true });
 window.addEventListener('scroll', () => Quiet.show(document.documentElement), { passive: true });
-// 目次は読んでいる見出しに合わせて自動で動く（setCurrent）。ホイール・タッチ・キー・スクロールバーのドラッグの直後か
-// 押している間のスクロールだけを、利用者の操作として知らせる
+// 目次は読んでいる見出しに合わせて自動で動く（setCurrent。動かした位置を tocAutoTop に残す）。その位置へのスクロールを除き、
+// ホイール・タッチ・スクロール用のキー・スクロールバーのドラッグの直後か押している間のスクロールだけを、利用者の操作として知らせる
 let tocUserUntil = 0, tocPressed = false;
 const tocUser = () => { tocUserUntil = performance.now() + 800; };
-for (const type of ['wheel', 'touchstart', 'touchmove', 'keydown']) els.sidebar.addEventListener(type, tocUser, { passive: true });
+const TOC_SCROLL_KEYS = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ', 'Tab']);
+for (const type of ['wheel', 'touchstart', 'touchmove']) els.sidebar.addEventListener(type, tocUser, { passive: true });
+els.sidebar.addEventListener('keydown', e => { if (TOC_SCROLL_KEYS.has(e.key)) tocUser(); }, { passive: true });
 els.sidebar.addEventListener('pointerdown', () => { tocPressed = true; tocUser(); }, { passive: true });
 window.addEventListener('pointerup', () => { tocPressed = false; }, { passive: true });
 window.addEventListener('pointercancel', () => { tocPressed = false; }, { passive: true });
 els.sidebar.addEventListener('scroll', () => {
-  if (!tocPressed && performance.now() > tocUserUntil) return;
+  const auto = tocAutoTop != null && Math.abs(els.sidebar.scrollTop - tocAutoTop) < 1;
+  tocAutoTop = null;
+  if (auto || (!tocPressed && performance.now() > tocUserUntil)) return;
   tocUser();
   Quiet.show(els.sidebar);
 }, { passive: true });
