@@ -2202,7 +2202,7 @@ function headingText(el) {
 /* ----- スクロール位置（目次の印・読了バー） ----- */
 const PAD = 16;
 const headerH = () => els.topbar.offsetHeight || 52;
-let scrollQueued = false;
+let scrollQueued = false, tocAutoTop = null; // tocAutoTop: 目次を自動追従で動かした位置
 function onScroll() {
   if (scrollQueued) return;
   scrollQueued = true;
@@ -2230,7 +2230,10 @@ function setCurrent(cur) {
   if (!a) return;
   a.classList.add('active');
   const sb = els.sidebar, r = a.getBoundingClientRect(), b = sb.getBoundingClientRect();
-  if (b.height && (r.top < b.top + 48 || r.bottom > b.bottom - 48)) sb.scrollTop += r.top - b.top - b.height / 3;
+  if (b.height && (r.top < b.top + 48 || r.bottom > b.bottom - 48)) {
+    sb.scrollTop += r.top - b.top - b.height / 3;
+    tocAutoTop = sb.scrollTop; // この位置へのスクロールは自動追従なので、スクロールバーを見せない
+  }
 }
 /* ツールバーのパンくず（いま読んでいる章 › 節） */
 function updateCrumb(cur) {
@@ -3767,6 +3770,8 @@ const SidebarWidth = {
       h.removeEventListener('lostpointercapture', up);
       document.body.classList.remove('sidebar-resizing');
       if (h.hasPointerCapture(e.pointerId)) h.releasePointerCapture(e.pointerId);
+      // ドラッグのために当てたフォーカスを外し、ポインターが離れたら取っ手が消えるようにする
+      h.blur();
       this.set(els.sidebar.offsetWidth, true);
       Width.done();
     };
@@ -3778,6 +3783,40 @@ const SidebarWidth = {
   },
   step(dx) { this.set(els.sidebar.offsetWidth + dx, true); Width.done(); },
   reset() { this.set(null, true); Width.done(); toast('左メニューの幅を標準に戻しました'); },
+};
+
+/* ----- 取っ手とスクロールバーを、使うときだけ見せる ----- */
+// 取っ手はポインターが近づくと .is-near、スクロールバーはスクロール中と、ポインターを端へ寄せたときに .is-scrolling を付ける
+const Quiet = {
+  NEAR: 40, EDGE: 14, HIDE_MS: 1000,
+  timers: new WeakMap(), held: new Set(), x: -1, y: -1, queued: false,
+  show(el) {
+    el.classList.add('is-scrolling');
+    clearTimeout(this.timers.get(el));
+    this.timers.set(el, setTimeout(() => { if (!this.held.has(el)) el.classList.remove('is-scrolling'); }, this.HIDE_MS));
+  },
+  hold(el, on) {
+    if (on) { this.held.add(el); el.classList.add('is-scrolling'); }
+    else if (this.held.delete(el)) this.show(el);
+  },
+  near(h) {
+    const r = h.getBoundingClientRect();
+    return r.width > 0 && Math.abs(this.x - (r.left + r.width / 2)) <= this.NEAR && this.y >= r.top && this.y <= r.bottom;
+  },
+  update() {
+    this.queued = false;
+    const on = this.x >= 0, de = document.documentElement, sb = els.sidebar;
+    for (const h of [els.widthHandle, els.sidebarWidthHandle]) h.classList.toggle('is-near', on && this.near(h));
+    this.hold(de, on && this.x >= de.clientWidth - this.EDGE);
+    const r = sb.getBoundingClientRect(), bar = r.left + sb.clientLeft + sb.clientWidth;
+    this.hold(sb, on && sb.scrollHeight > sb.clientHeight && this.x >= bar - this.EDGE && this.x < r.right && this.y >= r.top && this.y <= r.bottom);
+  },
+  move(e) {
+    if (e.pointerType === 'touch') return;
+    this.x = e.clientX; this.y = e.clientY;
+    if (!this.queued) { this.queued = true; requestAnimationFrame(() => this.update()); }
+  },
+  leave() { this.x = -1; this.update(); },
 };
 
 /* ----- 本文の幅（右端の取っ手をドラッグ。ダブルクリックで標準に戻す） ----- */
@@ -4213,6 +4252,27 @@ window.addEventListener('afterprint', () => {
 });
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('scroll', () => Quiet.show(document.documentElement), { passive: true });
+// 目次は読んでいる見出しに合わせて自動で動く（setCurrent。動かした位置を tocAutoTop に残す）。その位置へのスクロールを除き、
+// ホイール・タッチ・スクロール用のキー・スクロールバーのドラッグの直後か押している間のスクロールだけを、利用者の操作として知らせる
+let tocUserUntil = 0, tocPressed = false;
+const tocUser = () => { tocUserUntil = performance.now() + 800; };
+const TOC_SCROLL_KEYS = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ', 'Tab']);
+for (const type of ['wheel', 'touchstart', 'touchmove']) els.sidebar.addEventListener(type, tocUser, { passive: true });
+els.sidebar.addEventListener('keydown', e => { if (TOC_SCROLL_KEYS.has(e.key)) tocUser(); }, { passive: true });
+els.sidebar.addEventListener('pointerdown', () => { tocPressed = true; tocUser(); }, { passive: true });
+window.addEventListener('pointerup', () => { tocPressed = false; }, { passive: true });
+window.addEventListener('pointercancel', () => { tocPressed = false; }, { passive: true });
+els.sidebar.addEventListener('scroll', () => {
+  const auto = tocAutoTop != null && Math.abs(els.sidebar.scrollTop - tocAutoTop) < 1;
+  tocAutoTop = null;
+  if (auto || (!tocPressed && performance.now() > tocUserUntil)) return;
+  tocUser();
+  Quiet.show(els.sidebar);
+}, { passive: true });
+document.addEventListener('pointermove', e => Quiet.move(e), { passive: true });
+document.documentElement.addEventListener('pointerleave', () => Quiet.leave());
+window.addEventListener('blur', () => Quiet.leave());
 const relayout = debounce(() => { if (Slides.active) return; drawCharts(els.doc); fitTables(els.doc); Width.place(); SidebarWidth.sync(); }, 150);
 window.addEventListener('resize', () => { if (Slides.active) Slides.layout(); else { onScroll(); relayout(); } });
 // 目次や編集欄の開閉で本文の列の幅が変わったときも、グラフ・表・幅の取っ手を合わせる
