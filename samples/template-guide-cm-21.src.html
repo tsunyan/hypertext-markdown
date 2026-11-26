@@ -116,6 +116,18 @@ kbd {
   background: var(--bg); color: var(--ink); white-space: nowrap;
 }
 .sidebar, .help-card, .editor textarea, .codeblock pre, .table-scroll { scrollbar-width: thin; scrollbar-color: var(--frame-inner) transparent; }
+/* ページと左メニューのスクロールバーは、スクロール中かポインターを載せたとき（.is-scrolling）だけ色を付ける。
+   すぐ現れ、止まるとゆっくり消える。--sb-a（濃さ）を変化させて scrollbar-color を薄める。JavaScript が無いときはいつも見せる */
+@property --sb-a { syntax: "<number>"; inherits: false; initial-value: 0; }
+html:not(.no-js), html:not(.no-js) .sidebar {
+  --sb-a: 0; --sb-fade: .6s;
+  scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--frame-inner) calc(var(--sb-a) * 100%), transparent) transparent;
+  transition: --sb-a var(--sb-fade) ease-out;
+}
+html:not(.no-js) .sidebar { transition: --sb-a var(--sb-fade) ease-out, transform .2s ease; }
+html.is-scrolling:not(.no-js), html:not(.no-js) .sidebar.is-scrolling { --sb-a: 1; --sb-fade: .1s; }
+/* scrollbar-color は受け継がれるので、ページの指定を本文の中へ持ち込まない */
+html:not(.no-js) body { scrollbar-color: auto; }
 
 /* ---------- ツールバー ---------- */
 .topbar {
@@ -480,23 +492,34 @@ body.presenting .search-bar { top: 12px; z-index: 85; }
 ::highlight(search-current) { background-color: #f59e0b; color: #111; }
 .toc a .toc-hits { flex: none; align-self: center; margin-left: auto; padding: 0 .5em; border-radius: 999px; background: var(--mark); color: var(--ink); font-size: 11px; font-weight: 700; line-height: 1.65; font-variant-numeric: tabular-nums; }
 
-/* 本文の幅を変える取っ手（本文の右端） */
+/* 幅を変える取っ手。普段は隠し、ポインターが近づいたとき（.is-near）・触れたとき・選んだときだけ見せる。
+   左メニューは境界線そのものを取っ手にし、触れると線を太く強調の色にする */
 .main { position: relative; }
 .width-handle { position: absolute; top: 0; bottom: 0; left: -999px; z-index: 5; width: 16px; margin-left: -8px; cursor: col-resize; touch-action: none; outline: none; }
-.width-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 7px; width: 2px; background: var(--accent); opacity: 0; transition: opacity .15s; }
+.width-handle, .sidebar-width-handle { --fade: .5s; --fade-delay: .15s; }
+/* 現れるときは素早く、消えるときは少し待ってからゆっくり薄くする */
+.width-handle.is-near, .width-handle:hover, .width-handle:focus-visible, body.resizing .width-handle,
+.sidebar-width-handle.is-near, .sidebar-width-handle:hover, .sidebar-width-handle:focus-visible, body.sidebar-resizing .sidebar-width-handle { --fade: .12s; --fade-delay: 0s; }
+.width-handle::before, .sidebar-width-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 7px; width: 2px; background: var(--accent); opacity: 0; transition: opacity var(--fade) ease-out var(--fade-delay), width var(--fade) ease-out, left var(--fade) ease-out; }
+.width-handle.is-near::before { opacity: .15; }
 .width-handle:hover::before, .width-handle:focus-visible::before, body.resizing .width-handle::before { opacity: .3; }
-.width-grip { position: sticky; top: calc(50vh - 22px); display: block; width: 6px; height: 44px; margin-left: 5px; border-radius: 3px; background: var(--rule); opacity: .8; transition: background .15s; }
+.width-grip { position: sticky; top: calc(50vh - 22px); display: block; width: 6px; height: 44px; margin-left: 5px; border-radius: 3px; background: var(--rule); opacity: 0; transition: opacity var(--fade) ease-out var(--fade-delay), background var(--fade) ease-out; }
+.is-near > .width-grip { opacity: .8; }
 .width-handle:hover .width-grip, .width-handle:focus-visible .width-grip, body.resizing .width-grip { background: var(--accent); opacity: 1; }
 .width-label { position: absolute; top: 50%; left: 14px; display: none; padding: 2px 7px; border-radius: 4px; background: var(--ink); color: var(--bg); font-size: 12px; line-height: 1.6; white-space: nowrap; transform: translateY(-50%); font-variant-numeric: tabular-nums; }
 body.resizing .width-label, .width-handle:focus-visible .width-label { display: block; }
 body.resizing, body.sidebar-resizing { cursor: col-resize; -webkit-user-select: none; user-select: none; }
-/* 左メニューの右端。スクロールしても境界と取っ手を同じ場所に保つ */
-.sidebar-width-handle { position: fixed; top: var(--header-h); bottom: 0; left: var(--side-size); z-index: 36; width: 16px; margin-left: -8px; cursor: col-resize; touch-action: none; }
-.sidebar-width-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: 7px; width: 2px; background: var(--accent); opacity: 0; transition: opacity .15s; }
+/* 左メニューの右端。スクロールしても境界と取っ手を同じ場所に保つ。線は .sidebar の border-right と重ねる */
+.sidebar-width-handle { position: fixed; top: var(--header-h); bottom: 0; left: var(--side-size); z-index: 36; width: 16px; margin-left: -8px; cursor: col-resize; touch-action: none; outline: none; }
+.sidebar-width-handle::before { left: 7px; width: 1px; }
+.sidebar-width-handle.is-near::before { opacity: .45; }
+.sidebar-width-handle:hover::before, .sidebar-width-handle:focus-visible::before, body.sidebar-resizing .sidebar-width-handle::before { left: 6px; width: 3px; opacity: 1; }
 .sidebar-width-handle .width-grip { position: absolute; top: 50%; transform: translateY(-50%); }
-.sidebar-width-handle:hover::before, .sidebar-width-handle:focus-visible::before, body.sidebar-resizing .sidebar-width-handle::before { opacity: .3; }
 .sidebar-width-handle:hover .width-grip, .sidebar-width-handle:focus-visible .width-grip, body.sidebar-resizing .sidebar-width-handle .width-grip { background: var(--accent); opacity: 1; }
 .sidebar-width-handle:focus-visible .width-label, body.sidebar-resizing .sidebar-width-handle .width-label { display: block; }
+/* ポインターで近づけない端末（タッチなど）では、取っ手をいつも見せる */
+@media (hover: none) { .width-grip { opacity: .8; } }
+@media (prefers-reduced-motion: reduce) { .width-handle::before, .sidebar-width-handle::before, .width-grip, html:not(.no-js), html:not(.no-js) .sidebar { transition: none; } }
 body.editing .sidebar-width-handle, body.toc-hidden .sidebar-width-handle, body.no-toc .sidebar-width-handle, body.presenting .sidebar-width-handle, .no-js .sidebar-width-handle { display: none; }
 @media (max-width: 900px) { .sidebar-width-handle { display: none; } }
 @media print { .sidebar-width-handle { display: none !important; } }
@@ -7801,6 +7824,8 @@ const SidebarWidth = {
       h.removeEventListener('lostpointercapture', up);
       document.body.classList.remove('sidebar-resizing');
       if (h.hasPointerCapture(e.pointerId)) h.releasePointerCapture(e.pointerId);
+      // ドラッグのために当てたフォーカスを外し、ポインターが離れたら取っ手が消えるようにする
+      h.blur();
       this.set(els.sidebar.offsetWidth, true);
       Width.done();
     };
@@ -7812,6 +7837,40 @@ const SidebarWidth = {
   },
   step(dx) { this.set(els.sidebar.offsetWidth + dx, true); Width.done(); },
   reset() { this.set(null, true); Width.done(); toast('左メニューの幅を標準に戻しました'); },
+};
+
+/* ----- 取っ手とスクロールバーを、使うときだけ見せる ----- */
+// 取っ手はポインターが近づくと .is-near、スクロールバーはスクロール中と、ポインターを端へ寄せたときに .is-scrolling を付ける
+const Quiet = {
+  NEAR: 40, EDGE: 14, HIDE_MS: 1000,
+  timers: new WeakMap(), held: new Set(), x: -1, y: -1, queued: false,
+  show(el) {
+    el.classList.add('is-scrolling');
+    clearTimeout(this.timers.get(el));
+    this.timers.set(el, setTimeout(() => { if (!this.held.has(el)) el.classList.remove('is-scrolling'); }, this.HIDE_MS));
+  },
+  hold(el, on) {
+    if (on) { this.held.add(el); el.classList.add('is-scrolling'); }
+    else if (this.held.delete(el)) this.show(el);
+  },
+  near(h) {
+    const r = h.getBoundingClientRect();
+    return r.width > 0 && Math.abs(this.x - (r.left + r.width / 2)) <= this.NEAR && this.y >= r.top && this.y <= r.bottom;
+  },
+  update() {
+    this.queued = false;
+    const on = this.x >= 0, de = document.documentElement, sb = els.sidebar;
+    for (const h of [els.widthHandle, els.sidebarWidthHandle]) h.classList.toggle('is-near', on && this.near(h));
+    this.hold(de, on && this.x >= de.clientWidth - this.EDGE);
+    const r = sb.getBoundingClientRect(), bar = r.left + sb.clientLeft + sb.clientWidth;
+    this.hold(sb, on && sb.scrollHeight > sb.clientHeight && this.x >= bar - this.EDGE && this.x < r.right && this.y >= r.top && this.y <= r.bottom);
+  },
+  move(e) {
+    if (e.pointerType === 'touch') return;
+    this.x = e.clientX; this.y = e.clientY;
+    if (!this.queued) { this.queued = true; requestAnimationFrame(() => this.update()); }
+  },
+  leave() { this.x = -1; this.update(); },
 };
 
 /* ----- 本文の幅（右端の取っ手をドラッグ。ダブルクリックで標準に戻す） ----- */
@@ -8247,6 +8306,12 @@ window.addEventListener('afterprint', () => {
 });
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('scroll', () => Quiet.show(document.documentElement), { passive: true });
+// 目次は読んでいる見出しに合わせて自動で動くので、ポインターやフォーカスがあるときのスクロールだけ知らせる
+els.sidebar.addEventListener('scroll', () => { if (els.sidebar.matches(':hover, :focus-within')) Quiet.show(els.sidebar); }, { passive: true });
+document.addEventListener('pointermove', e => Quiet.move(e), { passive: true });
+document.documentElement.addEventListener('pointerleave', () => Quiet.leave());
+window.addEventListener('blur', () => Quiet.leave());
 const relayout = debounce(() => { if (Slides.active) return; drawCharts(els.doc); fitTables(els.doc); Width.place(); SidebarWidth.sync(); }, 150);
 window.addEventListener('resize', () => { if (Slides.active) Slides.layout(); else { onScroll(); relayout(); } });
 // 目次や編集欄の開閉で本文の列の幅が変わったときも、グラフ・表・幅の取っ手を合わせる

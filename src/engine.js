@@ -3767,6 +3767,8 @@ const SidebarWidth = {
       h.removeEventListener('lostpointercapture', up);
       document.body.classList.remove('sidebar-resizing');
       if (h.hasPointerCapture(e.pointerId)) h.releasePointerCapture(e.pointerId);
+      // ドラッグのために当てたフォーカスを外し、ポインターが離れたら取っ手が消えるようにする
+      h.blur();
       this.set(els.sidebar.offsetWidth, true);
       Width.done();
     };
@@ -3778,6 +3780,40 @@ const SidebarWidth = {
   },
   step(dx) { this.set(els.sidebar.offsetWidth + dx, true); Width.done(); },
   reset() { this.set(null, true); Width.done(); toast('左メニューの幅を標準に戻しました'); },
+};
+
+/* ----- 取っ手とスクロールバーを、使うときだけ見せる ----- */
+// 取っ手はポインターが近づくと .is-near、スクロールバーはスクロール中と、ポインターを端へ寄せたときに .is-scrolling を付ける
+const Quiet = {
+  NEAR: 40, EDGE: 14, HIDE_MS: 1000,
+  timers: new WeakMap(), held: new Set(), x: -1, y: -1, queued: false,
+  show(el) {
+    el.classList.add('is-scrolling');
+    clearTimeout(this.timers.get(el));
+    this.timers.set(el, setTimeout(() => { if (!this.held.has(el)) el.classList.remove('is-scrolling'); }, this.HIDE_MS));
+  },
+  hold(el, on) {
+    if (on) { this.held.add(el); el.classList.add('is-scrolling'); }
+    else if (this.held.delete(el)) this.show(el);
+  },
+  near(h) {
+    const r = h.getBoundingClientRect();
+    return r.width > 0 && Math.abs(this.x - (r.left + r.width / 2)) <= this.NEAR && this.y >= r.top && this.y <= r.bottom;
+  },
+  update() {
+    this.queued = false;
+    const on = this.x >= 0, de = document.documentElement, sb = els.sidebar;
+    for (const h of [els.widthHandle, els.sidebarWidthHandle]) h.classList.toggle('is-near', on && this.near(h));
+    this.hold(de, on && this.x >= de.clientWidth - this.EDGE);
+    const r = sb.getBoundingClientRect(), bar = r.left + sb.clientLeft + sb.clientWidth;
+    this.hold(sb, on && sb.scrollHeight > sb.clientHeight && this.x >= bar - this.EDGE && this.x < r.right && this.y >= r.top && this.y <= r.bottom);
+  },
+  move(e) {
+    if (e.pointerType === 'touch') return;
+    this.x = e.clientX; this.y = e.clientY;
+    if (!this.queued) { this.queued = true; requestAnimationFrame(() => this.update()); }
+  },
+  leave() { this.x = -1; this.update(); },
 };
 
 /* ----- 本文の幅（右端の取っ手をドラッグ。ダブルクリックで標準に戻す） ----- */
@@ -4213,6 +4249,12 @@ window.addEventListener('afterprint', () => {
 });
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('scroll', () => Quiet.show(document.documentElement), { passive: true });
+// 目次は読んでいる見出しに合わせて自動で動くので、ポインターやフォーカスがあるときのスクロールだけ知らせる
+els.sidebar.addEventListener('scroll', () => { if (els.sidebar.matches(':hover, :focus-within')) Quiet.show(els.sidebar); }, { passive: true });
+document.addEventListener('pointermove', e => Quiet.move(e), { passive: true });
+document.documentElement.addEventListener('pointerleave', () => Quiet.leave());
+window.addEventListener('blur', () => Quiet.leave());
 const relayout = debounce(() => { if (Slides.active) return; drawCharts(els.doc); fitTables(els.doc); Width.place(); SidebarWidth.sync(); }, 150);
 window.addEventListener('resize', () => { if (Slides.active) Slides.layout(); else { onScroll(); relayout(); } });
 // 目次や編集欄の開閉で本文の列の幅が変わったときも、グラフ・表・幅の取っ手を合わせる
