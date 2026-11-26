@@ -8609,8 +8609,19 @@ window.addEventListener('afterprint', () => {
 window.addEventListener('beforeunload', e => { if (state.dirty) { e.preventDefault(); e.returnValue = ''; } });
 window.addEventListener('scroll', onScroll, { passive: true });
 window.addEventListener('scroll', () => Quiet.show(document.documentElement), { passive: true });
-// 目次は読んでいる見出しに合わせて自動で動くので、ポインターやフォーカスがあるときのスクロールだけ知らせる
-els.sidebar.addEventListener('scroll', () => { if (els.sidebar.matches(':hover, :focus-within')) Quiet.show(els.sidebar); }, { passive: true });
+// 目次は読んでいる見出しに合わせて自動で動く（setCurrent）。ホイール・タッチ・キー・スクロールバーのドラッグの直後か
+// 押している間のスクロールだけを、利用者の操作として知らせる
+let tocUserUntil = 0, tocPressed = false;
+const tocUser = () => { tocUserUntil = performance.now() + 800; };
+for (const type of ['wheel', 'touchstart', 'touchmove', 'keydown']) els.sidebar.addEventListener(type, tocUser, { passive: true });
+els.sidebar.addEventListener('pointerdown', () => { tocPressed = true; tocUser(); }, { passive: true });
+window.addEventListener('pointerup', () => { tocPressed = false; }, { passive: true });
+window.addEventListener('pointercancel', () => { tocPressed = false; }, { passive: true });
+els.sidebar.addEventListener('scroll', () => {
+  if (!tocPressed && performance.now() > tocUserUntil) return;
+  tocUser();
+  Quiet.show(els.sidebar);
+}, { passive: true });
 document.addEventListener('pointermove', e => Quiet.move(e), { passive: true });
 document.documentElement.addEventListener('pointerleave', () => Quiet.leave());
 window.addEventListener('blur', () => Quiet.leave());
