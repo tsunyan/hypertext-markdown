@@ -177,10 +177,10 @@ python -I tools/check.py
 python -m pytest -q
 ```
 
-- `tools/check.py`: script 要素の壊れ、JavaScript の構文、全 HTML（圧縮版・見本・スキルのテンプレートを含む）が素材から作り直したものと同じこと、authoring.md の網羅
+- `tools/check.py`: script 要素の壊れ、JavaScript の構文、全 HTML（圧縮版・見本・スキルのテンプレートを含む）が素材から作り直したものと同じこと、authoring.md の網羅、スキル（`skills/hypertext-markdown/`）に GitHub Pages の URL が無いこと（スキルで作る HTML は手元で使うので、公開サイトへ案内しない）
 - `tests/test_build.py`: 素材の組み立て、エスケープ、テーマの素材と共通エンジンの一致、生成失敗時の保護、変更監視
 - `tests/test_build_cli.py`: 出力 HTML が無い状態からの全生成、実際の監視コマンドでの素材保存時の再生成、失敗からの復旧、ツール修正の反映、検査時に書き込まないことを確かめる
-- `tests/test_smoke.py`: Chromium で開いてエラーが無いこと、全スライドが収まること（デザインの見本も）、版の比較、保存と開き直し、スキルの空のテンプレートと `build.mjs` の往復
+- `tests/test_smoke.py`: Chromium で開いてエラーが無いこと、全スライドが収まること（デザインの見本も）、版の比較、保存と開き直し、スキルの空のテンプレートと `build.mjs` の往復、外への通信が図（Mermaid）のある文書に限られること
 - 見た目の変更は、ライトとダーク、1366px 幅と 375px 幅で画面を見て確かめる。Firefox と Safari は確かめていない
 
 ## 書き方の慣習

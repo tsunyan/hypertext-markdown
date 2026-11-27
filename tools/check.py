@@ -10,6 +10,7 @@
 6. スキルの authoring.md に、利用ガイドで使っている囲みの名前と、フロントマターのキーがすべて出てくる
 7. スキルの scripts/build.mjs に構文の誤りがない
 8. デザインの見本（samples/template-guide-<キー>.src.html）が、いまのテンプレートと samples/design/ の素材から作り直したものと同じ
+9. スキル（skills/hypertext-markdown/ のテンプレート・手順・スクリプト）に GitHub Pages の URL が入っていない。スキルで作る HTML は手元で使うもので、公開サイトへ案内しない
 """
 import importlib.util
 import re
@@ -32,6 +33,8 @@ HTML_FILES = [TEMPLATE, TEMPLATE_MIN, SAMPLE, SKELETON]
 CUSTOM_BLOCKS = {"my-box"}
 
 # HTML の構文では、script の中身は最初の </script で終わる（</script foo> のように属性が付いても閉じる）
+# GitHub Pages の公開サイト（<所有者>.github.io）を指す URL
+PAGES_URL_RE = re.compile(r"[\w-]+\.github\.io\b", re.IGNORECASE)
 SCRIPT_RE = re.compile(r"<script\b([^>]*)>(.*?)</script\b[^>]*>", re.DOTALL | re.IGNORECASE)
 
 
@@ -168,6 +171,17 @@ def check_authoring(text, errors):
         )
 
 
+def check_skill_pages_urls(errors):
+    for path in sorted(p for p in SKILL.rglob("*") if p.is_file()):
+        text = path.read_bytes().decode("utf-8", errors="ignore")
+        for m in PAGES_URL_RE.finditer(text):
+            line = text.count("\n", 0, m.start()) + 1
+            errors.append(
+                f"{path.relative_to(ROOT)}:{line}: GitHub Pages の URL（{m.group(0)}）がある。"
+                "スキルで作る HTML に公開サイトへのリンクを入れない"
+            )
+
+
 def check_build_script(errors):
     node = shutil.which("node")
     if not node:
@@ -192,11 +206,12 @@ def main():
         check_skeleton(errors)
         check_authoring(template, errors)
         check_build_script(errors)
+        check_skill_pages_urls(errors)
         check_designs(template, errors)
     if errors:
         print("\n".join("NG " + e for e in errors))
         sys.exit(1)
-    print("OK: script 要素、JavaScript の構文、見本の同期、テンプレートの見本の版、スキルのテンプレート・書式の説明・build.mjs、デザインの見本")
+    print("OK: script 要素、JavaScript の構文、見本の同期、テンプレートの見本の版、スキルのテンプレート・書式の説明・build.mjs・Pages の URL が無いこと、デザインの見本")
 
 
 if __name__ == "__main__":
