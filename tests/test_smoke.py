@@ -20,6 +20,8 @@ SKILL = ROOT / "skills" / "hypertext-markdown"
 SKELETON = SKILL / "assets" / "template.html"
 BUILD = SKILL / "scripts" / "build.mjs"
 MIN_SCALE = 80  # CONFIG.slideMinScale
+# 外から読んでよい唯一の URL（CONFIG.mermaidSrc）。部分一致ではなく、この URL と完全に一致するものだけを許す
+MERMAID_SRC = re.search(r"mermaidSrc: '([^']+)'", (ROOT / "src" / "engine.js").read_text(encoding="utf-8")).group(1)
 # デザインの見本（samples/design/designs.json のキーごとに 1 つ）
 DESIGNS = [
     ROOT / "samples" / f"template-guide-{key}.src.html"
@@ -416,7 +418,7 @@ def test_external_requests_only_for_mermaid(opened, tmp_path):
     requests = external(o)
     page = o.goto(chart.with_suffix(".html"))
     o.wait_mermaid()
-    assert requests and all("/npm/mermaid@" in u for u in requests), f"Mermaid 以外を読んだ: {requests}"
+    assert requests and set(requests) == {MERMAID_SRC}, f"{MERMAID_SRC} 以外を読んだ: {requests}"
     with page.expect_download() as dl:
         page.keyboard.press("Control+s")
     saved = tmp_path / "saved.html"
