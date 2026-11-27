@@ -20,6 +20,8 @@ SKILL = ROOT / "skills" / "hypertext-markdown"
 SKELETON = SKILL / "assets" / "template.html"
 BUILD = SKILL / "scripts" / "build.mjs"
 MIN_SCALE = 80  # CONFIG.slideMinScale
+# 外から読んでよい唯一の URL（CONFIG.mermaidSrc）。部分一致ではなく、この URL と完全に一致するものだけを許す
+MERMAID_SRC = re.search(r"mermaidSrc: '([^']+)'", (ROOT / "src" / "engine.js").read_text(encoding="utf-8")).group(1)
 # デザインの見本（samples/design/designs.json のキーごとに 1 つ）
 DESIGNS = [
     ROOT / "samples" / f"template-guide-{key}.src.html"
@@ -382,6 +384,52 @@ def test_skill_build_round_trip(opened, tmp_path):
     again.wait_mermaid()
     assert doc_facts(page) == expected
     assert page.title() == "hypertext-markdown 利用ガイド"
+    assert not again.errors, "\n".join(again.errors)
+
+
+def test_external_requests_only_for_mermaid(opened, tmp_path):
+    """外から読むのは Mermaid だけで、本文に図があり、描画済みの図が無いときに限る。"""
+    node = shutil.which("node")
+    if not node:
+        pytest.skip("node が無い")
+
+    def external(o):
+        found = []
+        o.context.on("request", lambda r: r.url.startswith(("http:", "https:")) and found.append(r.url))
+        return found
+
+    plain, chart = tmp_path / "plain.md", tmp_path / "chart.md"
+    plain.write_text("---\ntitle: 図なし\n---\n\n# 見出し\n\n本文。\n\n| A | B |\n|---|---|\n| 1 | 2 |\n", encoding="utf-8")
+    chart.write_text("---\ntitle: 図あり\n---\n\n# 見出し\n\n```mermaid\ngraph LR\n  A --> B\n```\n", encoding="utf-8")
+    for md in (plain, chart):
+        subprocess.run([node, str(BUILD), str(md), "-o", str(md.with_suffix(".html"))], check=True)
+
+    # 図が無ければ、スキルの空のテンプレートも、それで作った HTML も外へ通信しない
+    for path in (SKELETON, plain.with_suffix(".html")):
+        o = opened()
+        requests = external(o)
+        o.goto(path).wait_for_selector("#ui-doc")
+        o.page.wait_for_timeout(1000)
+        assert requests == [], f"{path.name}: 図が無いのに外へ通信した: {requests}"
+        assert not o.errors, "\n".join(o.errors)
+
+    # 図があるときだけ Mermaid を読む
+    o = opened()
+    requests = external(o)
+    page = o.goto(chart.with_suffix(".html"))
+    o.wait_mermaid()
+    assert requests and set(requests) == {MERMAID_SRC}, f"{MERMAID_SRC} 以外を読んだ: {requests}"
+    with page.expect_download() as dl:
+        page.keyboard.press("Control+s")
+    saved = tmp_path / "saved.html"
+    dl.value.save_as(saved)
+
+    # 保存した HTML は描画済みの図を使い、開き直しても Mermaid を読まない
+    again = opened()
+    requests = external(again)
+    again.goto(saved).wait_for_selector(".mermaid-block[data-state=done]")
+    again.page.wait_for_timeout(1000)
+    assert requests == [], f"描画済みの図があるのに外へ通信した: {requests}"
     assert not again.errors, "\n".join(again.errors)
 
 
